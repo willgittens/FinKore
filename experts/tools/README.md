@@ -43,8 +43,9 @@ consolidation remains a separate operation; the global command does not import
 new source observations or approve a research batch.
 
 These are optional evidence-maintenance commands. They are separate from
-`npm run verify` and normative `/conformance` traceability. Learn builds do not
-load the global index or execute Python evidence tools.
+`npm run verify` and normative `/conformance` traceability. Learn builds can export
+an explicit selection from the saved global index, without executing Python.
+Learn checks use the independent publication snapshot and do not require this index.
 
 ## Responsibilities
 
@@ -107,10 +108,13 @@ collection's curation instead. The shared-model version is independent of local
 collection formats and the FinKore Core release. Existing requirement, evidence,
 comparison and operation IDs are unchanged.
 
-`learn/related-evidence.json` remains a separate editorial publication snapshot.
-This migration does not add sources, change its selection, publish Reviews or
-alter canonical CoreDoc/specification wording. Future publication work can select
-from the common model while preserving explicit editorial approval and limits.
+`learn/evidence-selection.json` selects comparison keys, reviewed comparison
+fingerprints, target IDs and reader presentation. `npm run learn:build` exports
+that selection from the saved global index into `learn/related-evidence.json`.
+Changed comparisons, source inputs or selected clauses require review before
+export; newly discovered comparisons are never selected automatically. Publication
+does not change the recorded participant authorization or validation state.
+See the [Learn publication workflow](../../docs/tools/README.md#evidence-beside-coredoc-and-specification-requirements).
 
 Per-file atomic writes and input-change guards protect generated outputs. Builds
 are sequential; do not edit input curation or run simultaneous builds. If a build

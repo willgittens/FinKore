@@ -159,6 +159,43 @@ test('Research retains attributable findings, scope limits and a separate follow
   assert.throws(() => render(markdown.replace('https://ppublishing.org/media/uploads/journals/article/EJT-4-26_p82-90.pdf', 'javascript:alert')), /Unsupported Learn link/)
 })
 
+test('Reviews publishes registered reports with their complete canonical interview and comparison anchors', t => {
+  const root = fixture(t)
+  put(root, 'experts/reviews/reports/002-draft.md', '# Unregistered specialist draft\n\nPrivate response.')
+  buildLearnPages(root)
+  const archive = readFileSync(join(root, 'learn/reviews.html'), 'utf8')
+  const page = LEARN_PAGES.find(page => page.presentation === 'review-report')
+  const markdown = readFileSync(join(root, page.source), 'utf8')
+  const html = readFileSync(join(root, page.output), 'utf8')
+  const canonical = renderLearnMarkdown(markdown, page.source).html.replace(/<h1\b[^>]*>[\s\S]*?<\/h1>\n?/, '')
+  const story = html.match(/<article class="legacy-story review-story"[^>]*>([\s\S]*?)<\/article>/)[1]
+  assert.equal(story, canonical)
+  assert.match(archive, /href="review-001-vandeir-silva.html">Vandeir Silva/)
+  assert.match(html, /href="reviews.html#reports"/)
+  assert.match(html, /Mobile report navigation/)
+  assert.match(html, /translation[\s\S]*Portuguese/i)
+  for (let number = 1; number <= 22; number++) assert.ok(html.includes(`id="er-0001-q${String(number).padStart(2, '0')}"`))
+  for (let number = 1; number <= 12; number++) assert.ok(html.includes(`id="er-0001-f${String(number).padStart(2, '0')}"`))
+  for (const area of ['accounting', 'audit', 'approvals', 'legal', 'payments', 'tax', 'identity', 'risk']) assert.ok(archive.includes(`id="review-${area}-title"`))
+  assert.doesNotMatch(archive + html, /Unregistered specialist draft|Private response/)
+  const render = text => renderLearnPage(page, text, readLearnAssetVersion(root))
+  assert.throws(() => render(markdown.replace('**Specialist:** Vandeir Silva', '**Specialist:** Someone Else')), /name or quotation differs/)
+  assert.throws(() => render(markdown.replaceAll(page.review.quote, 'Changed interview excerpt.')), /name or quotation differs/)
+  assert.throws(() => render(markdown.replace('er-0001-q22', 'er-0001-q23')), /complete, sequential interview/)
+  const index = LEARN_PAGES.find(page => page.presentation === 'review-archive')
+  const source = readFileSync(join(root, index.source), 'utf8')
+  assert.throws(() => renderLearnPage(index, source.replace('001-vandeir-silva.md', '002-draft.md'), readLearnAssetVersion(root)), /registered reports/)
+})
+
+test('stable source anchors render safely and cannot duplicate an existing destination', () => {
+  const source = '# Report\n\n<a id="interview"></a>\n## Interview\n\n<a id="er-0001-q01"></a>\n### First question\n\nAnswer.'
+  const doc = renderLearnMarkdown(source, 'experts/reviews/reports/example.md')
+  assert.match(doc.html, /<span id="interview"><\/span>\n<h2 id="interview-1">/)
+  assert.match(doc.html, /<span id="er-0001-q01"><\/span>/)
+  assert.throws(() => renderLearnMarkdown(source + '\n\n<a id="interview"></a>', 'example.md'), /Duplicate Learn anchor/)
+  assert.throws(() => renderLearnMarkdown('# Report\n\n<a id="safe" onclick="bad"></a>', 'example.md'), /Unsupported Learn block/)
+})
+
 test('Experts groups three independent collections and Reviews preserves the existing discussion destinations', t => {
   const root = fixture(t)
   buildLearnPages(root)
@@ -214,7 +251,7 @@ test('generates registered canonical documents deterministically and checks drif
     const source = readFileSync(join(root, page.source), 'utf8')
     const html = readFileSync(join(root, page.output), 'utf8')
     assert.equal(html, renderLearnPage(page, source, readLearnAssetVersion(root)))
-    if (page.presentation?.startsWith('legacy-') || page.presentation === 'research-archive') {
+    if (page.presentation?.startsWith('legacy-') || page.presentation?.startsWith('review-') || page.presentation === 'research-archive') {
       assert.match(html, /class="legacy-page /)
       assert.match(html, /href="css\/legacy.css\?v=/)
       assert.doesNotMatch(html, /href="css\/(?:coredoc|documents).css/)

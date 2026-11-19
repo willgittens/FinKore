@@ -15,6 +15,8 @@ Start from a rule in the [CoreDoc traceability index](traceability.md#by-coredoc
 or read a report for the professional experience and its financial significance.
 Each report contains its complete interview, with stable question anchors.
 The [Experts index](../README.md) lists the other collections.
+The [Learn Reviews collection](../../learn/reviews.html) offers the published
+reading experience, including the [Vandeir Silva report](../../learn/review-001-vandeir-silva.html).
 
 ## Structure
 
@@ -63,10 +65,13 @@ tool checks structure, answer locations and freshness; it does not decide the
 financial meaning of a comparison. Rebuilding does not approve changed evidence.
 See [maintenance commands](tools/README.md).
 
-Bindings provide data for later editorial selection alongside CoreDoc rules.
+Bindings provide data for explicit editorial selection alongside CoreDoc rules.
 Collection registration and completed analysis remain separate from participant
 validation and publication authorization. Learn publication retains its own
-curation. Reviews forms part of [ongoing expert consultation](../../docs/tools/README.md#ongoing-expert-review),
+selection in `learn/evidence-selection.json`, exported from the unified Experts
+index. Reports require explicit registration in the Learn reader registry;
+adding a report file does not publish it automatically.
+Reviews forms part of [ongoing expert consultation](../../docs/tools/README.md#ongoing-expert-review),
 not a global specialist approval or an additional release gate.
 
 Behavioral proposals follow the [contribution workflow](../../CONTRIBUTING.md)

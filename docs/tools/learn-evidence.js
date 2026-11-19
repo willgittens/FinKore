@@ -87,19 +87,29 @@ export function loadLearnEvidence(root, suppliedData) {
   const data = suppliedData === undefined
     ? JSON.parse(readFileSync(contained(root, 'learn/related-evidence.json'), 'utf8'))
     : suppliedData
-  if (!data || !['1.0.0', '1.1.0'].includes(data.schema_version) || !Array.isArray(data.sources) || !Array.isArray(data.bindings)) throw new Error('Unsupported Learn evidence format')
+  if (!data || !['1.0.0', '1.1.0', '1.2.0'].includes(data.schema_version) || !Array.isArray(data.sources) || !Array.isArray(data.bindings)) throw new Error('Unsupported Learn evidence format')
   for (const source of data.sources) {
-    if (index.sources.has(source.id) || !['research', 'legacy', 'code'].includes(source.kind) ||
+    if (index.sources.has(source.id) || !['research', 'legacy', 'code', 'review'].includes(source.kind) ||
         !text(source.title) || !text(source.limits) || source.status !== 'pending_validation' ||
         !/^[a-f0-9]{64}$/.test(source.publication_sha256)) throw new Error('Invalid or duplicate Learn evidence source')
     if (source.kind === 'code') {
-      if (data.schema_version !== '1.1.0') throw new Error('Code Evidence requires Learn evidence format 1.1.0')
+      if (!['1.1.0', '1.2.0'].includes(data.schema_version)) throw new Error('Code Evidence requires Learn evidence format 1.1.0 or later')
       validateCodeSource(source)
     } else {
-      if (!/^(?:MAP|LGC)-\d{4}$/.test(source.id) || !Array.isArray(source.authors) || !source.authors.length || source.authors.some(author => !text(author))) throw new Error('Invalid Learn evidence attribution')
-      const allowed = source.kind === 'research' ? /^research\.html#rev-\d{4}$/ : /^legacy-\d{3}-[a-z0-9-]+\.html#[a-z0-9-]+$/
-      const publication = source.kind === 'research' ? /^learn\/research\.md$/ : /^experts\/legacy\/interviews\/\d{3}-[a-z0-9-]+\.md$/
-      if (!allowed.test(source.href) || !publication.test(source.publication_path) || !source.id.startsWith(source.kind === 'research' ? 'MAP-' : 'LGC-')) throw new Error('Unsupported Learn evidence destination')
+      if (!Array.isArray(source.authors) || !source.authors.length || source.authors.some(author => !text(author))) throw new Error('Invalid Learn evidence attribution')
+      if (source.kind === 'review') {
+        const filename = source.publication_path?.match(/^experts\/reviews\/reports\/(\d{3}-[a-z0-9-]+)\.md$/)?.[1]
+        if (data.schema_version !== '1.2.0' || !/^ER-\d{4}-F\d{2}$/.test(source.id) || !/^ER-\d{4}$/.test(source.report_id) ||
+            !source.id.startsWith(source.report_id + '-F') || !filename || source.href !== `review-${filename}.html#${source.id.toLowerCase()}` ||
+            source.authors.length !== 1 || !/^[a-z]{2}$/.test(source.original_language) || !/^[a-z]{2}$/.test(source.interview_language) ||
+            !['original', 'editorial_translation'].includes(source.translation_status) || !['authorized', 'not_recorded'].includes(source.publication_authorization) ||
+            (source.translation_status === 'original' && source.original_language !== source.interview_language)) throw new Error('Invalid Review source or destination')
+      } else {
+        if (!/^(?:MAP|LGC)-\d{4}$/.test(source.id)) throw new Error('Invalid Learn evidence attribution')
+        const allowed = source.kind === 'research' ? /^research\.html#rev-\d{4}$/ : /^legacy-\d{3}-[a-z0-9-]+\.html#[a-z0-9-]+$/
+        const publication = source.kind === 'research' ? /^learn\/research\.md$/ : /^experts\/legacy\/interviews\/\d{3}-[a-z0-9-]+\.md$/
+        if (!allowed.test(source.href) || !publication.test(source.publication_path) || !source.id.startsWith(source.kind === 'research' ? 'MAP-' : 'LGC-')) throw new Error('Unsupported Learn evidence destination')
+      }
     }
     let current = false
     try {
@@ -116,6 +126,12 @@ export function loadLearnEvidence(root, suppliedData) {
         const approved = /^\*\*Status:\*\* (?:Approved by Interviewee on .+|Approved for publication — confirmed by the project maintainer on \d{2}\.\d{2}\.\d{4})\s*$/m.test(text)
         const reader = 'legacy-' + source.publication_path.split('/').at(-1).replace(/\.md$/, '.html')
         current &&= approved && source.authors.length === 1 && source.authors[0] === speaker && source.href.startsWith(reader + '#')
+      }
+      if (source.kind === 'review') {
+        const body = bytes.toString('utf8')
+        const specialist = body.match(/^\*\*Specialist:\*\*\s*([^·\n]+)/m)?.[1].trim()
+        current &&= specialist === source.authors[0] && body.includes(`<a id="${source.id.toLowerCase()}"></a>`) &&
+          body.startsWith(`# ${source.report_id} — `)
       }
     }
     catch (error) { if (error.code !== 'ENOENT') throw error }
@@ -135,6 +151,8 @@ export function loadLearnEvidence(root, suppliedData) {
           (binding.evidence_role !== 'supports_rationale' || binding.relationship !== 'already_addressed')))) {
       throw new Error('Invalid Code Evidence CoreDoc comparison')
     }
+    if (index.sources.get(binding.source_id).kind === 'review' &&
+        (binding.target_path !== 'docs/coreDoc/core-doc.md' || !/^CORE-\d{3}\.\d+$/.test(binding.target_id))) throw new Error('Review comparisons target CoreDoc rules only')
     if (!index.byTarget.has(binding.target_id)) index.byTarget.set(binding.target_id, [])
     index.byTarget.get(binding.target_id).push(binding)
   }
@@ -150,13 +168,14 @@ export function renderRelatedEvidence(id, clause, index) {
   const code = current.filter(binding => index.sources.get(binding.source_id).kind === 'code')
   const readings = current.filter(binding => index.sources.get(binding.source_id).kind !== 'code')
   const kinds = readings.reduce((counts, binding) => { const kind = index.sources.get(binding.source_id).kind; counts[kind] = (counts[kind] ?? 0) + 1; return counts }, {})
-  const label = [kinds.research ? `${kinds.research} research ${kinds.research === 1 ? 'note' : 'notes'}` : '', kinds.legacy ? `${kinds.legacy} practitioner ${kinds.legacy === 1 ? 'account' : 'accounts'}` : ''].filter(Boolean).join(' · ')
+  const reviewCount = new Set(readings.filter(binding => index.sources.get(binding.source_id).kind === 'review').map(binding => index.sources.get(binding.source_id).report_id)).size
+  const label = [kinds.research ? `${kinds.research} research ${kinds.research === 1 ? 'note' : 'notes'}` : '', kinds.legacy ? `${kinds.legacy} practitioner ${kinds.legacy === 1 ? 'account' : 'accounts'}` : '', reviewCount ? `${reviewCount} specialist ${reviewCount === 1 ? 'report' : 'reports'}` : ''].filter(Boolean).join(' · ')
   const editorial = readings.length ? `<aside class="rule-evidence" aria-label="Evidence and context for ${escape(id)}"><details>
     <summary><span>Evidence &amp; context<span class="rule-evidence-count">${label}</span></span><span aria-hidden="true">+</span></summary>
-    <p class="rule-evidence-intro">These sources inform discussion of this rule. Their role and limits are stated separately; a citation is not certification or specialist sign-off. Notes from the same study are not independent confirmation.</p>
+    <p class="rule-evidence-intro">These sources inform discussion of this rule. Their role and limits are stated separately; a citation is not certification or specialist sign-off. Passages from the same study or consultation are not independent confirmation.</p>
     <div class="rule-evidence-grid">${readings.map(binding => {
       const source = index.sources.get(binding.source_id)
-      return `<article class="rule-evidence-card"><p class="rule-evidence-kind">${source.kind === 'research' ? 'Research' : 'Legacy'} <span aria-hidden="true">/</span> ${roles.get(binding.evidence_role)}</p><p class="rule-evidence-title"><a href="${escape(source.href)}">${escape(source.title)} <span aria-hidden="true">↗</span></a></p><p class="rule-evidence-authors">${escape(source.authors.join('; '))}</p><p>${escape(binding.explanation)}</p><details class="rule-evidence-limits"><summary>Scope and limitations</summary><p>${escape(source.limits)}</p></details></article>`
+      return `<article class="rule-evidence-card"><p class="rule-evidence-kind">${({ research: 'Research', legacy: 'Legacy', review: 'Review' })[source.kind]} <span aria-hidden="true">/</span> ${roles.get(binding.evidence_role)}</p><p class="rule-evidence-title"><a href="${escape(source.href)}">${escape(source.title)} <span aria-hidden="true">↗</span></a></p><p class="rule-evidence-authors">${escape(source.authors.join('; '))}</p><p>${escape(binding.explanation)}</p><details class="rule-evidence-limits"><summary>Scope and limitations</summary><p>${escape(source.limits)}</p></details></article>`
     }).join('')}</div>${stale ? '<p class="rule-evidence-stale">Some other related readings need review after a source or rule changed.</p>' : ''}
   </details></aside>` : ''
   return [editorial, code.length ? renderCodeEvidence(id, code, index, stale) : ''].filter(Boolean).join('\n            ')

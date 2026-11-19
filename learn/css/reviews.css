@@ -1,0 +1,54 @@
+/* SPDX-License-Identifier: MPL-2.0 */
+/* Reviews shares the Experts archive typography, colors and reading layout. */
+.review-archive .eyebrow, .review-report .eyebrow { font-size: 0.875rem; }
+.review-archive .legacy-breadcrumb, .review-report .legacy-breadcrumb,
+.review-archive .legacy-tags li, .review-report .legacy-tags li,
+.review-archive .legacy-section-heading > p, .review-archive cite,
+.review-report .legacy-chapters nav a, .review-report .legacy-mobile-index nav a,
+.review-report .legacy-all-interviews { font-size: 0.875rem; }
+.review-archive .legacy-prose { font-size: 1rem; }
+.review-feature-art { background: var(--dark); font-size: 0.875rem; }
+.review-feature-art::after { border-color: #63616a; }
+.review-feature-art .legacy-feature-number { color: var(--orange-light); }
+.review-report-title { margin-top: 0.75rem; font-size: 1.125rem; font-weight: 600; }
+.review-card-note { margin-top: 1rem; color: var(--muted); font-size: 0.875rem; }
+.review-areas-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 3rem; margin-top: 2rem; }
+.review-area { padding-block: 2rem; border-top: 1px solid var(--legacy-line); }
+.review-area h3 { font-size: 1.375rem; }
+.review-area p { margin-top: 1rem; }
+.review-area p:not(:last-child) { color: var(--muted); }
+.review-area p:last-child a { font-weight: 650; }
+.review-process { padding-top: 0; }
+.review-process .legacy-prose { max-width: none; }
+.review-process ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2rem 4rem; margin-block: 2rem; }
+.review-process li + li { margin-top: 0; }
+.review-process li strong { display: block; margin-bottom: 0.5rem; }
+.review-method .legacy-prose { color: var(--muted); }
+.review-report-heading { max-width: 60rem; margin-top: 2rem; }
+.review-report-heading h1 { margin-top: 1rem; font-size: clamp(2.5rem, 5vw, 4.25rem); }
+.review-specialist { margin-top: 2rem; font-size: 1.25rem; font-weight: 650; }
+.review-specialist span { display: block; margin-top: 0.3rem; color: var(--muted); font-size: 1rem; font-weight: 400; }
+.review-report-heading .legacy-deck { max-width: 60ch; margin-top: 1.5rem; color: var(--muted); }
+.review-report-heading .actions { margin-top: 2rem; }
+.review-question-index { margin-top: 1rem; }
+.review-question-index summary { padding-block: 0.75rem; cursor: pointer; font-size: 0.875rem; }
+.review-story h2 { margin-block: 3.5rem 1.5rem; color: var(--ink); font-size: 1.75rem; line-height: 1.4; letter-spacing: -0.025em; text-transform: none; }
+.review-story h3 { margin-block: 2.5rem 1rem; padding-top: 1.5rem; border-top: 1px solid var(--legacy-line); }
+.review-story ul, .review-story ol { padding-left: 1.5rem; margin-block: 1.5rem; }
+.review-story li + li { margin-top: 0.5rem; }
+.review-story blockquote { margin-block: 1.5rem; padding-left: 1.25rem; border-left: 2px solid var(--accent); }
+.review-story > p:first-child { color: var(--muted); font-family: var(--font-sans); font-size: 0.875rem; }
+.review-story .core-table { max-width: 100%; overflow-x: auto; margin-block: 2rem; font-family: var(--font-sans); font-size: 0.875rem; line-height: 1.6; }
+.review-story table { width: 100%; min-width: 36rem; border-collapse: collapse; }
+.review-story th, .review-story td { padding: 1rem; border: 1px solid var(--legacy-line); text-align: left; vertical-align: top; }
+.review-story th { background: #eeebe4; }
+.review-story > span[id] { display: block; }
+@media (max-width: 48rem) {
+  .review-areas-grid, .review-process ol { grid-template-columns: minmax(0, 1fr); }
+  .review-feature-art .legacy-feature-number { font-size: 4rem; }
+  .review-report-heading h1 { font-size: clamp(2.4rem, 10vw, 3.5rem); }
+}
+@media print {
+  .review-story .core-table { overflow: visible; }
+  .review-story table { min-width: 0; }
+}

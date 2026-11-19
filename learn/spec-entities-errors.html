@@ -19,9 +19,9 @@
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="FinKore — Define once. Build many times." />
   <link rel="icon" type="image/png" href="img/Finkore_Favicon.png" />
-  <link rel="stylesheet" href="css/styles.css?v=b9d0fcad-a8ab-468d-8f94-d492797a492d" />
-  <link rel="stylesheet" href="css/coredoc.css?v=b9d0fcad-a8ab-468d-8f94-d492797a492d" />
-  <link rel="stylesheet" href="css/documents.css?v=b9d0fcad-a8ab-468d-8f94-d492797a492d" />
+  <link rel="stylesheet" href="css/styles.css?v=2cb624a7-d3ab-4a4b-a5d9-8bc777541d7b" />
+  <link rel="stylesheet" href="css/coredoc.css?v=2cb624a7-d3ab-4a4b-a5d9-8bc777541d7b" />
+  <link rel="stylesheet" href="css/documents.css?v=2cb624a7-d3ab-4a4b-a5d9-8bc777541d7b" />
 </head>
 <body id="top" class="core-reader learn-document">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -74,7 +74,7 @@
 <h2 id="requirements">Requirements</h2>
 <ul><li class="spec-requirement" id="entity-error-001"><strong>ENTITY-ERROR-001</strong> — A Financial Entity failure MUST leave identity, current State, and entity data unchanged.</li><li class="spec-requirement" id="entity-error-002"><strong>ENTITY-ERROR-002</strong> — Validation failures SHOULD include stable violation identifiers.<aside class="rule-evidence" aria-label="Evidence and context for ENTITY-ERROR-002"><details>
     <summary><span>Evidence &amp; context<span class="rule-evidence-count">1 practitioner account</span></span><span aria-hidden="true">+</span></summary>
-    <p class="rule-evidence-intro">These sources inform discussion of this rule. Their role and limits are stated separately; a citation is not certification or specialist sign-off. Notes from the same study are not independent confirmation.</p>
+    <p class="rule-evidence-intro">These sources inform discussion of this rule. Their role and limits are stated separately; a citation is not certification or specialist sign-off. Passages from the same study or consultation are not independent confirmation.</p>
     <div class="rule-evidence-grid"><article class="rule-evidence-card"><p class="rule-evidence-kind">Legacy <span aria-hidden="true">/</span> Supports the rationale</p><p class="rule-evidence-title"><a href="legacy-001-elaine-richardson.html#5-after-all-these-years-whats-the-one-thing-you-think-the-next-generation-of-financial-software-developers-should-never-forget">Stable portable failures and actionable diagnostics serve different readers <span aria-hidden="true">↗</span></a></p><p class="rule-evidence-authors">Elaine Richardson</p><p>Stable violation identifiers are SHOULD-level guidance; do not promote them into a universal MUST.</p><details class="rule-evidence-limits"><summary>Scope and limitations</summary><p>The quote is advice supported by a personal incident, not a FinKore requirement for log content, manuals, localized wording, or an error envelope. SPEC-ERROR-003 permits messages and context (MAY); entity paths and stable violation identifiers are SHOULD obligations. Sensitive financial, personal and implementation data are not automatically safe to include.</p></details></article></div>
   </details></aside></li><li class="spec-requirement" id="entity-error-003"><strong>ENTITY-ERROR-003</strong> — Implementations MAY attach safe diagnostic context without changing portable code meaning.</li><li class="spec-requirement" id="entity-error-004"><strong>ENTITY-ERROR-004</strong> — A Workflow, Money, Approval, or Audit failure MUST retain its domain-specific code when that condition is the primary failure; it MUST NOT be replaced by <code>FINKORE_ENTITY_VALIDATION_FAILED</code>.</li></ul>
 <p>Entity evolution error mapping is defined by <strong>ENTITY-EVOLUTION-024</strong> through <strong>ENTITY-EVOLUTION-028</strong> in <a href="spec-entities-evolution.html">Entity Evolution</a>. Core 2.0 does not introduce a dedicated evolution error code.</p>

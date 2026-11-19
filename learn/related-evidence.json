@@ -1,6 +1,6 @@
 {
-  "schema_version": "1.1.0",
-  "description": "Explicit editorial links from unchanged CoreDoc and specification requirements to published preliminary research notes and approved public interviews. Roles and limitations are not endorsements or normative acceptance. No specialist review is inferred.",
+  "schema_version": "1.2.0",
+  "description": "Explicit editorial selection from the unified Experts index. Roles and limits are not endorsements, independent validation or normative acceptance.",
   "sources": [
     {
       "id": "MAP-0001",
@@ -945,6 +945,168 @@
       "status": "pending_validation",
       "publication_path": "experts/code-evidence/analyses/CE-REPO-0015/CE-EDITION-0015.md",
       "publication_sha256": "4b7a1a540f00d7889bb8a52287288061dc6ee916c7a57a5ca264d1983861aded"
+    },
+    {
+      "id": "ER-0001-F01",
+      "kind": "review",
+      "report_id": "ER-0001",
+      "title": "Completion has meaning within a declared scope",
+      "authors": [
+        "Vandeir Silva"
+      ],
+      "href": "review-001-vandeir-silva.html#er-0001-f01",
+      "limits": "The account does not define FinKore transitions or universal payment-finality criteria. Settlement remains outside the Core scope.",
+      "status": "pending_validation",
+      "publication_path": "experts/reviews/reports/001-vandeir-silva.md",
+      "publication_sha256": "b9ae3905f17cb77fcd85f37780fda28aa34ac17afaf8775935fecf44c053e20c",
+      "original_language": "pt",
+      "interview_language": "en",
+      "translation_status": "editorial_translation",
+      "publication_authorization": "not_recorded"
+    },
+    {
+      "id": "ER-0001-F02",
+      "kind": "review",
+      "report_id": "ER-0001",
+      "title": "Relevant conditions must be checked before a result becomes observable",
+      "authors": [
+        "Vandeir Silva"
+      ],
+      "href": "review-001-vandeir-silva.html#er-0001-f02",
+      "limits": "The amount and channel policy belongs to the product. The technical cause and prior existence of the rule were not verified by inspecting the system.",
+      "status": "pending_validation",
+      "publication_path": "experts/reviews/reports/001-vandeir-silva.md",
+      "publication_sha256": "b9ae3905f17cb77fcd85f37780fda28aa34ac17afaf8775935fecf44c053e20c",
+      "original_language": "pt",
+      "interview_language": "en",
+      "translation_status": "editorial_translation",
+      "publication_authorization": "not_recorded"
+    },
+    {
+      "id": "ER-0001-F03",
+      "kind": "review",
+      "report_id": "ER-0001",
+      "title": "Later recovery does not replace preservation on rejection",
+      "authors": [
+        "Vandeir Silva"
+      ],
+      "href": "review-001-vandeir-silva.html#er-0001-f03",
+      "limits": "No FinKore rejection or violation was established. The rule does not guarantee distributed atomicity or generic handling of communication failures.",
+      "status": "pending_validation",
+      "publication_path": "experts/reviews/reports/001-vandeir-silva.md",
+      "publication_sha256": "b9ae3905f17cb77fcd85f37780fda28aa34ac17afaf8775935fecf44c053e20c",
+      "original_language": "pt",
+      "interview_language": "en",
+      "translation_status": "editorial_translation",
+      "publication_authorization": "not_recorded"
+    },
+    {
+      "id": "ER-0001-F04",
+      "kind": "review",
+      "report_id": "ER-0001",
+      "title": "Identity connects evidence and distinguishes operations",
+      "authors": [
+        "Vandeir Silva"
+      ],
+      "href": "review-001-vandeir-silva.html#er-0001-f04",
+      "limits": "The bank identifier model was not examined. Entity and Audit Event identities do not establish economic deduplication or an idempotency protocol.",
+      "status": "pending_validation",
+      "publication_path": "experts/reviews/reports/001-vandeir-silva.md",
+      "publication_sha256": "b9ae3905f17cb77fcd85f37780fda28aa34ac17afaf8775935fecf44c053e20c",
+      "original_language": "pt",
+      "interview_language": "en",
+      "translation_status": "editorial_translation",
+      "publication_authorization": "not_recorded"
+    },
+    {
+      "id": "ER-0001-F05",
+      "kind": "review",
+      "report_id": "ER-0001",
+      "title": "Distinct evolution needs declared meaning and a link to the earlier fact",
+      "authors": [
+        "Vandeir Silva"
+      ],
+      "href": "review-001-vandeir-silva.html#er-0001-f05",
+      "limits": "Institutional terms do not automatically map to Correction, Reversal, Void or Supersession. The Core does not define concrete accounting postings.",
+      "status": "pending_validation",
+      "publication_path": "experts/reviews/reports/001-vandeir-silva.md",
+      "publication_sha256": "b9ae3905f17cb77fcd85f37780fda28aa34ac17afaf8775935fecf44c053e20c",
+      "original_language": "pt",
+      "interview_language": "en",
+      "translation_status": "editorial_translation",
+      "publication_authorization": "not_recorded"
+    },
+    {
+      "id": "ER-0001-F06",
+      "kind": "review",
+      "report_id": "ER-0001",
+      "title": "An adjustment needs to remain linked to its original",
+      "authors": [
+        "Vandeir Silva"
+      ],
+      "href": "review-001-vandeir-silva.html#er-0001-f06",
+      "limits": "The answer does not establish additional identifiers or a portable immutable relationship. Free text evidences the need; it does not demonstrate that every requirement was implemented.",
+      "status": "pending_validation",
+      "publication_path": "experts/reviews/reports/001-vandeir-silva.md",
+      "publication_sha256": "b9ae3905f17cb77fcd85f37780fda28aa34ac17afaf8775935fecf44c053e20c",
+      "original_language": "pt",
+      "interview_language": "en",
+      "translation_status": "editorial_translation",
+      "publication_authorization": "not_recorded"
+    },
+    {
+      "id": "ER-0001-F07",
+      "kind": "review",
+      "report_id": "ER-0001",
+      "title": "Approval has an identifiable subject and financial content",
+      "authors": [
+        "Vandeir Silva"
+      ],
+      "href": "review-001-vandeir-silva.html#er-0001-f07",
+      "limits": "Eligibility policy and the subject model were not examined. The account does not determine per-item approval, quorum or a universal chain. Answer 16 concerns entries already processed and does not document changes between approval and execution. It does not demonstrate revalidation after facts change or immutable preservation of the complete decision.",
+      "status": "pending_validation",
+      "publication_path": "experts/reviews/reports/001-vandeir-silva.md",
+      "publication_sha256": "b9ae3905f17cb77fcd85f37780fda28aa34ac17afaf8775935fecf44c053e20c",
+      "original_language": "pt",
+      "interview_language": "en",
+      "translation_status": "editorial_translation",
+      "publication_authorization": "not_recorded"
+    },
+    {
+      "id": "ER-0001-F09",
+      "kind": "review",
+      "report_id": "ER-0001",
+      "title": "Attribution supports reconstruction of requests and authorizations",
+      "authors": [
+        "Vandeir Silva"
+      ],
+      "href": "review-001-vandeir-silva.html#er-0001-f09",
+      "limits": "The answer does not demonstrate every portable field, stable identities or immutable history. Automated execution must not be attributed by inference to the human approver.",
+      "status": "pending_validation",
+      "publication_path": "experts/reviews/reports/001-vandeir-silva.md",
+      "publication_sha256": "b9ae3905f17cb77fcd85f37780fda28aa34ac17afaf8775935fecf44c053e20c",
+      "original_language": "pt",
+      "interview_language": "en",
+      "translation_status": "editorial_translation",
+      "publication_authorization": "not_recorded"
+    },
+    {
+      "id": "ER-0001-F11",
+      "kind": "review",
+      "report_id": "ER-0001",
+      "title": "Evaluations need to identify relevant external facts",
+      "authors": [
+        "Vandeir Silva"
+      ],
+      "href": "review-001-vandeir-silva.html#er-0001-f11",
+      "limits": "The account does not demonstrate determinism of a FinKore evaluation. A consistent evaluation does not certify the material truth of external information or establish exception policy.",
+      "status": "pending_validation",
+      "publication_path": "experts/reviews/reports/001-vandeir-silva.md",
+      "publication_sha256": "b9ae3905f17cb77fcd85f37780fda28aa34ac17afaf8775935fecf44c053e20c",
+      "original_language": "pt",
+      "interview_language": "en",
+      "translation_status": "editorial_translation",
+      "publication_authorization": "not_recorded"
     }
   ],
   "bindings": [
@@ -2110,54 +2272,24 @@
       "explanation": "SHOULD and SHOULD NOT obligations retain their recommendation strength and documented-exception rule. The interview cannot promote them to mandatory requirements."
     },
     {
-      "source_id": "CE-FINDING-0007",
-      "target_id": "CORE-001.2",
-      "target_path": "docs/coreDoc/core-doc.md",
-      "clause_sha256": "4317664c45a67fd420616bfc3d41af0321cca216c1c7732e93fbf6497379f37b",
-      "evidence_role": "counterpoint",
-      "relationship": "application_policy",
-      "implementation_relationship": "different_policy",
-      "explanation": "NodaMoney rounds during construction using the selected or ambient context; the standard path can choose currency scale. This contrasts with a generic exact-value boundary and shows why a composing rounding policy must be expressly identified."
-    },
-    {
-      "source_id": "CE-FINDING-0005",
-      "target_id": "CORE-001.2",
-      "target_path": "docs/coreDoc/core-doc.md",
-      "clause_sha256": "4317664c45a67fd420616bfc3d41af0321cca216c1c7732e93fbf6497379f37b",
-      "evidence_role": "limits_claim",
-      "relationship": "application_policy",
-      "implementation_relationship": "partial_match",
-      "explanation": "Dinero separates its calculator from money operations. The inspected number path has precision limits and a no-progress guard; choosing a monetary library or calculator does not by itself establish exact arithmetic."
-    },
-    {
-      "source_id": "CE-FINDING-0004",
-      "target_id": "CORE-001.3",
-      "target_path": "docs/coreDoc/core-doc.md",
-      "clause_sha256": "15c2b7a30962c5f3322debb4c5758a35fe8c61f40f602a56a0c4a33f8302eff2",
-      "evidence_role": "supports_rationale",
-      "relationship": "already_addressed",
-      "implementation_relationship": "same_approach",
-      "explanation": "The inspected addition path checks currency compatibility before combining amounts and rejects a mismatch with both currencies identified. This supports the addition control; other comparisons and conversions were not reviewed."
-    },
-    {
-      "source_id": "CE-FINDING-0008",
-      "target_id": "CORE-001.3",
-      "target_path": "docs/coreDoc/core-doc.md",
-      "clause_sha256": "15c2b7a30962c5f3322debb4c5758a35fe8c61f40f602a56a0c4a33f8302eff2",
-      "evidence_role": "limits_claim",
-      "relationship": "application_policy",
-      "implementation_relationship": "partial_match",
-      "explanation": "py-moneyed rejects mismatched-currency addition and retains currency in new results. Its native equality returns false for different currencies, so the finding is a partial match rather than evidence for every operation in this rule."
-    },
-    {
       "source_id": "CE-FINDING-0001",
       "target_id": "CORE-001.4",
       "target_path": "docs/coreDoc/core-doc.md",
       "clause_sha256": "d474514ff700a8a762ef46b73b6e1b0c10b13109b3e208762fb99088c1a0d310",
       "evidence_role": "limits_claim",
       "relationship": "application_policy",
-      "implementation_relationship": "partial_match",
-      "explanation": "Money PHP carries source currency and tracks residual units so successful allocation can conserve the total. It chooses recipients by fractional loss, whereas Core uses declared order; conservation does not settle that policy choice."
+      "explanation": "Money PHP carries source currency and tracks residual units so successful allocation can conserve the total. It chooses recipients by fractional loss, whereas Core uses declared order; conservation does not settle that policy choice.",
+      "implementation_relationship": "partial_match"
+    },
+    {
+      "source_id": "CE-FINDING-0001",
+      "target_id": "CORE-002.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "20b537b4b61f75741bc518b9819bb8bd37e300ca2b7058ecd682a83e66028c67",
+      "evidence_role": "limits_claim",
+      "relationship": "application_policy",
+      "explanation": "The inspected allocation guards and local result construction do not assign to the source Money amount or currency when rejecting invalid ratios. This supports operand preservation in that path, not every observable financial effect in the whole library.",
+      "implementation_relationship": "partial_match"
     },
     {
       "source_id": "CE-FINDING-0002",
@@ -2166,8 +2298,8 @@
       "clause_sha256": "d474514ff700a8a762ef46b73b6e1b0c10b13109b3e208762fb99088c1a0d310",
       "evidence_role": "supports_rationale",
       "relationship": "already_addressed",
-      "implementation_relationship": "same_approach",
-      "explanation": "With FloorToFirst, positive integer weights and an explicitly matched fixed unit context, Brick allocates the source magnitude, assigns remaining steps in order and restores the sign. The selected negative cases exercise the same signed allocation approach."
+      "explanation": "With FloorToFirst, positive integer weights and an explicitly matched fixed unit context, Brick allocates the source magnitude, assigns remaining steps in order and restores the sign. The selected negative cases exercise the same signed allocation approach.",
+      "implementation_relationship": "same_approach"
     },
     {
       "source_id": "CE-FINDING-0003",
@@ -2176,8 +2308,28 @@
       "clause_sha256": "d474514ff700a8a762ef46b73b6e1b0c10b13109b3e208762fb99088c1a0d310",
       "evidence_role": "limits_claim",
       "relationship": "application_policy",
-      "implementation_relationship": "partial_match",
-      "explanation": "RubyMoney carries the remaining amount through successive splits, with selected tests checking the final sum. This numeric helper does not establish currency preservation, and its algorithm/input domain differs from Core allocation."
+      "explanation": "RubyMoney carries the remaining amount through successive splits, with selected tests checking the final sum. This numeric helper does not establish currency preservation, and its algorithm/input domain differs from Core allocation.",
+      "implementation_relationship": "partial_match"
+    },
+    {
+      "source_id": "CE-FINDING-0004",
+      "target_id": "CORE-001.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "15c2b7a30962c5f3322debb4c5758a35fe8c61f40f602a56a0c4a33f8302eff2",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "The inspected addition path checks currency compatibility before combining amounts and rejects a mismatch with both currencies identified. This supports the addition control; other comparisons and conversions were not reviewed.",
+      "implementation_relationship": "same_approach"
+    },
+    {
+      "source_id": "CE-FINDING-0005",
+      "target_id": "CORE-001.2",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "4317664c45a67fd420616bfc3d41af0321cca216c1c7732e93fbf6497379f37b",
+      "evidence_role": "limits_claim",
+      "relationship": "application_policy",
+      "explanation": "Dinero separates its calculator from money operations. The inspected number path has precision limits and a no-progress guard; choosing a monetary library or calculator does not by itself establish exact arithmetic.",
+      "implementation_relationship": "partial_match"
     },
     {
       "source_id": "CE-FINDING-0005",
@@ -2186,8 +2338,8 @@
       "clause_sha256": "d474514ff700a8a762ef46b73b6e1b0c10b13109b3e208762fb99088c1a0d310",
       "evidence_role": "counterpoint",
       "relationship": "application_policy",
-      "implementation_relationship": "different_policy",
-      "explanation": "The inspected Dinero distribution utility gives residual units to larger weights. For 801 units and weights [1, 3], its test expects [200, 601]; Core declared-order allocation gives [201, 600]. Both preserve the total at these small values."
+      "explanation": "The inspected Dinero distribution utility gives residual units to larger weights. For 801 units and weights [1, 3], its test expects [200, 601]; Core declared-order allocation gives [201, 600]. Both preserve the total at these small values.",
+      "implementation_relationship": "different_policy"
     },
     {
       "source_id": "CE-FINDING-0006",
@@ -2196,68 +2348,18 @@
       "clause_sha256": "d474514ff700a8a762ef46b73b6e1b0c10b13109b3e208762fb99088c1a0d310",
       "evidence_role": "limits_claim",
       "relationship": "application_policy",
-      "implementation_relationship": "partial_match",
-      "explanation": "GoMoney equal splitting distributes signed residual units to the first positions. Its ratio method also accepts all-zero weights and can return zeros for a nonzero source, so the broader method is not a conservation guarantee."
+      "explanation": "GoMoney equal splitting distributes signed residual units to the first positions. Its ratio method also accepts all-zero weights and can return zeros for a nonzero source, so the broader method is not a conservation guarantee.",
+      "implementation_relationship": "partial_match"
     },
     {
-      "source_id": "CE-FINDING-0011",
-      "target_id": "CORE-002.2",
+      "source_id": "CE-FINDING-0007",
+      "target_id": "CORE-001.2",
       "target_path": "docs/coreDoc/core-doc.md",
-      "clause_sha256": "11233e3eeb3e6ed4148654c16755dcd97e149e90166d654165fb7af545cd7fa7",
-      "evidence_role": "context_only",
-      "relationship": "deferred_scope",
-      "implementation_relationship": "related_control",
-      "explanation": "Moov recomputes file-to-batch and batch-to-entry totals rather than relying on structural acceptance. This payment-domain control illustrates evaluating related values together; it is not an implementation of the bounded Core Entity model."
-    },
-    {
-      "source_id": "CE-FINDING-0014",
-      "target_id": "CORE-002.2",
-      "target_path": "docs/coreDoc/core-doc.md",
-      "clause_sha256": "11233e3eeb3e6ed4148654c16755dcd97e149e90166d654165fb7af545cd7fa7",
-      "evidence_role": "context_only",
-      "relationship": "deferred_scope",
-      "implementation_relationship": "related_control",
-      "explanation": "TigerBeetle includes pending and posted counters in configured account-limit predicates before inserting a new transfer. It illustrates the importance of evaluating the complete relevant state; the ledger formula is outside Core."
-    },
-    {
-      "source_id": "CE-FINDING-0015",
-      "target_id": "CORE-002.2",
-      "target_path": "docs/coreDoc/core-doc.md",
-      "clause_sha256": "11233e3eeb3e6ed4148654c16755dcd97e149e90166d654165fb7af545cd7fa7",
-      "evidence_role": "context_only",
-      "relationship": "deferred_scope",
-      "implementation_relationship": "related_control",
-      "explanation": "ERPNext accumulates duplicate voucher and term references against fresh outstanding data. Its test rejects a combined 200 allocation against an invoice outstanding of 100, even though each individual row could appear acceptable."
-    },
-    {
-      "source_id": "CE-FINDING-0001",
-      "target_id": "CORE-002.3",
-      "target_path": "docs/coreDoc/core-doc.md",
-      "clause_sha256": "20b537b4b61f75741bc518b9819bb8bd37e300ca2b7058ecd682a83e66028c67",
-      "evidence_role": "limits_claim",
+      "clause_sha256": "4317664c45a67fd420616bfc3d41af0321cca216c1c7732e93fbf6497379f37b",
+      "evidence_role": "counterpoint",
       "relationship": "application_policy",
-      "implementation_relationship": "partial_match",
-      "explanation": "The inspected allocation guards and local result construction do not assign to the source Money amount or currency when rejecting invalid ratios. This supports operand preservation in that path, not every observable financial effect in the whole library."
-    },
-    {
-      "source_id": "CE-FINDING-0015",
-      "target_id": "CORE-002.3",
-      "target_path": "docs/coreDoc/core-doc.md",
-      "clause_sha256": "20b537b4b61f75741bc518b9819bb8bd37e300ca2b7058ecd682a83e66028c67",
-      "evidence_role": "context_only",
-      "relationship": "deferred_scope",
-      "implementation_relationship": "related_control",
-      "explanation": "The inspected invoice test expects outstanding to remain 100 after an excessive aggregate payment is rejected. This is an application-domain assertion read from source; it does not prove all related state or concurrency behavior."
-    },
-    {
-      "source_id": "CE-FINDING-0013",
-      "target_id": "CORE-003.3",
-      "target_path": "docs/coreDoc/core-doc.md",
-      "clause_sha256": "b9acdb2fec7191d7c12a7192a212c3d234ccfbbea47769a5f73d20dae4df82d3",
-      "evidence_role": "context_only",
-      "relationship": "deferred_scope",
-      "implementation_relationship": "related_control",
-      "explanation": "Formance constructs inverse postings in another transaction value. The helper alone establishes neither a verifiable original-event link nor a persisted reversal, making it a useful boundary example for this rule rather than a demonstrated match."
+      "explanation": "NodaMoney rounds during construction using the selected or ambient context; the standard path can choose currency scale. This contrasts with a generic exact-value boundary and shows why a composing rounding policy must be expressly identified.",
+      "implementation_relationship": "different_policy"
     },
     {
       "source_id": "CE-FINDING-0007",
@@ -2266,8 +2368,18 @@
       "clause_sha256": "dcb226bdfff8d7285f2a33f0896a7aede46032bd6033284f16bae7745d216873",
       "evidence_role": "limits_claim",
       "relationship": "application_policy",
-      "implementation_relationship": "partial_match",
-      "explanation": "An omitted NodaMoney context can resolve to a global or thread-local policy and affect the constructed amount. Reproducing the outcome therefore requires identifying the applicable context; ambient lookup alone is not a portable context contract."
+      "explanation": "An omitted NodaMoney context can resolve to a global or thread-local policy and affect the constructed amount. Reproducing the outcome therefore requires identifying the applicable context; ambient lookup alone is not a portable context contract.",
+      "implementation_relationship": "partial_match"
+    },
+    {
+      "source_id": "CE-FINDING-0008",
+      "target_id": "CORE-001.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "15c2b7a30962c5f3322debb4c5758a35fe8c61f40f602a56a0c4a33f8302eff2",
+      "evidence_role": "limits_claim",
+      "relationship": "application_policy",
+      "explanation": "py-moneyed rejects mismatched-currency addition and retains currency in new results. Its native equality returns false for different currencies, so the finding is a partial match rather than evidence for every operation in this rule.",
+      "implementation_relationship": "partial_match"
     },
     {
       "source_id": "CE-FINDING-0008",
@@ -2276,8 +2388,8 @@
       "clause_sha256": "dcb226bdfff8d7285f2a33f0896a7aede46032bd6033284f16bae7745d216873",
       "evidence_role": "context_only",
       "relationship": "deferred_scope",
-      "implementation_relationship": "related_control",
-      "explanation": "The selected py-moneyed rounding test changes its expected result when the active Decimal rounding context changes. This identifies a material numeric dependency, while the full arithmetic context remains unverified."
+      "explanation": "The selected py-moneyed rounding test changes its expected result when the active Decimal rounding context changes. This identifies a material numeric dependency, while the full arithmetic context remains unverified.",
+      "implementation_relationship": "related_control"
     },
     {
       "source_id": "CE-FINDING-0009",
@@ -2286,8 +2398,8 @@
       "clause_sha256": "dcb226bdfff8d7285f2a33f0896a7aede46032bd6033284f16bae7745d216873",
       "evidence_role": "context_only",
       "relationship": "deferred_scope",
-      "implementation_relationship": "related_control",
-      "explanation": "Beancount balance checks use explicit tolerance or derive it from decimal precision and an option. Those facts change assertion outcomes and must be retained for reproduction; ledger tolerance remains separate from exact Money equality."
+      "explanation": "Beancount balance checks use explicit tolerance or derive it from decimal precision and an option. Those facts change assertion outcomes and must be retained for reproduction; ledger tolerance remains separate from exact Money equality.",
+      "implementation_relationship": "related_control"
     },
     {
       "source_id": "CE-FINDING-0010",
@@ -2296,8 +2408,58 @@
       "clause_sha256": "dcb226bdfff8d7285f2a33f0896a7aede46032bd6033284f16bae7745d216873",
       "evidence_role": "context_only",
       "relationship": "deferred_scope",
-      "implementation_relationship": "related_control",
-      "explanation": "QuantLib Actual/360 receives a declared last-day inclusion setting that changes the year fraction. This is a concrete example of material calculation context; Core does not currently define interest day-count conventions."
+      "explanation": "QuantLib Actual/360 receives a declared last-day inclusion setting that changes the year fraction. This is a concrete example of material calculation context; Core does not currently define interest day-count conventions.",
+      "implementation_relationship": "related_control"
+    },
+    {
+      "source_id": "CE-FINDING-0011",
+      "target_id": "CORE-002.2",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "11233e3eeb3e6ed4148654c16755dcd97e149e90166d654165fb7af545cd7fa7",
+      "evidence_role": "context_only",
+      "relationship": "deferred_scope",
+      "explanation": "Moov recomputes file-to-batch and batch-to-entry totals rather than relying on structural acceptance. This payment-domain control illustrates evaluating related values together; it is not an implementation of the bounded Core Entity model.",
+      "implementation_relationship": "related_control"
+    },
+    {
+      "source_id": "CE-FINDING-0013",
+      "target_id": "CORE-003.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "b9acdb2fec7191d7c12a7192a212c3d234ccfbbea47769a5f73d20dae4df82d3",
+      "evidence_role": "context_only",
+      "relationship": "deferred_scope",
+      "explanation": "Formance constructs inverse postings in another transaction value. The helper alone establishes neither a verifiable original-event link nor a persisted reversal, making it a useful boundary example for this rule rather than a demonstrated match.",
+      "implementation_relationship": "related_control"
+    },
+    {
+      "source_id": "CE-FINDING-0014",
+      "target_id": "CORE-002.2",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "11233e3eeb3e6ed4148654c16755dcd97e149e90166d654165fb7af545cd7fa7",
+      "evidence_role": "context_only",
+      "relationship": "deferred_scope",
+      "explanation": "TigerBeetle includes pending and posted counters in configured account-limit predicates before inserting a new transfer. It illustrates the importance of evaluating the complete relevant state; the ledger formula is outside Core.",
+      "implementation_relationship": "related_control"
+    },
+    {
+      "source_id": "CE-FINDING-0015",
+      "target_id": "CORE-002.2",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "11233e3eeb3e6ed4148654c16755dcd97e149e90166d654165fb7af545cd7fa7",
+      "evidence_role": "context_only",
+      "relationship": "deferred_scope",
+      "explanation": "ERPNext accumulates duplicate voucher and term references against fresh outstanding data. Its test rejects a combined 200 allocation against an invoice outstanding of 100, even though each individual row could appear acceptable.",
+      "implementation_relationship": "related_control"
+    },
+    {
+      "source_id": "CE-FINDING-0015",
+      "target_id": "CORE-002.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "20b537b4b61f75741bc518b9819bb8bd37e300ca2b7058ecd682a83e66028c67",
+      "evidence_role": "context_only",
+      "relationship": "deferred_scope",
+      "explanation": "The inspected invoice test expects outstanding to remain 100 after an excessive aggregate payment is rejected. This is an application-domain assertion read from source; it does not prove all related state or concurrency behavior.",
+      "implementation_relationship": "related_control"
     },
     {
       "source_id": "CE-FINDING-0015",
@@ -2306,8 +2468,98 @@
       "clause_sha256": "dcb226bdfff8d7285f2a33f0896a7aede46032bd6033284f16bae7745d216873",
       "evidence_role": "context_only",
       "relationship": "deferred_scope",
-      "implementation_relationship": "related_control",
-      "explanation": "ERPNext validates against freshly queried outstanding values, party/account facts and configured precision. Those dependencies affect the result; refreshing facts does not alone define a stable snapshot or a concurrency guarantee."
+      "explanation": "ERPNext validates against freshly queried outstanding values, party/account facts and configured precision. Those dependencies affect the result; refreshing facts does not alone define a stable snapshot or a concurrency guarantee.",
+      "implementation_relationship": "related_control"
+    },
+    {
+      "source_id": "ER-0001-F01",
+      "target_id": "CORE-002.1",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "32a272932fa9304df826b445920827e03c1bb833350956fdf533ce8a56319696",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Distinguishing local completion from the customer-facing effect supports declaring the meaning and conditions of a state."
+    },
+    {
+      "source_id": "ER-0001-F02",
+      "target_id": "CORE-002.2",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "11233e3eeb3e6ed4148654c16755dcd97e149e90166d654165fb7af545cd7fa7",
+      "evidence_role": "illustrates_risk",
+      "relationship": "already_addressed",
+      "explanation": "Initial confirmation without remittance illustrates the risk of recognizing a result before evaluating eligibility against the relevant facts."
+    },
+    {
+      "source_id": "ER-0001-F03",
+      "target_id": "CORE-002.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "20b537b4b61f75741bc518b9819bb8bd37e300ca2b7058ecd682a83e66028c67",
+      "evidence_role": "illustrates_risk",
+      "relationship": "already_addressed",
+      "explanation": "Investigating differences after failures illustrates the cost of partial effects and the reason a domain rejection must preserve its specified state."
+    },
+    {
+      "source_id": "ER-0001-F04",
+      "target_id": "CORE-005.1",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "18b9bf8b6f29a2f34bed7dd2330510aeff73ac12995e3ea5d8e1e65242a4b957",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Reconstructing attempts and remittances supports the practical value of stable subjects to which evidence can be associated."
+    },
+    {
+      "source_id": "ER-0001-F05",
+      "target_id": "CORE-003.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "b9acdb2fec7191d7c12a7192a212c3d234ccfbbea47769a5f73d20dae4df82d3",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Resolution through another movement, together with the distinctions in answer 13, supports preserving the origin and making the later action explicit."
+    },
+    {
+      "source_id": "ER-0001-F06",
+      "target_id": "CORE-003.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "b9acdb2fec7191d7c12a7192a212c3d234ccfbbea47769a5f73d20dae4df82d3",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Using a description to relate the outstanding item to its resolution supports the practical need for a verifiable link to the original."
+    },
+    {
+      "source_id": "ER-0001-F07",
+      "target_id": "CORE-004.1",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "670f59e0882a2b9bab0709abfd48b45ea7a32480e13762c16d36ce53a35d797a",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "The batch presented to management illustrates a decision about an identified subject and financial content, distinct from technical access to a system."
+    },
+    {
+      "source_id": "ER-0001-F07",
+      "target_id": "CORE-004.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "4ee8d0bdbc31496c3c51ac20cdd63015dd24da36c6d4b52fb54aff71711fa1f4",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "The accounts, amounts and descriptions presented for approval support associating a decision with what was actually decided."
+    },
+    {
+      "source_id": "ER-0001-F09",
+      "target_id": "CORE-003.1",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "c83537a4e1a56972adeee898744b596e1f599926848d331ca64403e0aed54bb8",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Recording responsible people, times and adjustment information supports attributing and reconstructing financial events."
+    },
+    {
+      "source_id": "ER-0001-F11",
+      "target_id": "CORE-005.3",
+      "target_path": "docs/coreDoc/core-doc.md",
+      "clause_sha256": "dcb226bdfff8d7285f2a33f0896a7aede46032bd6033284f16bae7745d216873",
+      "evidence_role": "supports_rationale",
+      "relationship": "already_addressed",
+      "explanation": "Consulting external evidence to explain the discrepancy supports identifying facts relevant to an outcome rather than inferring them from authorization or a local balance."
     }
   ]
 }
