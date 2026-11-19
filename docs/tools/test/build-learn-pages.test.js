@@ -315,7 +315,7 @@ test('publication accepts synchronized release history but rejects changed histo
   assert.doesNotMatch(diagnostics(), /HTML link must name a local destination/)
   const page = LEARN_PAGES.find(p => p.label === 'Release notes')
   const html = readFileSync(join(root, page.output), 'utf8')
-  writeFileSync(join(root, page.output), html.replace('Published release history.', 'Changed release history.'))
+  writeFileSync(join(root, page.output), html.replace(page.description, 'Changed release history.'))
   assert.match(diagnostics(), /Learn pages are out of date/)
   assert.match(diagnostics(), /learn\/releases.html: stale or contradictory/)
   writeFileSync(join(root, page.output), html)

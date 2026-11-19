@@ -377,6 +377,17 @@ link retains the highlighted button style and opens the official repository at
 `https://github.com/willgittens/FinKore` in a new tab with
 `rel="noopener noreferrer"`. The release checker permits this exact external
 destination only on the known Learn pages.
+
+Page titles and descriptions briefly explain what the reader will find, and are
+shared by the HTML head and Open Graph tags. Generated readers declare `title`
+and `description` in `build-learn-pages.js` or `learn-specifications.js`; their
+short navigation `label` stays separate. CoreDoc metadata lives in
+`build-learn-coredoc.js`. Home and Network metadata is maintained directly in
+their editorial HTML. Interview titles highlight the person and topics; interview
+numbers remain in the page content and navigation. All pages retain the shared
+institutional Open Graph image. Review metadata when a page's subject changes,
+then regenerate the readers with `npm run learn:build`.
+
 Repository file links on these pages use
 `https://github.com/willgittens/FinKore/blob/main/` with the repository-relative
 path and original fragment. They open in a new tab with the same safe link
