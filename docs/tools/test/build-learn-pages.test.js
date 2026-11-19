@@ -196,6 +196,21 @@ test('stable source anchors render safely and cannot duplicate an existing desti
   assert.throws(() => renderLearnMarkdown('# Report\n\n<a id="safe" onclick="bad"></a>', 'example.md'), /Unsupported Learn block/)
 })
 
+test('heading suffixes avoid explicit anchors and previously generated IDs', () => {
+  for (const [body, expected] of [
+    ['<a id="interview-1"></a>\n## Interview\n\n## Interview', ['report', 'interview-1', 'interview', 'interview-2']],
+    ['<a id="interview"></a>\n<a id="interview-1"></a>\n## Interview\n\n## Interview', ['report', 'interview', 'interview-1', 'interview-2', 'interview-3']],
+    ['## Topic\n\n## Topic\n\n## Topic-1\n\n## Topic', ['report', 'topic', 'topic-1', 'topic-1-1', 'topic-2']],
+  ]) {
+    const doc = renderLearnMarkdown(`# Report\n\n${body}`, 'example.md')
+    const ids = [...doc.html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1])
+    assert.deepEqual(ids, expected)
+    assert.equal(new Set(ids).size, ids.length)
+    for (const heading of doc.headings) assert.ok(ids.includes(heading.id))
+  }
+  assert.throws(() => renderLearnMarkdown('# Report\n\n## Topic\n\n## Topic\n\n<a id="topic-1"></a>', 'example.md'), /Duplicate Learn anchor: topic-1/)
+})
+
 test('Experts groups three independent collections and Reviews preserves the existing discussion destinations', t => {
   const root = fixture(t)
   buildLearnPages(root)

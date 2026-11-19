@@ -119,12 +119,18 @@ function inline(text, source, autolinks = true) {
 
 export function renderLearnMarkdown(markdown, source) {
   const lines = markdown.trim().split('\n')
-  const used = new Map(), headings = []
+  const used = new Set(), counts = new Map(), headings = []
   function headingId(text) {
     const slug = text.toLowerCase().replace(/[`*_~]/g, '').replace(/[^\p{L}\p{N}\s_-]/gu, '').replace(/\s+/g, '-')
-    const number = used.get(slug) ?? 0
-    used.set(slug, number + 1)
-    return slug + (number ? `-${number}` : '')
+    let number = counts.get(slug) ?? 0
+    let id = slug + (number ? `-${number}` : '')
+    while (used.has(id)) {
+      number++
+      id = `${slug}-${number}`
+    }
+    counts.set(slug, number + 1)
+    used.add(id)
+    return id
   }
   const blocks = []
   let title, titleId
@@ -152,7 +158,7 @@ export function renderLearnMarkdown(markdown, source) {
     const namedAnchor = line.match(/^<a id="([a-z][a-z0-9-]*)"><\/a>$/)
     if (namedAnchor) {
       if (used.has(namedAnchor[1])) throw new Error(`Duplicate Learn anchor: ${namedAnchor[1]}`)
-      used.set(namedAnchor[1], 1)
+      used.add(namedAnchor[1])
       blocks.push(`<span id="${namedAnchor[1]}"></span>`)
       i++; continue
     }

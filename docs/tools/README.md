@@ -421,13 +421,19 @@ The home page's `css/styles.css` URL retains that identifier; the renderers use
 it to generate the remaining URLs. Build the site after CSS-only changes too,
 and publish the complete `learn/` output, including the HTML and CSS together.
 The Learn deployment workflow validates the committed output through
-`npm run verify`, including `npm run learn:check`, and uploads that same version.
+`npm run verify`, including `npm run learn:check`, followed by
+`npm run learn:evidence:check` and `npm run release:check`, and uploads that same
+version. Publication fails for broken HTML destinations or a changed evidence
+selection that no longer matches its saved snapshot. The evidence export check
+uses the optional saved inputs without executing Python; ordinary contract
+verification remains independent of the global Experts index.
 Run the full build before committing Learn changes. Deployment validation does
 not run a fresh build, because its intentionally new cache identifier would
 change the committed HTML. See [deployment guidance](../../.github/DEPLOYMENT.md#triggers-and-verification).
 
-`npm run learn:check`, `npm run verify`, and `npm run release:check` read the
-existing identifier without creating a new one or modifying files. Generation
+`npm run learn:check`, `npm run learn:evidence:check`, `npm run verify`, and
+`npm run release:check` read the existing identifier without creating a new one
+or modifying files. Generation
 is deterministic for a fixed identifier and canonical source. Missing or mixed
 versions in the maintained pages fail synchronization checks; rerun the full
 `npm run learn:build` command to repair them. Include the changed CSS URLs in
@@ -563,8 +569,9 @@ and pinned Code Evidence analyses. Its sources and bindings are generated; edit
 the selection and collection curation instead. Export rejects changed comparisons,
 source inputs, attribution, publications and selected clauses, without refreshing
 reviewed hashes. `npm run learn:evidence:check` checks this optional export without
-writing. It is separate from `npm run verify`. If the optional selection or global
-index is absent, the build retains the saved snapshot. Neither Python nor original
+writing. It is separate from `npm run verify` and runs before Learn deployment.
+If the optional selection or global index is absent, the build retains the saved
+snapshot. Neither Python nor original
 discovery manifests are executed. Ordinary `learn:check` validates the readers
 against the snapshot alone; contract readers also work without that snapshot.
 
