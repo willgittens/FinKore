@@ -1,0 +1,153 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0017",
+  "title": "Nominal/effective rate conversion declares compounding frequency",
+  "scope": "candidate_rule",
+  "question": "Applying a scalar Rate to Money is not nominal/effective interest conversion.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0036",
+      "title": "Nominal/effective conversion requires compounding context",
+      "library_id": "CE-REPO-0113",
+      "edition_id": "CE-EDITION-0113",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn11",
+          "path": "fin/rates.go",
+          "name": "fin.EffectiveRate",
+          "start_line": 11,
+          "end_line": 16
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn12",
+          "path": "fin/rates.go",
+          "name": "fin.NominalRate",
+          "start_line": 21,
+          "end_line": 26
+        }
+      ],
+      "explanation": [
+        "Nominal/effective conversion explicitly rejects nonpositive compounding frequency and applies reciprocal power expressions using decimal-scalar rate units.",
+        "The two function bodies establish selected algebra and the frequency guard, not APR disclosure or exact-decimal financial arithmetic.",
+        "numPeriods>0, finite real-domain rate inputs; fractional powers of negative bases remain outside a demonstrated valid domain. The same nominal rate with different frequencies gives a different effective rate; no date basis, fees or annual disclosure convention follows from that formula. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0069",
+      "title": "Rate conversion declares frequency, compounding and time units",
+      "library_id": "CE-REPO-0099",
+      "edition_id": "CE-EDITION-0099",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn01",
+          "path": "R/EIR.R",
+          "name": "FinCal::EIR",
+          "start_line": 31,
+          "end_line": 41
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn16",
+          "path": "R/ear.R",
+          "name": "FinCal::ear",
+          "start_line": 14,
+          "end_line": 16
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn17",
+          "path": "R/ear.continuous.R",
+          "name": "FinCal::ear.continuous",
+          "start_line": 11,
+          "end_line": 13
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn18",
+          "path": "R/ear2bey.R",
+          "name": "FinCal::ear2bey",
+          "start_line": 8,
+          "end_line": 10
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn19",
+          "path": "R/ear2hpr.R",
+          "name": "FinCal::ear2hpr",
+          "start_line": 11,
+          "end_line": 13
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn53",
+          "path": "R/r.continuous.R",
+          "name": "FinCal::r.continuous",
+          "start_line": 9,
+          "end_line": 11
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn54",
+          "path": "R/r.norminal.R",
+          "name": "FinCal::r.norminal",
+          "start_line": 12,
+          "end_line": 14
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn05",
+          "path": "R/bdy.R",
+          "name": "FinCal::bdy",
+          "start_line": 10,
+          "end_line": 12
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn06",
+          "path": "R/bdy2mmy.R",
+          "name": "FinCal::bdy2mmy",
+          "start_line": 9,
+          "end_line": 11
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn33",
+          "path": "R/hpr2bey.R",
+          "name": "FinCal::hpr2bey",
+          "start_line": 9,
+          "end_line": 11
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn34",
+          "path": "R/hpr2ear.R",
+          "name": "FinCal::hpr2ear",
+          "start_line": 11,
+          "end_line": 13
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn35",
+          "path": "R/hpr2mmy.R",
+          "name": "FinCal::hpr2mmy",
+          "start_line": 10,
+          "end_line": 12
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn42",
+          "path": "R/mmy2hpr.R",
+          "name": "FinCal::mmy2hpr",
+          "start_line": 11,
+          "end_line": 13
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn55",
+          "path": "R/r.perpetuity.R",
+          "name": "FinCal::r.perpetuity",
+          "start_line": 9,
+          "end_line": 11
+        }
+      ],
+      "explanation": [
+        "The helpers distinguish compound-equivalent conversion, proportional division, continuous conversion and360/365 money-market scaling; hpr2bey uses a month-based6/t exponent.",
+        "The constants and powers were read directly across the conversion functions. No common unit type or universal domain guard is supplied.",
+        "Caller-selected day or month period, meaningful frequency, nonzero denominators and a valid real logarithm/power domain. Passing a day count to the6/t month exponent changes the financial unit; fixed365 scaling is not a configurable day-count convention. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    }
+  ]
+}

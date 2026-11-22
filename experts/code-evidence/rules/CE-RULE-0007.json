@@ -1,0 +1,128 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0007",
+  "title": "Payment-file totals validate a bounded set of records",
+  "scope": "candidate_rule",
+  "question": "Identify included records, counters and amount units; a scheme-specific total is not a universal settlement rule.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0011",
+      "title": "Payment control totals are checked at file and batch levels",
+      "library_id": "CE-REPO-0011",
+      "edition_id": "CE-EDITION-0011",
+      "collected_on": "2026-11-18",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0011:CE-EDITION-0011:fn01",
+          "path": "file.go",
+          "name": "ach.(*File).ValidateTotals",
+          "start_line": 1170,
+          "end_line": 1192
+        },
+        {
+          "id": "CE-REPO-0011:CE-EDITION-0011:fn02",
+          "path": "file.go",
+          "name": "ach.(*File).isFileAmount",
+          "start_line": 1249,
+          "end_line": 1289
+        },
+        {
+          "id": "CE-REPO-0011:CE-EDITION-0011:fn03",
+          "path": "batch.go",
+          "name": "ach.(*Batch).isBatchAmount",
+          "start_line": 738,
+          "end_line": 770
+        },
+        {
+          "id": "CE-REPO-0011:CE-EDITION-0011:fn04",
+          "path": "batch.go",
+          "name": "ach.(*Batch).calculateBatchAmounts",
+          "start_line": 772,
+          "end_line": 787
+        }
+      ],
+      "explanation": [
+        "ValidateTotals separately compares declared file debit/credit totals to batch totals and asks batches to validate their own controls. For ordinary batches, entry transaction codes determine which amounts contribute to debit or credit. A totals mismatch is returned as an error, without silently rewriting a control value.",
+        "ACH file/batch control validation, not current Core payment semantics or a certification against a Nacha edition. Selected totals checks and assertions do not prove all variants, bounds or settlement behavior."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0071",
+      "title": "Payment control sums identify exactly which records and units are included",
+      "library_id": "CE-REPO-0106",
+      "edition_id": "CE-EDITION-0106",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0106:CE-EDITION-0106:fn07",
+          "path": "src/nemiah/phpSepaXml/SEPATransfer.php",
+          "name": "nemiah\\phpSepaXml\\SEPATransfer::CtrlSum($sequence=null)",
+          "start_line": 54,
+          "end_line": 69
+        },
+        {
+          "id": "CE-REPO-0106:CE-EDITION-0106:fn08",
+          "path": "src/nemiah/phpSepaXml/SEPATransfer.php",
+          "name": "nemiah\\phpSepaXml\\SEPATransfer::toXML($paymentInitiation='')",
+          "start_line": 71,
+          "end_line": 135
+        },
+        {
+          "id": "CE-REPO-0106:CE-EDITION-0106:fn12",
+          "path": "src/nemiah/phpSepaXml/SEPADirectDebitBasic.php",
+          "name": "nemiah\\phpSepaXml\\SEPADirectDebitBasic::CtrlSum($sequence=null)",
+          "start_line": 57,
+          "end_line": 72
+        },
+        {
+          "id": "CE-REPO-0106:CE-EDITION-0106:fn13",
+          "path": "src/nemiah/phpSepaXml/SEPADirectDebitBasic.php",
+          "name": "nemiah\\phpSepaXml\\SEPADirectDebitBasic::toXML($format='pain.008.001.02')",
+          "start_line": 74,
+          "end_line": 150
+        },
+        {
+          "id": "CE-REPO-0106:CE-EDITION-0106:fn22",
+          "path": "src/nemiah/phpSepaXml/SEPACreditor.php",
+          "name": "nemiah\\phpSepaXml\\SEPACreditor::XMLTransfer(SimpleXMLElement $xml)",
+          "start_line": 83,
+          "end_line": 100
+        },
+        {
+          "id": "CE-REPO-0106:CE-EDITION-0106:fn23",
+          "path": "src/nemiah/phpSepaXml/SEPADebitor.php",
+          "name": "nemiah\\phpSepaXml\\SEPADebitor::XMLDirectDebit(SimpleXMLElement $xml,$format)",
+          "start_line": 30,
+          "end_line": 67
+        }
+      ],
+      "explanation": [
+        "Transfer and direct-debit documents emit counts and sums at global and group levels from the same grouped parties. Amounts use ordinary PHP numeric addition and each transaction separately emits its own currency attribute.",
+        "No currency compatibility or exact decimal accumulator is shown. Mixed-currency parties are summed numerically; no local exactness/scale or duplicate check establishes that sum as portable Money. Commented schema validation and source examples do not prove XML or bank acceptance."
+      ],
+      "context_requirement_ids": []
+    }
+  ],
+  "historical_publications": [
+    {
+      "id": "CE-FINDING-0011",
+      "title": "Moov ACH — Payment control totals are checked at file and batch levels",
+      "collected_on": "2026-11-18",
+      "function_ids": [
+        "CE-REPO-0011:CE-EDITION-0011:fn01",
+        "CE-REPO-0011:CE-EDITION-0011:fn02",
+        "CE-REPO-0011:CE-EDITION-0011:fn03",
+        "CE-REPO-0011:CE-EDITION-0011:fn04"
+      ],
+      "explanation": [
+        "ValidateTotals separately compares declared file debit/credit totals to batch totals and asks batches to validate their own controls. For ordinary batches, entry transaction codes determine which amounts contribute to debit or credit. A totals mismatch is returned as an error, without silently rewriting a control value.",
+        "ACH file/batch control validation, not current Core payment semantics or a certification against a Nacha edition. Selected totals checks and assertions do not prove all variants, bounds or settlement behavior."
+      ]
+    }
+  ]
+}

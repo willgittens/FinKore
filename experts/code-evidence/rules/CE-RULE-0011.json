@@ -1,0 +1,208 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0011",
+  "title": "Tax calculation declares whether the base includes tax",
+  "scope": "candidate_rule",
+  "question": "Separate gross-to-net extraction from net-to-gross addition; percentage units and intermediate/output rounding can change the result.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0023",
+      "title": "VAT arithmetic requires a gross/net interpretation",
+      "library_id": "CE-REPO-0017",
+      "edition_id": "CE-EDITION-0017",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn02",
+          "path": "src/index.ts",
+          "name": "percentToMultiplier",
+          "start_line": 50,
+          "end_line": 51
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn03",
+          "path": "src/index.ts",
+          "name": "percentToRate",
+          "start_line": 52,
+          "end_line": 52
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn48",
+          "path": "src/index.ts",
+          "name": "Money.addVat",
+          "start_line": 615,
+          "end_line": 620
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn49",
+          "path": "src/index.ts",
+          "name": "Money.removeVat",
+          "start_line": 622,
+          "end_line": 627
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn50",
+          "path": "src/index.ts",
+          "name": "Money.getVat",
+          "start_line": 629,
+          "end_line": 637
+        }
+      ],
+      "explanation": [
+        "The VAT helpers select gross/net interpretation through an explicit argument or tag, apply multiplication/division by1+p/100, and then reconstruct Money under the library precision policy.",
+        "addVat/removeVat and getVat have distinct bases; reading the helpers confirms the tag selects a calculation branch, not jurisdiction or legally applicable rates.",
+        "Dintero Money receiver, a supplied percentage and an explicit/tagged inclusive interpretation; constructor and Big.js precision remain source-selected. At percentage-100 the gross-removal multiplier is zero; intermediate reconstruction can make add/remove noninverse. This is not a generic Rate-only tax specification. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0043",
+      "title": "Included and excluded tax use different bases and rounding boundaries",
+      "library_id": "CE-REPO-0053",
+      "edition_id": "CE-EDITION-0053",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0053:CE-EDITION-0053:fn01",
+          "path": "Calculator/DefaultCalculator.php",
+          "name": "Sylius\\Component\\Taxation\\Calculator\\DefaultCalculator::calculate",
+          "start_line": 20,
+          "end_line": 27
+        },
+        {
+          "id": "CE-REPO-0053:CE-EDITION-0053:fn03",
+          "path": "Calculator/DelegatingCalculator.php",
+          "name": "Sylius\\Component\\Taxation\\Calculator\\DelegatingCalculator::calculate",
+          "start_line": 25,
+          "end_line": 31
+        }
+      ],
+      "explanation": [
+        "DefaultCalculator extracts included tax as gross-gross/(1+r), but excluded tax as net*r, rounding the returned tax amount to a whole unit.",
+        "No tax eligibility, jurisdiction, currency, rate-effective-date or statutory rounding policy is established. Dintero uses percentage input and rounds a reconstructed net before rate multiplication; these formulas are not universally equivalent under finite scale."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0048",
+      "title": "Tax preserves a chosen net or gross component",
+      "library_id": "CE-REPO-0038",
+      "edition_id": "CE-EDITION-0038",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0038:CE-EDITION-0038:fn25",
+          "path": "prices/tax.py",
+          "name": "prices.tax.flat_tax",
+          "start_line": 30,
+          "end_line": 51
+        },
+        {
+          "id": "CE-REPO-0038:CE-EDITION-0038:fn26",
+          "path": "prices/taxed_money.py",
+          "name": "prices.taxed_money.TaxedMoney.__init__",
+          "start_line": 17,
+          "end_line": 26
+        },
+        {
+          "id": "CE-REPO-0038:CE-EDITION-0038:fn38",
+          "path": "prices/taxed_money.py",
+          "name": "prices.taxed_money.TaxedMoney.tax",
+          "start_line": 108,
+          "end_line": 110
+        },
+        {
+          "id": "CE-REPO-0038:CE-EDITION-0038:fn39",
+          "path": "prices/taxed_money.py",
+          "name": "prices.taxed_money.TaxedMoney.quantize",
+          "start_line": 112,
+          "end_line": 119
+        }
+      ],
+      "explanation": [
+        "flat_tax can keep gross while quantizing a reduced net or keep net while quantizing an increased gross. TaxedMoney then computes tax as gross-net and checks currency compatibility.",
+        "Reapplying flat_tax to already different net/gross components uses the current chosen component, not a universal replace-tax rule. No jurisdiction, effective-date, exemption or statutory precision is resolved."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0108",
+      "title": "Tax-inclusive example derives residual tax after subtotal truncation",
+      "library_id": "CE-REPO-0023",
+      "edition_id": "CE-EDITION-0023",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn150",
+          "path": "doc_test.go",
+          "name": "govalues/money.example.TaxAmount",
+          "start_line": 16,
+          "end_line": 38
+        }
+      ],
+      "explanation": [
+        "The tax-inclusive example divides the total by1+taxRate, truncates subtotal to the currency unit, and assigns the remainder as total minus subtotal tax.",
+        "This is an explicit illustrative residual-ownership choice, not an independently validated legal tax algorithm or generic percentage Rate operation.",
+        "Supplied inclusive price, rate denominator nonzero and a jurisdiction that intentionally chooses this truncation/subtraction convention. Rate-1 makes the denominator zero; truncating subtotal and subtracting it can differ from independently rounding a calculated tax amount. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0122",
+      "title": "Invoice and cart tax declare different bases and residual rounding",
+      "library_id": "CE-REPO-0005",
+      "edition_id": "CE-EDITION-0005",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn198",
+          "path": "examples/invoice-builder/src/lib/money.ts",
+          "name": "examples/invoice-builder/src/lib/money.ts::percentageRatios@103",
+          "start_line": 103,
+          "end_line": 107
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn199",
+          "path": "examples/invoice-builder/src/lib/money.ts",
+          "name": "examples/invoice-builder/src/lib/money.ts::discountAmount@112",
+          "start_line": 112,
+          "end_line": 129
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn200",
+          "path": "examples/invoice-builder/src/lib/money.ts",
+          "name": "examples/invoice-builder/src/lib/money.ts::taxAmount@134",
+          "start_line": 134,
+          "end_line": 148
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn201",
+          "path": "examples/invoice-builder/src/lib/money.ts",
+          "name": "examples/invoice-builder/src/lib/money.ts::grandTotal@153",
+          "start_line": 153,
+          "end_line": 159
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn009",
+          "path": "examples/cart-react/src/App.tsx",
+          "name": "examples/cart-react/src/App.tsx::App@63",
+          "start_line": 63,
+          "end_line": 243
+        }
+      ],
+      "explanation": [
+        "The invoice example taxes subtotal after discount, whereas the cart applies a VAT allocation directly to subtotal and adds shipping; percentage ratios are native-rounded integer weights.",
+        "These are different illustrative bases and residual mechanisms. A fixed discount is not clipped to subtotal in the calculation helper.",
+        "The respective example UI and helper inputs, valid Dinero currency/scale and allocator-admissible percentage ratios. A fixed discount above subtotal makes the taxable amount negative; percentage above100 can create an invalid complementary allocation weight. These are source paths, not legal tax conclusions. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    }
+  ]
+}

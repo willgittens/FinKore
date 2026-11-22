@@ -1,0 +1,46 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0031",
+  "title": "Entity identity does not substitute for a full-state observation",
+  "scope": "candidate_rule",
+  "question": "Compare ID-only equality with the state fields required to establish failure atomicity.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0056",
+      "title": "Entity identity equality is distinct from full-state comparison",
+      "library_id": "CE-REPO-0016",
+      "edition_id": "CE-EDITION-0016",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn25",
+          "path": "src/main/java/com/lmoraesdev/payment/domain/model/Charge.java",
+          "name": "Charge.restore(UUID,Money,ChargeStatus,Instant,Instant,Long)",
+          "start_line": 55,
+          "end_line": 69
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn26",
+          "path": "src/main/java/com/lmoraesdev/payment/domain/model/Charge.java",
+          "name": "Charge.equals(Object)",
+          "start_line": 104,
+          "end_line": 112
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn27",
+          "path": "src/main/java/com/lmoraesdev/payment/domain/model/Charge.java",
+          "name": "Charge.hashCode()",
+          "start_line": 115,
+          "end_line": 117
+        }
+      ],
+      "explanation": [
+        "Restored Charge requires identity and financial fields, while equals/hashCode compare identity only. Comparing equal entities therefore does not verify that status, amount, timestamps or revision remained unchanged.",
+        "Entity identity semantics can support a control but cannot replace full-state observations for rejected operations. No general immutability, concurrency or snapshot guarantee follows from ID-only equality; the restore path does not verify timestamp order/history."
+      ],
+      "context_requirement_ids": []
+    }
+  ]
+}

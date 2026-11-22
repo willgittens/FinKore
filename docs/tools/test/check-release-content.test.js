@@ -65,7 +65,7 @@ test('upstream code links require a current registered source, the CoreDoc page 
   const root = fixture(t)
   const data = JSON.parse(readFileSync(new URL('../../../learn/related-evidence.json', import.meta.url), 'utf8'))
   const source = data.sources.find(source => source.kind === 'code')
-  const index = { schema_version: '1.1.0', sources: [source], bindings: [] }
+  const index = { schema_version: data.schema_version, sources: [source], bindings: [] }
   const publication = readFileSync(new URL(`../../../${source.publication_path}`, import.meta.url), 'utf8')
   put(root, source.publication_path, publication)
   put(root, 'learn/related-evidence.json', JSON.stringify(index))
@@ -103,6 +103,103 @@ test('accepts stable publication while preserving format versions, vector IDs, r
   assert.equal(validateReleaseContent(root).htmlLinkCount, 3)
   assert.equal(run(root).status, 0)
   assert.match(run(root).output, /Financial behavior was not executed/)
+})
+
+function upstreamFixture(t) {
+  const root = fixture(t), repository_id = 'CE-REPO-0001', edition_id = 'CE-EDITION-0001', commit_sha = 'a'.repeat(40)
+  const prefix = 'experts/code-evidence/', stem = `${repository_id}/${edition_id}`
+  const target = negative.emptyPlanDirectory + '/upstream-proposal.md'
+  const archive = `https://codeload.github.com/example/project/tar.gz/${commit_sha}`
+  const url = `https://github.com/example/project/blob/${commit_sha}/${target}#L1-L4`
+  const inventory = { schema_version: '1.1.0', repository_id, edition_id, commit_sha, source_url: archive,
+    source_files: [], other_files: [[target, 'regular', 128]] }
+  const analysis = prefix + `analyses/${stem}/extensive.md`
+  const body = '# Attributed upstream reading\n\n`' + target + '` is an upstream proposal only.\n\n[Pinned source](' + url + ').\n'
+  const evaluation = { repository_id, edition_id, commit_sha, file_groups: [{ paths: [target] }], file_observations: [{ path: target }],
+    constructs: [{ name: 'Proposal only: ' + target, location: { path: target, source_url: url } }], tests: [] }
+  put(root, prefix + 'repositories.json', JSON.stringify({ repositories: [{ id: repository_id, full_name: 'example/project', editions: [{ id: edition_id, commit_sha }] }] }))
+  put(root, prefix + `inventories/${stem}.json`, JSON.stringify(inventory))
+  put(root, prefix + `evaluations/${stem}.json`, JSON.stringify(evaluation))
+  put(root, prefix + 'rule-library.json', JSON.stringify({ sources: [{ repository_id, edition_id,
+    inventory: `inventories/${stem}.json`, analysis_records: [analysis.slice(prefix.length)] }] }))
+  put(root, analysis, body)
+  return { root, prefix, stem, analysis, body, target, url, inventory, evaluation }
+}
+
+test('pinned upstream inventory, evaluation and registered reading paths are not local working plans', t => {
+  const f = upstreamFixture(t)
+  const before = readFileSync(join(f.root, f.analysis))
+  assert.equal(run(f.root).status, 0, run(f.root).error)
+  assert.deepEqual(readFileSync(join(f.root, f.analysis)), before)
+  // A plain upstream directory mention is contextual only beside its pinned citation.
+  put(f.root, f.analysis, f.body + '\nThe source proposal directory ' + negative.emptyPlanDirectory + '/ contains alternatives.\n')
+  assert.equal(run(f.root).status, 0)
+  mkdirSync(join(f.root, negative.emptyPlanDirectory), { recursive: true })
+  assert.match(run(f.root).error, /planning artifact is forbidden/)
+})
+
+test('upstream-path exception requires matching catalog, archive pin and registered reading', t => {
+  for (const mutate of [
+    f => { f.inventory.commit_sha = 'b'.repeat(40) },
+    f => { f.inventory.source_url = f.inventory.source_url.replace('example/project', 'other/project') },
+    f => { f.inventory.source_url = f.inventory.source_url.replace('a'.repeat(40), 'main') },
+    f => { put(f.root, f.prefix + 'rule-library.json', JSON.stringify({ sources: [] })) },
+    f => { put(f.root, f.prefix + 'repositories.json', JSON.stringify({ repositories: [] })) },
+  ]) {
+    const f = upstreamFixture(t); mutate(f)
+    put(f.root, f.prefix + `inventories/${f.stem}.json`, JSON.stringify(f.inventory))
+    assert.match(run(f.root).error, /active planning reference/)
+  }
+})
+
+test('upstream citations cannot hide moved pins, relative links, unknown paths or URL prefixes', t => {
+  for (const mutation of [
+    f => f.body.replace(f.url, f.url.replace('a'.repeat(40), 'main')),
+    f => f.body.replace(f.url, f.url.replace('a'.repeat(40), 'b'.repeat(40))),
+    f => f.body.replace(f.url, 'https://other.invalid/?redirect=' + f.url),
+    f => f.body + '\n[Local plan](' + f.target + ')\n',
+    f => f.body + '\n[Local plan](../../' + f.target + ')\n',
+    f => f.body + '\n`' + f.target + '.local.md`\n',
+    f => f.body + '\n`' + negative.emptyPlanDirectory + '/local-only.md`\n',
+  ]) {
+    const f = upstreamFixture(t)
+    put(f.root, f.analysis, mutation(f))
+    assert.match(run(f.root).error, /active planning reference/)
+  }
+})
+
+test('upstream metadata exception never masks arbitrary prose, copied milestones or another collection', t => {
+  const f = upstreamFixture(t)
+  f.inventory.classification = 'Follow ' + f.target
+  put(f.root, f.prefix + `inventories/${f.stem}.json`, JSON.stringify(f.inventory))
+  assert.match(run(f.root).error, /active planning reference/)
+  delete f.inventory.classification
+  put(f.root, f.prefix + `inventories/${f.stem}.json`, JSON.stringify(f.inventory))
+  put(f.root, f.analysis, f.body + '\n## Milestone 1\n\nCopied local work.\n')
+  assert.match(run(f.root).error, /copied planning content/)
+  put(f.root, f.analysis, f.body)
+  put(f.root, 'experts/research/unregistered.md', f.body)
+  assert.match(run(f.root).error, /active planning reference/)
+})
+
+test('an evaluation path with the wrong upstream commit remains a forbidden reference', t => {
+  const f = upstreamFixture(t)
+  f.evaluation.constructs[0].location.source_url = f.url.replace('a'.repeat(40), 'b'.repeat(40))
+  put(f.root, f.prefix + `evaluations/${f.stem}.json`, JSON.stringify(f.evaluation))
+  assert.match(run(f.root).error, /active planning reference/)
+})
+
+test('Git-tree-only upstream paths require the same catalog commit and tree source', t => {
+  const f = upstreamFixture(t)
+  f.inventory.other_files = []
+  f.inventory.repository_tree = { commit_sha: 'a'.repeat(40), tree_sha: 'c'.repeat(40),
+    source_url: 'https://github.com/example/project/tree/' + 'a'.repeat(40),
+    files: [[f.target, '100644', 'd'.repeat(40), 128, 4]] }
+  put(f.root, f.prefix + `inventories/${f.stem}.json`, JSON.stringify(f.inventory))
+  assert.equal(run(f.root).status, 0)
+  f.inventory.repository_tree.commit_sha = 'b'.repeat(40)
+  put(f.root, f.prefix + `inventories/${f.stem}.json`, JSON.stringify(f.inventory))
+  assert.match(run(f.root).error, /active planning reference/)
 })
 
 test('rejects each reintroduced artifact, dependency, status and HTML defect with its intended CLI diagnostic', (t) => {

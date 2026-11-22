@@ -1,52 +1,297 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:finkore:code-evidence:traceability:1.0.0",
-  "title": "Local Code Evidence comparison curation",
+  "$id": "urn:finkore:code-evidence:traceability:2.0.0",
   "type": "object",
   "additionalProperties": false,
   "properties": {
     "schema_version": {
-      "const": "1.0.0"
+      "const": "2.0.0"
     },
-    "curation": {
+    "normative": {
+      "const": false
+    },
+    "format_migrated_on": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "review_baseline": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "description": {
+        "version": {
           "type": "string",
           "minLength": 1
         },
+        "commit_sha": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sha256": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "path",
+              "sha256"
+            ]
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "version",
+        "commit_sha",
+        "scope",
+        "artifacts"
+      ]
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^CE-COMPARISON-[0-9]{4}$"
+          },
+          "finding_id": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^CE-FINDING-[0-9]{4}$"
+          },
+          "rule_id": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^CE-RULE-[0-9]{4}$"
+          },
+          "reviewed_by": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reviewed_on": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+          },
+          "disposition": {
+            "enum": [
+              "mapped",
+              "not_mapped"
+            ]
+          },
+          "record_sha256": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "requirement_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0
+          },
+          "vector_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0
+          },
+          "agentic_operations": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0
+          },
+          "bindings": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "target_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^CORE-[0-9]{3}\\.[0-9]+$"
+                },
+                "target_path": {
+                  "const": "docs/coreDoc/core-doc.md"
+                },
+                "clause_sha256": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^[a-f0-9]{64}$"
+                },
+                "relationship": {
+                  "enum": [
+                    "already_addressed",
+                    "possible_gap",
+                    "possible_conflict",
+                    "application_policy",
+                    "deferred_scope",
+                    "outside_scope"
+                  ]
+                },
+                "evidence_role": {
+                  "enum": [
+                    "supports_rationale",
+                    "illustrates_risk",
+                    "limits_claim",
+                    "counterpoint",
+                    "context_only"
+                  ]
+                },
+                "implementation_relationship": {
+                  "enum": [
+                    "same_approach",
+                    "partial_match",
+                    "different_policy",
+                    "related_control"
+                  ]
+                },
+                "explanation": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "target_id",
+                "target_path",
+                "clause_sha256",
+                "relationship",
+                "evidence_role",
+                "implementation_relationship",
+                "explanation"
+              ]
+            },
+            "minItems": 0
+          },
+          "decision": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "action": {
+                "enum": [
+                  "keep_evidence",
+                  "defer",
+                  "discard"
+                ]
+              },
+              "priority": {
+                "enum": [
+                  "high",
+                  "medium",
+                  "low"
+                ]
+              },
+              "by": {
+                "type": "string",
+                "minLength": 1
+              },
+              "on": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+              },
+              "question": {
+                "type": "string",
+                "minLength": 1
+              },
+              "role": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "action",
+              "priority",
+              "by",
+              "on"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "previous_comparison": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^CE-FINDING-[0-9]{4}$"
+          }
+        },
+        "required": [
+          "id",
+          "finding_id",
+          "rule_id",
+          "reviewed_by",
+          "reviewed_on",
+          "disposition",
+          "record_sha256",
+          "requirement_ids",
+          "vector_ids",
+          "agentic_operations",
+          "bindings",
+          "decision"
+        ]
+      },
+      "minItems": 0
+    },
+    "publications": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
         "sources": {
           "type": "array",
           "items": {
             "type": "object"
           },
-          "minItems": 1
+          "minItems": 0
         },
         "bindings": {
           "type": "array",
           "items": {
             "type": "object"
           },
-          "minItems": 1
+          "minItems": 0
         }
       },
       "required": [
-        "description",
         "sources",
         "bindings"
-      ]
-    },
-    "resolved": {
-      "type": [
-        "object",
-        "null"
       ]
     }
   },
   "required": [
     "schema_version",
-    "curation",
-    "resolved"
+    "normative",
+    "format_migrated_on",
+    "review_baseline",
+    "records",
+    "publications"
   ]
 }

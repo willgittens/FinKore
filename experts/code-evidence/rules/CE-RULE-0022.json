@@ -1,0 +1,197 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0022",
+  "title": "Financial indicators declare units and economic applicability",
+  "scope": "candidate_rule",
+  "question": "Ratios, percentage outputs, heuristics and pricing models are separate rule candidates, with explicit denominators and rounding.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0042",
+      "title": "Named financial ratios carry distinct applicability and rounding policies",
+      "library_id": "CE-REPO-0103",
+      "edition_id": "CE-EDITION-0103",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn08",
+          "path": "finance.js",
+          "name": "Finance.prototype.PP",
+          "start_line": 72,
+          "end_line": 89
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn09",
+          "path": "finance.js",
+          "name": "Finance.prototype.ROI",
+          "start_line": 92,
+          "end_line": 95
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn12",
+          "path": "finance.js",
+          "name": "Finance.prototype.PI",
+          "start_line": 128,
+          "end_line": 138
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn13",
+          "path": "finance.js",
+          "name": "Finance.prototype.DF",
+          "start_line": 141,
+          "end_line": 149
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn15",
+          "path": "finance.js",
+          "name": "Finance.prototype.CAGR",
+          "start_line": 158,
+          "end_line": 161
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn16",
+          "path": "finance.js",
+          "name": "Finance.prototype.LR",
+          "start_line": 164,
+          "end_line": 166
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn17",
+          "path": "finance.js",
+          "name": "Finance.prototype.R72",
+          "start_line": 169,
+          "end_line": 171
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn18",
+          "path": "finance.js",
+          "name": "Finance.prototype.WACC",
+          "start_line": 174,
+          "end_line": 184
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn22",
+          "path": "finance.js",
+          "name": "Finance.prototype.CAPM",
+          "start_line": 243,
+          "end_line": 246
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn23",
+          "path": "finance.js",
+          "name": "Finance.prototype.stockPV",
+          "start_line": 250,
+          "end_line": 253
+        }
+      ],
+      "explanation": [
+        "The named ratios and heuristics return different units and rounding: some percentages, some ratios, rounded prices and a72/rate doubling heuristic.",
+        "Reading each helper shows no common economic validation or output-unit contract. Recurrence of ordinary number values cannot establish interchangeable financial meaning.",
+        "Operation-specific nonzero denominators and meaningful economic inputs; percentage/scalar choices must follow the actual helper. R72 is a heuristic and CAPM returns a scalar while ROI returns percentage; a test name cannot substantiate a different function it does not call. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0067",
+      "title": "Earnings-per-share controls depend on weighted exposure and dilution choices",
+      "library_id": "CE-REPO-0099",
+      "edition_id": "CE-EDITION-0099",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "open_question",
+      "functions": [
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn02",
+          "path": "R/EPS.R",
+          "name": "FinCal::EPS",
+          "start_line": 11,
+          "end_line": 13
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn14",
+          "path": "R/diluted.EPS.R",
+          "name": "FinCal::diluted.EPS",
+          "start_line": 24,
+          "end_line": 31
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn38",
+          "path": "R/iss.R",
+          "name": "FinCal::iss",
+          "start_line": 10,
+          "end_line": 16
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn61",
+          "path": "R/was.R",
+          "name": "FinCal::was",
+          "start_line": 12,
+          "end_line": 25
+        }
+      ],
+      "explanation": [
+        "Basic EPS uses caller weighted shares; was weights month counts by12. Diluted EPS makes one conditional recomputation and the option helper rejects price<=exercise.",
+        "The source does not independently assess each instrument anti-dilution effect or establish an accounting disclosure standard.",
+        "Nonzero economically meaningful share denominators, aligned month/share inputs and caller interpretation of tax and convertible instruments. The single recomputation can remain distinct from instrument-by-instrument anti-dilution analysis; out-of-money options raise instead of returning zero incremental shares. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0361",
+      "title": "Financial result units and rounding differ across named calculators",
+      "library_id": "CE-REPO-0103",
+      "edition_id": "CE-EDITION-0103",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn13",
+          "path": "finance.js",
+          "name": "Finance.prototype.DF",
+          "start_line": 141,
+          "end_line": 149
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn14",
+          "path": "finance.js",
+          "name": "Finance.prototype.CI",
+          "start_line": 152,
+          "end_line": 155
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn18",
+          "path": "finance.js",
+          "name": "Finance.prototype.WACC",
+          "start_line": 174,
+          "end_line": 184
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn20",
+          "path": "finance.js",
+          "name": "Finance.prototype.IAR",
+          "start_line": 200,
+          "end_line": 202
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn22",
+          "path": "finance.js",
+          "name": "Finance.prototype.CAPM",
+          "start_line": 243,
+          "end_line": 246
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn23",
+          "path": "finance.js",
+          "name": "Finance.prototype.stockPV",
+          "start_line": 250,
+          "end_line": 253
+        }
+      ],
+      "explanation": [
+        "IAR, CAPM, WACC, stockPV, DF and CI expose distinct output units, rounding and time observations despite sharing native number types.",
+        "The bodies explicitly scale IAR by100, CAPM inputs by100 without output scaling, WACC to tenths of a percentage point, stockPV to integers, and DF to upward-rounded factors.",
+        "Per-function economic domain and denominator conditions; no currency protocol or exact decimal result is asserted. DF excludes its loop endpoint and includes exponent0; CI includes principal rather than interest alone. Equal numeric result types cannot erase those distinctions. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    }
+  ]
+}

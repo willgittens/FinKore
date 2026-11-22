@@ -237,3 +237,27 @@ test('CoreDoc evidence is separate from every original obligation and governance
   assert.match(html, /rule-evidence-card/)
   assert.equal(html.replace(/\n\s*<aside class="rule-evidence"[\s\S]*?<\/aside>/g, ''), baseline)
 })
+
+test('compact code publications preserve selected text and function identity without hashing unrelated findings', async t => {
+  const {recordHash} = await import('../code-evidence-publication.js')
+  const f=codeFixture(t), source=f.data.sources.find(s=>s.kind==='code')
+  const publication={id:source.id,title:source.title,collected_on:'2026-11-18',function_ids:['fn01'],explanation:['The allocation path retains residual units.',source.limits]}
+  const rule={schema_version:'2.0.0',id:'CE-RULE-0001',evidence:[{id:source.id,functions:[{id:'fn01',name:'Money.allocate',path:'src/money.js',start_line:10,end_line:20}]}],historical_publications:[publication]}
+  const path='experts/code-evidence/rules/CE-RULE-0001.json'
+  Object.assign(source,{publication_format:'code-evidence-v2',publication_path:path,publication_sha256:recordHash(publication),href:'https://github.com/willgittens/FinKore/blob/main/'+path})
+  f.data.schema_version='1.3.0'
+  const save=()=>{put(f.root,path,JSON.stringify(rule));f.save()}
+  save();assert.equal(loadLearnEvidence(f.root).sources.get(source.id).current,true)
+  f.data.schema_version='1.2.0';f.save()
+  assert.throws(()=>loadLearnEvidence(f.root),/requires Learn evidence format 1.3.0/)
+  f.data.schema_version='1.3.0';f.save()
+  rule.evidence.push({id:'CE-FINDING-0002',explanation:['An unrelated observation.']})
+  save();assert.equal(loadLearnEvidence(f.root).sources.get(source.id).current,true)
+  publication.explanation[0]='A materially changed interpretation.'
+  save();assert.equal(loadLearnEvidence(f.root).sources.get(source.id).current,false)
+  publication.explanation[0]='The allocation path retains residual units.'
+  rule.evidence[0].functions[0].start_line=11
+  save();assert.equal(loadLearnEvidence(f.root).sources.get(source.id).current,false)
+  put(f.root,path,'invalid JSON')
+  assert.equal(loadLearnEvidence(f.root).sources.get(source.id).current,false)
+})

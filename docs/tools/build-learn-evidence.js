@@ -103,7 +103,7 @@ export function buildLearnEvidence(root = process.cwd(), { check = false } = {})
       bindings.push(exported)
     }
   }
-  const snapshot = { schema_version: '1.2.0', description: 'Explicit editorial selection from the unified Experts index. Roles and limits are not endorsements, independent validation or normative acceptance.', sources, bindings }
+  const snapshot = { schema_version: '1.3.0', description: 'Explicit editorial selection from the unified Experts index. Roles and limits are not endorsements, independent validation or normative acceptance.', sources, bindings }
   const validated = loadLearnEvidence(root, snapshot)
   if ([...validated.sources.values()].some(source => !source.current)) throw new Error('A selected publication changed; review its text before updating its fingerprint')
   if (read(root, selectionPath).compare(selectionBytes) || read(root, indexPath).compare(indexBytes)) throw new Error('Evidence inputs changed during export')

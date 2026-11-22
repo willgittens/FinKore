@@ -1,0 +1,912 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0013",
+  "title": "Display or cash-step rounding is separate from stored value",
+  "scope": "candidate_rule",
+  "question": "An increment such as .05 can apply only during formatting; stored amount/JSON and settlement policy need explicit distinction.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0028",
+      "title": "Display-step rounding is distinct from stored amount and JSON",
+      "library_id": "CE-REPO-0018",
+      "edition_id": "CE-EDITION-0018",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn03",
+          "path": "src/currency.js",
+          "name": "rounding",
+          "start_line": 15,
+          "end_line": 15
+        },
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn06",
+          "path": "src/currency.js",
+          "name": "format",
+          "start_line": 96,
+          "end_line": 105
+        },
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn14",
+          "path": "src/currency.js",
+          "name": "currency.prototype.format",
+          "start_line": 196,
+          "end_line": 204
+        },
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn15",
+          "path": "src/currency.js",
+          "name": "currency.prototype.toString",
+          "start_line": 210,
+          "end_line": 213
+        },
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn16",
+          "path": "src/currency.js",
+          "name": "currency.prototype.toJSON",
+          "start_line": 219,
+          "end_line": 221
+        }
+      ],
+      "explanation": [
+        "currency.js applies its configured increment only while producing toString/display text; toJSON returns the stored native numeric value without currency.",
+        "toString calls rounding(intValue/_precision, increment).toFixed, whereas toJSON returns this.value. format selects sign from the original value. These are different source boundaries; display rounding is not mutation of the stored Money amount.",
+        "Ordinary finite stored value and valid positive increment/precision; custom callbacks can mutate public fields and are not assumed pure. An amount such as 1.02 with increment .05 can display 1.00 while toJSON still returns the stored number. That difference is deliberate display policy, not evidence that the serializer performs Core rounding. No upstream operation was executed. The conclusion is a bounded static source trace; deployment/runtime-dependent outputs are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0095",
+      "title": "Cash quantum is explicit and independent from a display scale",
+      "library_id": "CE-REPO-0002",
+      "edition_id": "CE-EDITION-0002",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn47",
+          "path": "src/Context/CustomContext.php",
+          "name": "Brick\\Money\\Context\\CustomContext::__construct",
+          "start_line": 33,
+          "end_line": 50
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn42",
+          "path": "src/Context/CashContext.php",
+          "name": "Brick\\Money\\Context\\CashContext::applyTo",
+          "start_line": 43,
+          "end_line": 60
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn59",
+          "path": "src/Context/Internal/StepValidation.php",
+          "name": "Brick\\Money\\Context\\Internal\\StepValidation::isValidStepForScale",
+          "start_line": 20,
+          "end_line": 26
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn217",
+          "path": "src/Money.php",
+          "name": "Brick\\Money\\Money::split",
+          "start_line": 602,
+          "end_line": 622
+        }
+      ],
+      "explanation": [
+        "Brick Money declares a context step, validates its compatibility with a selected scale and applies the caller rounding mode while fitting a cash amount. Split delegates to explicit allocation modes.",
+        "CashContext.applyTo derives currency digits, verifies the step, divides by step, fits scale and multiplies back. StepValidation accepts a divisor or multiple of 10^scale. CustomContext checks positive step/nonnegative scale. This shows an explicit context policy, not a universal cash denomination.",
+        "A valid fixed context, positive step and a supported rounding mode; Separate split produces an extra residual output rather than the Core result shape. CashContext(step=5) at currency scale2 operates in .05 quanta; rounding to scale2 alone does not express that quantum. A named context may declare a scale derivation, so currency-derived scale is not automatically an undeclared-policy defect. No upstream operation was executed. The conclusion is a bounded static source trace; deployment/runtime-dependent outputs are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0100",
+      "title": "Locale display narrows numbers only after explicit digit and scale checks",
+      "library_id": "CE-REPO-0002",
+      "edition_id": "CE-EDITION-0002",
+      "collected_on": "2026-11-21",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn182",
+          "path": "src/Formatter/MoneyLocaleFormatter.php",
+          "name": "Brick\\Money\\Formatter\\MoneyLocaleFormatter::format",
+          "start_line": 100,
+          "end_line": 148
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn189",
+          "path": "src/Formatter/MoneyLocaleFormatter.php",
+          "name": "Brick\\Money\\Formatter\\MoneyLocaleFormatter::checkFloatAccuracy",
+          "start_line": 288,
+          "end_line": 301
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn187",
+          "path": "src/Formatter/MoneyLocaleFormatter.php",
+          "name": "Brick\\Money\\Formatter\\MoneyLocaleFormatter::checkLocale",
+          "start_line": 235,
+          "end_line": 262
+        }
+      ],
+      "explanation": [
+        "Brick Money checks locale/runtime admission and decimal digit/scale limits before converting a copy of the amount to a float for ICU display; the displayed text is not an exact portable serialization guarantee.",
+        "The constructor verifies intl/ICU version and checkLocale. format extracts a BigDecimal, optionally removes insignificant zeros, calls checkFloatAccuracy and then toFloat. Digit/scale admission bounds do not make every accepted decimal exactly representable in binary.",
+        "The inspected formatter and its configured locale; installed ICU/CLDR, PHP_FLOAT_DIG and maxScale remain explicit environment boundaries. Even an admitted decimal such as 0.1 need not have an exact binary representation. The guards justify a supported display domain, not equality with Money serialized amount text or the result of every ICU version. No upstream operation was executed. The conclusion is a bounded static source trace; deployment/runtime-dependent outputs are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0119",
+      "title": "Decimal formatting accepts scalar radices that its decimal padding cannot express",
+      "library_id": "CE-REPO-0005",
+      "edition_id": "CE-EDITION-0005",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn417",
+          "path": "packages/dinero.js/src/core/api/toDecimal.ts",
+          "name": "packages/dinero.js/src/core/api/toDecimal.ts::toDecimal.toDecimalFn@29",
+          "start_line": 29,
+          "end_line": 54
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn418",
+          "path": "packages/dinero.js/src/core/api/toDecimal.ts",
+          "name": "packages/dinero.js/src/core/api/toDecimal.ts::getDecimal@57",
+          "start_line": 57,
+          "end_line": 82
+        }
+      ],
+      "explanation": [
+        "Dinero toDecimal admits scalar bases divisible by ten but pads the fractional unit using the raw scale, so accepted custom non-ten bases can produce a text value inconsistent with toUnits.",
+        "The guard checks base modulo10, not base==10. toUnits divides by base^scale; getDecimal pads its remainder to scale digits. With the standard number calculator/formatter, base100, amount1, scale1 gives units [0,1] and text0.1 instead of the underlying one-hundredth.",
+        "Custom scalar base100 with the inspected number calculator and decimal String formatter; no claim is made for every injected calculator or ordinary ISO base10 data. The static base100 trace distinguishes an admission/padding inconsistency from a general binary-arithmetic complaint. A transformer can replace the output and changes the observed boundary. No upstream operation was executed. The conclusion is a bounded static source trace; deployment/runtime-dependent outputs are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0134",
+      "title": "Display formatting inherits CLDR precision and ambient Decimal processing",
+      "library_id": "CE-REPO-0008",
+      "edition_id": "CE-EDITION-0008",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0008:CE-EDITION-0008:fn046",
+          "path": "src/moneyed/l10n.py",
+          "name": "moneyed.l10n.format_money",
+          "start_line": 12,
+          "end_line": 31
+        },
+        {
+          "id": "CE-REPO-0008:CE-EDITION-0008:fn023",
+          "path": "src/moneyed/classes.py",
+          "name": "moneyed.classes.Money.__str__",
+          "start_line": 202,
+          "end_line": 203
+        }
+      ],
+      "explanation": [
+        "py-moneyed forwards amount, currency and formatting options to Babel using an import-time locale default. The inspected Babel2.8 path may process Decimal context before the optional display quantization choice.",
+        "format_money defaults currency_digits and decimal_quantization to True and delegates directly. In the inspected minimum Babel NumberPattern.apply, scaleb then abs/normalize occur before adaptive precision selection. Money.__str__ calls that wrapper without changing stored fields.",
+        "The wrapper source and the selected compatible Babel2.8 contract; the open dependency range does not pin an installed Babel, CLDR dataset or Decimal context. Turning decimal_quantization off avoids one display quantization instruction but does not prove that earlier Decimal context processing is inert. Conversely, display changes do not prove the stored Money amount changed. Babel2.8 NumberPattern.apply lines908–990 were inspected as a compatible dependency path; no locale/Decimal execution or all-version behavior is claimed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0147",
+      "title": "Fixed display and localized display apply different rounding controls",
+      "library_id": "CE-REPO-0041",
+      "edition_id": "CE-EDITION-0041",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn031",
+          "path": "money/money.py",
+          "name": "money.money.py::Money.__unicode__",
+          "start_line": 75,
+          "end_line": 76
+        },
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn060",
+          "path": "money/money.py",
+          "name": "money.money.py::Money.format",
+          "start_line": 256,
+          "end_line": 292
+        },
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn029",
+          "path": "money/money.py",
+          "name": "money.money.py::Money.__repr__",
+          "start_line": 65,
+          "end_line": 66
+        }
+      ],
+      "explanation": [
+        "Carlos Palol Money has a fixed two-place native string formatter and a separately delegated Babel locale formatter; neither is its portable Money serializer.",
+        "__unicode__ formats the stored Decimal with :,.2f, while format forwards amount/currency/pattern/locale to an available supported Babel. __repr__ uses the unquantized stored Decimal spelling. A selected Babel2.3 rounding path cannot be generalized to every runtime satisfying the open supported-version check.",
+        "The inspected wrapper, ordinary finite Decimal amounts and declared formatting options; installed Babel/CLDR and Decimal settings remain environment context. An amount with more than two fractional digits can have a shorter __unicode__ display while __repr__ retains its stored spelling. That is not evidence that arithmetic or portable JSON changed the value. No upstream operation was executed. The conclusion is a bounded static source trace; deployment/runtime-dependent outputs are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0165",
+      "title": "Documented custom formatter loses fractional zero-padding",
+      "library_id": "CE-REPO-0018",
+      "edition_id": "CE-EDITION-0018",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn022",
+          "path": "docs/03-options.md",
+          "name": "example::format@61",
+          "start_line": 61,
+          "end_line": 63
+        }
+      ],
+      "explanation": [
+        "The documented currency.js custom formatter joins whole and numeric fractional components without zero-padding, so it is not a faithful fixed-two-place formatter.",
+        "The example returns a template of dollars() and cents() with a decimal point and no padStart or formatting step. The runtime cents accessor yields an ordinary numeric remainder, so a fractional component of one becomes text1 rather than01.",
+        "The illustrative docs callback with default precision2 and a finite, modest amount; this is not the shipped default formatter or every user callback. For the documented callback, 1.01 follows the components 1 and1 and therefore spells1.1. Negative component signs and native whole-part narrowing are additional boundaries, not a universal observed execution result. No upstream operation was executed. The conclusion is a bounded static source trace; deployment/runtime-dependent outputs are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0179",
+      "title": "Cash step, display precision and locale text use distinct contexts",
+      "library_id": "CE-REPO-0003",
+      "edition_id": "CE-EDITION-0003",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn155",
+          "path": "lib/money/money.rb",
+          "name": "Money::to_nearest_cash_value",
+          "start_line": 84,
+          "end_line": 97
+        },
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn137",
+          "path": "lib/money/money/formatter.rb",
+          "name": "Money::Formatter::extract_whole_and_decimal_parts",
+          "start_line": 307,
+          "end_line": 318
+        },
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn174",
+          "path": "lib/money/money.rb",
+          "name": "Money::to_s",
+          "start_line": 431,
+          "end_line": 436
+        },
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn088",
+          "path": "lib/money/currency.rb",
+          "name": "Money::Currency::exponent",
+          "start_line": 460,
+          "end_line": 462
+        }
+      ],
+      "explanation": [
+        "RubyMoney cash rounding, optional formatter rounding and native string display use distinct denomination, numeric-context and locale policies.",
+        "to_nearest_cash_value divides fractional units by smallest_denomination and explicitly uses Money.rounding_mode. Formatter extraction optionally calls fractional.round without that explicit mode, then divides by the actual subunit ratio. exponent separately rounds log10(subunit_to_unit); to_s deliberately invokes locale formatting.",
+        "Pinned currency metadata and runtime BigDecimal/I18n contracts; denomination availability is checked, but current legal tender and every custom registry value are not certified. A subunit ratio5 in the pinned data has rounded log10 exponent1, although division uses5. A currency exponent is therefore not a general exact unit conversion or an instruction to use portable decimal display. No upstream operation was executed. The conclusion is a bounded static source trace; deployment/runtime-dependent outputs are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0183",
+      "title": "Ambiguous separators change amount under mutable parser policy",
+      "library_id": "CE-REPO-0033",
+      "edition_id": "CE-EDITION-0033",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0033:CE-EDITION-0033:fn032",
+          "path": "lib/monetize/parser.rb",
+          "name": "Monetize::Parser::extract_major_minor_with_single_delimiter",
+          "start_line": 139,
+          "end_line": 153
+        },
+        {
+          "id": "CE-REPO-0033:CE-EDITION-0033:fn033",
+          "path": "lib/monetize/parser.rb",
+          "name": "Monetize::Parser::extract_major_minor_with_tentative_delimiter",
+          "start_line": 155,
+          "end_line": 172
+        },
+        {
+          "id": "CE-REPO-0033:CE-EDITION-0033:fn030",
+          "path": "lib/monetize/parser.rb",
+          "name": "Monetize::Parser::extract_major_minor",
+          "start_line": 117,
+          "end_line": 133
+        }
+      ],
+      "explanation": [
+        "Monetize intentionally resolves single and multiple separators using mutable parsing policy and currency metadata; the same human text can denote different amounts under different admitted contexts.",
+        "The single-delimiter branch prefers a currency decimal mark unless expect_whole_subunits changes selection. Repeated delimiters are removed as thousands separators; with two distinct delimiters the first observed one is treated as grouping. There is no universal grouping-width check in these branches.",
+        "Successful currency detection and the inspected parser options, especially decimal mark, expect_whole_subunits and the process-wide delimiter-enforcement option. For EUR text10,000, decimal-mark interpretation yields ten major units while a whole-subunit/grouping preference can choose ten thousand. This is a demonstrated branch distinction, not proof which human interpretation is financially correct. No upstream operation was executed. The conclusion is a bounded static source trace; deployment/runtime-dependent outputs are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0192",
+      "title": "Parser and validator consult different locale policies",
+      "library_id": "CE-REPO-0034",
+      "edition_id": "CE-EDITION-0034",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0034:CE-EDITION-0034:fn032",
+          "path": "lib/money-rails/active_model/validator.rb",
+          "name": "MoneyRails::ActiveModel::MoneyValidator::validate_each",
+          "start_line": 46,
+          "end_line": 89
+        },
+        {
+          "id": "CE-REPO-0034:CE-EDITION-0034:fn036",
+          "path": "lib/money-rails/active_model/validator.rb",
+          "name": "MoneyRails::ActiveModel::MoneyValidator::lookup",
+          "start_line": 125,
+          "end_line": 131
+        },
+        {
+          "id": "CE-REPO-0034:CE-EDITION-0034:fn066",
+          "path": "lib/money-rails/active_record/monetizable.rb",
+          "name": "MoneyRails::ActiveRecord::Monetizable::write_monetized",
+          "start_line": 248,
+          "end_line": 299
+        }
+      ],
+      "explanation": [
+        "MoneyRails writes parsed monetary subunits through one path and validates retained original text through a separate locale-sensitive path; a later validation error is not an automatic rollback promise.",
+        "write_monetized stores before_type_cast, invokes to_money and writes subunits before its later currency check/cache update. validate_each separately resolves symbols/locale markers and checks normalized raw input and grouping. The code does not make these independent grammars one atomic Money operation.",
+        "The ActiveRecord integration with configured Monetize and Money locale backends; actual callbacks, database transaction behavior and persistence are external boundaries. A text accepted by the setter grammar can subsequently fail a differently configured locale validator. Source call order supports potential partial field changes, but it does not prove a committed database mutation after rejection. No upstream operation was executed. The conclusion is a bounded static source trace; deployment/runtime-dependent outputs are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0201",
+      "title": "Localized amount parser accepts grouping beyond its display policy",
+      "library_id": "CE-REPO-0004",
+      "edition_id": "CE-EDITION-0004",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn233",
+          "path": "src/main/java/org/joda/money/format/AmountPrinterParser.java",
+          "name": "org.joda.money.format.AmountPrinterParser.parse",
+          "start_line": 129,
+          "end_line": 178
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn280",
+          "path": "src/main/java/org/joda/money/format/MoneyFormatter.java",
+          "name": "org.joda.money.format.MoneyFormatter.parseBigMoney",
+          "start_line": 229,
+          "end_line": 243
+        }
+      ],
+      "explanation": [
+        "Joda localized amount parsing strips nonconsecutive grouping characters without enforcing display grouping widths; the full Money parse still requires complete, error-free amount and currency context.",
+        "AmountPrinterParser accumulates digits and a single decimal mark, skips admitted grouping characters and constructs BigDecimal. parseBigMoney separately rejects error, leftover input or incomplete currency/amount state. Permissive grouping is an intentional input policy rather than proof of portable JSON acceptance.",
+        "A localized style with distinct decimal/group characters and a formatter supplying valid currency context. Partial parse contexts are not successful Money results. An amount token1,2,3 can reach BigDecimal123 without three-digit groups. A trailing group or unconsumed suffix can still make parseBigMoney reject; the parser is not simply accepting every malformed string. No upstream operation was executed. The conclusion is a bounded static source trace; deployment/runtime-dependent outputs are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0221",
+      "title": "Symbol-only formatter can use locale currency rather than Money currency",
+      "library_id": "CE-REPO-0019",
+      "edition_id": "CE-EDITION-0019",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0019:CE-EDITION-0019:fn039",
+          "path": "src/Formatters/CurrencySymbolMoneyFormatter.php",
+          "name": "CurrencySymbolMoneyFormatter::format",
+          "start_line": 44,
+          "end_line": 53
+        },
+        {
+          "id": "CE-REPO-0019:CE-EDITION-0019:fn063",
+          "path": "src/MoneyFormatterTrait.php",
+          "name": "MoneyFormatterTrait::formatByCurrencySymbol",
+          "start_line": 86,
+          "end_line": 91
+        }
+      ],
+      "explanation": [
+        "The Laravel currency-symbol formatter obtains an ICU locale symbol without binding the Money currency, then prefixes or suffixes separately formatted amount text.",
+        "NumberFormatter is created with locale and CURRENCY style; getSymbol runs before any Money code reaches it. DecimalMoneyFormatter receives the actual Money/currency registry. Thus symbol and amount have different currency-context sources.",
+        "The inspected formatter and host ICU locale data. This is a symbol-only presentation API; no portable ISO currency identity can be inferred solely from the glyph. A EUR Money rendered under an en_US locale can receive the locale-default dollar glyph if ICU reports that symbol. The omission of currency binding is source-proven; the exact glyph on every host is not observed. No upstream operation was executed. The conclusion is a bounded static source trace; deployment/runtime-dependent outputs are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0223",
+      "title": "Intl parser default style expression is boolean fallback",
+      "library_id": "CE-REPO-0019",
+      "edition_id": "CE-EDITION-0019",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0019:CE-EDITION-0019:fn072",
+          "path": "src/MoneyParserTrait.php",
+          "name": "MoneyParserTrait::parseByIntl",
+          "start_line": 177,
+          "end_line": 193
+        },
+        {
+          "id": "CE-REPO-0019:CE-EDITION-0019:fn073",
+          "path": "src/MoneyParserTrait.php",
+          "name": "MoneyParserTrait::parseByIntlLocalizedDecimal",
+          "start_line": 205,
+          "end_line": 221
+        }
+      ],
+      "explanation": [
+        "The Intl parser helpers select an explicit truthy style or a boolean fallback expression; they do not implement a retry between CURRENCY and DECIMAL styles.",
+        "Both constructors use style ?: (CURRENCY || DECIMAL) under the inspected PHP operator contract. Without strict_types in this trait, the boolean fallback reaches the native style argument through ordinary coercion. parseByIntl and parseByIntlLocalizedDecimal otherwise instantiate different parser classes.",
+        "The pinned PHP trait and ordinary weak parameter coercion; actual ICU parsing and extension behavior are not executed. An explicit valid truthy style avoids the fallback branch. With omitted style, boolean OR selects true rather than retaining two formatter styles. A truthy supplied style remains selected, so the defect must not be described as corrupting every call. No upstream operation was executed. The conclusion is a bounded static source trace; deployment/runtime-dependent outputs are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0245",
+      "title": "Formatting overrides and permissive localized parsing are asymmetric",
+      "library_id": "CE-REPO-0022",
+      "edition_id": "CE-EDITION-0022",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn045",
+          "path": "formatter.go",
+          "name": "(f *Formatter)::Format",
+          "start_line": 88,
+          "end_line": 127
+        },
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn046",
+          "path": "formatter.go",
+          "name": "(f *Formatter)::Parse",
+          "start_line": 130,
+          "end_line": 157
+        },
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn050",
+          "path": "formatter.go",
+          "name": "(f *Formatter)::formatCurrency",
+          "start_line": 224,
+          "end_line": 240
+        }
+      ],
+      "explanation": [
+        "Bojanz formatting may select a custom display symbol, while parsing removes a registry symbol and normalizes separators/parentheses without an identical grammar contract.",
+        "Format rounds a new result using MaxDigits/RoundingMode and formatCurrency may read SymbolMap. Parse independently calls GetSymbol and performs global string replacements before NewAmount. The displayed custom symbol is not automatically a parser token.",
+        "The pinned locale format, configured SymbolMap/AccountingStyle and valid Amount. A display round trip is not promised to preserve all original fractional digits or admit every custom symbol. A non-registry custom symbol may survive Parse normalization and cause rejection. With AccountingStyle, replacing an opening parenthesis by minus does not itself validate a balanced closing parenthesis. No upstream operation was executed. The conclusion is a bounded static source trace; deployment/runtime-dependent outputs are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0253",
+      "title": "Reusable formatter loses the alternate sign pattern",
+      "library_id": "CE-REPO-0032",
+      "edition_id": "CE-EDITION-0032",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn153",
+          "path": "lib/src/pattern_encoder.dart",
+          "name": "PatternEncoder::encode",
+          "start_line": 59,
+          "end_line": 107
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn156",
+          "path": "lib/src/pattern_encoder.dart",
+          "name": "PatternEncoder::_processMinorPart",
+          "start_line": 149,
+          "end_line": 176
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn075",
+          "path": "lib/src/money.dart",
+          "name": "Money::format",
+          "start_line": 523,
+          "end_line": 524
+        }
+      ],
+      "explanation": [
+        "Reusing the implementation class PatternEncoder through a direct src import can discard the unused sign-specific pattern. The package root does not export that class, and Money.format creates a new encoder for each call.",
+        "encode splits the current pattern, selects a sign branch and assigns that branch back to the instance pattern before rendering. A subsequent opposite-sign call can no longer select the lost branch. The result is about public encoder reuse, not every Money.format call. The root export list includes encoder interfaces but not pattern_encoder.dart; naming the class public without this qualification overstates the supported entry point.",
+        "A direct import of package:money2/src/pattern_encoder.dart, one retained encoder with a two-section pattern and sequential opposite-sign calls. This is not an exported-root API claim or the ordinary Money.format path. After a positive call chooses the first section, an opposite-sign call sees a single-section pattern. Any implicit minus processing is not restoration of the original negative-section layout. No upstream operation was executed. The conclusion is a bounded static source trace; deployment/runtime-dependent outputs are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0261",
+      "title": "Formatting precision and grouping select incompatible numeric paths",
+      "library_id": "CE-REPO-0048",
+      "edition_id": "CE-EDITION-0048",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn025",
+          "path": "src/Money.php",
+          "name": "Money::formatAmount",
+          "start_line": 378,
+          "end_line": 408
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn047",
+          "path": "src/Money.php",
+          "name": "Money::getArrayRepresentation",
+          "start_line": 777,
+          "end_line": 783
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn072",
+          "path": "src/MoneyNormalizer.php",
+          "name": "MoneyNormalizer::mapFromEntity",
+          "start_line": 104,
+          "end_line": 114
+        }
+      ],
+      "explanation": [
+        "Paysera formatAmount uses text truncation for positive fractional counts without grouping, but uses native number_format at zero/nonpositive counts and grouped paths; serialized array/normalizer profiles inherit that selection.",
+        "For an input with a decimal point, the ungrouped positive-fraction branch uses substr and padding. The grouped branch truncates first and then calls number_format; zero fraction calls number_format directly. mapFromEntity/getArrayRepresentation expose these rendered values as amount fields.",
+        "A Money accepted with meaningful digits beyond the requested/default currency fraction, such as EUR10.559; native float/PHP formatting details remain bounded to the selected runtime contract. The ungrouped two-place string path yields10.55 from10.559 without an explicit rounding request. If used as portable Money serialization, that changes numeric value; grouping can add binary narrowing and is not a general exact alternative. No upstream operation was executed. The conclusion is a bounded static source trace; deployment/runtime-dependent outputs are not certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0279",
+      "title": "Integer display avoids ordinary floats but signed minimum and metadata limits remain",
+      "library_id": "CE-REPO-0098",
+      "edition_id": "CE-EDITION-0098",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn067",
+          "path": "format/format.go",
+          "name": "(f *Formatter)::Format",
+          "start_line": 30,
+          "end_line": 57
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn069",
+          "path": "format/format.go",
+          "name": "(f *Formatter)::abs",
+          "start_line": 69,
+          "end_line": 75
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn016",
+          "path": "currency/currency.go",
+          "name": "(c *Currency)::Formatter",
+          "start_line": 30,
+          "end_line": 38
+        }
+      ],
+      "explanation": [
+        "Gocanto normally formats an integer coefficient directly, but the signed-minimum abs branch and unchecked format metadata admit malformed display; these are presentation boundaries rather than evidence of an invalid stored amount.",
+        "FormatInt receives abs(amount); negating MinInt64 remains negative in the inspected Go contract. Format later adds another minus for a negative input. Fraction/group slicing and template replacement also trust public metadata without validation.",
+        "For the decisive signed-minimum trace, choose Fraction0, no grouping and Template1. Actual numeric storage remains int64; no general arbitrary precision or current currency-data claim is made. The selected MinInt64 configuration retains a leading minus from FormatInt and prefixes another minus. Very negative Fraction can also create invalid grouping slice indexes, but not every negative Fraction reaches that branch. No upstream operation was executed. The conclusion is a bounded static source trace; deployment/runtime-dependent outputs are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0288",
+      "title": "Formatting explicitly separates the sign and can change amount units globally",
+      "library_id": "CE-REPO-0097",
+      "edition_id": "CE-EDITION-0097",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn082",
+          "path": "src/fmt.rs",
+          "name": "src/fmt.rs::format_decimal_abs",
+          "start_line": 98,
+          "end_line": 142
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn084",
+          "path": "src/fmt.rs",
+          "name": "src/fmt.rs::format_with_separator_internal",
+          "start_line": 166,
+          "end_line": 197
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn085",
+          "path": "src/fmt.rs",
+          "name": "src/fmt.rs::contains_active_format_symbol",
+          "start_line": 201,
+          "end_line": 224
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn087",
+          "path": "src/fmt.rs",
+          "name": "src/fmt.rs::format_with_amount_internal",
+          "start_line": 243,
+          "end_line": 295
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn088",
+          "path": "src/fmt.rs",
+          "name": "src/fmt.rs::format_locale_amount",
+          "start_line": 298,
+          "end_line": 350
+        }
+      ],
+      "explanation": [
+        "moneylib renders sign and units through caller pattern tokens; the generic and ICU-locale paths do not give the m token the same amount-rescaling effect.",
+        "The generic path chooses minor_amount for every a token when an unescaped m is active. The shared token renderer emits minus only for n. The locale path first formats abs major-unit amount, then invokes token substitution without the generic minor-amount selection.",
+        "The inspected Money/RawMoney formatter, active versus escaped tokens and the selected locale/numbering data. A missing minor projection produces the explicit OVERFLOWED display sentinel on the generic path. For USD12.34, a generic pattern containing a and m can show1234 with a minor-unit label, while the locale path can label the major amount12.34 as minor. Omitting n hides a negative sign but does not alter the stored amount. No upstream operation was executed. The conclusion is a bounded static source trace; deployment/runtime-dependent outputs are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0300",
+      "title": "Locale formatting and currency inference are separate from monetary value",
+      "library_id": "CE-REPO-0007",
+      "edition_id": "CE-EDITION-0007",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn110",
+          "path": "src/NodaMoney/CurrencyInfo.cs",
+          "name": "NodaMoney.CurrencyInfo::internal string Format(string? format, in Money money, IFormatProvider? formatProvider)",
+          "start_line": 493,
+          "end_line": 558
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn111",
+          "path": "src/NodaMoney/CurrencyInfo.cs",
+          "name": "NodaMoney.CurrencyInfo::private string FormatCompact(in Money money, NumberFormatInfo nfi, int digits, bool onlyNumber = false)",
+          "start_line": 560,
+          "end_line": 700
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn115",
+          "path": "src/NodaMoney/CurrencyInfo.cs",
+          "name": "NodaMoney.CurrencyInfo::private NumberFormatInfo ToNumberFormatInfo(IFormatProvider? formatProvider, bool useCurrencyCode = false, bool useInternationalSymbol = false)",
+          "start_line": 772,
+          "end_line": 799
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn383",
+          "path": "src/NodaMoney/Money.Parsable.cs",
+          "name": "NodaMoney.Money::private static bool TryParseCurrencyInfo(ReadOnlySpan<char> currencyChars, CurrencyInfo? specifiedCurrency,\n        [NotNullWhen(true)] out CurrencyInfo? currencyInfo, out CurrencyParseFailure failure, out CurrencyInfo? singleMatch)",
+          "start_line": 229,
+          "end_line": 299
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn386",
+          "path": "src/NodaMoney/Money.Parsable.cs",
+          "name": "NodaMoney.Money::private static NumberFormatInfo GetNumberFormatInfo(IFormatProvider? provider)",
+          "start_line": 438,
+          "end_line": 445
+        }
+      ],
+      "explanation": [
+        "Noda formatting and human parsing select currency metadata and numeric culture separately; compact/locale text is not portable Money serialization. An internal missing receiver-currency check does not itself prove a public wrong-currency formatter path.",
+        "CurrencyInfo.Format uses its receiver metadata and performs no equality check, but Money.Format retrieves CurrencyInfo from its own Currency before calling it. Compact display uses magnitude-dependent rounding. Ambiguous parser symbols select the first registry match equal to either default or current currency, not an unconditional default-before-culture precedence.",
+        "The pinned public Money path, registry contents and supplied provider/current culture. Direct internal calls and stale documentation are not assumed externally reachable or executed. If two ambiguous-symbol matches respectively equal default and current currency, the loop order can choose either matching entry first. A TODO in the internal formatter is insufficient evidence that ordinary Money.ToString binds an unrelated currency. No upstream operation was executed. The conclusion is a bounded static source trace; deployment/runtime-dependent outputs are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0310",
+      "title": "ex-money: localized amount parsing refuses ambiguity rather than silently changing amount/currency",
+      "library_id": "CE-REPO-0031",
+      "edition_id": "CE-EDITION-0031",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn252",
+          "path": "lib/money.ex",
+          "name": "Money.parse [clause 662]",
+          "start_line": 662,
+          "end_line": 684
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn253",
+          "path": "lib/money.ex",
+          "name": "Money.parsed_money [clause 686]",
+          "start_line": 686,
+          "end_line": 688
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn254",
+          "path": "lib/money.ex",
+          "name": "Money.parsed_money [clause 692]",
+          "start_line": 692,
+          "end_line": 699
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn255",
+          "path": "lib/money.ex",
+          "name": "Money.parsed_money [clause 701]",
+          "start_line": 701,
+          "end_line": 703
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn256",
+          "path": "lib/money.ex",
+          "name": "Money.missing_currency [clause 705]",
+          "start_line": 705,
+          "end_line": 714
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn257",
+          "path": "lib/money.ex",
+          "name": "Money.missing_currency [clause 718]",
+          "start_line": 718,
+          "end_line": 723
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn269",
+          "path": "lib/money.ex",
+          "name": "Money.token_currency [clause 793]",
+          "start_line": 793,
+          "end_line": 799
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn271",
+          "path": "lib/money.ex",
+          "name": "Money.token_id [clause 821]",
+          "start_line": 821,
+          "end_line": 827
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn272",
+          "path": "lib/money.ex",
+          "name": "Money.one_token [clause 829]",
+          "start_line": 829,
+          "end_line": 833
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn273",
+          "path": "lib/money.ex",
+          "name": "Money.one_token [clause 835]",
+          "start_line": 835,
+          "end_line": 837
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn274",
+          "path": "lib/money.ex",
+          "name": "Money.one_token [clause 839]",
+          "start_line": 839,
+          "end_line": 841
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn275",
+          "path": "lib/money.ex",
+          "name": "Money.one_token [clause 843]",
+          "start_line": 843,
+          "end_line": 845
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn280",
+          "path": "lib/money.ex",
+          "name": "Money.to_string [clause 950]",
+          "start_line": 950,
+          "end_line": 952
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn281",
+          "path": "lib/money.ex",
+          "name": "Money.to_string [clause 961]",
+          "start_line": 961,
+          "end_line": 975
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn282",
+          "path": "lib/money.ex",
+          "name": "Money.to_string [clause 979]",
+          "start_line": 979,
+          "end_line": 991
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn283",
+          "path": "lib/money.ex",
+          "name": "Money.to_string [clause 993]",
+          "start_line": 993,
+          "end_line": 997
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn435",
+          "path": "lib/money.ex",
+          "name": "Money.parse_decimal [clause 3495]",
+          "start_line": 3495,
+          "end_line": 3512
+        }
+      ],
+      "explanation": [
+        "ex-money delegates human amount parsing to a selected Localize grammar, rejects a particular three-fraction-digit ambiguity shape, and permits explicit locale/default-currency/token policies distinct from Core portable JSON.",
+        "Money.parse builds parser options and constructs Money only on success; missing currency may use locale defaults unless disabled. The inspected Localize amount_number uses grouping:sizes, then unambiguous_fraction rejects its group-shaped three-digit fraction only for smaller currency digit counts and absolute amounts at least one. It is not a rejection of every three-digit decimal.",
+        "Locked Localize parser behavior and configured filters/locale; token resolution uses separate DigitalToken policy. The existing dependency findings do not certify all grammars, data or custom namespaces. A group-shaped1,599 in an applicable lower-digit currency may be refused, whereas a decimal below one is excluded from that exact ambiguity test. Keyword formatter options can choose output context, while the validated options-struct clause requires matching currency. No upstream operation was executed. The conclusion is a bounded static source trace; deployment/runtime-dependent outputs are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0336",
+      "title": "Moneta parsing: localized display paths can lose numeric precision and leave unconsumed input",
+      "library_id": "CE-REPO-0110",
+      "edition_id": "CE-EDITION-0110",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn382",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/format/MonetaryAmountDecimalFormat.java",
+          "name": "org.javamoney.moneta.format.MonetaryAmountDecimalFormat.parse",
+          "start_line": 101,
+          "end_line": 109
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn383",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/format/MonetaryAmountDecimalFormat.java",
+          "name": "org.javamoney.moneta.format.MonetaryAmountDecimalFormat.queryFrom",
+          "start_line": 112,
+          "end_line": 117
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn790",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/format/AmountNumberToken.java",
+          "name": "org.javamoney.moneta.spi.format.AmountNumberToken.parseToken",
+          "start_line": 165,
+          "end_line": 194
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn791",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/format/AmountNumberToken.java",
+          "name": "org.javamoney.moneta.spi.format.AmountNumberToken.evalNumberRange",
+          "start_line": 196,
+          "end_line": 219
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn812",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/format/DefaultMonetaryAmountFormat.java",
+          "name": "org.javamoney.moneta.spi.format.DefaultMonetaryAmountFormat.parse",
+          "start_line": 168,
+          "end_line": 202
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn394",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/format/MonetaryAmountDecimalFormatBuilder.java",
+          "name": "org.javamoney.moneta.format.MonetaryAmountDecimalFormatBuilder.build",
+          "start_line": 129,
+          "end_line": 146
+        }
+      ],
+      "explanation": [
+        "Moneta default localized numeric parsing can use a narrowed Number and can consume more text than its DecimalFormat parse position proves; full formatted parsing does not add a final full-consumption check.",
+        "AmountNumberToken builds default DecimalFormats without enabling parseBigDecimal. It scans a candidate span, accepts any nonnull parsed Number and consumes the whole scanned string without comparing ParsePosition to its end. DefaultMonetaryAmountFormat reuses one ParseContext during negative fallback and checks amount/currency presence rather than complete input consumption.",
+        "The inspected default format/token path and JDK DecimalFormat prefix-parsing contract; producer/factory, locale and patterns remain explicit. This is distinct from the plain two-token format and from every custom numeric parser. For an amount token starting at index0, evalNumberRange does not stop at an internal alphabetic character merely because firstDigit==0. If DecimalFormat accepts a numeric prefix of123x45, consuming the scanned span can hide the suffix. This is a conditional static trace, not an executed locale result. No upstream operation was executed. The conclusion is a bounded static source trace; deployment/runtime-dependent outputs are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    }
+  ]
+}

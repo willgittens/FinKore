@@ -26,6 +26,7 @@ python3 experts/tools/build_expert_traceability.py --check
 python3 experts/tools/build_expert_traceability.py --target CORE-003.3
 python3 experts/tools/build_expert_traceability.py --target MONEY-ROUNDING-001
 python3 experts/tools/build_expert_traceability.py --collection reviews
+python3 experts/tools/build_expert_traceability.py --source 'code-evidence/JodaOrg/joda-money@2e8a1fd4263de2ce6fcc9c2ae703d559dd86c61e'
 ```
 
 `--repo-root` selects another checkout. Build mode refreshes the local generated
@@ -63,13 +64,18 @@ its catalog/snapshot logic; Legacy checks speaker passages and explicit
 publication approval; Reviews checks numbered embedded answers and translation
 metadata.
 
-Code Evidence now curates its existing source-to-rule comparisons in
-`experts/code-evidence/traceability.json.curation`. Those records were copied
-from the pre-existing Learn selection with identifiers, reviewed hashes,
-functions, commits, roles and policy relationships unchanged. The profile reuses
-the existing pinned-code validation logic with explicitly supplied data, so it
-does not read the Learn publication snapshot. The discovery catalog and analyses
-retain their own workflow. Newly discovered findings are not automatically linked.
+Code Evidence local format 2.0.0 stores one compact JSON file per rule family,
+with useful function-level observations and at most three explanatory paragraphs
+per finding. Its traceability.json is canonical curation, with no persisted
+resolved duplicate. The Node validator exports typed comparisons in memory for
+the shared builder and writes only the local Markdown navigation.
+
+The 352 current comparisons preserve stable IDs, actual target bindings or an
+explicit unmapped reason, reviewer/date and deferred questions. The 14 historical
+Learn comparisons preserve their bounded interpretations separately in the rule
+JSON. Builds detect changed records and reviewed clauses without renewing hashes,
+dates, specialist validation or publication authorization. New comparisons remain
+ineligible for Learn. See the [collection guidance](../code-evidence/README.md).
 
 ## Common comparison model
 

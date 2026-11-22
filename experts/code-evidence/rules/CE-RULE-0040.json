@@ -1,0 +1,220 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0040",
+  "title": "Business-date operations preserve calendar, interval and adjustment context",
+  "scope": "candidate_rule",
+  "question": "Compare endpoint inclusion, signed reversal, zero offsets, vector admission, finite calendar coverage, registry state and serialization without assuming one market calendar.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0377",
+      "title": "Business-day counting and offsets express different endpoint policies",
+      "library_id": "CE-REPO-0102",
+      "edition_id": "CE-EDITION-0102",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0102:CE-EDITION-0102:fn019",
+          "path": "R/bizdays.R",
+          "name": "bizdays::bizdays.Date",
+          "start_line": 55,
+          "end_line": 103
+        },
+        {
+          "id": "CE-REPO-0102:CE-EDITION-0102:fn043",
+          "path": "R/calendar.R",
+          "name": "bizdays::that$bizdays",
+          "start_line": 187,
+          "end_line": 200
+        },
+        {
+          "id": "CE-REPO-0102:CE-EDITION-0102:fn039",
+          "path": "R/calendar.R",
+          "name": "bizdays::rev_index",
+          "start_line": 106,
+          "end_line": 110
+        },
+        {
+          "id": "CE-REPO-0102:CE-EDITION-0102:fn048",
+          "path": "R/calendar.R",
+          "name": "bizdays::that$add",
+          "start_line": 223,
+          "end_line": 235
+        },
+        {
+          "id": "CE-REPO-0102:CE-EDITION-0102:fn105",
+          "path": "R/offset.R",
+          "name": "bizdays::add.bizdays.Date",
+          "start_line": 60,
+          "end_line": 72
+        }
+      ],
+      "explanation": [
+        "bizdays counting uses signed dual-index differences, adjustments and financial/nonfinancial endpoint corrections; offset zero explicitly restores the original input date.",
+        "The count and offset bodies have different normalization and vector-recycling contracts, so they cannot be treated as unrestricted inverses.",
+        "Selected financial flag and adjustment functions, valid calendar coverage and intended R vector shapes; offset uses rep_len while count checks divisibility. Offset zero can retain a holiday, while count adjusts endpoints; exchanging these policies with BusinessDays changes observable results. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0378",
+      "title": "Any-in-range guards and edge search can outlive calendar knowledge",
+      "library_id": "CE-REPO-0102",
+      "edition_id": "CE-EDITION-0102",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0102:CE-EDITION-0102:fn044",
+          "path": "R/calendar.R",
+          "name": "bizdays::.adjust",
+          "start_line": 202,
+          "end_line": 211
+        },
+        {
+          "id": "CE-REPO-0102:CE-EDITION-0102:fn004",
+          "path": "R/adjust.date.R",
+          "name": "bizdays::adjust.next.Date",
+          "start_line": 58,
+          "end_line": 66
+        },
+        {
+          "id": "CE-REPO-0102:CE-EDITION-0102:fn100",
+          "path": "R/is.bizday.R",
+          "name": "bizdays::is.bizday.Date",
+          "start_line": 39,
+          "end_line": 46
+        },
+        {
+          "id": "CE-REPO-0102:CE-EDITION-0102:fn071",
+          "path": "R/getbizdays.R",
+          "name": "bizdays::count_bizdays.by_month",
+          "start_line": 41,
+          "end_line": 45
+        },
+        {
+          "id": "CE-REPO-0102:CE-EDITION-0102:fn072",
+          "path": "R/getbizdays.R",
+          "name": "bizdays::count_bizdays.by_year",
+          "start_line": 47,
+          "end_line": 50
+        }
+      ],
+      "explanation": [
+        "Several public date wrappers admit a vector when any date is in range, while adjustment treats an unknown index as a terminal true result.",
+        "The any-range checks and NA-to-TRUE branch can admit partially uncovered inputs or stop a following search outside coverage. Period sums also do not verify complete month/year coverage.",
+        "A finite-range calendar and a mixed covered/uncovered date vector, or a nonbusiness boundary date whose following adjustment leaves coverage. An outside date can be accepted as the terminal adjustment without being established as a market business day. Exact R observations remain unexecuted. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0379",
+      "title": "Calendar serialization does not preserve range and every adjustment policy",
+      "library_id": "CE-REPO-0102",
+      "edition_id": "CE-EDITION-0102",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "open_question",
+      "functions": [
+        {
+          "id": "CE-REPO-0102:CE-EDITION-0102:fn036",
+          "path": "R/calendar-export.R",
+          "name": "bizdays::cal2list",
+          "start_line": 46,
+          "end_line": 57
+        },
+        {
+          "id": "CE-REPO-0102:CE-EDITION-0102:fn050",
+          "path": "R/calendar.R",
+          "name": "bizdays::adjust_name",
+          "start_line": 244,
+          "end_line": 253
+        },
+        {
+          "id": "CE-REPO-0102:CE-EDITION-0102:fn037",
+          "path": "R/calendar-export.R",
+          "name": "bizdays::save_calendar",
+          "start_line": 64,
+          "end_line": 68
+        },
+        {
+          "id": "CE-REPO-0102:CE-EDITION-0102:fn038",
+          "path": "R/calendar-export.R",
+          "name": "bizdays::load_calendar",
+          "start_line": 74,
+          "end_line": 102
+        },
+        {
+          "id": "CE-REPO-0102:CE-EDITION-0102:fn051",
+          "path": "R/calendar.R",
+          "name": "bizdays::create.calendar",
+          "start_line": 257,
+          "end_line": 273
+        }
+      ],
+      "explanation": [
+        "The calendar save projection omits start/end coverage; loading consults those members and defaults missing financial to false, whereas create defaults financial to true.",
+        "The serializer/loader projections do not promise complete context preservation. Exact restored bounds depend on the receiving constructor and JSON representation.",
+        "A saved calendar with meaningful explicit coverage and policies, serialized through the source jsonlite path and loaded through its matching helper. Identical holidays/weekdays do not imply identical covered interval or financial policy after reconstruction; serialization alone is not an identity guarantee. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0381",
+      "title": "Calendar registry exposes mutable implicit context and partial reloads",
+      "library_id": "CE-REPO-0102",
+      "edition_id": "CE-EDITION-0102",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0102:CE-EDITION-0102:fn061",
+          "path": "R/calendar.R",
+          "name": "bizdays::calendars",
+          "start_line": 415,
+          "end_line": 417
+        },
+        {
+          "id": "CE-REPO-0102:CE-EDITION-0102:fn051",
+          "path": "R/calendar.R",
+          "name": "bizdays::create.calendar",
+          "start_line": 257,
+          "end_line": 273
+        },
+        {
+          "id": "CE-REPO-0102:CE-EDITION-0102:fn065",
+          "path": "R/create-calendars.R",
+          "name": "bizdays::load_quantlib_calendars",
+          "start_line": 133,
+          "end_line": 185
+        },
+        {
+          "id": "CE-REPO-0102:CE-EDITION-0102:fn101",
+          "path": "R/load-buildin-calendars.R",
+          "name": "bizdays::load_builtin_calendars",
+          "start_line": 25,
+          "end_line": 30
+        },
+        {
+          "id": "CE-REPO-0102:CE-EDITION-0102:fn024",
+          "path": "R/bizdays.options.R",
+          "name": "bizdays::new_defaults",
+          "start_line": 8,
+          "end_line": 42
+        },
+        {
+          "id": "CE-REPO-0102:CE-EDITION-0102:fn026",
+          "path": "R/bizdays.options.R",
+          "name": "bizdays::set",
+          "start_line": 25,
+          "end_line": 37
+        }
+      ],
+      "explanation": [
+        "Calendar creation overwrites a named live registry entry, and QuantLib loading catches individual failures and continues without deleting an existing entry.",
+        "The exposed registry and closure-backed defaults are mutable local policy; loading is not an atomic snapshot replacement.",
+        "A previously populated registry and a later per-calendar refresh that fails or overwrites the same name. A failed refresh can leave an older named calendar while other names update; no distributed coordination or actual failed dependency call is asserted. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0010",
+  "title": "Lifecycle changes follow a declared current-state transition",
+  "scope": "existing_core_subject",
+  "question": "Compare directed transition declarations, pre-mutation guards and rejected-state preservation; payment expiry and concurrency remain separate.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0016",
+      "title": "Closing a charge requires a declared current-state transition",
+      "library_id": "CE-REPO-0016",
+      "edition_id": "CE-EDITION-0016",
+      "collected_on": "2026-11-20",
+      "relationship": "corroborates",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn01",
+          "path": "src/main/java/com/lmoraesdev/payment/domain/model/Charge.java",
+          "name": "com.lmoraesdev.payment.domain.model.Charge.create(Money)",
+          "start_line": 42,
+          "end_line": 53
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn02",
+          "path": "src/main/java/com/lmoraesdev/payment/domain/model/Charge.java",
+          "name": "com.lmoraesdev.payment.domain.model.Charge.transitionTo(ChargeStatus)",
+          "start_line": 71,
+          "end_line": 77
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn03",
+          "path": "src/main/java/com/lmoraesdev/payment/domain/model/Money.java",
+          "name": "com.lmoraesdev.payment.domain.model.Money",
+          "start_line": 7,
+          "end_line": 20
+        }
+      ],
+      "explanation": [
+        "Charge.transitionTo looks up the current status in VALID_TRANSITIONS, accepts only ACTIVE to PAID, EXPIRED or CANCELLED, and rejects an absent target before assigning the new status.",
+        "The current-state guard supports explicit workflow transition eligibility and prevents the selected status mutation on rejection. A closing status has no declared outgoing or self-transition; the method itself does no repository write, event emission or clock comparison.",
+        "Selecting EXPIRED does not establish elapsed expiry time. This bounded domain-model reading does not prove transaction atomicity, concurrency safety or unchanged external state; exception-constructor effects and null-target runtime behavior were not inspected. Later service findings remain separately bounded. Source and test code were read, not executed; independent validation remains pending."
+      ],
+      "context_requirement_ids": [
+        "WORKFLOW-TERMINAL-001",
+        "WORKFLOW-TRANSITION-002",
+        "WORKFLOW-TRANSITION-003",
+        "WORKFLOW-TRANSITION-006"
+      ]
+    },
+    {
+      "id": "CE-FINDING-0401",
+      "title": "Claim qualification and benefit use survive recovery in the LTC example",
+      "library_id": "CE-REPO-0028",
+      "edition_id": "CE-EDITION-0028",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn334",
+          "path": "examples/ltc_model.jl",
+          "name": "examples/ltc_model.jl exits L44",
+          "start_line": 44,
+          "end_line": 48
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn335",
+          "path": "examples/ltc_model.jl",
+          "name": "examples/ltc_model.jl care_payable L50",
+          "start_line": 50,
+          "end_line": 51
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn336",
+          "path": "examples/ltc_model.jl",
+          "name": "examples/ltc_model.jl claim_months_counted L55",
+          "start_line": 55,
+          "end_line": 55
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn337",
+          "path": "examples/ltc_model.jl",
+          "name": "examples/ltc_model.jl on_claim L59",
+          "start_line": 59,
+          "end_line": 60
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn338",
+          "path": "examples/ltc_model.jl",
+          "name": "examples/ltc_model.jl LifeContingencies.Experimental.transitions L63",
+          "start_line": 63,
+          "end_line": 81
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn339",
+          "path": "examples/ltc_model.jl",
+          "name": "examples/ltc_model.jl care_payment L85",
+          "start_line": 85,
+          "end_line": 90
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn340",
+          "path": "examples/ltc_model.jl",
+          "name": "examples/ltc_model.jl ltc_contract L95",
+          "start_line": 95,
+          "end_line": 102
+        }
+      ],
+      "explanation": [
+        "The illustrative monthly LTC state retains claim duration, lifetime qualification and full benefit months already paid. Recovery keeps qualification/usage; a subsequent claim need not repeat elimination period and cannot reset maximum benefit entitlement. A continuing payable claim month increments usage; recovery/death ending a month pays half and does not increment fullmonth count. Premiums are waived on claim; premium and benefit end dates use distinct state/transition predicates.",
+        "Academicexample withillustrativeuncalibrated forces, no native parameter-admissibility guarantee and no statutory/policy acceptance. Own tests include seededMonteCarlo and pathenumeration source assertions, but neitherwasexecuted. Engine state is not a FinKore Workflow operation."
+      ],
+      "context_requirement_ids": []
+    }
+  ]
+}

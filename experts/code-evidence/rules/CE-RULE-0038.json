@@ -1,0 +1,39 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0038",
+  "title": "Policy-year ordinals declare anniversary and overlap conventions",
+  "scope": "candidate_rule",
+  "question": "Distinguish integer elapsed anniversaries from one-based policy duration and year fractions; compare equality, reversed dates and leap anniversaries.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0356",
+      "title": "Anniversary count and policy-year ordinal use separate endpoint policies",
+      "library_id": "CE-REPO-0027",
+      "edition_id": "CE-EDITION-0027",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0027:CE-EDITION-0027:fn001",
+          "path": "src/utilities.jl",
+          "name": "ActuaryUtilities.Utilities.years_between",
+          "start_line": 34,
+          "end_line": 53
+        },
+        {
+          "id": "CE-REPO-0027:CE-EDITION-0027:fn002",
+          "path": "src/utilities.jl",
+          "name": "ActuaryUtilities.Utilities.policy_duration",
+          "start_line": 81,
+          "end_line": 83
+        }
+      ],
+      "explanation": [
+        "years_between compares year/month/day with overlap flag; policy_duration always uses overlaptrue and adds1. Issue date therefore maps to policyyear1 while years_between returns0. Reversal need not negate partial-year count, and leap-day anniversaries depend on day-component comparison rather than calendar-year clipping.",
+        "Static read of Utilities only. **This behavior is not currently defined by FinKore Core.** Do not equate policy ordinal, elapsed-year fraction and interest accrual."
+      ],
+      "context_requirement_ids": []
+    }
+  ]
+}

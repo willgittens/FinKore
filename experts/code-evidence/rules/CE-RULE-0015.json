@@ -1,0 +1,566 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0015",
+  "title": "Cash-flow valuation declares the first observation time",
+  "scope": "candidate_rule",
+  "question": "A first flow at t=0 differs from t=1; scheduled durations also require a declared calendar/time basis.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0034",
+      "title": "Discounting requires an explicit first-cash-flow time",
+      "library_id": "CE-REPO-0113",
+      "edition_id": "CE-EDITION-0113",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn18",
+          "path": "fin/cashflow.go",
+          "name": "fin.NetPresentValue",
+          "start_line": 12,
+          "end_line": 19
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn22",
+          "path": "fin/cashflow.go",
+          "name": "fin.ScheduledNetPresentValue",
+          "start_line": 79,
+          "end_line": 91
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn20",
+          "path": "fin/cashflow.go",
+          "name": "fin.dNetPresentValue",
+          "start_line": 40,
+          "end_line": 47
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn24",
+          "path": "fin/cashflow.go",
+          "name": "fin.dScheduledNetPresentValue",
+          "start_line": 117,
+          "end_line": 129
+        }
+      ],
+      "explanation": [
+        "Periodic NPV discounts its first flow at period1; scheduled NPV anchors the first supplied date at0 and divides signed elapsed hours by24 and365.",
+        "The loops use i versus dates[i-1]-dates[0]; the difference is explicit source policy and not interchangeable naming.",
+        "Finite periodic flows or equally sized amount/date arrays; rate outside singular domains; supplied date order/time instants are retained. A one-flow periodic value is discounted once, whereas a one-flow scheduled value is undiscounted. No sorting or civil-calendar accrual rule is implemented. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0040",
+      "title": "Valuation inputs need explicit rate units and time origin",
+      "library_id": "CE-REPO-0103",
+      "edition_id": "CE-EDITION-0103",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn02",
+          "path": "finance.js",
+          "name": "Finance.prototype.PV",
+          "start_line": 9,
+          "end_line": 14
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn03",
+          "path": "finance.js",
+          "name": "Finance.prototype.FV",
+          "start_line": 17,
+          "end_line": 21
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn04",
+          "path": "finance.js",
+          "name": "Finance.prototype.NPV",
+          "start_line": 24,
+          "end_line": 30
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn20",
+          "path": "finance.js",
+          "name": "Finance.prototype.IAR",
+          "start_line": 200,
+          "end_line": 202
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn14",
+          "path": "finance.js",
+          "name": "Finance.prototype.CI",
+          "start_line": 152,
+          "end_line": 155
+        }
+      ],
+      "explanation": [
+        "PV/FV/NPV use percentage-rate inputs with local two-place rounding, while NPV retains its initial flow at time0; IAR takes scalar returns and CI returns capital plus interest.",
+        "The explicit /100 conversions and exponent positions distinguish the operation meanings. These untyped numeric helpers do not implement canonical exact Money operations.",
+        "Finite scalar financial inputs, explicit periods and a compatible interpretation of percentage versus scalar rates. Passing0.05 expecting5percent to a /100 helper changes meaning by100; comparing this NPV with period-one NPV without shifting origin is unsound. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0063",
+      "title": "Cash-flow wrappers change time origin and sign",
+      "library_id": "CE-REPO-0099",
+      "edition_id": "CE-EDITION-0099",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn50",
+          "path": "R/pv.simple.R",
+          "name": "FinCal::pv.simple",
+          "start_line": 12,
+          "end_line": 14
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn23",
+          "path": "R/fv.simple.R",
+          "name": "FinCal::fv.simple",
+          "start_line": 12,
+          "end_line": 14
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn51",
+          "path": "R/pv.uneven.R",
+          "name": "FinCal::pv.uneven",
+          "start_line": 10,
+          "end_line": 17
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn24",
+          "path": "R/fv.uneven.R",
+          "name": "FinCal::fv.uneven",
+          "start_line": 9,
+          "end_line": 17
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn45",
+          "path": "R/npv.R",
+          "name": "FinCal::npv",
+          "start_line": 11,
+          "end_line": 15
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn36",
+          "path": "R/irr.R",
+          "name": "FinCal::irr",
+          "start_line": 10,
+          "end_line": 14
+        }
+      ],
+      "explanation": [
+        "pv.uneven discounts its first flow at1 and negates through pv.simple; npv adds cf1 at0 and negates the remaining stream back. fv.uneven leaves its last flow at exponent0.",
+        "The wrapper indices and helper sign expressions establish different observations, not conflicting universal NPV definitions.",
+        "Ordinary nonempty flow vectors in the intended R scalar domain; singleton/empty loop-sequence behavior is not normalized. R slices2:n and loops1:n remain unguarded for small lengths; names alone cannot justify interchanging these methods. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0309",
+      "title": "ex-money: financial flow timing is explicit period index rather than collection position",
+      "library_id": "CE-REPO-0031",
+      "edition_id": "CE-EDITION-0031",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn163",
+          "path": "lib/money/financial.ex",
+          "name": "Money.Financial.net_present_value [clause 237]",
+          "start_line": 237,
+          "end_line": 239
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn164",
+          "path": "lib/money/financial.ex",
+          "name": "Money.Financial.net_present_value [clause 242]",
+          "start_line": 242,
+          "end_line": 245
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn167",
+          "path": "lib/money/financial.ex",
+          "name": "Money.Financial.validate_same_currency! [clause 399]",
+          "start_line": 399,
+          "end_line": 401
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn168",
+          "path": "lib/money/financial.ex",
+          "name": "Money.Financial.validate_same_currency! [clause 403]",
+          "start_line": 403,
+          "end_line": 416
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn473",
+          "path": "lib/money/financial.ex",
+          "name": "lib/money/financial.ex def future_value(%Money{amount: amount} = money, interest_rate, periods) guarded implementation",
+          "start_line": 39,
+          "end_line": 49
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn474",
+          "path": "lib/money/financial.ex",
+          "name": "lib/money/financial.ex def future_value([{period, %Money{}} | _other_flows] = flows, interest_rate) guarded implementation",
+          "start_line": 77,
+          "end_line": 83
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn475",
+          "path": "lib/money/financial.ex",
+          "name": "lib/money/financial.ex def present_value(%Money{amount: amount} = money, interest_rate, periods) guarded implementation",
+          "start_line": 111,
+          "end_line": 120
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn476",
+          "path": "lib/money/financial.ex",
+          "name": "lib/money/financial.ex def present_value([{period, %Money{}} | _other_flows] = flows, interest_rate) guarded implementation",
+          "start_line": 147,
+          "end_line": 151
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn477",
+          "path": "lib/money/financial.ex",
+          "name": "lib/money/financial.ex defp do_present_value({period, %Money{} = flow}, interest_rate) guarded implementation",
+          "start_line": 153,
+          "end_line": 156
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn478",
+          "path": "lib/money/financial.ex",
+          "name": "lib/money/financial.ex defp do_present_value([{period, %Money{}} = flow | []], interest_rate) guarded implementation",
+          "start_line": 158,
+          "end_line": 161
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn479",
+          "path": "lib/money/financial.ex",
+          "name": "lib/money/financial.ex defp do_present_value([{period, %Money{}} = flow | other_flows], interest_rate) guarded implementation",
+          "start_line": 163,
+          "end_line": 167
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn480",
+          "path": "lib/money/financial.ex",
+          "name": "lib/money/financial.ex def net_present_value([{period, %Money{currency: currency}} | _] = flows, interest_rate) guarded implementation",
+          "start_line": 196,
+          "end_line": 199
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn481",
+          "path": "lib/money/financial.ex",
+          "name": "lib/money/financial.ex def net_present_value([{period, %Money{}} | _] = flows, interest_rate, %Money{} = investment) guarded implementation",
+          "start_line": 202,
+          "end_line": 208
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn482",
+          "path": "lib/money/financial.ex",
+          "name": "lib/money/financial.ex def interest_rate( %Money{currency: pv_currency, amount: pv_amount} = _present_value, %Money{currency: fv_currency, amount: fv_amount} = _future_value, periods ) guarded implementation",
+          "start_line": 314,
+          "end_line": 324
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn483",
+          "path": "lib/money/financial.ex",
+          "name": "lib/money/financial.ex def periods( %Money{currency: pv_currency, amount: pv_amount} = _present_value, %Money{currency: fv_currency, amount: fv_amount} = _future_value, interest_rate ) guarded implementation",
+          "start_line": 350,
+          "end_line": 360
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn484",
+          "path": "lib/money/financial.ex",
+          "name": "lib/money/financial.ex def payment( %Money{amount: pv_amount} = present_value, interest_rate, periods ) guarded implementation",
+          "start_line": 387,
+          "end_line": 397
+        }
+      ],
+      "explanation": [
+        "Indexed flows are discounted at their supplied periods, FV compounds to a maximum period, and NPV subtracts the separately supplied investment. Inverse rate/period helpers use root/log paths distinct from IRR.",
+        "The full guarded clauses retain currency consistency but accept number guards before Decimal.from_float in some paths. Exact storage alone does not certify exponent/root/log arithmetic.",
+        "Compatible Money flow currencies; nonnegative periods where guarded; float rates and positive period/rate guards for the corresponding inverse/payment helpers. An integer interest_rate can satisfy is_number then fail Decimal.from_float; empty lists and zero-rate payment lack total clauses. Approximation and actual exceptions are not executed. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0365",
+      "title": "NPV and MIRR retain time-zero position and declare two rates",
+      "library_id": "CE-REPO-0104",
+      "edition_id": "CE-EDITION-0104",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0104:CE-EDITION-0104:fn009",
+          "path": "src/index.ts",
+          "name": "npv",
+          "start_line": 641,
+          "end_line": 643
+        },
+        {
+          "id": "CE-REPO-0104:CE-EDITION-0104:fn010",
+          "path": "src/index.ts",
+          "name": "mirr",
+          "start_line": 658,
+          "end_line": 693
+        }
+      ],
+      "explanation": [
+        "NPV discounts array position0 at time zero. MIRR preserves the original periodic positions while separately masking positive and negative flows and applying finance/reinvestment rates over n-1 periods.",
+        "The reduce exponent is the index; the two MIRR masks retain length and locations, so removing zero/nonmatching flows would change the observation.",
+        "Periodic scalar-number flows with both signs and meaningful finance/reinvestment rates; this is not a dated schedule. npv([initial, later]) and a first-period-one function differ by a factor of1+rate. NaN entries fail both sign tests in the masks and may become zero contributions. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0368",
+      "title": "Periodic and scheduled valuation have different time origins",
+      "library_id": "CE-REPO-0113",
+      "edition_id": "CE-EDITION-0113",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn18",
+          "path": "fin/cashflow.go",
+          "name": "fin.NetPresentValue",
+          "start_line": 12,
+          "end_line": 19
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn20",
+          "path": "fin/cashflow.go",
+          "name": "fin.dNetPresentValue",
+          "start_line": 40,
+          "end_line": 47
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn22",
+          "path": "fin/cashflow.go",
+          "name": "fin.ScheduledNetPresentValue",
+          "start_line": 79,
+          "end_line": 91
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn24",
+          "path": "fin/cashflow.go",
+          "name": "fin.dScheduledNetPresentValue",
+          "start_line": 117,
+          "end_line": 129
+        }
+      ],
+      "explanation": [
+        "The periodic and scheduled NPV paths have distinct origins: periodic starts at1, while scheduled starts at the first supplied instant with signed duration/365 exponents.",
+        "Their derivative loops match those selected exponents. The origin difference can rescale finite NPV, but does not justify a universal claim about numerical trajectories or all roots.",
+        "Comparable periodic spacing, finite arithmetic and r not equal-1 for the simple rescaling argument; scheduled dates remain caller ordered. For finite equally spaced inputs, multiplying periodic NPV by1+r relates it to time-zero NPV. Rounding, singular rates and solver iteration need separate evidence. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0383",
+      "title": "State, transition and certain channels have different current-time inclusion",
+      "library_id": "CE-REPO-0028",
+      "edition_id": "CE-EDITION-0028",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn034",
+          "path": "src/engine.jl",
+          "name": "Experimental.component_cashflows state",
+          "start_line": 355,
+          "end_line": 355
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn035",
+          "path": "src/engine.jl",
+          "name": "Experimental.component_cashflows transition",
+          "start_line": 356,
+          "end_line": 356
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn036",
+          "path": "src/engine.jl",
+          "name": "Experimental.component_cashflows certain",
+          "start_line": 357,
+          "end_line": 358
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn057",
+          "path": "src/engine.jl",
+          "name": "Experimental.component_before certain",
+          "start_line": 565,
+          "end_line": 565
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn059",
+          "path": "src/engine.jl",
+          "name": "Experimental.component_after transition",
+          "start_line": 567,
+          "end_line": 567
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn060",
+          "path": "src/engine.jl",
+          "name": "Experimental.component_after certain",
+          "start_line": 568,
+          "end_line": 568
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn048",
+          "path": "src/engine.jl",
+          "name": "Experimental.terminal_functions NamedTuple",
+          "start_line": 501,
+          "end_line": 513
+        }
+      ],
+      "explanation": [
+        "State cashflows exist at every grid date, transitions at stop dates after the first; incoming transitions are settled in before/after observations. Certain payments include or exclude equality explicitly and are valued beyond the grid from their own dates; certain-only valuation skips model traversal. Terminal values apply once to state/transition components, never to certain payments.",
+        "Engine-source mechanisms only; FinanceCore discount implementation and consumer mortality model remain pending, so financial valuation correctness is not asserted."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0398",
+      "title": "Annualized annuities separate installment size, timing and guarantee",
+      "library_id": "CE-REPO-0028",
+      "edition_id": "CE-EDITION-0028",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn156",
+          "path": "src/products.jl",
+          "name": "LifeContingencies.annuity [products.jl:112]",
+          "start_line": 112,
+          "end_line": 120
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn157",
+          "path": "src/products.jl",
+          "name": "LifeContingencies.AnnuityDue [products.jl:162]",
+          "start_line": 162,
+          "end_line": 163
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn159",
+          "path": "src/products.jl",
+          "name": "LifeContingencies.AnnuityImmediate [products.jl:182]",
+          "start_line": 182,
+          "end_line": 183
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn163",
+          "path": "src/products.jl",
+          "name": "LifeContingencies.schedule [products.jl:192]",
+          "start_line": 192,
+          "end_line": 209
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn164",
+          "path": "src/products.jl",
+          "name": "LifeContingencies.unit_payments [products.jl:212]",
+          "start_line": 212,
+          "end_line": 222
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn266",
+          "path": "src/textbook.jl",
+          "name": "LifeContingencies.benefit [textbook.jl:113]",
+          "start_line": 113,
+          "end_line": 113
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn267",
+          "path": "src/textbook.jl",
+          "name": "LifeContingencies.probability [textbook.jl:123]",
+          "start_line": 123,
+          "end_line": 123
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn268",
+          "path": "src/textbook.jl",
+          "name": "LifeContingencies.cashflows [textbook.jl:134]",
+          "start_line": 134,
+          "end_line": 137
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn272",
+          "path": "src/textbook.jl",
+          "name": "LifeContingencies.FinanceCore.present_value [textbook.jl:158]",
+          "start_line": 158,
+          "end_line": 161
+        }
+      ],
+      "explanation": [
+        "Annuities pay1/frequency perinstallment. Due versus Immediate shifts first date by one period; start_time defers commencement. Guaranteed installments begin atcommencement and can survive death atissue or during deferral; contingent installments depend on observed active state. Termzero is empty; positive integer frequency and nonnegative whole guarantee/start/term controls are explicit.",
+        "Source-defined unit products only, excluding expense, profit and statutory reserve policies. Stored expected payment and PV identities are source-read, never executed."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0400",
+      "title": "Product settlement phase and near-date snapping are explicit valuation policy",
+      "library_id": "CE-REPO-0028",
+      "edition_id": "CE-EDITION-0028",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn174",
+          "path": "src/products.jl",
+          "name": "LifeContingencies.check_valuation [products.jl:294]",
+          "start_line": 294,
+          "end_line": 299
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn175",
+          "path": "src/products.jl",
+          "name": "LifeContingencies.payment_now [products.jl:302]",
+          "start_line": 302,
+          "end_line": 307
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn176",
+          "path": "src/products.jl",
+          "name": "LifeContingencies.conditional_product_value [products.jl:309]",
+          "start_line": 309,
+          "end_line": 318
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn177",
+          "path": "src/products.jl",
+          "name": "LifeContingencies.valuation_time [products.jl:323]",
+          "start_line": 323,
+          "end_line": 337
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn206",
+          "path": "src/policies.jl",
+          "name": "LifeContingencies.prepare_product [policies.jl:84]",
+          "start_line": 84,
+          "end_line": 101
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn273",
+          "path": "src/textbook.jl",
+          "name": "LifeContingencies.FinanceCore.present_value [textbook.jl:203]",
+          "start_line": 203,
+          "end_line": 210
+        }
+      ],
+      "explanation": [
+        "End-period death/immediate payments are settled at valuation date; due-before keeps the installment atthat date and after settles it. Product APIs differ from raw engine before/after-every-state-payment phases. Query time snaps only within max(1e-9/frequency,4ulps) and below half-period distance; known-state death/endowment valuation otherwise requires integer anniversary. Premium subperiod refinement retains year-end death settlement through interval discount factors.",
+        "Snapping is floating time policy, not exact Money comparison. Source regression assertions were read but never executed; curve correctness and timing applicability depend on caller context."
+      ],
+      "context_requirement_ids": []
+    }
+  ]
+}

@@ -1,0 +1,1885 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0030",
+  "title": "Persistence preserves exact amounts within an explicit representable range",
+  "scope": "candidate_rule",
+  "question": "Separate domain decimal acceptance from scaled-integer storage bounds and read-side validation.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0055",
+      "title": "Persistence imposes a bounded integer amount representation",
+      "library_id": "CE-REPO-0016",
+      "edition_id": "CE-EDITION-0016",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn23",
+          "path": "src/main/java/com/lmoraesdev/payment/adapter/out/persistence/ChargeMapper.java",
+          "name": "ChargeMapper.toEntity(Charge)",
+          "start_line": 11,
+          "end_line": 22
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn24",
+          "path": "src/main/java/com/lmoraesdev/payment/adapter/out/persistence/ChargeMapper.java",
+          "name": "ChargeMapper.toDomain(ChargeJpaEntity)",
+          "start_line": 24,
+          "end_line": 32
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn25",
+          "path": "src/main/java/com/lmoraesdev/payment/domain/model/Charge.java",
+          "name": "Charge.restore(UUID,Money,ChargeStatus,Instant,Instant,Long)",
+          "start_line": 55,
+          "end_line": 69
+        }
+      ],
+      "explanation": [
+        "The domain validates positive scale-2 BigDecimal amounts; persistence converts to signed-long centavos using exact conversion and reconstructs the amount using explicit scale 2. Exactness is preserved within that representable range; domain acceptance alone does not establish persistence representability.",
+        "A positive scale-2 amount beyond the signed-long centavos maximum can pass Money construction then fail mapping. No such boundary assertion was found in the test files read. SQL amount_centavos lacks a positive-value check in V1; read-side Money validation can reject a stored value. This is a bounded representation policy, not a portable FinKore size limit."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0077",
+      "title": "Default JSON decoding narrows numeric amounts through float64",
+      "library_id": "CE-REPO-0006",
+      "edition_id": "CE-EDITION-0006",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0006:CE-EDITION-0006:fn04",
+          "path": "money.go",
+          "name": "money.defaultUnmarshalJSON",
+          "start_line": 29,
+          "end_line": 61
+        },
+        {
+          "id": "CE-REPO-0006:CE-EDITION-0006:fn05",
+          "path": "money.go",
+          "name": "money.defaultMarshalJSON",
+          "start_line": 63,
+          "end_line": 70
+        },
+        {
+          "id": "CE-REPO-0006:CE-EDITION-0006:fn29",
+          "path": "money.go",
+          "name": "money.(*Money).UnmarshalJSON",
+          "start_line": 356,
+          "end_line": 358
+        },
+        {
+          "id": "CE-REPO-0006:CE-EDITION-0006:fn30",
+          "path": "money.go",
+          "name": "money.(*Money).MarshalJSON",
+          "start_line": 361,
+          "end_line": 363
+        }
+      ],
+      "explanation": [
+        "Default GoMoney JSON uses numeric integer amounts and decodes via float64 before int64, unlike portable exact decimal-string interchange.",
+        "Default decoder validates field types before assigning destination, but missing fields default zero/empty and zero plus empty constructs nil-currency Money. Present amount must be float64 and converts to int64 without fractional/exactness guard. Serializer emits numeric amount. Mapped as portable Core JSON this conflicts with string amounts and required currency/value preservation; native minor-unit schema and injected callbacks are separate policies.",
+        "Use default JSON callbacks and map their native minor-unit shape directly to Core portable JSON; loss requires fractional numeric input or integer beyond exact binary64 resolution. Default failed validation leaves destination unchanged; custom callbacks may behave differently. No decoder execution or actual large-integer result was observed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0091",
+      "title": "Native integer filtering and large-integer fallback accept different spellings",
+      "library_id": "CE-REPO-0001",
+      "edition_id": "CE-EDITION-0001",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn06",
+          "path": "src/Money.php",
+          "name": "Money\\Money::__construct",
+          "start_line": 74,
+          "end_line": 88
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn32",
+          "path": "src/Money.php",
+          "name": "Money\\Money::jsonSerialize",
+          "start_line": 488,
+          "end_line": 494
+        }
+      ],
+      "explanation": [
+        "PHP integer constructor can preserve plus/whitespace spelling that its JSON amount later emits unchanged.",
+        "The fast path uses FILTER_VALIDATE_INT only as a predicate and stores the original amount string; Number fallback normalizes its parsed integer part. jsonSerialize returns stored text. Native integer input accepting plus/whitespace is not itself a Core violation, but exporting those spellings as portable amount conflicts with plain decimal lexical rules. Its amount is also native smallest-unit integer rather than automatically Core major-unit amount.",
+        "In-range numeric string accepted by the pinned PHP filter with leading plus or surrounding whitespace, then use native JSON as portable Money JSON. Large-number fallback has different validation. No PHP execution or deployment filter configuration was observed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0098",
+      "title": "Rate ambiguity and total tie resolution are separate persistence controls",
+      "library_id": "CE-REPO-0002",
+      "edition_id": "CE-EDITION-0002",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn175",
+          "path": "src/ExchangeRateProvider/PdoProvider.php",
+          "name": "Brick\\Money\\ExchangeRateProvider\\PdoProvider::getExchangeRate",
+          "start_line": 104,
+          "end_line": 274
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn151",
+          "path": "src/ExchangeRateProvider/Pdo/PdoProviderBuilder.php",
+          "name": "Brick\\Money\\ExchangeRateProvider\\Pdo\\PdoProviderBuilder::orderBy",
+          "start_line": 182,
+          "end_line": 189
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn152",
+          "path": "src/ExchangeRateProvider/Pdo/PdoProviderBuilder.php",
+          "name": "Brick\\Money\\ExchangeRateProvider\\Pdo\\PdoProviderBuilder::thenOrderBy",
+          "start_line": 199,
+          "end_line": 206
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn176",
+          "path": "src/ExchangeRateProvider/PdoProvider.php",
+          "name": "Brick\\Money\\ExchangeRateProvider\\PdoProvider::exec",
+          "start_line": 287,
+          "end_line": 299
+        }
+      ],
+      "explanation": [
+        "PDO rate lookup rejects ambiguity without ordering but ordering alone does not guarantee unique ties or exact numeric persistence.",
+        "Same-currency shortcut returns one. Other lookup resolves dimensions before executing parameterized conditions; without order it detects a second row, while ORDER BY adds LIMIT1 and suppresses that ambiguity. Selected float is cast to string only after the driver may have narrowed it. Cursor closes and error mode restores in finally, which does not create a database snapshot or transaction.",
+        "Multiple matching rows, tied configured sort keys, or a driver returning approximate float rate rather than exact text. Unique total ordering and exact decimal-string database columns can avoid these risks; no database or current exchange rate was queried. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0099",
+      "title": "Rational and mixed-currency serialization require a distinct explicit schema",
+      "library_id": "CE-REPO-0002",
+      "edition_id": "CE-EDITION-0002",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn21",
+          "path": "src/AbstractMoney.php",
+          "name": "Brick\\Money\\AbstractMoney::jsonSerialize",
+          "start_line": 249,
+          "end_line": 255
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn236",
+          "path": "src/MoneyBag.php",
+          "name": "Brick\\Money\\MoneyBag::jsonSerialize",
+          "start_line": 138,
+          "end_line": 144
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn262",
+          "path": "src/RationalMoney.php",
+          "name": "Brick\\Money\\RationalMoney::of",
+          "start_line": 47,
+          "end_line": 56
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn241",
+          "path": "src/MoneyBag.php",
+          "name": "Brick\\Money\\MoneyBag::dividedBy",
+          "start_line": 220,
+          "end_line": 231
+        }
+      ],
+      "explanation": [
+        "RationalMoney and MoneyBag serialize richer values with separate schemas rather than single finite-decimal Money.",
+        "AbstractMoney serializes getAmount.toString and code; RationalMoney construction keeps BigRational, allowing fraction text, and bag serialization emits component arrays. Those intentional types cannot be silently reused as Core portable finite-decimal Money. Bag dividedBy parses/rejects zero before iteration, including empty bag, a useful validation-order pattern but not acceptance of a Core bag operation.",
+        "Serialize a rational fraction or multi-currency bag; explicit conversion/rounding to finite Money would be a separate step. Core single Money schema does not forbid publishing additional rational/bag schemas. No reverse parser or exact external roundtrip was demonstrated. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0105",
+      "title": "Scale conversion and native interchange declare rounding before range flags",
+      "library_id": "CE-REPO-0023",
+      "edition_id": "CE-EDITION-0023",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn11",
+          "path": "amount.go",
+          "name": "govalues/money.Amount.MinorUnits",
+          "start_line": 202,
+          "end_line": 217
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn09",
+          "path": "amount.go",
+          "name": "govalues/money.Amount.Int64",
+          "start_line": 169,
+          "end_line": 171
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn13",
+          "path": "amount.go",
+          "name": "govalues/money.Amount.Float64",
+          "start_line": 252,
+          "end_line": 254
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn67",
+          "path": "amount.go",
+          "name": "govalues/money.Amount.Rescale",
+          "start_line": 1092,
+          "end_line": 1096
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn66",
+          "path": "amount.go",
+          "name": "govalues/money.Amount.Quantize",
+          "start_line": 1084,
+          "end_line": 1086
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn12",
+          "path": "amount.go",
+          "name": "govalues/money.NewAmountFromFloat64",
+          "start_line": 230,
+          "end_line": 242
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn21",
+          "path": "amount.go",
+          "name": "govalues/money.Amount.One",
+          "start_line": 530,
+          "end_line": 532
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn58",
+          "path": "amount.go",
+          "name": "govalues/money.Amount.Ceil",
+          "start_line": 1003,
+          "end_line": 1007
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn60",
+          "path": "amount.go",
+          "name": "govalues/money.Amount.Floor",
+          "start_line": 1024,
+          "end_line": 1028
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn64",
+          "path": "amount.go",
+          "name": "govalues/money.Amount.Round",
+          "start_line": 1066,
+          "end_line": 1070
+        }
+      ],
+      "explanation": [
+        "Native conversions intentionally round before range flags; scale-carry and One(scale19) paths expose separate backend invariant questions.",
+        "MinorUnits invokes RoundToCurr before bounds; Int64/Float64 delegate to decimal conversions, whose success flags mean range/parse success rather than losslessness. Rescale/Ceil/Floor/Round then Pad and call unsafe Amount construction; limited Pad can fail to restore currency scale after carry. Decimal.One directly constructs coefficient10^scale, including a20-digit coefficient atscale19 beyond its19-digit contract. These are local invariants, not a universal Core currency-minor-scale obligation.",
+        "For conversion loss use discarded nonzero digits; for carry use extrema whose rounded magnitude grows; for One use an admitted receiver withscale19. Quantize only borrows donor scale, so differing donor currency alone is not a Core arithmetic compatibility defect. No numeric outcome was executed and convenience conversion is not portable serialization. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0112",
+      "title": "Interchange examples require complete input validation and exactness policy",
+      "library_id": "CE-REPO-0023",
+      "edition_id": "CE-EDITION-0023",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn166",
+          "path": "doc_test.go",
+          "name": "govalues/money.example.FromISO8583",
+          "start_line": 455,
+          "end_line": 470
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn167",
+          "path": "doc_test.go",
+          "name": "govalues/money.example.FromMoneyProto",
+          "start_line": 481,
+          "end_line": 483
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn168",
+          "path": "doc_test.go",
+          "name": "govalues/money.example.ToMoneyProto",
+          "start_line": 485,
+          "end_line": 489
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn169",
+          "path": "doc_test.go",
+          "name": "govalues/money.example.FromStripe",
+          "start_line": 503,
+          "end_line": 505
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn170",
+          "path": "doc_test.go",
+          "name": "govalues/money.example.ToStripe",
+          "start_line": 507,
+          "end_line": 511
+        }
+      ],
+      "explanation": [
+        "Illustrative ISO8583 parser slices before length validation, while proto/payment examples use potentially rounded native conversions.",
+        "FromISO8583 takes s[4:] before checking length and treats only D as debit; other markers pass as credit. Proto helpers fix scale9 and ToMoneyProto uses Int64(9); payment helper lowercases code and uses MinorUnits. These examples do not establish complete external format compliance or arbitrary exact roundtrip.",
+        "Short input for slicing concern, invalid sign marker, or amount with nonzero digits beyond target nano/minor scale for conversion loss. These are doc_test examples; actual production validation and external service conventions were not executed/reviewed as authorities. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0120",
+      "title": "Transport helpers must preserve scale and restore signed backend fields",
+      "library_id": "CE-REPO-0005",
+      "edition_id": "CE-EDITION-0005",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn420",
+          "path": "packages/dinero.js/src/core/api/toSnapshot.ts",
+          "name": "packages/dinero.js/src/core/api/toSnapshot.ts::toSnapshot@3",
+          "start_line": 3,
+          "end_line": 7
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn556",
+          "path": "docs/guides/integrating-with-payment-services.md",
+          "name": "docs/guides/integrating-with-payment-services.md::toStripeMoney@27",
+          "start_line": 27,
+          "end_line": 31
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn597",
+          "path": ".agents/skills/dinero-formatting/rules/serialization-bigint-json.md",
+          "name": ".agents/skills/dinero-formatting/rules/serialization-bigint-json.md::<callback@41>@41",
+          "start_line": 41,
+          "end_line": 46
+        }
+      ],
+      "explanation": [
+        "Dinero transport examples drop scale in raw minor-unit payloads, and digit-only bigint reviver fails to restore negative coefficients.",
+        "toSnapshot returns native toJSON including coefficient/context. Stripe example destructures amount/currency and sends raw amount without scale reconciliation. Reviver converts only strings matching unsigned digits, leaving negative bigint text a string. These are conditional example integration defects; native coefficient/scale snapshots are not automatically portable Money JSON.",
+        "Use a custom snapshot scale incompatible with intended target minor units, or serialize a negative bigint coefficient with the matching documented replacer. Standard-scale nonnegative inputs may work; converting an already-inexact Number to BigInt cannot recover prior digits. No payment service/JSON example was executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0135",
+      "title": "Minor-unit extraction truncates after a context-sensitive multiplication",
+      "library_id": "CE-REPO-0008",
+      "edition_id": "CE-EDITION-0008",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0008:CE-EDITION-0008:fn040",
+          "path": "src/moneyed/classes.py",
+          "name": "moneyed.classes.Money.get_amount_in_sub_unit",
+          "start_line": 357,
+          "end_line": 358
+        }
+      ],
+      "explanation": [
+        "Minor-unit extraction truncates the context-sensitive product; it is a lossy native accessor rather than exact portable serialization.",
+        "The one-line body multiplies Decimal amount by currency.sub_unit then int-converts toward zero, without checking integrality. Product precision also follows Decimal context. Amount123.456 under factor100 statically yields a fractional-unit intermediate whose int loses nonzero digits; negative values truncate toward zero. Core roundtrip only applies if this accessor is used as a serializer.",
+        "Stored amount with fractional minor units or an insufficient ambient Decimal precision. Exact integral products within context preserve value; the accessor does not itself emit or parse portable JSON. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0142",
+      "title": "Persistence and form boundaries choose different precision and null semantics",
+      "library_id": "CE-REPO-0040",
+      "edition_id": "CE-EDITION-0040",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0040:CE-EDITION-0040:fn014",
+          "path": "money/contrib/django/models/fields.py",
+          "name": "money.contrib.django.models.fields.InfiniteDecimalField.db_type",
+          "start_line": 93,
+          "end_line": 99
+        },
+        {
+          "id": "CE-REPO-0040:CE-EDITION-0040:fn015",
+          "path": "money/contrib/django/models/fields.py",
+          "name": "money.contrib.django.models.fields.InfiniteDecimalField.get_db_prep_save",
+          "start_line": 101,
+          "end_line": 114
+        },
+        {
+          "id": "CE-REPO-0040:CE-EDITION-0040:fn024",
+          "path": "money/contrib/django/models/fields.py",
+          "name": "money.contrib.django.models.fields.MoneyField.value_to_string",
+          "start_line": 245,
+          "end_line": 252
+        },
+        {
+          "id": "CE-REPO-0040:CE-EDITION-0040:fn002",
+          "path": "money/contrib/django/forms/fields.py",
+          "name": "money.contrib.django.forms.fields.MoneyField.compress",
+          "start_line": 31,
+          "end_line": 37
+        }
+      ],
+      "explanation": [
+        "Nullable field serialization dereferences None while storage/form precision have distinct boundaries.",
+        "PostgreSQL db_type returns numeric and get_db_prep_save delegates to get_db_prep_value rather than fixed formatting. Form compress returns None for empty input. value_to_string reads value.amount unconditionally, so a nullable missing value reaching it has no guard. These bodies support a nullable serializer concern but do not prove actual database precision or that absence should equal monetary zero.",
+        "A nullable Money field resolves to None when value_to_string is invoked. Populated fields need not fail; PostgreSQL/driver range and actual forms/database outcomes were not executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0157",
+      "title": "Serializer paths distinguish absent currency, bare Decimal and validated Money",
+      "library_id": "CE-REPO-0039",
+      "edition_id": "CE-EDITION-0039",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn010",
+          "path": "djmoney/contrib/django_rest_framework/fields.py",
+          "name": "djmoney/contrib/django_rest_framework/fields.py::MoneyField.get_value",
+          "start_line": 68,
+          "end_line": 88
+        },
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn009",
+          "path": "djmoney/contrib/django_rest_framework/fields.py",
+          "name": "djmoney/contrib/django_rest_framework/fields.py::MoneyField.to_internal_value",
+          "start_line": 58,
+          "end_line": 66
+        },
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn008",
+          "path": "djmoney/contrib/django_rest_framework/fields.py",
+          "name": "djmoney/contrib/django_rest_framework/fields.py::MoneyField.to_representation",
+          "start_line": 49,
+          "end_line": 56
+        },
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn112",
+          "path": "djmoney/serializers.py",
+          "name": "djmoney/serializers.py::Deserializer",
+          "start_line": 17,
+          "end_line": 68
+        }
+      ],
+      "explanation": [
+        "Django/DRF serializers distinguish amount-only Decimal from currency-bearing Money and may quantize or accept native JSON numbers.",
+        "get_value wraps only truthy currency and present nonnull nonMoney amount; to_internal_value validates amount through parent and builds Money only for wrapped inputs. to_representation unwraps amount into DRF decimal settings. Django Deserializer uses default json.loads before constructing Money, allowing numeric tokens to narrow through floats; it can yield earlier objects before later failure. These are framework schemas, not automatically Core portable JSON.",
+        "Omit/empty companion currency, configure coarser decimal_places, or use numeric JSON tokens with more precision than binary float. Exact amount strings and adequate representation scale can preserve value. Bare Decimal is deliberately tested framework behavior; no batch transaction or normalized portable errors follows. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0162",
+      "title": "Integer accessors wrap at signed32 bits within documented monetary range",
+      "library_id": "CE-REPO-0018",
+      "edition_id": "CE-EDITION-0018",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn12",
+          "path": "src/currency.js",
+          "name": "currency.prototype.dollars",
+          "start_line": 178,
+          "end_line": 180
+        },
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn13",
+          "path": "src/currency.js",
+          "name": "currency.prototype.cents",
+          "start_line": 186,
+          "end_line": 189
+        }
+      ],
+      "explanation": [
+        "currency.js dollars and cents accessors apply signed32-bit conversion instead of unrestricted integer truncation.",
+        "dollars returns ~~this.value and cents returns ~~(intValue%_precision). ECMAScript bitwise conversion wraps into signed32 bits; a value2147483648 consequently changes sign in the accessor despite fitting the documented cent integer range. High-precision remainders can similarly wrap. This is an accessor range concern, not proof every native Number amount is inaccurate.",
+        "Use a finite integer outside signed32 range for dollars, or a cents remainder outside that range at configured high precision. Small values behave as expected; no JavaScript runtime was executed. The library lacks an ISO currency-bearing Core Money contract. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0164",
+      "title": "Numeric JSON erases monetary context and normalizes nonfinite values to null",
+      "library_id": "CE-REPO-0018",
+      "edition_id": "CE-EDITION-0018",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn16",
+          "path": "src/currency.js",
+          "name": "currency.prototype.toJSON",
+          "start_line": 219,
+          "end_line": 221
+        },
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn10",
+          "path": "src/currency.js",
+          "name": "currency.prototype.divide",
+          "start_line": 144,
+          "end_line": 147
+        },
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn05",
+          "path": "src/currency.js",
+          "name": "parse",
+          "start_line": 55,
+          "end_line": 89
+        }
+      ],
+      "explanation": [
+        "currency.js JSON returns a bare Number and therefore requires an explicit portable Money wrapper.",
+        "toJSON returns this.value with no currency/amount-string envelope. Native divide has no zero check and parse can propagate nonfinite values, which JSON.stringify maps to null under the language contract. This native serialization policy differs from Core portable JSON; it does not prove all finite outputs lose numeric value or that a symbol means ISO currency.",
+        "Use native toJSON directly as Core interchange; nonfinite-null concern requires a nonfinite value reaching this.value. Finite exactly representable Number inputs may serialize numerically unchanged but still lack portable schema. No executed zero-division/JSON result was observed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0190",
+      "title": "Mongoid persistence converts every cents amount to Float",
+      "library_id": "CE-REPO-0034",
+      "edition_id": "CE-EDITION-0034",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0034:CE-EDITION-0034:fn087",
+          "path": "lib/money-rails/mongoid/money.rb",
+          "name": "Money::mongoize",
+          "start_line": 5,
+          "end_line": 10
+        },
+        {
+          "id": "CE-REPO-0034:CE-EDITION-0034:fn088",
+          "path": "lib/money-rails/mongoid/money.rb",
+          "name": "Money::demongoize",
+          "start_line": 15,
+          "end_line": 20
+        },
+        {
+          "id": "CE-REPO-0034:CE-EDITION-0034:fn090",
+          "path": "lib/money-rails/mongoid/money.rb",
+          "name": "Money::evolve",
+          "start_line": 35,
+          "end_line": 40
+        }
+      ],
+      "explanation": [
+        "Mongoid integration converts every minor-unit amount to Float before returning its persistence hash.",
+        "mongoize explicitly calls cents.to_f, demongoize passes stored cents into Money.new, and evolve reuses mongoize for query conversion. For sufficiently large/fine values, distinct exact cents can collapse before any BSON/storage boundary; reconstruction cannot recover lost information. A consumer requiring Core exact roundtrip must constrain range or use exact storage rather than attribute precision to the database.",
+        "An admitted source cents value not exactly represented by Ruby Float, followed by persistence roundtrip or equality-query encoding. Small exactly representable values can roundtrip; no MongoDB operation or concrete runtime decoded value was executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0195",
+      "title": "Persistence schemas and defaults require explicit unit and range boundaries",
+      "library_id": "CE-REPO-0034",
+      "edition_id": "CE-EDITION-0034",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0034:CE-EDITION-0034:fn038",
+          "path": "lib/money-rails/active_record/migration_extensions/options_extractor.rb",
+          "name": "MoneyRails::ActiveRecord::MigrationExtensions::OptionsExtractor::extract::class",
+          "start_line": 7,
+          "end_line": 21
+        },
+        {
+          "id": "CE-REPO-0034:CE-EDITION-0034:fn021",
+          "path": "lib/money-rails/active_job/money_serializer.rb",
+          "name": "MoneyRails::ActiveJob::MoneySerializer::serialize",
+          "start_line": 10,
+          "end_line": 12
+        },
+        {
+          "id": "CE-REPO-0034:CE-EDITION-0034:fn022",
+          "path": "lib/money-rails/active_job/money_serializer.rb",
+          "name": "MoneyRails::ActiveJob::MoneySerializer::deserialize",
+          "start_line": 14,
+          "end_line": 16
+        },
+        {
+          "id": "CE-REPO-0034:CE-EDITION-0034:fn086",
+          "path": "lib/money-rails/money.rb",
+          "name": "Money::to_hash",
+          "start_line": 28,
+          "end_line": 30
+        }
+      ],
+      "explanation": [
+        "Rails migrations, jobs and native hashes define minor-unit and null/default schemas distinct from portable Money JSON.",
+        "OptionsExtractor merges per-column options after top-level null controls; ActiveJob serialize emits cents/currency and deserialize passes possibly absent cents to Money.new. Native to_hash uses cents/currency_iso. These shapes require explicit unit translation and required-member handling if projected to Core; their existence does not itself violate their native APIs or establish database integer width.",
+        "Use the native cents schema or missing cents with an otherwise valid currency; construction interpretation depends on attributed RubyMoney constructor contract. Transport encoder and actual database capacity are outside these bodies. Native omission/default policies need not claim FinKore portable parsing. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0205",
+      "title": "Native deserialization checks currency metadata but relies on conditional scale assertion",
+      "library_id": "CE-REPO-0004",
+      "edition_id": "CE-EDITION-0004",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn225",
+          "path": "src/main/java/org/joda/money/Ser.java",
+          "name": "org.joda.money.Ser.readExternal",
+          "start_line": 112,
+          "end_line": 127
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn226",
+          "path": "src/main/java/org/joda/money/Ser.java",
+          "name": "org.joda.money.Ser.readBigMoney",
+          "start_line": 129,
+          "end_line": 136
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn227",
+          "path": "src/main/java/org/joda/money/Ser.java",
+          "name": "org.joda.money.Ser.readCurrency",
+          "start_line": 138,
+          "end_line": 148
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn144",
+          "path": "src/main/java/org/joda/money/Money.java",
+          "name": "org.joda.money.Money.Money",
+          "start_line": 356,
+          "end_line": 360
+        }
+      ],
+      "explanation": [
+        "Joda native binary deserialization validates currency metadata but fixed Money scale relies on conditional assertions.",
+        "Ser.readExternal reads tag then builds Money from readBigMoney; that reader preserves unscaled BigInteger plus scale and validates numeric/digits metadata against registry. Money(BigMoney) checks currency scale only with Java assert. With assertions disabled a crafted native stream can bypass that fixed-scale invariant, while ordinary valid serialization remains exact. Core does not require storage at currency scale or define this binary format.",
+        "Native Money-tag stream with valid registered currency metadata but noncurrency amount scale, assertions disabled. No crafted stream, JVM assertion setting or security exploit was executed. This is the upstream fixed-scale invariant, not a Core JSON lexical defect. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0213",
+      "title": "Construction, projection and persistence have different integer boundaries",
+      "library_id": "CE-REPO-0024",
+      "edition_id": "CE-EDITION-0024",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn003",
+          "path": "src/clojure/clojurewerkz/money/amounts.clj",
+          "name": "clojurewerkz.money.amounts/of-major",
+          "start_line": 53,
+          "end_line": 57
+        },
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn004",
+          "path": "src/clojure/clojurewerkz/money/amounts.clj",
+          "name": "clojurewerkz.money.amounts/of-minor",
+          "start_line": 59,
+          "end_line": 64
+        },
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn005",
+          "path": "src/clojure/clojurewerkz/money/amounts.clj",
+          "name": "clojurewerkz.money.amounts/major-of",
+          "start_line": 66,
+          "end_line": 69
+        },
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn006",
+          "path": "src/clojure/clojurewerkz/money/amounts.clj",
+          "name": "clojurewerkz.money.amounts/minor-of",
+          "start_line": 71,
+          "end_line": 74
+        },
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn096",
+          "path": "src/clojure/clojurewerkz/money/monger.clj",
+          "name": "clojurewerkz.money.monger/to-db-object[Money]",
+          "start_line": 56,
+          "end_line": 59
+        },
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn097",
+          "path": "src/clojure/clojurewerkz/money/monger.clj",
+          "name": "clojurewerkz.money.monger/from-stored-map",
+          "start_line": 61,
+          "end_line": 67
+        }
+      ],
+      "explanation": [
+        "Clojure construction, major/minor projections and Monger storage expose distinct integer ranges.",
+        "of-major/of-minor use primitive long arguments; their coercion can discard fractional Number input before Joda construction under the attributed Clojure contract. major-of delegates truncating major-long projection, minor-of returns BigInt, and Monger serialization requires getAmountMinorLong. A value may thus fit the Money representation and BigInt accessor but fail the narrower native storage profile. Finite backend range limits are not themselves a universal Core defect.",
+        "Fractional Number passed to long constructor, or a Money whose minor count exceeds long while a major representation/accessor remains admissible. The exact long projection can reject rather than silently lose large values. No Clojure/BSON/database runtime was executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0215",
+      "title": "JSON, display and database profiles intentionally differ",
+      "library_id": "CE-REPO-0024",
+      "edition_id": "CE-EDITION-0024",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn092",
+          "path": "src/clojure/clojurewerkz/money/json.clj",
+          "name": "clojurewerkz.money.json/encode-money",
+          "start_line": 46,
+          "end_line": 51
+        },
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn094",
+          "path": "src/clojure/clojurewerkz/money/json.clj",
+          "name": "clojurewerkz.money.json/<fn@58>",
+          "start_line": 58,
+          "end_line": 59
+        },
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn096",
+          "path": "src/clojure/clojurewerkz/money/monger.clj",
+          "name": "clojurewerkz.money.monger/to-db-object[Money]",
+          "start_line": 56,
+          "end_line": 59
+        },
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn090",
+          "path": "src/clojure/clojurewerkz/money/hiccup.clj",
+          "name": "clojurewerkz.money.hiccup/render-html[Money]",
+          "start_line": 43,
+          "end_line": 44
+        }
+      ],
+      "explanation": [
+        "Clojure JSON, localized HTML and Monger profiles intentionally use different schemas.",
+        "encode-money formats code-space-BigDecimal text and registered Cheshire callback writes it as a JSON string. Hiccup delegates localized formatter, while Monger stores amount-in-minor-units long and currency-unit code. None is the Core amount/currency object by field/shape alone, and no reverse portable codec follows from registration.",
+        "Use the native serializers for their documented profiles; direct reuse as portable Core JSON requires explicit schema/unit conversion. A separate human-readable JSON string or database schema is allowed as additional API; neither implies wrong numerical amount by itself. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0219",
+      "title": "Casts and serializer variants narrow exact values to native storage types",
+      "library_id": "CE-REPO-0019",
+      "edition_id": "CE-EDITION-0019",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0019:CE-EDITION-0019:fn019",
+          "path": "src/Casts/MoneyDecimalCast.php",
+          "name": "MoneyDecimalCast::getFormatter",
+          "start_line": 14,
+          "end_line": 17
+        },
+        {
+          "id": "CE-REPO-0019:CE-EDITION-0019:fn020",
+          "path": "src/Casts/MoneyIntegerCast.php",
+          "name": "MoneyIntegerCast::getFormatter",
+          "start_line": 14,
+          "end_line": 17
+        },
+        {
+          "id": "CE-REPO-0019:CE-EDITION-0019:fn090",
+          "path": "src/Serializer/IntegerMoneySerializer.php",
+          "name": "IntegerMoneySerializer::serialize",
+          "start_line": 15,
+          "end_line": 18
+        },
+        {
+          "id": "CE-REPO-0019:CE-EDITION-0019:fn021",
+          "path": "src/Casts/MoneyStringCast.php",
+          "name": "MoneyStringCast::getFormatter",
+          "start_line": 14,
+          "end_line": 17
+        }
+      ],
+      "explanation": [
+        "Laravel cast/serializer helpers narrow exact decimal/minor strings into platform float/int before storage.",
+        "MoneyDecimalCast casts exact major decimal text to float; integer cast and IntegerMoneySerializer cast arbitrary minor text to native int without explicit range checks. MoneyStringCast selects Intl text instead. These are attributable conversion boundaries before any driver; if used for exact Money persistence, values beyond selected native precision/range need rejection or exact encoding.",
+        "Decimal not exactly representable as float, minor integer outside platform int range, or locale-formatted storage parsed under a different locale. Small exact values and stable native-profile consumers may work. Actual driver/storage type and readback result were not executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0220",
+      "title": "Default JSON amount uses minor units and formatted output depends on locale",
+      "library_id": "CE-REPO-0019",
+      "edition_id": "CE-EDITION-0019",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0019:CE-EDITION-0019:fn088",
+          "path": "src/Serializer/ArrayMoneySerializer.php",
+          "name": "ArrayMoneySerializer::serialize",
+          "start_line": 15,
+          "end_line": 22
+        },
+        {
+          "id": "CE-REPO-0019:CE-EDITION-0019:fn049",
+          "path": "src/Money.php",
+          "name": "Money::jsonSerialize",
+          "start_line": 151,
+          "end_line": 155
+        },
+        {
+          "id": "CE-REPO-0019:CE-EDITION-0019:fn075",
+          "path": "src/MoneySerializerTrait.php",
+          "name": "MoneySerializerTrait::serialize",
+          "start_line": 20,
+          "end_line": 43
+        }
+      ],
+      "explanation": [
+        "Default Laravel JSON uses MoneyPHP minor-unit amount with locale display, and configured serializers can replace its shape.",
+        "Array serializer merges attributes, underlying MoneyPHP json and formatted text in that order, so reserved amount/currency override extra attributes. jsonSerialize delegates dynamic serializer configuration, validating its interface. Native amount100USD means100 minor units, not automatically Core100 major units. Locale display adds presentation context but does not itself alter underlying amount/currency meaning.",
+        "Use default array serializer or configure integer/string serializer; direct Core interchange requires minor-to-major projection. Extra formatted member is permitted if financial fields remain semantically unchanged; mere presence of locale text is not a MONEY-SERIALIZATION-007 violation. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0230",
+      "title": "Serialization outputs numeric minor values and can swallow encoding failure",
+      "library_id": "CE-REPO-0020",
+      "edition_id": "CE-EDITION-0020",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn067",
+          "path": "src/Money.php",
+          "name": "Money::toArray",
+          "start_line": 683,
+          "end_line": 690
+        },
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn068",
+          "path": "src/Money.php",
+          "name": "Money::toJson",
+          "start_line": 692,
+          "end_line": 695
+        },
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn003",
+          "path": "src/Casts/MoneyCast.php",
+          "name": "MoneyCast::get",
+          "start_line": 15,
+          "end_line": 32
+        },
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn004",
+          "path": "src/Casts/MoneyCast.php",
+          "name": "MoneyCast::set",
+          "start_line": 34,
+          "end_line": 44
+        }
+      ],
+      "explanation": [
+        "Akaunting native JSON exposes numeric minor amounts and can stringify an encoding failure as an empty string.",
+        "toArray emits raw numeric amount, rounded getValue and Currency object; cast profile emits raw amount/code. toJson and cast set string-cast json_encode without checking false, so a native encoding failure becomes empty output absent throwing flags. Cast get requires decoded nonnull amount/currency but does not enforce Core decimal-string or exact large-number profile. This is an error-reporting concern plus alternative schema.",
+        "Reach json_encode failure, such as admitted nonfinite numeric amount, with options lacking throw-on-error; or use large numeric native JSON through default decoder. Caller throw flags can change failure behavior; no PHP encoding, constructor admission or database roundtrip was executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0237",
+      "title": "Raw-minor numeric JSON differs from major-decimal Core representation",
+      "library_id": "CE-REPO-0021",
+      "edition_id": "CE-EDITION-0021",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0021:CE-EDITION-0021:fn014",
+          "path": "src/Money.php",
+          "name": "Money::jsonSerialize",
+          "start_line": 108,
+          "end_line": 114
+        },
+        {
+          "id": "CE-REPO-0021:CE-EDITION-0021:fn016",
+          "path": "src/Money.php",
+          "name": "Money::getConvertedAmount",
+          "start_line": 131,
+          "end_line": 134
+        },
+        {
+          "id": "CE-REPO-0021:CE-EDITION-0021:fn011",
+          "path": "src/IntlFormatter.php",
+          "name": "IntlFormatter::format",
+          "start_line": 48,
+          "end_line": 54
+        }
+      ],
+      "explanation": [
+        "Native integer minor-unit JSON and ICU display require explicit conversion to Core major decimal-string JSON.",
+        "jsonSerialize emits integer amount and code; getConvertedAmount divides using live currency subunit then rounds to live fraction digits before Intl formatting. Identical amount/currency member names do not make minor-unit integer values Core major-unit decimal strings. Display rounding alone is not evidence native integer storage was changed.",
+        "Use native JSON directly as portable interchange or depend on converted display under mutable currency metadata. A stable native minor-unit schema can be valid for its own API. No reverse parser, current ICU output or external exact roundtrip was executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0243",
+      "title": "Binary and SQL profiles assume code structure that registration does not enforce",
+      "library_id": "CE-REPO-0022",
+      "edition_id": "CE-EDITION-0022",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn042",
+          "path": "currency.go",
+          "name": "Register",
+          "start_line": 153,
+          "end_line": 172
+        },
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn026",
+          "path": "amount.go",
+          "name": "(a Amount)::MarshalBinary",
+          "start_line": 350,
+          "end_line": 356
+        },
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn027",
+          "path": "amount.go",
+          "name": "(a *Amount)::UnmarshalBinary",
+          "start_line": 359,
+          "end_line": 376
+        },
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn030",
+          "path": "amount.go",
+          "name": "(a Amount)::Value",
+          "start_line": 427,
+          "end_line": 429
+        },
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn031",
+          "path": "amount.go",
+          "name": "(a *Amount)::Scan",
+          "start_line": 435,
+          "end_line": 467
+        }
+      ],
+      "explanation": [
+        "Registry admission permits codes that the native fixed-three-byte binary codec cannot roundtrip.",
+        "Register accepts any nonempty string; MarshalBinary concatenates the entire code and numeric text, while UnmarshalBinary takes exactly the firstthree bytes as code. An admitted four-bytecodeUSDX shifts X into number parsing. SQL Value emits an unescaped composite and Scan splits first comma; empty Scan returns without resetting receiver. These are native codec/admission mismatches, not permission to define Core private currency namespaces.",
+        "Register and construct a non-three-byte code, or a composite-sensitive code; use a prepopulated receiver with empty Scan for unchanged-state policy. Normal three-letter codes avoid the binary split mismatch; no database/codec was executed. Core private currency behavior remains undefined. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0244",
+      "title": "JSON accepts raw numeric tokens without float conversion but uses scientific-capable profile",
+      "library_id": "CE-REPO-0022",
+      "edition_id": "CE-EDITION-0022",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn028",
+          "path": "amount.go",
+          "name": "(a Amount)::MarshalJSON",
+          "start_line": 379,
+          "end_line": 387
+        },
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn029",
+          "path": "amount.go",
+          "name": "(a *Amount)::UnmarshalJSON",
+          "start_line": 390,
+          "end_line": 422
+        },
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn007",
+          "path": "amount.go",
+          "name": "(a Amount)::Number",
+          "start_line": 110,
+          "end_line": 112
+        }
+      ],
+      "explanation": [
+        "Native number/currency JSON preserves numeric token text but permits a broader APD notation/value profile than Core.",
+        "Unmarshal uses RawMessage, tries a string then parses raw token text directly, avoiding float64 narrowing; assignment occurs after parse/currency checks. Marshal writes number:string rather than amount and Number returns APD scientific-capable String. No finite Form guard appears, and empty-codezero is accepted. Exact token handling is a useful mechanism, but exponent/nonfinite allowance and member names require a separate portable boundary.",
+        "Use native JSON directly as Core, or admit quoted nonfinite/exponent strings via the attributed APD parser contract. Exact finite numeric tokens can retain all digits despite being JSON numbers; they still do not satisfy Core amount-string schema. No APD/runtime encoding was executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0256",
+      "title": "JSON preserves exact coefficient text but depends on external currency definitions",
+      "library_id": "CE-REPO-0032",
+      "edition_id": "CE-EDITION-0032",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn070",
+          "path": "lib/src/money.dart",
+          "name": "Money::Money.fromJson",
+          "start_line": 381,
+          "end_line": 388
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn077",
+          "path": "lib/src/money.dart",
+          "name": "Money::toJson",
+          "start_line": 533,
+          "end_line": 537
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn027",
+          "path": "lib/src/currency.dart",
+          "name": "Currency::toJson",
+          "start_line": 208,
+          "end_line": 224
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn046",
+          "path": "lib/src/exchange_rates/exchange_rate.dart",
+          "name": "ExchangeRate::ExchangeRate.fromJson",
+          "start_line": 131,
+          "end_line": 140
+        }
+      ],
+      "explanation": [
+        "Money2 JSON preserves coefficient text and explicit decimals; README numeric minorUnits conflicts with the decoder, while registry metadata replacement alone does not prove numeric Core roundtrip loss.",
+        "fromJson casts minorUnits to String and toJson emits String, but README supplies numeric1050. Reconstruction retains explicit decimals with the BigInt coefficient and resolves currency by code. Currency display/flags may differ after registry replacement, yet numeric amount and code remain preserved under that explicit-scale path; the original context warning must not be promoted into a Core value-loss claim without an amount/currency change.",
+        "Use the numeric README example for the cast mismatch; for valid roundtrip use string coefficient and existing registered code. External registry changes may alter display metadata or make lookup fail, but do not automatically rescale the stored amount because decimals is explicit. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0265",
+      "title": "Integer projection checks range after an implicit rounding policy",
+      "library_id": "CE-REPO-0048",
+      "edition_id": "CE-EDITION-0048",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn022",
+          "path": "src/Money.php",
+          "name": "Money::getAmountInCents",
+          "start_line": 314,
+          "end_line": 326
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn024",
+          "path": "src/Money.php",
+          "name": "Money::getAmountInMinorUnits",
+          "start_line": 351,
+          "end_line": 365
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn023",
+          "path": "src/Money.php",
+          "name": "Money::setAmountInMinorUnits",
+          "start_line": 335,
+          "end_line": 344
+        }
+      ],
+      "explanation": [
+        "Paysera integer projection checks native range after scale-limited multiplication and local floor, so a successful range check is not an exactness guarantee.",
+        "getAmountInCents/minorUnits multiply using the local BcMath6 strategy, call floor and then require string-int-string identity. This rejects native integer narrowing, but earlier multiplication can discard digits. floor tests truncated integer sign, so negative fractions betweenzero andminusone do not trigger the decrement. Protected minor setter divides under that same local strategy. This is distinct from factory-injected Maba math.",
+        "Use fractional minor units, extra digits beyond local scale, or a negative nearzero floor input after multiplication. Integral exactly representable products can pass correctly; actual integer overflow/error and PHP/BCMath numerical results were not executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0267",
+      "title": "Raw serializer mapping and formatted normalizer retain different amounts",
+      "library_id": "CE-REPO-0048",
+      "edition_id": "CE-EDITION-0048",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn021",
+          "path": "src/Money.php",
+          "name": "Money::getAmount",
+          "start_line": 302,
+          "end_line": 305
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn047",
+          "path": "src/Money.php",
+          "name": "Money::getArrayRepresentation",
+          "start_line": 777,
+          "end_line": 783
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn072",
+          "path": "src/MoneyNormalizer.php",
+          "name": "MoneyNormalizer::mapFromEntity",
+          "start_line": 104,
+          "end_line": 114
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn073",
+          "path": "src/Serializer.php",
+          "name": "Serializer::getMetadataPath",
+          "start_line": 12,
+          "end_line": 15
+        }
+      ],
+      "explanation": [
+        "Formatted array/normalizer output can discard stored nonzero fractional digits while raw XML metadata targets stored strings.",
+        "getAmount exposes raw text, whereas array and normalizer invoke formatAmount. For positive fraction with no grouping, formatAmount substr truncates excess digits; atnonpositivefraction it uses number_format. If used as serialization, stored1.239EUR becomes formatted1.23 without an explicit prior rounding operation, conflicting with Core numeric preservation. XML declares raw amount/currency but engine execution is unverified.",
+        "Stored amount with nonzero digits beyond selected/default currency fraction and use formatted normalizer/array as persistence or portable serialization. Only removing trailingzero digits preserves amount. Native PHP reconstruction/wakeup and external XML engine were not executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0273",
+      "title": "JSON integer tokens are exact but decimal fallback can cross the rounding boundary",
+      "library_id": "CE-REPO-0098",
+      "edition_id": "CE-EDITION-0098",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn270",
+          "path": "money/json.go",
+          "name": "(j *JSON)::defaultUnmarshalJSON",
+          "start_line": 179,
+          "end_line": 280
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn269",
+          "path": "money/json.go",
+          "name": "(j *JSON)::defaultMarshalJSON",
+          "start_line": 151,
+          "end_line": 177
+        }
+      ],
+      "explanation": [
+        "JSON integer token path is exact within int64; decimal fallback rounds through a default64-bit binary significand before its tie-away rule.",
+        "Decoder first ParseInts original json.Number text, preserving integers beyond2^53. On parse failure it creates unconfigured big.Float, whose pinned scanner selects64bits, then truncates/computes fractional distance to0.5 and tie-away integer; range check follows. Near int64 boundary a decimal can cross a half threshold before wrapper rounding. This is narrower than claiming all numeric tokens lose precision.",
+        "Decimal/exponent token not handled by ParseInt and close enough to a rounding boundary for64-bit binary approximation to matter. Plain in-range integer tokens avoid the float fallback. Specific9223372036854775807.49 overflow is a static derived counterexample, not an executed result. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0274",
+      "title": "JSON defaults and callbacks are outside canonical Money serialization",
+      "library_id": "CE-REPO-0098",
+      "edition_id": "CE-EDITION-0098",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn270",
+          "path": "money/json.go",
+          "name": "(j *JSON)::defaultUnmarshalJSON",
+          "start_line": 179,
+          "end_line": 280
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn268",
+          "path": "money/json.go",
+          "name": "(j *JSON)::SetCurrency",
+          "start_line": 138,
+          "end_line": 149
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn271",
+          "path": "money/json.go",
+          "name": "(j *JSON)::getUnmarshalJSONMoney",
+          "start_line": 282,
+          "end_line": 299
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn303",
+          "path": "money/money.go",
+          "name": "(m *Money)::UnmarshalJSON",
+          "start_line": 210,
+          "end_line": 216
+        }
+      ],
+      "explanation": [
+        "JSON decoder invokes the default-currency callback even for explicit codes and accepts a nil callback setter.",
+        "Default decoder calls currencyFn before choosing explicit/default currency, so callback failure blocks explicit code parsing. SetCurrency stores nil without checking, and decoder later invokes it. Money.UnmarshalJSON creates NewJson rather than using an independently configured object. Default assignment is at the end, preserving prior receiver on normal validation errors; custom callbacks have separate effects. Native missing-fieldzero/default and minor rounding policies differ from Core required fields.",
+        "Call SetCurrency(nil) on a nonnil JSON codec then defaultUnmarshal, or install an erroring default callback while input supplies a valid explicit code. No callback/panic was executed; configured JSON instances do work when explicitly used. Default error atomicity cannot be generalized to custom unmarshal callbacks. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0276",
+      "title": "Database delimiter is mutable context and can collide with signed values",
+      "library_id": "CE-REPO-0098",
+      "edition_id": "CE-EDITION-0098",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn076",
+          "path": "money/db.go",
+          "name": "SetDBMoneyValueSeparator",
+          "start_line": 36,
+          "end_line": 47
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn077",
+          "path": "money/db.go",
+          "name": "(m *Money)::Value",
+          "start_line": 51,
+          "end_line": 67
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn078",
+          "path": "money/db.go",
+          "name": "(m *Money)::Scan",
+          "start_line": 71,
+          "end_line": 111
+        }
+      ],
+      "explanation": [
+        "Native database delimiter admission allows sign collisions and mutable separator changes can invalidate stored values.",
+        "SetDBMoneyValueSeparator rejects only trimmed-empty text, so minus is accepted. Value emits amount plus separator plus code; negativeone with minus delimiter has three split segments, and Scan requires exactlytwo nonempty parts. Scan parses/resolves before receiver assignment, preserving old Money on default errors. This is a codec roundtrip defect for an admitted configuration, separate from any database transaction guarantee.",
+        "Configure separator minus and serialize negative amount, or change separator between serialization and scan. Stable noncolliding delimiter with valid fields can roundtrip; no database/codec was executed. Currency metadata is resolved from current registry. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0284",
+      "title": "Minor projection has a smaller range and applies rounding before narrowing",
+      "library_id": "CE-REPO-0097",
+      "edition_id": "CE-EDITION-0097",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn003",
+          "path": "src/base.rs",
+          "name": "src/base.rs::BaseMoney::from_minor",
+          "start_line": 152,
+          "end_line": 163
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn118",
+          "path": "src/money.rs",
+          "name": "src/money.rs::BaseMoney<C> for Money<C>::minor_amount",
+          "start_line": 205,
+          "end_line": 209
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn243",
+          "path": "src/raw_money/raw_money.rs",
+          "name": "src/raw_money/raw_money.rs::BaseMoney<C> for RawMoney<C>::minor_amount",
+          "start_line": 245,
+          "end_line": 250
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn261",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::comma_str_code::serialize",
+          "start_line": 116,
+          "end_line": 123
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn265",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::option_comma_str_code::serialize",
+          "start_line": 165,
+          "end_line": 175
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn271",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::comma_str_symbol::serialize",
+          "start_line": 225,
+          "end_line": 232
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn275",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::option_comma_str_symbol::serialize",
+          "start_line": 274,
+          "end_line": 284
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn281",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::dot_str_code::serialize",
+          "start_line": 334,
+          "end_line": 341
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn285",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::option_dot_str_code::serialize",
+          "start_line": 383,
+          "end_line": 393
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn291",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::dot_str_symbol::serialize",
+          "start_line": 443,
+          "end_line": 450
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn295",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::option_dot_str_symbol::serialize",
+          "start_line": 492,
+          "end_line": 502
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn301",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::str_code::serialize",
+          "start_line": 552,
+          "end_line": 559
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn305",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::option_str_code::serialize",
+          "start_line": 601,
+          "end_line": 611
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn311",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::str_symbol::serialize",
+          "start_line": 661,
+          "end_line": 668
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn315",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::option_str_symbol::serialize",
+          "start_line": 710,
+          "end_line": 720
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn321",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::minor::serialize",
+          "start_line": 770,
+          "end_line": 780
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn330",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::option_minor::serialize",
+          "start_line": 836,
+          "end_line": 846
+        }
+      ],
+      "explanation": [
+        "Minor-unit projections and codecs have narrower checked ranges than major-value storage and may explicitly round RawMoney.",
+        "from_minor first converts i128 to bounded Decimal then divides by currency power, so some eventual major values can be rejected early. Money.minor_amount checks multiplication/power and i128 conversion; RawMoney additionally round_dp before projection. Minor serializer turns None into error; human formatter substitutes OVERFLOWED. Range rejection is a declared native profile limitation, not silent narrowing or a universal Core range violation.",
+        "Use major amount near backend bounds, custom exponent exceeding representable power, or RawMoney with fractional minor units. Ordinary in-range exact Money projections can preserve value. Human text fallback is not suitable as lossless persistence; no Rust runtime outcome was executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0287",
+      "title": "Numeric and string serialization profiles differ in currency context and round trips",
+      "library_id": "CE-REPO-0097",
+      "edition_id": "CE-EDITION-0097",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn246",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::serialize_as_number",
+          "start_line": 21,
+          "end_line": 30
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn249",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::de::Visitor<'de> for BaseMoneyVisitor<M, C>::visit_f64",
+          "start_line": 46,
+          "end_line": 48
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn258",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::de::Visitor<'de> for BaseMoneyVisitor<M, C>::visit_map",
+          "start_line": 78,
+          "end_line": 91
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn261",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::comma_str_code::serialize",
+          "start_line": 116,
+          "end_line": 123
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn264",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::comma_str_code::deserialize",
+          "start_line": 143,
+          "end_line": 150
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn265",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::option_comma_str_code::serialize",
+          "start_line": 165,
+          "end_line": 175
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn270",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::option_comma_str_code::deserialize",
+          "start_line": 203,
+          "end_line": 210
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn271",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::comma_str_symbol::serialize",
+          "start_line": 225,
+          "end_line": 232
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn274",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::comma_str_symbol::deserialize",
+          "start_line": 252,
+          "end_line": 259
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn275",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::option_comma_str_symbol::serialize",
+          "start_line": 274,
+          "end_line": 284
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn280",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::option_comma_str_symbol::deserialize",
+          "start_line": 312,
+          "end_line": 319
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn281",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::dot_str_code::serialize",
+          "start_line": 334,
+          "end_line": 341
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn284",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::dot_str_code::deserialize",
+          "start_line": 361,
+          "end_line": 368
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn285",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::option_dot_str_code::serialize",
+          "start_line": 383,
+          "end_line": 393
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn290",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::option_dot_str_code::deserialize",
+          "start_line": 421,
+          "end_line": 428
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn291",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::dot_str_symbol::serialize",
+          "start_line": 443,
+          "end_line": 450
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn294",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::dot_str_symbol::deserialize",
+          "start_line": 470,
+          "end_line": 477
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn295",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::option_dot_str_symbol::serialize",
+          "start_line": 492,
+          "end_line": 502
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn300",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::option_dot_str_symbol::deserialize",
+          "start_line": 530,
+          "end_line": 537
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn301",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::str_code::serialize",
+          "start_line": 552,
+          "end_line": 559
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn304",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::str_code::deserialize",
+          "start_line": 579,
+          "end_line": 586
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn305",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::option_str_code::serialize",
+          "start_line": 601,
+          "end_line": 611
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn310",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::option_str_code::deserialize",
+          "start_line": 639,
+          "end_line": 646
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn311",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::str_symbol::serialize",
+          "start_line": 661,
+          "end_line": 668
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn314",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::str_symbol::deserialize",
+          "start_line": 688,
+          "end_line": 695
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn315",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::option_str_symbol::serialize",
+          "start_line": 710,
+          "end_line": 720
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn320",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::option_str_symbol::deserialize",
+          "start_line": 748,
+          "end_line": 755
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn321",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::minor::serialize",
+          "start_line": 770,
+          "end_line": 780
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn329",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::minor::deserialize",
+          "start_line": 814,
+          "end_line": 821
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn330",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::option_minor::serialize",
+          "start_line": 836,
+          "end_line": 846
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn335",
+          "path": "src/serde/base.rs",
+          "name": "src/serde/base.rs::option_minor::deserialize",
+          "start_line": 874,
+          "end_line": 881
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn366",
+          "path": "src/serde/obj_money.rs",
+          "name": "src/serde/obj_money.rs::serde::Serialize for ObjMoney<IS_RAW>::serialize",
+          "start_line": 7,
+          "end_line": 20
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn368",
+          "path": "src/serde/obj_money.rs",
+          "name": "src/serde/obj_money.rs::serde::Deserialize<'de> for ObjMoney<IS_RAW>::deserialize",
+          "start_line": 24,
+          "end_line": 40
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn369",
+          "path": "src/serde/obj_money.rs",
+          "name": "src/serde/obj_money.rs::str_code_comma::serialize",
+          "start_line": 50,
+          "end_line": 60
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn370",
+          "path": "src/serde/obj_money.rs",
+          "name": "src/serde/obj_money.rs::str_code_comma::deserialize",
+          "start_line": 62,
+          "end_line": 70
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn371",
+          "path": "src/serde/obj_money.rs",
+          "name": "src/serde/obj_money.rs::str_code_dot::serialize",
+          "start_line": 76,
+          "end_line": 86
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn372",
+          "path": "src/serde/obj_money.rs",
+          "name": "src/serde/obj_money.rs::str_code_dot::deserialize",
+          "start_line": 88,
+          "end_line": 96
+        }
+      ],
+      "explanation": [
+        "Optional fixed-separator serializers use default formatting while their readers delegate to fixed-separator parsing.",
+        "Nonoptional comma/dot writers call format_with_separator. Optional counterparts call format_code/format_symbol; visit_some delegates to the fixed base reader, whose visit_str selects literal comma/dot separators. When currency defaults differ, an emitted value can be rejected or reinterpreted by its own reader. Numeric static profiles separately derive currency from type and JSON Number preserves text until bounded decimal conversion; f64 visitors cannot recover previously lost digits.",
+        "An optional Some value using a currency default separator set different from the named fixed profile and an amount exposing decimal/group separators. None paths and nonoptional fixed writers are separate and need not fail. Exact failure outcome depends on parser/admitted text; no Rust/Serde execution was performed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0296",
+      "title": "Serialization reconstruction can round a previously serialized exact value",
+      "library_id": "CE-REPO-0007",
+      "edition_id": "CE-EDITION-0007",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn440",
+          "path": "src/NodaMoney/Serialization/MoneyJsonConverter.cs",
+          "name": "NodaMoney.Serialization.MoneyJsonConverter::public override Money Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)",
+          "start_line": 36,
+          "end_line": 45
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn466",
+          "path": "src/NodaMoney/Serialization/MoneyJsonConverter.cs",
+          "name": "NodaMoney.Serialization.MoneyJsonConverter::Money ParseMoneyFromString(ref Utf8JsonReader reader)",
+          "start_line": 56,
+          "end_line": 111
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn467",
+          "path": "src/NodaMoney/Serialization/MoneyJsonConverter.cs",
+          "name": "NodaMoney.Serialization.MoneyJsonConverter::Money ParseMoneyFromJsonObject(ref Utf8JsonReader reader)",
+          "start_line": 119,
+          "end_line": 184
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn387",
+          "path": "src/NodaMoney/Money.Serializable.cs",
+          "name": "NodaMoney.Money::private Money(SerializationInfo info, StreamingContext context)\n        : this()",
+          "start_line": 25,
+          "end_line": 74
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn390",
+          "path": "src/NodaMoney/Money.Serializable.cs",
+          "name": "NodaMoney.Money::public void ReadXml(XmlReader reader)",
+          "start_line": 94,
+          "end_line": 135
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn444",
+          "path": "src/NodaMoney/Serialization/MoneyTypeConverter.cs",
+          "name": "NodaMoney.Serialization.MoneyTypeConverter::public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object? value)",
+          "start_line": 24,
+          "end_line": 70
+        }
+      ],
+      "explanation": [
+        "NodaMoney reconstruction applies converter/ambient rounding, so default roundtrip can reduce an originally finer exact amount.",
+        "JSON writer emits code plus invariant amount string. Reader accepts that string or legacy numeric/permissive object and constructs new Money with converter context; binary/XML/type-converter paths also reconstruct. Money constructor applies contextual rounding, including standardtwo-decimal fast path. If source retained123.456EUR under NoRounding but reader uses standard context, numeric amount can change. Unknown-property rejection is permitted by Core and not a defect.",
+        "Serialize a finer amount retained under a no-rounding context, then reconstruct with a coarser default rather than matching no-rounding context. Matching NoRounding preserves the finer value; exponent/plus acceptance belongs to this native schema, not automatically Core JSON grammar. No .NET roundtrip was executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0304",
+      "title": "ex-money: integer tuple conversion exposes residual but tuple import discards it",
+      "library_id": "CE-REPO-0031",
+      "edition_id": "CE-EDITION-0031",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn384",
+          "path": "lib/money.ex",
+          "name": "Money.to_integer_exp [clause 2972]",
+          "start_line": 2972,
+          "end_line": 2982
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn385",
+          "path": "lib/money.ex",
+          "name": "Money.integer_amount [clause 2984]",
+          "start_line": 2984,
+          "end_line": 2987
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn396",
+          "path": "lib/money.ex",
+          "name": "Money.replace_fractional_digits_with_currency_digits [clause 3105]",
+          "start_line": 3105,
+          "end_line": 3110
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn408",
+          "path": "lib/money.ex",
+          "name": "Money.from_integer [clause 3310]",
+          "start_line": 3310,
+          "end_line": 3312
+        }
+      ],
+      "explanation": [
+        "Integer tuple export exposes exponent and residual, while tuple import intentionally ignores both and uses current currency digits.",
+        "to_integer_exp rounds, normalizes, computes original-minus-rounded remainder, resolves digits, then returns currency/integer/negative exponent/remainder. from_integer tuple matches but discards exponent/residual and calls integer-plus-currency overload. It is not an inverse for nondefault digits or nonzero remainder. This native projection policy is not a demonstration of canonical portable JSON roundtrip.",
+        "Use custom export digit policy or a source requiring nonzero rounding remainder, then pass exported tuple to from_integer. Default digits with zero remainder can reconstruct the same amount; no Elixir Decimal arithmetic or optional JSON encoder was executed/read as a complete codec. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0337",
+      "title": "Moneta numeric conversion: exact floating extractors only guard Infinity",
+      "library_id": "CE-REPO-0110",
+      "edition_id": "CE-EDITION-0110",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn669",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/DefaultNumberValue.java",
+          "name": "org.javamoney.moneta.spi.DefaultNumberValue.DefaultNumberValue",
+          "start_line": 47,
+          "end_line": 49
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn680",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/DefaultNumberValue.java",
+          "name": "org.javamoney.moneta.spi.DefaultNumberValue.doubleValueExact",
+          "start_line": 148,
+          "end_line": 155
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn685",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/DefaultNumberValue.java",
+          "name": "org.javamoney.moneta.spi.DefaultNumberValue.numberValueExact",
+          "start_line": 202,
+          "end_line": 204
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn628",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/ConvertNumberValue.java",
+          "name": "org.javamoney.moneta.spi.ConvertNumberValue.ConvertNumberValueDouble.convertExact",
+          "start_line": 99,
+          "end_line": 107
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn630",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/ConvertNumberValue.java",
+          "name": "org.javamoney.moneta.spi.ConvertNumberValue.ConvertNumberValueFloat.convertExact",
+          "start_line": 120,
+          "end_line": 128
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn609",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/ConvertBigDecimal.java",
+          "name": "org.javamoney.moneta.spi.ConvertBigDecimal.getDecimal",
+          "start_line": 36,
+          "end_line": 38
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn610",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/ConvertBigDecimal.java",
+          "name": "org.javamoney.moneta.spi.ConvertBigDecimal.getDecimal",
+          "start_line": 43,
+          "end_line": 50
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn611",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/ConvertBigDecimal.java",
+          "name": "org.javamoney.moneta.spi.ConvertBigDecimal.getDecimal",
+          "start_line": 55,
+          "end_line": 57
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn612",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/ConvertBigDecimal.java",
+          "name": "org.javamoney.moneta.spi.ConvertBigDecimal.getDecimal",
+          "start_line": 62,
+          "end_line": 65
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn613",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/ConvertBigDecimal.java",
+          "name": "org.javamoney.moneta.spi.ConvertBigDecimal.getDecimal",
+          "start_line": 70,
+          "end_line": 73
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn614",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/ConvertBigDecimal.java",
+          "name": "org.javamoney.moneta.spi.ConvertBigDecimal.getDecimal",
+          "start_line": 78,
+          "end_line": 81
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn615",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/ConvertBigDecimal.java",
+          "name": "org.javamoney.moneta.spi.ConvertBigDecimal.getDecimal",
+          "start_line": 86,
+          "end_line": 95
+        }
+      ],
+      "explanation": [
+        "Moneta floating exact extractors check infinite overflow rather than finite binary exactness, and unknown-Number decimal fallback is eager.",
+        "doubleValueExact and float/double convertExact return any finite converted result, without checking roundtrip equality; integer exact APIs use stricter paths. ConvertBigDecimal DEFAULT parses text then invokes Optional.orElse with BigDecimal.valueOf(num.doubleValue()), evaluating the fallback even on successful text parse. A custom Number with valid decimal text but nonfinite/throwing doubleValue can fail that path. Wrapped Number is retained by reference; that alone does not prove immutable Money mutation.",
+        "Exact decimal not representable by float/double, or unknown custom Number whose textual parse succeeds but double conversion overflows/throws. Some finite binary values are exactly representable and BigDecimal/native integral branches avoid the unknown fallback. No executed exception or numeric result is claimed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    }
+  ]
+}

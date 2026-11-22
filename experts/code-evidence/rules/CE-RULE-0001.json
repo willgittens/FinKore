@@ -1,0 +1,1153 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0001",
+  "title": "Allocation conserves a source while declaring residual ownership",
+  "scope": "existing_core_subject",
+  "question": "Compare source units, accepted ratios, sign handling, base-share rounding and recipient order. Conservation alone is not the Core allocation algorithm.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0001",
+      "title": "Conservation and remainder policy are separate obligations",
+      "library_id": "CE-REPO-0001",
+      "edition_id": "CE-EDITION-0001",
+      "collected_on": "2026-11-18",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn01",
+          "path": "src/Money.php",
+          "name": "Money\\Money::allocate",
+          "start_line": 319,
+          "end_line": 358
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn02",
+          "path": "src/Money.php",
+          "name": "Unnamed closure",
+          "start_line": 344,
+          "end_line": 348
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn03",
+          "path": "src/Money.php",
+          "name": "Money\\Money::allocateTo",
+          "start_line": 370,
+          "end_line": 373
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn04",
+          "path": "src/Calculator/BcMathCalculator.php",
+          "name": "Money\\Calculator\\BcMathCalculator::share",
+          "start_line": 211,
+          "end_line": 214
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn05",
+          "path": "src/Calculator/BcMathCalculator.php",
+          "name": "Money\\Calculator\\BcMathCalculator::floor",
+          "start_line": 83,
+          "end_line": 96
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn06",
+          "path": "src/Money.php",
+          "name": "Money\\Money::__construct",
+          "start_line": 74,
+          "end_line": 88
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn07",
+          "path": "src/Calculator/BcMathCalculator.php",
+          "name": "Money\\Calculator\\BcMathCalculator::subtract",
+          "start_line": 41,
+          "end_line": 46
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn08",
+          "path": "src/Calculator/BcMathCalculator.php",
+          "name": "Money\\Calculator\\BcMathCalculator::add",
+          "start_line": 33,
+          "end_line": 38
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn09",
+          "path": "src/Calculator/BcMathCalculator.php",
+          "name": "Money\\Calculator\\BcMathCalculator::compare",
+          "start_line": 27,
+          "end_line": 30
+        }
+      ],
+      "explanation": [
+        "MoneyPHP allocates signed integer-minor base shares and corrects their remainder by largest fractional loss, using source order only to break equal rankings. This is not Core declared-order allocation.",
+        "The actual loop selects max(fractions), while the base BCMath helper floors the signed quotient. Constructor and new-result paths retain currency; neither property makes recipient selection equivalent to absolute-floor then declared order.",
+        "Integer-minor Money, nonnegative admitted weights with positive sum, the selected calculator, and values whose intermediate/float ranking remains meaningful. For 1000 minor units and weights [3,2,1], the largest fractional share receives the last unit rather than Core earliest position. Binary ranking and fixed-14 intermediates prevent a general conservation/exactness proof. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0002",
+      "title": "Ordered allocation in explicit integer steps",
+      "library_id": "CE-REPO-0002",
+      "edition_id": "CE-EDITION-0002",
+      "collected_on": "2026-11-18",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn01",
+          "path": "src/Money.php",
+          "name": "Brick\\Money\\Money::allocate",
+          "start_line": 544,
+          "end_line": 573
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn02",
+          "path": "src/Money.php",
+          "name": "Brick\\Money\\Money::normalizeRatios",
+          "start_line": 769,
+          "end_line": 801
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn03",
+          "path": "src/Allocation/AbstractFloorStrategy.php",
+          "name": "Brick\\Money\\Allocation\\AbstractFloorStrategy::computeFloors",
+          "start_line": 25,
+          "end_line": 37
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn04",
+          "path": "src/Allocation/AbstractFloorAbsorbStrategy.php",
+          "name": "Brick\\Money\\Allocation\\AbstractFloorAbsorbStrategy::allocate",
+          "start_line": 16,
+          "end_line": 27
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn05",
+          "path": "src/Allocation/FloorToFirstStrategy.php",
+          "name": "Brick\\Money\\Allocation\\FloorToFirstStrategy::prioritizeIndices",
+          "start_line": 16,
+          "end_line": 19
+        }
+      ],
+      "explanation": [
+        "Brick FloorToFirst reproduces the magnitude-floor, earliest-position remainder and sign-restoration mechanism when the fixed context has the same explicit scale and a unit step.",
+        "The strategy floors nonnegative step counts, increments array_keys order, then Money reconstructs step-scaled values and negates results for a negative source. normalizeRatios nevertheless admits zeros and rational weights.",
+        "Positive integer ratios, fixed matched scale, step1, exact source-unit representation, and supported BigInteger/BigRational operations. Changing to a cash step, supplying zero/rational ratios, or leaving scale implicit changes the request domain. This bounded algorithm match does not establish Core scale/count/range validation. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0003",
+      "title": "Allocation carries residual value through successive splits",
+      "library_id": "CE-REPO-0003",
+      "edition_id": "CE-EDITION-0003",
+      "collected_on": "2026-11-18",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn01",
+          "path": "lib/money/money/allocation.rb",
+          "name": "Money::Allocation.generate",
+          "start_line": 24,
+          "end_line": 70
+        },
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn02",
+          "path": "lib/money/money/allocation.rb",
+          "name": "Money::Allocation.convert_to_big_decimal",
+          "start_line": 78,
+          "end_line": 86
+        }
+      ],
+      "explanation": [
+        "RubyMoney allocation is reverse successive allocation against the remaining amount/weight. Its conservation reading is restricted to admissible positive weights and a precision cutoff that does not discard source value.",
+        "The helper pops the last weight, truncates or rounds its current share, reduces remaining totals and prepends results. Empty weights are rejected, all-zero weights become equal weights, and Rational conversion passes through Float.",
+        "A bounded numeric helper with positive weights, compatible native number types and a suitable decimal_cutoff; currency preservation belongs to the Money wrapper. The global Core floor/remainder pass is different. Negative weights [-1,2] with amount10 can return[0,20], and an integer cutoff can lose a nonzero decimal remainder even with one recipient. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0005",
+      "title": "Allocation prioritizes larger weights for residual units",
+      "library_id": "CE-REPO-0005",
+      "edition_id": "CE-EDITION-0005",
+      "collected_on": "2026-11-18",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn01",
+          "path": "packages/dinero.js/src/core/api/allocate.ts",
+          "name": "safeAllocate<TAmount> / returned allocate",
+          "start_line": 54,
+          "end_line": 95
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn02",
+          "path": "packages/dinero.js/src/core/utils/distribute.ts",
+          "name": "distribute<TAmount> / returned unnamed closure",
+          "start_line": 17,
+          "end_line": 78
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn03",
+          "path": "packages/dinero.js/src/calculator/number/api/integerDivide.ts",
+          "name": "number calculator integerDivide",
+          "start_line": 11,
+          "end_line": 16
+        }
+      ],
+      "explanation": [
+        "Dinero safe allocation admits normalized nonnegative weights and distributes signed residuals by descending nonzero weight, with a number-backend no-progress break.",
+        "The utility filters zero weights and sorts by ratio before repeated corrections; safeAllocate also derives a promoted source scale from ratio scales. A break can stop correction without demonstrating conservation.",
+        "The selected calculator, admitted normalized ratios, meaningful backend coefficients, and the specifically chosen scale transformation. Weights[1,2] on an indivisible source unit prioritize the second recipient, unlike Core declared order. Number values beyond safe precision can trigger no-progress termination rather than exact residual accounting. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0006",
+      "title": "Signed splitting preserves residual units, except the zero-weight fallback",
+      "library_id": "CE-REPO-0006",
+      "edition_id": "CE-EDITION-0006",
+      "collected_on": "2026-11-18",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0006:CE-EDITION-0006:fn01",
+          "path": "money.go",
+          "name": "money.(*Money).Split",
+          "start_line": 262,
+          "end_line": 288
+        },
+        {
+          "id": "CE-REPO-0006:CE-EDITION-0006:fn02",
+          "path": "money.go",
+          "name": "money.(*Money).Allocate",
+          "start_line": 293,
+          "end_line": 341
+        },
+        {
+          "id": "CE-REPO-0006:CE-EDITION-0006:fn03",
+          "path": "calculator.go",
+          "name": "money.(*calculator).allocate",
+          "start_line": 27,
+          "end_line": 33
+        }
+      ],
+      "explanation": [
+        "GoMoney equal Split gives signed remainder units to earliest recipients within its supported integer domain; weighted Allocate additionally admits an all-zero fallback that returns zero shares.",
+        "Split uses quotient/remainder and signed unit corrections. Allocate returns constructed shares immediately when sum==0, and calculator.allocate returns0 for that denominator.",
+        "Positive part count and representable int64 amounts for the equal path; successful weighted paths additionally need safe products and a positive ratio sum. Equal -100 minor units split3 gives[-34,-33,-33]. For nonzero source and all-zero weights, the weighted path returns zeros, which is an upstream fallback outside Core admitted ratios. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0020",
+      "title": "Rounded-first allocation corrects signed residuals without reversing shares",
+      "library_id": "CE-REPO-0017",
+      "edition_id": "CE-EDITION-0017",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn47",
+          "path": "src/index.ts",
+          "name": "Money.distributeBy",
+          "start_line": 524,
+          "end_line": 613
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn46",
+          "path": "src/index.ts",
+          "name": "Money.distribute",
+          "start_line": 505,
+          "end_line": 511
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn33",
+          "path": "src/index.ts",
+          "name": "Money.multiply",
+          "start_line": 420,
+          "end_line": 423
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn11",
+          "path": "src/index.ts",
+          "name": "Money.sum",
+          "start_line": 213,
+          "end_line": 231
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn36",
+          "path": "src/index.ts",
+          "name": "Money.subtract",
+          "start_line": 442,
+          "end_line": 445
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn05",
+          "path": "src/index.ts",
+          "name": "Money.constructor",
+          "start_line": 67,
+          "end_line": 93
+        }
+      ],
+      "explanation": [
+        "Dintero allocates by rounded weighted shares, then corrects signed residue in source order while skipping zero weights and candidates that would reverse sign.",
+        "multiply reconstructs through constructor rounding before residual computation. The correction therefore starts from a different base than Core absolute integer floors.",
+        "Selected Money decimal scale/Big.js policy, nonnegative weights with positive total and a nonzero representable correction unit. The source67 JPY/four-weight scenario has[16,17,17,17], whereas Core at scale0 has[17,17,17,16]. This static policy distinction does not prove termination for all scales. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0026",
+      "title": "Equal splitting assigns signed residual units to early positions",
+      "library_id": "CE-REPO-0018",
+      "edition_id": "CE-EDITION-0018",
+      "collected_on": "2026-11-20",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn04",
+          "path": "src/currency.js",
+          "name": "currency",
+          "start_line": 25,
+          "end_line": 53
+        },
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn07",
+          "path": "src/currency.js",
+          "name": "currency.prototype.add",
+          "start_line": 114,
+          "end_line": 117
+        },
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn08",
+          "path": "src/currency.js",
+          "name": "currency.prototype.subtract",
+          "start_line": 124,
+          "end_line": 127
+        },
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn11",
+          "path": "src/currency.js",
+          "name": "currency.prototype.distribute",
+          "start_line": 155,
+          "end_line": 172
+        }
+      ],
+      "explanation": [
+        "currency.js distribute uses truncation-toward-zero base unit shares and signed corrections at earliest positions for valid positive counts and safe integer stored units.",
+        "The floor/ceil selection depends on source sign, pennies measures the absolute residue, and correction uses add/subtract by source sign.",
+        "Positive integer count, safe representable stored minor units and precision reconstruction that does not lose units. The same method accepts invalid counts without an upfront guard, and no ISO currency or explicit Core target-scale request is supplied. The equal mechanism alone is not a complete allocation contract. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0078",
+      "title": "A ratio-sum guard does not bound intermediate amount-times-weight products",
+      "library_id": "CE-REPO-0006",
+      "edition_id": "CE-EDITION-0006",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0006:CE-EDITION-0006:fn02",
+          "path": "money.go",
+          "name": "money.(*Money).Allocate",
+          "start_line": 293,
+          "end_line": 341
+        },
+        {
+          "id": "CE-REPO-0006:CE-EDITION-0006:fn03",
+          "path": "calculator.go",
+          "name": "money.(*calculator).allocate",
+          "start_line": 27,
+          "end_line": 33
+        },
+        {
+          "id": "CE-REPO-0006:CE-EDITION-0006:fn07",
+          "path": "money.go",
+          "name": "money.NewFromFloat",
+          "start_line": 92,
+          "end_line": 95
+        },
+        {
+          "id": "CE-REPO-0006:CE-EDITION-0006:fn37",
+          "path": "calculator.go",
+          "name": "money.(*calculator).absolute",
+          "start_line": 35,
+          "end_line": 41
+        },
+        {
+          "id": "CE-REPO-0006:CE-EDITION-0006:fn54",
+          "path": "formatter.go",
+          "name": "money.(Formatter).abs",
+          "start_line": 68,
+          "end_line": 74
+        }
+      ],
+      "explanation": [
+        "GoMoney checks the sum of ratios but not the int64 amount-times-ratio product; overflow can invalidate both the share and the residual-loop index bound.",
+        "calculator.allocate multiplies before dividing. Allocate assumes the residual needs at most one pass through recipients and does not bound p before indexing.",
+        "Accepted int64 amount2^62 and native positive ratio[2], with the Go signed-overflow contract reused from R1-M1. The product wraps to MinInt64, produces a negative share, and the signed residual loop can advance beyond the sole output. The trace is static; no process panic was observed. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0081",
+      "title": "Ordered residual assignment includes early zero-weight positions",
+      "library_id": "CE-REPO-0006",
+      "edition_id": "CE-EDITION-0006",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0006:CE-EDITION-0006:fn02",
+          "path": "money.go",
+          "name": "money.(*Money).Allocate",
+          "start_line": 293,
+          "end_line": 341
+        }
+      ],
+      "explanation": [
+        "GoMoney weighted residual assignment can give a leftover unit to an earlier zero-weight entry.",
+        "The correction loop indexes the output list sequentially and does not consult the original ratio when applying the leftover signed unit.",
+        "Native ratio allocation with zero and positive weights and safe intermediate arithmetic. For1 minor unit and weights[0,1,1], the first zero-weight output can receive the unit. This is outside Core positive-ratio admission and does not refute Core declared-order behavior on valid ratios. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0093",
+      "title": "Allocation mode declares priority and whether residual is an extra output",
+      "library_id": "CE-REPO-0002",
+      "edition_id": "CE-EDITION-0002",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn01",
+          "path": "src/Money.php",
+          "name": "Brick\\Money\\Money::allocate",
+          "start_line": 544,
+          "end_line": 573
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn02",
+          "path": "src/Money.php",
+          "name": "Brick\\Money\\Money::normalizeRatios",
+          "start_line": 769,
+          "end_line": 801
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn29",
+          "path": "src/Allocation/FloorToLargestRemainderStrategy.php",
+          "name": "Brick\\Money\\Allocation\\FloorToLargestRemainderStrategy::prioritizeIndices",
+          "start_line": 18,
+          "end_line": 31
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn27",
+          "path": "src/Allocation/FloorToLargestRatioStrategy.php",
+          "name": "Brick\\Money\\Allocation\\FloorToLargestRatioStrategy::prioritizeIndices",
+          "start_line": 17,
+          "end_line": 24
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn26",
+          "path": "src/Allocation/FloorSeparateStrategy.php",
+          "name": "Brick\\Money\\Allocation\\FloorSeparateStrategy::allocate",
+          "start_line": 14,
+          "end_line": 19
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn24",
+          "path": "src/Allocation/BlockSeparateStrategy.php",
+          "name": "Brick\\Money\\Allocation\\BlockSeparateStrategy::allocate",
+          "start_line": 16,
+          "end_line": 26
+        }
+      ],
+      "explanation": [
+        "Brick allocation modes explicitly choose source order, ratio order, largest remainder, or a separate residual output; these modes are not interchangeable allocation confirmations.",
+        "The inspected sort keys differ by strategy, while separate strategies append the residual as an additional output. normalizeRatios also expands rational weights to integer ratios.",
+        "A fixed representable step context and the specifically selected AllocationMode; Core comparison is restricted to positive integer weights and one output per input weight. FloorSeparate/BlockSeparate return an extra residual slot, while largest-ratio/remainder ordering can differ from FloorToFirst for the same amount. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0102",
+      "title": "Rounded quotient can change the residual owner before equal splitting",
+      "library_id": "CE-REPO-0023",
+      "edition_id": "CE-EDITION-0023",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn57",
+          "path": "amount.go",
+          "name": "govalues/money.Amount.split",
+          "start_line": 951,
+          "end_line": 995
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn52",
+          "path": "amount.go",
+          "name": "govalues/money.Amount.quo",
+          "start_line": 872,
+          "end_line": 879
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn54",
+          "path": "amount.go",
+          "name": "govalues/money.Amount.quoRem",
+          "start_line": 897,
+          "end_line": 917
+        }
+      ],
+      "explanation": [
+        "govalues Split first computes a precision-fitted decimal quotient, truncates it to source scale, then assigns a signed residual; near the coefficient boundary this can reverse the first residual owner relative to Core integer-floor allocation.",
+        "The actual sequence is Quo→Trunc→Mul→Sub, then CopySign(ULP) corrections. A quotient rounded upward can create a negative residual corrected at the first position.",
+        "Supported amount90000000000000000.03 USD, two parts and the pinned19-digit decimal contract, with source-scale allocation units. The static first/second shares end in.01/.02, while Core at scale2 assigns.02/.01. Valid final shares can fit even though an intermediate exact quotient exceeds the dependency coefficient domain. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0116",
+      "title": "Residual weight ties do not use a consistent comparator",
+      "library_id": "CE-REPO-0005",
+      "edition_id": "CE-EDITION-0005",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "open_question",
+      "functions": [
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn02",
+          "path": "packages/dinero.js/src/core/utils/distribute.ts",
+          "name": "distribute<TAmount> / returned unnamed closure",
+          "start_line": 17,
+          "end_line": 78
+        }
+      ],
+      "explanation": [
+        "Dinero equal-weight sorting returns1 rather than0, so source equality of weights does not itself establish stable residual ownership across engine contracts.",
+        "The comparator expression has only greater-than? -1:1, including equality. This is a concrete non-reflexive comparator; the resulting engine-specific sort order was not observed.",
+        "Two or more equal nonzero weights in distribute and a backend for which ratio equality is meaningful. Comparing an equal weight with itself returns1. No specific reordered output, cross-engine divergence or hang is asserted without an actual engine observation. The equal-weight comparator was read, but sort behavior for an inconsistent comparison function was not executed on any engine. Retain only the source condition and do not claim an observed ordering failure."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0117",
+      "title": "Scaled ratios derive a new monetary scale instead of requiring target units",
+      "library_id": "CE-REPO-0005",
+      "edition_id": "CE-EDITION-0005",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn348",
+          "path": "packages/dinero.js/src/core/api/allocate.ts",
+          "name": "packages/dinero.js/src/core/api/allocate.ts::safeAllocate@52",
+          "start_line": 52,
+          "end_line": 95
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn345",
+          "path": "packages/dinero.js/src/core/api/allocate.ts",
+          "name": "packages/dinero.js/src/core/api/allocate.ts::unsafeAllocate.allocate@24",
+          "start_line": 24,
+          "end_line": 41
+        }
+      ],
+      "explanation": [
+        "Dinero scales decimal ratios by powers of ten and promotes the Money source scale before allocating; the output scale is derived rather than a Core explicit request scale.",
+        "safeAllocate computes highestRatioScale, normalizes ratio coefficients, adds that scale to source scale, then invokes unsafeAllocate on the transformed object.",
+        "The chosen currency radix/calculator and supported scaled-ratio representation; admitted zeros and scaled ratios belong to the native API. Supplying scaled ratios changes the source/output scale even when the caller did not request a target scale. Core instead rejects non-integer/zero ratios and requires an explicit target scale. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0161",
+      "title": "Allocation count is not checked before decrement-until-zero",
+      "library_id": "CE-REPO-0018",
+      "edition_id": "CE-EDITION-0018",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn11",
+          "path": "src/currency.js",
+          "name": "currency.prototype.distribute",
+          "start_line": 155,
+          "end_line": 172
+        }
+      ],
+      "explanation": [
+        "currency.js distribute does not validate count before a strict count!==0 decrement loop; some accepted nonpositive, fractional or nonfinite values cannot reach zero by that loop.",
+        "The only termination test is count!==0 and count is decremented on each iteration. The count0 branch returns an empty list for any source.",
+        "Direct method invocation with a negative, fractional, NaN or infinite count, without an external validating caller. Count-1 moves farther from zero; count0 returns[] even for nonzero source. No resource exhaustion or actual hanging process was run. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0166",
+      "title": "Allocation requires a nonzero correction unit under its division context",
+      "library_id": "CE-REPO-0017",
+      "edition_id": "CE-EDITION-0017",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn47",
+          "path": "src/index.ts",
+          "name": "Money.distributeBy",
+          "start_line": 524,
+          "end_line": 613
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn34",
+          "path": "src/index.ts",
+          "name": "Money.divide",
+          "start_line": 433,
+          "end_line": 435
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn05",
+          "path": "src/index.ts",
+          "name": "Money.constructor",
+          "start_line": 67,
+          "end_line": 93
+        }
+      ],
+      "explanation": [
+        "Dintero can enter an unchanged-residual loop when accepted Money scale exceeds Big.js division precision and the computed correction unit is zero.",
+        "smallestUnit is formed by dividing1 by10**decimals through the same bounded Big.div path; the loop only protects sign reversals, so adding zero resets skips without reducing rest.",
+        "Explicit decimals21, default Big.DP20/rounding contract from the locked dependency, a source1e-21 and two equal weights. Both rounded initial shares can become1e-21, rest=-1e-21, while1/1e21 becomes0. The loop then preserves rest and its condition. This is a static nonprogress derivation, not an observed hang. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0176",
+      "title": "Allocation conservation needs weight and representability guards",
+      "library_id": "CE-REPO-0003",
+      "edition_id": "CE-EDITION-0003",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn01",
+          "path": "lib/money/money/allocation.rb",
+          "name": "Money::Allocation.generate",
+          "start_line": 24,
+          "end_line": 70
+        },
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn02",
+          "path": "lib/money/money/allocation.rb",
+          "name": "Money::Allocation.convert_to_big_decimal",
+          "start_line": 78,
+          "end_line": 86
+        },
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn184",
+          "path": "lib/money/money.rb",
+          "name": "Money::allocate",
+          "start_line": 577,
+          "end_line": 580
+        }
+      ],
+      "explanation": [
+        "RubyMoney allocation does not validate the positive-weight and representability conditions needed for conservation; accepted negative-weight or cutoff inputs can lose or create returned value.",
+        "remaining_amount and parts_sum evolve independently after each popped weight, and nonpositive remaining sums skip calculation. An integer cutoff can round a final remainder rather than preserve it.",
+        "The actual helper/native Money allocation inputs, including negative weights or direct helper decimal cutoff; no invented Core-validity assumption for zero/negative ratios. amount10, weights[-1,2] reaches[0,20]. Direct helper amount1.2345, one part, cutoff2 reaches1.23. These are static traces, not observed deployment outcomes. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0228",
+      "title": "Allocation uses floor and first-position remainder with fractional minor totals",
+      "library_id": "CE-REPO-0020",
+      "edition_id": "CE-EDITION-0020",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn058",
+          "path": "src/Money.php",
+          "name": "Money::allocate",
+          "start_line": 542,
+          "end_line": 566
+        }
+      ],
+      "explanation": [
+        "Akaunting allocation floors signed native proportional shares and corrects only a positive remainder in early positions; it admits fractional minor totals and negative ratios with nonzero sum.",
+        "The guard checks empty ratios and total==0 only. Base floor applies directly to the signed amount, and increments can be fractional through min(1,remainder).",
+        "The native floating representation, nonempty nonzero-sum ratios and supported result construction; exact Core comparison additionally needs valid positive integer weights and explicit unit scale. For-100 across three equal weights the signed-floor correction yields[-33,-33,-34], unlike Core[-34,-33,-33]. A fractional minor total can produce a fractional corrective unit. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0233",
+      "title": "Negative allocation breaks target count and conservation",
+      "library_id": "CE-REPO-0021",
+      "edition_id": "CE-EDITION-0021",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0021:CE-EDITION-0021:fn022",
+          "path": "src/Money.php",
+          "name": "Money::allocateToTargets",
+          "start_line": 230,
+          "end_line": 250
+        },
+        {
+          "id": "CE-REPO-0021:CE-EDITION-0021:fn023",
+          "path": "src/Money.php",
+          "name": "Money::allocateByRatios",
+          "start_line": 259,
+          "end_line": 277
+        }
+      ],
+      "explanation": [
+        "Sebastian Money signed allocation can return the wrong number of recipients or a sum different from the accepted source.",
+        "allocateToTargets uses signed remainder as the second loop start; allocateByRatios truncates signed shares and only corrects positive remainder. Neither implements magnitude-first signed restoration.",
+        "Accepted negative integer Money, positive target count or positive ratio list, and ordinary safe native arithmetic. -99 allocated to10 targets reaches19 copies of-9; -5 with ratios[3,7] yields[-1,-3] and ignores residual-1. These are bounded static traces, not execution results. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0241",
+      "title": "Absolute integer allocation preserves sub-minor source scale and skips zero weights",
+      "library_id": "CE-REPO-0022",
+      "edition_id": "CE-EDITION-0022",
+      "collected_on": "2026-11-21",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn018",
+          "path": "amount.go",
+          "name": "(a Amount)::Allocate",
+          "start_line": 241,
+          "end_line": 294
+        },
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn017",
+          "path": "amount.go",
+          "name": "(a Amount)::Split",
+          "start_line": 229,
+          "end_line": 234
+        }
+      ],
+      "explanation": [
+        "Bojanz allocation uses exact BigInt magnitude floors, corrects earliest eligible positions and restores source sign, while selecting a source/currency-derived unit and permitting zero weights.",
+        "The implementation copies the absolute coefficient, rescales to its finer exponent, computes integer quotients and then applies sign. No rounded decimal Add is needed for the allocation itself.",
+        "Finite amount, nonnegative native ratios with positive sum, matched explicit Core target units and positive weights for equivalence. Subminor10.005 can remain allocated at its finer source scale rather than being rejected for a coarser Core request. Zero-weight skipping and native ratio ranges remain a different admission profile. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0252",
+      "title": "Signed allocation conserves exact coefficients with zero-weight eligibility",
+      "library_id": "CE-REPO-0032",
+      "edition_id": "CE-EDITION-0032",
+      "collected_on": "2026-11-21",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn103",
+          "path": "lib/src/money.dart",
+          "name": "Money::allocationAccordingTo",
+          "start_line": 701,
+          "end_line": 702
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn104",
+          "path": "lib/src/money.dart",
+          "name": "Money::allocationTo",
+          "start_line": 707,
+          "end_line": 717
+        }
+      ],
+      "explanation": [
+        "Money2 delegates allocation to Fixed6.0.0 exact BigInt magnitude floors and first-positive-weight corrections, then restores source sign at the stored Fixed scale.",
+        "The wrapper maps returned Fixed shares back through _withAmount; the dependency validates empty/negative ratios and positive total, performs integer products/quotients and sign restoration.",
+        "Finite represented coefficients, the selected compatible Fixed version, positive weights and matching explicit target units for direct Core comparison. Zero weights are admitted and skipped, while the target scale is the existing Money scale rather than a required portable request. The wrapper and dependency are one numerical lineage. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0269",
+      "title": "Allocation can discard source value after intermediate overflow or zero-weight policy",
+      "library_id": "CE-REPO-0098",
+      "edition_id": "CE-EDITION-0098",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn286",
+          "path": "money/manager.go",
+          "name": "(mm *Manager)::Allocate",
+          "start_line": 241,
+          "end_line": 294
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn008",
+          "path": "calculator/calculator.go",
+          "name": "(c *Calculator)::Allocate",
+          "start_line": 59,
+          "end_line": 65
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn014",
+          "path": "calculator/ration.go",
+          "name": "Ration",
+          "start_line": 46,
+          "end_line": 96
+        }
+      ],
+      "explanation": [
+        "The weighted allocator can lose the source amount when a positive-weight intermediate overflows: Ration returns zero and the manager performs only one correction pass.",
+        "Ration checks amount*ratio but uses zero as its overflow observation. Allocate consumes that zero as a share; its bounded residual loop need not exhaust the remaining magnitude. Zero ratios and all-zero sums are separately admitted native policies.",
+        "Positive ratios and accepted int64 source with product overflow, or the distinct native zero-weight domain; these paths are not numerical execution evidence. For MaxInt64 and [2,1], the overflowing first product is converted to zero; a single pass adding at most one unit per part cannot recover the resulting large residue. Core rejects zero weights, so zero-weight examples are not needed to establish this concern. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0280",
+      "title": "Split preserves signed residual by source order within integer range",
+      "library_id": "CE-REPO-0098",
+      "edition_id": "CE-EDITION-0098",
+      "collected_on": "2026-11-21",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn285",
+          "path": "money/manager.go",
+          "name": "(mm *Manager)::Split",
+          "start_line": 206,
+          "end_line": 236
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn006",
+          "path": "calculator/calculator.go",
+          "name": "(c *Calculator)::Divide",
+          "start_line": 41,
+          "end_line": 47
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn007",
+          "path": "calculator/calculator.go",
+          "name": "(c *Calculator)::Modulus",
+          "start_line": 50,
+          "end_line": 56
+        }
+      ],
+      "explanation": [
+        "Manager Split divides signed minor units and assigns the signed remainder to earliest positions, preserving source order and sign for admitted positive counts.",
+        "The source checks n>0, computes quotient/remainder, constructs n shares and adds signed one-unit corrections in increasing index order.",
+        "Represented int64 source, positive count, native minor-unit scale matched to an explicit Core target and supported allocation size. The implicit currency/minor scale and native count domain do not establish Core explicit target-scale validation or its maximum100 recipients. A matching negative remainder mechanism alone does not certify the complete request contract. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0286",
+      "title": "Allocation corrects rounded shares with ordered additions or descending-share decrements",
+      "library_id": "CE-REPO-0097",
+      "edition_id": "CE-EDITION-0097",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn403",
+          "path": "src/split_alloc_ops.rs",
+          "name": "src/split_alloc_ops.rs::Split<M, C, u32> for (M, M)::split",
+          "start_line": 23,
+          "end_line": 25
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn404",
+          "path": "src/split_alloc_ops.rs",
+          "name": "src/split_alloc_ops.rs::Split<M, C, u32> for Vec<M>::split",
+          "start_line": 33,
+          "end_line": 35
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn407",
+          "path": "src/split_alloc_ops.rs",
+          "name": "src/split_alloc_ops.rs::ulp",
+          "start_line": 65,
+          "end_line": 67
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn408",
+          "path": "src/split_alloc_ops.rs",
+          "name": "src/split_alloc_ops.rs::get_equal_part",
+          "start_line": 70,
+          "end_line": 128
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn409",
+          "path": "src/split_alloc_ops.rs",
+          "name": "src/split_alloc_ops.rs::split",
+          "start_line": 131,
+          "end_line": 187
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn410",
+          "path": "src/split_alloc_ops.rs",
+          "name": "src/split_alloc_ops.rs::split_dist",
+          "start_line": 190,
+          "end_line": 225
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn412",
+          "path": "src/split_alloc_ops.rs",
+          "name": "src/split_alloc_ops.rs::allocate",
+          "start_line": 228,
+          "end_line": 348
+        }
+      ],
+      "explanation": [
+        "Rust split/allocate correct decimal-computed shares using representation-derived ULPs and sometimes sorted largest shares; they are not the explicit-target absolute-integer-floor Core allocator.",
+        "get_equal_part may truncate long mantissas. split can sort adjusted shares and return one common quotient plus residual; split_dist spreads ULPs. allocate computes rounded receiver-policy products/divisions, then subtracts from largest shares on overshoot or cycles source order on undershoot.",
+        "Selected Money/RawMoney implementation, bounded Decimal arithmetic, representable positive total and admitted ratios; invalid or negative ratios are not claimed to be Core inputs. USD0.05 at a two-digit Money scale with ratios[1,1,1] can initially round each share to0.02 and remove0.01 from the largest/tied early share, reversing the Core[0.02,0.02,0.01] priority. That trace assumes the pinned midpoint/backend and stable sort contract, without execution. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0294",
+      "title": "Split rounds preceding outputs and assigns the entire residual to the final position",
+      "library_id": "CE-REPO-0007",
+      "edition_id": "CE-EDITION-0007",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn427",
+          "path": "src/NodaMoney/MoneyExtensions.cs",
+          "name": "NodaMoney.MoneyExtensions::public IEnumerable<Money> Split(int shares, MidpointRounding rounding)",
+          "start_line": 26,
+          "end_line": 47
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn429",
+          "path": "src/NodaMoney/MoneyExtensions.cs",
+          "name": "NodaMoney.MoneyExtensions::public IEnumerable<Money> Split(int[] ratios, MidpointRounding rounding)",
+          "start_line": 65,
+          "end_line": 90
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn468",
+          "path": "src/NodaMoney/MoneyExtensions.cs",
+          "name": "NodaMoney.MoneyExtensions::IEnumerable<Money> DistributeIterator()",
+          "start_line": 33,
+          "end_line": 46
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn469",
+          "path": "src/NodaMoney/MoneyExtensions.cs",
+          "name": "NodaMoney.MoneyExtensions::IEnumerable<Money> DistributeIterator()",
+          "start_line": 74,
+          "end_line": 89
+        }
+      ],
+      "explanation": [
+        "Noda Split rounds preceding shares and leaves the final residual, with lazy ratio evaluation and an empty-ratio path that returns the full source as one output.",
+        "The equal method rejects shares<=1. The ratio guard Any(ratio<1) is false for an empty array; both iterators derive decimals from context/currency, construct preceding shares and finally emit remainder.",
+        "The selected context and output constructor policy, positive ordinary inputs, and caller-owned ratio array unchanged until enumeration. 10.00 split3 can place the indivisible cent in the final share rather than the Core earliest position. Empty ratios yield one output; one equal part is rejected despite Core accepting it. Custom reconstruction can reround returned parts. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0302",
+      "title": "ex-money: equal quotient/residual and tail-first weighted spread are distinct allocation policies",
+      "library_id": "CE-REPO-0031",
+      "edition_id": "CE-EDITION-0031",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn347",
+          "path": "lib/money.ex",
+          "name": "Money.split [clause 2298]",
+          "start_line": 2298,
+          "end_line": 2307
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn348",
+          "path": "lib/money.ex",
+          "name": "Money.split_with_rounding [clause 2309]",
+          "start_line": 2309,
+          "end_line": 2318
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn349",
+          "path": "lib/money.ex",
+          "name": "Money.spread [clause 2372]",
+          "start_line": 2372,
+          "end_line": 2372
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn350",
+          "path": "lib/money.ex",
+          "name": "Money.spread [clause 2374]",
+          "start_line": 2374,
+          "end_line": 2376
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn351",
+          "path": "lib/money.ex",
+          "name": "Money.spread [clause 2378]",
+          "start_line": 2378,
+          "end_line": 2387
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn352",
+          "path": "lib/money.ex",
+          "name": "Money.spread [clause 2389]",
+          "start_line": 2389,
+          "end_line": 2389
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn353",
+          "path": "lib/money.ex",
+          "name": "Money.recurse_spread [clause 2391]",
+          "start_line": 2391,
+          "end_line": 2391
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn354",
+          "path": "lib/money.ex",
+          "name": "Money.recurse_spread [clause 2393]",
+          "start_line": 2393,
+          "end_line": 2404
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn355",
+          "path": "lib/money.ex",
+          "name": "Money.prop_remaining [clause 2406]",
+          "start_line": 2406,
+          "end_line": 2407
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn356",
+          "path": "lib/money.ex",
+          "name": "Money.prop_remaining [clause 2409]",
+          "start_line": 2409,
+          "end_line": 2409
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn357",
+          "path": "lib/money.ex",
+          "name": "Money.spread_sum [clause 2411]",
+          "start_line": 2411,
+          "end_line": 2411
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn358",
+          "path": "lib/money.ex",
+          "name": "Money.spread_sum [clause 2412]",
+          "start_line": 2412,
+          "end_line": 2412
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn359",
+          "path": "lib/money.ex",
+          "name": "Money.spread_zero [clause 2414]",
+          "start_line": 2414,
+          "end_line": 2414
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn360",
+          "path": "lib/money.ex",
+          "name": "Money.spread_zero [clause 2415]",
+          "start_line": 2415,
+          "end_line": 2415
+        }
+      ],
+      "explanation": [
+        "Ex-money split returns a rounded common share plus residual, while spread pre-rounds the total and unwinds a tail-first cumulative calculation.",
+        "split_with_rounding divides, rounds and computes residual; split retries :down only for a negative remainder. spread rounds amount with defaults before recurse_spread, and numeric portions use native / while Money portions use Decimal.div.",
+        "The named native operation, currency metadata/options and ambient Decimal context; positive weights and representable source are needed for comparison. A source having extra fractional digits can be rounded before spread even when shares sum to that rounded source. Quotient/residual output does not have Core one-share-per-recipient cardinality or its explicit-scale admission semantics. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    }
+  ],
+  "historical_publications": [
+    {
+      "id": "CE-FINDING-0001",
+      "title": "Money PHP — Allocation rules",
+      "collected_on": "2026-11-18",
+      "function_ids": [
+        "CE-REPO-0001:CE-EDITION-0001:fn01",
+        "CE-REPO-0001:CE-EDITION-0001:fn02",
+        "CE-REPO-0001:CE-EDITION-0001:fn03",
+        "CE-REPO-0001:CE-EDITION-0001:fn04",
+        "CE-REPO-0001:CE-EDITION-0001:fn05",
+        "CE-REPO-0001:CE-EDITION-0001:fn06",
+        "CE-REPO-0001:CE-EDITION-0001:fn07",
+        "CE-REPO-0001:CE-EDITION-0001:fn08",
+        "CE-REPO-0001:CE-EDITION-0001:fn09"
+      ],
+      "explanation": [
+        "In the inspected allocation path, base shares retain the source currency and a tracked remainder is redistributed in whole source units. The recipient with the greatest computed fractional loss is selected first; supplied order breaks equal-score ties. This is an explicit allocation policy, not permission to discard or create a monetary residual. The implementation and upstream allocation explanation support this reading.",
+        "Allocation path only. Amount and currency are retained, but largest-fraction recipient selection differs from Core declared-order distribution. BCMath intermediates and float ranking were not executed or exhaustively verified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0002",
+      "title": "Brick Money — Ordered allocation in explicit integer steps",
+      "collected_on": "2026-11-18",
+      "function_ids": [
+        "CE-REPO-0002:CE-EDITION-0002:fn01",
+        "CE-REPO-0002:CE-EDITION-0002:fn02",
+        "CE-REPO-0002:CE-EDITION-0002:fn03",
+        "CE-REPO-0002:CE-EDITION-0002:fn04",
+        "CE-REPO-0002:CE-EDITION-0002:fn05"
+      ],
+      "explanation": [
+        "In FloorToFirst allocation, the source magnitude is converted to context-sized integer steps, base shares are computed, residual steps are assigned by the strategy, and the source sign is restored on each newly constructed result.",
+        "FloorToFirst strategy, positive integer weights and a fixed context with explicitly matched scale/step. Other strategies, rational/zero-weight inputs and Brick Math internals are not claimed equivalent to Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0003",
+      "title": "RubyMoney — Allocation carries residual value through successive splits",
+      "collected_on": "2026-11-18",
+      "function_ids": [
+        "CE-REPO-0003:CE-EDITION-0003:fn01",
+        "CE-REPO-0003:CE-EDITION-0003:fn02"
+      ],
+      "explanation": [
+        "Money::Allocation.generate consumes parts in reverse order, recalculating each share against the remaining amount and remaining weight, then prepends results to preserve declared output order. It is a successive-allocation policy rather than one global floor-and-remainder pass.",
+        "A numeric helper, not a complete Money operation: currency construction is outside the reading. Successive division, numeric types and decimal cutoff affect the result; all-zero weights are replaced with equal weights."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0005",
+      "title": "Dinero.js — Allocation prioritizes larger weights for residual units",
+      "collected_on": "2026-11-18",
+      "function_ids": [
+        "CE-REPO-0005:CE-EDITION-0005:fn01",
+        "CE-REPO-0005:CE-EDITION-0005:fn02",
+        "CE-REPO-0005:CE-EDITION-0005:fn03"
+      ],
+      "explanation": [
+        "The safe allocation path validates normalized non-negative weights with at least one positive value, while the distribution utility prioritizes larger weights for residual units. Numeric backend safety remains material: the number path contains a no-progress guard for values beyond safe floating precision.",
+        "The safe API and selected number-backend utility were read. Remainder goes to larger weights; zero ratios and scale derivation differ from Core. The no-progress guard is not proof of exact conservation beyond safe number precision."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0006",
+      "title": "GoMoney — Signed splitting preserves residual units, except the zero-weight fallback",
+      "collected_on": "2026-11-18",
+      "function_ids": [
+        "CE-REPO-0006:CE-EDITION-0006:fn01",
+        "CE-REPO-0006:CE-EDITION-0006:fn02",
+        "CE-REPO-0006:CE-EDITION-0006:fn03"
+      ],
+      "explanation": [
+        "Equal splitting assigns leftover signed units to the first recipients. Ratio allocation also has ordered residual assignment, but returns zero shares without distributing the source when the ratio sum is zero. The selected test explicitly expects this for a nonzero amount.",
+        "Signed equal splitting and ratio allocation were read. Equal splitting preserves signed residuals in the selected cases; an all-zero ratio list can return zero amounts for a nonzero source. Fixed-width overflow limits remain unverified."
+      ]
+    }
+  ]
+}

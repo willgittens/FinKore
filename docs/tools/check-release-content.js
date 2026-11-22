@@ -26,6 +26,98 @@ const PLAN_REFERENCE = /docs[/\\]plans\b|\bplan-\d+(?:\.\d+)*\b/i
 const SUPPLEMENT_REFERENCE = /boundary097-cases\.json|readSupplementary[C]ases|SUPPLEMENTARY[_]CASES|manifest\/supplementary/i
 const FREEZE_REFERENCE = /SPEC-FREEZE-\d+|release[\s-]+candidate\s+freeze/i
 const escapedTarget = TARGET_CORE_VERSION.replaceAll('.', '\\.')
+
+// Attribution can contain an upstream planning path without retaining a local
+// working plan. Mask only inventoried paths in their own pinned metadata/reading
+// context for the planning-reference check; all other content checks still use
+// the original bytes. This is not validation of upstream financial behavior.
+function upstreamPlanningContexts(files) {
+  const contexts = new Map()
+  try {
+    const catalog = JSON.parse(files.get('experts/code-evidence/repositories.json') ?? 'null')
+    const library = JSON.parse(files.get('experts/code-evidence/rule-library.json') ?? 'null')
+    for (const repo of catalog?.repositories ?? []) for (const edition of repo.editions ?? []) {
+      if (!/^CE-REPO-\d{4}$/.test(repo.id) || !/^CE-EDITION-\d{4}$/.test(edition.id) ||
+          !/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(repo.full_name) ||
+          repo.full_name.split('/').some(part => part === '.' || part === '..') ||
+          `https://github.com/${repo.full_name}`.toLowerCase() === GITHUB_PROJECT_URL.toLowerCase() ||
+          !/^[a-f0-9]{40}$/.test(edition.commit_sha)) continue
+      const inventoryPath = `experts/code-evidence/inventories/${repo.id}/${edition.id}.json`
+      let inventory
+      try { inventory = JSON.parse(files.get(inventoryPath) ?? 'null') } catch { continue }
+      if (!inventory || !['1.0.0', '1.1.0', '1.2.0', '1.3.0'].includes(inventory.schema_version) ||
+          inventory.repository_id !== repo.id || inventory.edition_id !== edition.id || inventory.commit_sha !== edition.commit_sha ||
+          inventory.source_url !== `https://codeload.github.com/${repo.full_name}/tar.gz/${edition.commit_sha}`) continue
+      if (inventory.repository_tree && (inventory.repository_tree.commit_sha !== edition.commit_sha ||
+          inventory.repository_tree.source_url !== `https://github.com/${repo.full_name}/tree/${edition.commit_sha}` ||
+          !/^[a-f0-9]{40}$/.test(inventory.repository_tree.tree_sha))) continue
+      const paths = new Set([...(inventory.source_files ?? []), ...(inventory.other_files ?? []), ...(inventory.repository_tree?.files ?? [])]
+        .map(row => row[0]).filter(path => typeof path === 'string' && /^[A-Za-z0-9_./-]+$/.test(path) &&
+          !path.split('/').some(part => ['', '.', '..'].includes(part)) && PLAN_REFERENCE.test(path)))
+      if (!paths.size) continue
+      const source = library?.sources?.find(s => s.repository_id === repo.id && s.edition_id === edition.id &&
+        s.inventory === inventoryPath.slice('experts/code-evidence/'.length))
+      contexts.set(`${repo.id}/${edition.id}`, { paths, inventoryPath, commit: edition.commit_sha,
+        url: `https://github.com/${repo.full_name}/blob/${edition.commit_sha}/`, records: new Set(source?.analysis_records ?? []) })
+    }
+  } catch { /* Malformed/unavailable optional metadata cannot establish an exception. */ }
+  return contexts
+}
+
+function planningReferenceText(path, text, contexts) {
+  const match = /^experts\/code-evidence\/(inventories|evaluations|analyses)\/(CE-REPO-\d{4})\/(CE-EDITION-\d{4})(\.json|\.md|\/[A-Za-z0-9_-]+\.md)$/.exec(path)
+  if (!match) return text
+  const context = contexts.get(`${match[2]}/${match[3]}`)
+  if (!context) return text
+  const marker = '[attributed upstream path]'
+  const pinned = (url, target) => typeof url === 'string' && url.startsWith(context.url + target + '#') &&
+    /^#L([1-9]\d*)-L([1-9]\d*)$/.test(url.slice((context.url + target).length)) &&
+    Number(url.split('#L')[1].split('-L')[0]) <= Number(url.split('-L').at(-1))
+  if (match[1] !== 'analyses') {
+    let data
+    try { data = JSON.parse(text) } catch { return text }
+    if (data.repository_id !== match[2] || data.edition_id !== match[3] || data.commit_sha !== context.commit) return text
+    if (match[1] === 'inventories') {
+      if (path !== context.inventoryPath) return text
+      for (const rows of [data.source_files, data.other_files, data.repository_tree?.files]) {
+        for (const row of rows ?? []) if (context.paths.has(row[0])) row[0] = marker
+      }
+    } else {
+      for (const group of data.file_groups ?? []) if (Array.isArray(group.paths)) group.paths = group.paths.map(p => context.paths.has(p) ? marker : p)
+      for (const observation of data.file_observations ?? []) if (context.paths.has(observation.path)) observation.path = marker
+      for (const item of [...(data.constructs ?? []), ...(data.tests ?? [])]) {
+        const target = item.location?.path
+        if (!context.paths.has(target) || !pinned(item.location.source_url, target)) continue
+        item.location.path = marker; item.location.source_url = marker
+        if (typeof item.name === 'string') item.name = item.name.split(target).join(marker)
+      }
+    }
+    return JSON.stringify(data)
+  }
+  const local = path.slice('experts/code-evidence/'.length)
+  if (!context.records.has(local)) return text
+  const escaped = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  let result = text
+  const cited = []
+  for (const target of context.paths) {
+    const url = new RegExp('(^|[\\s(])' + escaped(context.url + target) + '#L([1-9]\\d*)-L([1-9]\\d*)(?=[)\\s]|$)', 'gm')
+    result = result.replace(url, (ref, boundary, start, end) => {
+      if (Number(start) > Number(end)) return ref
+      cited.push(target)
+      return boundary + marker
+    })
+  }
+  for (const target of new Set(cited)) {
+    // Relative Markdown/HTML links remain local references and are never masked.
+    const bare = new RegExp('(^|[\\s`])' + escaped(target) + '(?=$|[\\s`:,]|\\.(?=\\s|$))', 'gm')
+    result = result.replace(bare, (_, boundary) => boundary + marker)
+  }
+  const directory = ['docs', 'plans'].join('/') + '/'
+  if (cited.some(target => target.startsWith(directory))) {
+    result = result.replace(new RegExp('(^|[\\s`])' + escaped(directory) + '(?=$|[\\s`,]|\\.(?=\\s|$))', 'gm'), (_, boundary) => boundary + marker)
+  }
+  return result
+}
 const STABLE = new RegExp(`\\bFinKore Core ${escapedTarget} (?:is )?stable\\b`, 'i')
 const STALE_STATUS = /release[\s-]+candidate|\brelease preparation\b|\b\d+\.\d+-rc\b|\bpre[\s-]?1\.0\b|\bDraft \d+\.\d+|\bremains experimental\b|\bpromotion (?:is )?(?:not complete|outstanding)\b|\bnot (?:yet )?stable\b|\bstatus:\s*(?:draft|experimental)\b|\bintended to become\b/i
 
@@ -251,6 +343,7 @@ export function validateReleaseContent(repositoryRoot = process.cwd()) {
   }
   if (!existsSync(root) || !statSync(root).isDirectory()) throw new Error(`Release content check failed: missing release tree: ${root}`)
   walk(root)
+  const upstreamContexts = upstreamPlanningContexts(files)
   const evidence = loadLearnEvidence(root)
   const codeLinks = codeEvidenceDestinations(evidence)
   for (const path of snapshots.keys()) if (!files.has(path)) errors.push(`${path}: registered snapshot is missing or unreadable`)
@@ -278,7 +371,7 @@ export function validateReleaseContent(repositoryRoot = process.cwd()) {
   for (const [path, text] of files) {
     // Only explicit adversarial fixture data is exempt; test/tool source is scanned.
     if (path === NEGATIVE_FIXTURE) continue
-    if (PLAN_REFERENCE.test(text)) errors.push(`${path}: active planning reference is forbidden`)
+    if (PLAN_REFERENCE.test(planningReferenceText(path, text, upstreamContexts))) errors.push(`${path}: active planning reference is forbidden`)
     if (/^#{1,6}\s+.*FinKore.*\b(?:Plan|Roadmap)\b|^##\s+Milestone\s+\d/im.test(text)) {
       errors.push(`${path}: copied planning content is forbidden`)
     }

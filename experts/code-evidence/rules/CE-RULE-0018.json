@@ -1,0 +1,127 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0018",
+  "title": "Depreciation declares the schedule and rounding boundary",
+  "scope": "candidate_rule",
+  "question": "Straight-line, fixed declining and sum-of-years methods are alternatives; cost/salvage/life/partial-year bounds remain financial policy.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0037",
+      "title": "Depreciation methods choose different schedules and rounding boundaries",
+      "library_id": "CE-REPO-0113",
+      "edition_id": "CE-EDITION-0113",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn13",
+          "path": "fin/depreciation.go",
+          "name": "fin.DepreciationFixedDeclining",
+          "start_line": 11,
+          "end_line": 33
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn14",
+          "path": "fin/depreciation.go",
+          "name": "fin.DepreciationStraightLine",
+          "start_line": 38,
+          "end_line": 43
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn15",
+          "path": "fin/depreciation.go",
+          "name": "fin.DepreciationSYD",
+          "start_line": 48,
+          "end_line": 50
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn16",
+          "path": "fin/depreciation.go",
+          "name": "fin.round",
+          "start_line": 52,
+          "end_line": 75
+        }
+      ],
+      "explanation": [
+        "Fixed declining, straight-line and SYD depreciation select different period schedules; fixed declining rounds its intermediate rate to three places and prorates first/extra years.",
+        "The fixed-declining loop and distinct closed formulas support separate candidate schedules. None supplies a universal salvage floor or accounting-policy selection.",
+        "Cost/lifetime/period/month arguments satisfying the actual method-specific guards; zero cost/life are not uniformly excluded. A period beyond life can continue through the loop, and zero lifetime remains admitted. Source behavior is not a statutory depreciation rule. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0070",
+      "title": "Depreciation declares salvage clipping and the schedule observation",
+      "library_id": "CE-REPO-0099",
+      "edition_id": "CE-EDITION-0099",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn12",
+          "path": "R/ddb.R",
+          "name": "FinCal::ddb",
+          "start_line": 10,
+          "end_line": 31
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn57",
+          "path": "R/slde.R",
+          "name": "FinCal::slde",
+          "start_line": 10,
+          "end_line": 12
+        }
+      ],
+      "explanation": [
+        "Straight-line returns one annual cost-minus-salvage amount; double-declining returns a period matrix, clips a period to salvage, and leaves preallocated later entries zero after breaking.",
+        "The loop uses the remaining book value and stops after a clipped period. That output differs from a single-period observation and does not implement an automatic straight-line switch.",
+        "Double-declining t>=2 plus intended integral period count; cost/salvage economic admission remains caller policy. Salvage above cost and fractional/zero lifetime are not uniformly validated. A preallocated zero after a break is not evidence of a separate depreciation calculation. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0369",
+      "title": "Depreciation permits zero lifetime and continuation beyond economic bounds",
+      "library_id": "CE-REPO-0113",
+      "edition_id": "CE-EDITION-0113",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "open_question",
+      "functions": [
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn13",
+          "path": "fin/depreciation.go",
+          "name": "fin.DepreciationFixedDeclining",
+          "start_line": 11,
+          "end_line": 33
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn14",
+          "path": "fin/depreciation.go",
+          "name": "fin.DepreciationStraightLine",
+          "start_line": 38,
+          "end_line": 43
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn15",
+          "path": "fin/depreciation.go",
+          "name": "fin.DepreciationSYD",
+          "start_line": 48,
+          "end_line": 50
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn16",
+          "path": "fin/depreciation.go",
+          "name": "fin.round",
+          "start_line": 52,
+          "end_line": 75
+        }
+      ],
+      "explanation": [
+        "The depreciation functions lack common economic admission and terminal/salvage controls: zero lifetime is admitted and fixed-declining periods can extend beyond life.",
+        "The guards and loop bounds expose policy gaps, but a source library formula alone does not select the correct accounting or tax regime.",
+        "Method-specific nonnegative cost/life guards, period/month arguments and economic interpretation supplied by the caller. Straight-line divides by life even at0; SYD has no guard; a fixed-declining period beyond life+1 uses the ordinary loop branch. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    }
+  ]
+}

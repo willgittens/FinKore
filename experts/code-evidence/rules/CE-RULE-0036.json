@@ -1,0 +1,278 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0036",
+  "title": "Payment output preserves selected date and artifact-version context",
+  "scope": "candidate_rule",
+  "question": "Compare supplied execution dates, grouping dates, wall-clock substitutions and selected schema/namespace.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0073",
+      "title": "The execution date in a payment file must follow the selected context",
+      "library_id": "CE-REPO-0106",
+      "edition_id": "CE-EDITION-0106",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0106:CE-EDITION-0106:fn01",
+          "path": "src/nemiah/phpSepaXml/SEPAFile.php",
+          "name": "nemiah\\phpSepaXml\\SEPAFile::start($paymentInitiation)",
+          "start_line": 16,
+          "end_line": 35
+        },
+        {
+          "id": "CE-REPO-0106:CE-EDITION-0106:fn05",
+          "path": "src/nemiah/phpSepaXml/SEPATransfer.php",
+          "name": "nemiah\\phpSepaXml\\SEPATransfer::addCreditor(SEPACreditor $creditor)",
+          "start_line": 36,
+          "end_line": 45
+        },
+        {
+          "id": "CE-REPO-0106:CE-EDITION-0106:fn08",
+          "path": "src/nemiah/phpSepaXml/SEPATransfer.php",
+          "name": "nemiah\\phpSepaXml\\SEPATransfer::toXML($paymentInitiation='')",
+          "start_line": 71,
+          "end_line": 135
+        }
+      ],
+      "explanation": [
+        "Creditors are grouped by requested execution date, but Transfer.toXML does not emit that grouping date: the ordinary branch uses 1999-01-01 and the alternate format comparison omits pain. The base schema label also changes according to wall-clock date.",
+        "No XML was generated or schema checked. Exact bank/scheme obligations are not inferred from comments. Supplied execution date, format namespace, wall-clock schema selection and message identity need separate deterministic policy."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0307",
+      "title": "ex-money: calendar subscription credit uses effective-date denominator and explicit proration policy",
+      "library_id": "CE-REPO-0031",
+      "edition_id": "CE-EDITION-0031",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn204",
+          "path": "lib/money/subscription.ex",
+          "name": "Money.Subscription.current_interval_start_date [clause 418]",
+          "start_line": 418,
+          "end_line": 427
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn205",
+          "path": "lib/money/subscription.ex",
+          "name": "Money.Subscription.current_interval_start_date [clause 429]",
+          "start_line": 429,
+          "end_line": 447
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn214",
+          "path": "lib/money/subscription.ex",
+          "name": "Money.Subscription.prorate [clause 724]",
+          "start_line": 724,
+          "end_line": 733
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn215",
+          "path": "lib/money/subscription.ex",
+          "name": "Money.Subscription.prorate [clause 737]",
+          "start_line": 737,
+          "end_line": 754
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn216",
+          "path": "lib/money/subscription.ex",
+          "name": "Money.Subscription.build_price_prorate [clause 756]",
+          "start_line": 756,
+          "end_line": 776
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn217",
+          "path": "lib/money/subscription.ex",
+          "name": "Money.Subscription.plan_credit [clause 778]",
+          "start_line": 778,
+          "end_line": 792
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn218",
+          "path": "lib/money/subscription.ex",
+          "name": "Money.Subscription.extend_period [clause 796]",
+          "start_line": 796,
+          "end_line": 812
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn219",
+          "path": "lib/money/subscription.ex",
+          "name": "Money.Subscription.plan_days [clause 840]",
+          "start_line": 840,
+          "end_line": 844
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn220",
+          "path": "lib/money/subscription.ex",
+          "name": "Money.Subscription.days_remaining [clause 874]",
+          "start_line": 874,
+          "end_line": 878
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn221",
+          "path": "lib/money/subscription.ex",
+          "name": "Money.Subscription.next_interval_starts [clause 909]",
+          "start_line": 909,
+          "end_line": 920
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn222",
+          "path": "lib/money/subscription.ex",
+          "name": "Money.Subscription.next_interval_starts [clause 922]",
+          "start_line": 922,
+          "end_line": 932
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn223",
+          "path": "lib/money/subscription.ex",
+          "name": "Money.Subscription.next_interval_starts [clause 934]",
+          "start_line": 934,
+          "end_line": 948
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn224",
+          "path": "lib/money/subscription.ex",
+          "name": "Money.Subscription.next_interval_starts [clause 950]",
+          "start_line": 950,
+          "end_line": 956
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn225",
+          "path": "lib/money/subscription.ex",
+          "name": "Money.Subscription.add_months [clause 963]",
+          "start_line": 963,
+          "end_line": 979
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn485",
+          "path": "lib/money/subscription/plan.ex",
+          "name": "lib/money/subscription/plan.ex def new(%Money{} = price, interval, interval_count) guarded implementation",
+          "start_line": 81,
+          "end_line": 84
+        }
+      ],
+      "explanation": [
+        "Subscription credit combines interval length measured from the effective date with remaining days measured from the current interval. Price and period proration use distinct carry/rounding policies.",
+        "The denominator and numerator reference different dates by construction. Monthly preferred-day adjustment is explicit, while yearly replacement and plan count admission have separate gaps.",
+        "Selected proration mode, explicit effective/current start dates and intended valid positive plan interval; source also admits zero/negative integer counts. A calendar-month change can make effective-date denominator differ from the current interval length; a yearly Feb29 replacement is not date-validated. These are not universal subscription rules. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0347",
+      "title": "Business-day zero and negative offsets first follow the input date",
+      "library_id": "CE-REPO-0025",
+      "edition_id": "CE-EDITION-0025",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0025:CE-EDITION-0025:fn056",
+          "path": "src/bdays.jl",
+          "name": "BusinessDays.advancebdays(hc::HolidayCalendar, dt::Dates.Date, bdays_count::Int) :: Dates.Date [L66]",
+          "start_line": 66,
+          "end_line": 91
+        },
+        {
+          "id": "CE-REPO-0025:CE-EDITION-0025:fn059",
+          "path": "src/bdays.jl",
+          "name": "BusinessDays.bdayscount(hc::HolidayCalendar, dt0::Dates.Date, dt1::Dates.Date) :: Int [L116]",
+          "start_line": 116,
+          "end_line": 132
+        },
+        {
+          "id": "CE-REPO-0025:CE-EDITION-0025:fn184",
+          "path": "src/query.jl",
+          "name": "BusinessDays.listbdays(hc::HolidayCalendar, dt0::Dates.Date, dt1::Dates.Date) [L22]",
+          "start_line": 22,
+          "end_line": 43
+        },
+        {
+          "id": "CE-REPO-0025:CE-EDITION-0025:fn135",
+          "path": "src/calendars/calendars.jl",
+          "name": "BusinessDays.listbdays(::NullHolidayCalendar, dt0::Dates.Date, dt1::Dates.Date) [L61]",
+          "start_line": 61,
+          "end_line": 61
+        }
+      ],
+      "explanation": [
+        "BusinessDays normalizes advancebdays through following before testing zero/direction; its ordinary list includes both normalized endpoints and its NullCalendar specialization uses a raw Date range.",
+        "The count, advance and list bodies establish distinct endpoint policies. They are not universal business-day rules or automatically inverse operations.",
+        "An explicit holiday calendar, Date operands and sufficient calendar/cache coverage for every successor search. Advancing a weekend by zero can move it forward, unlike another library that preserves the input at zero; endpoint count cannot be inferred from an operation name. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0351",
+      "title": "Business-day listing and cached bounds have an extra successor dependency",
+      "library_id": "CE-REPO-0025",
+      "edition_id": "CE-EDITION-0025",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "open_question",
+      "functions": [
+        {
+          "id": "CE-REPO-0025:CE-EDITION-0025:fn184",
+          "path": "src/query.jl",
+          "name": "BusinessDays.listbdays(hc::HolidayCalendar, dt0::Dates.Date, dt1::Dates.Date) [L22]",
+          "start_line": 22,
+          "end_line": 43
+        },
+        {
+          "id": "CE-REPO-0025:CE-EDITION-0025:fn077",
+          "path": "src/bdayscache.jl",
+          "name": "BusinessDays.isbday(hcc::HolidayCalendarCache, dt::Dates.Date) :: Bool [L41]",
+          "start_line": 41,
+          "end_line": 44
+        },
+        {
+          "id": "CE-REPO-0025:CE-EDITION-0025:fn052",
+          "path": "src/bdays.jl",
+          "name": "BusinessDays.isbday(hc::HolidayCalendar, dt::Dates.Date) :: Bool [L24]",
+          "start_line": 24,
+          "end_line": 30
+        }
+      ],
+      "explanation": [
+        "The ordinary business-day list searches one successor after appending its final eligible date; a cached calendar bounds-checks every queried date.",
+        "The loop advances even after the last included endpoint. A request whose output is inside the cache can therefore still require calendar data outside it.",
+        "Cached calendar, an included last date near the initialized upper boundary, and a successor search extending beyond that boundary. A single-day output request at the final cached business date can enter the next-date search; exact runtime exception and cache initialization are not executed. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0352",
+      "title": "DateTime plus a business-day period discards time of day",
+      "library_id": "CE-REPO-0025",
+      "edition_id": "CE-EDITION-0025",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0025:CE-EDITION-0025:fn047",
+          "path": "src/bday.jl",
+          "name": "Base.:(+)(dt::Dates.DateTime, bd::BDay) [L227]",
+          "start_line": 227,
+          "end_line": 229
+        },
+        {
+          "id": "CE-REPO-0025:CE-EDITION-0025:fn049",
+          "path": "src/bday.jl",
+          "name": "Base.:(-)(dt::Dates.DateTime, bd::BDay) [L233]",
+          "start_line": 233,
+          "end_line": 235
+        }
+      ],
+      "explanation": [
+        "DateTime plus/minus BDay explicitly converts the timestamp to Date before applying business-day arithmetic.",
+        "The conversion discards clock information as an intentional date-only overload; no clock-preserving or timezone-aware operation follows from it.",
+        "DateTime operands and the defined BDay overload, with caller acceptance of a Date result. A timestamp with a nonmidnight time loses that time in the result; no wall-clock or DST behavior was executed. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    }
+  ]
+}

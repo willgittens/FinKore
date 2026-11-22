@@ -1,978 +1,1728 @@
 {
-  "schema_version": "1.0.0",
-  "title": "FinKore Experts — Code Evidence",
-  "updated_on": "2026-11-18",
-  "normative": false,
-  "finkore_baseline": {
-    "version": "2.0.4",
-    "commit_sha": "ba16f0d726bdf46adac8b58a5641d9872f7fd8ef",
-    "comparison_status": "not_started"
-  },
-  "discovery": {
-    "method": "Manual seed selection, web discovery, public GitHub REST metadata and selected pinned README passages.",
-    "searches": [
-      {
-        "query": "site:github.com moneyphp money brick money Joda Money financial libraries",
-        "searched_on": "2026-11-18"
-      },
-      {
-        "query": "site:github.com moov-io ach apache fineract gnucash beancount QuantLib",
-        "searched_on": "2026-11-18"
-      }
-    ],
-    "inclusion_criteria": [
-      "Public source with a specifically financial purpose or identifiable financial modules.",
-      "An inspectable source edition pinned to a full commit SHA.",
-      "Potential to expose financial rules, alternatives, contradictions or future-domain questions."
-    ],
-    "exclusion_criteria": [
-      "Generic CRUD, infrastructure or numerical libraries without financial domain behavior.",
-      "Awesome lists, marketing-only repositories or client SDKs without substantive financial rules."
-    ],
-    "limitations": [
-      "Curated starting set, not an exhaustive GitHub search or a ranking of quality, correctness, adoption or maintenance.",
-      "Repository owners are verified GitHub account holders, not necessarily original authors or current maintainers.",
-      "Only repository/release metadata and selected README passages were inspected; implementation and tests were not reviewed or executed.",
-      "Topics and questions are editorial discovery hypotheses, not financial findings or contract mappings.",
-      "Versions are selected source editions, not promises of the newest available package release.",
-      "GitHub metadata and release/tag names can change; the recorded full commit SHA identifies the source to inspect."
-    ]
-  },
-  "repositories": [
+  "schema_version": "2.0.0",
+  "libraries": [
     {
       "id": "CE-REPO-0001",
       "name": "Money PHP",
+      "repository": "moneyphp/money",
       "github_id": 1543827,
-      "full_name": "moneyphp/money",
-      "url": "https://github.com/moneyphp/money",
-      "owner": {
-        "login": "moneyphp",
-        "url": "https://github.com/moneyphp",
-        "type": "Organization"
-      },
-      "authors": {
-        "names": null,
-        "source_url": null
-      },
-      "kind": "library",
-      "primary_language": "PHP",
-      "upstream_license": {
-        "reported_spdx_id": "MIT",
-        "verification": "github_metadata_only"
-      },
-      "archived": false,
-      "fork": false,
-      "observed_on": "2026-11-18",
-      "metadata_source_url": "https://api.github.com/repos/moneyphp/money",
-      "investigation": {
-        "scope": "core_related",
-        "topics": [
-          "monetary representation",
-          "allocation",
-          "currency compatibility"
-        ],
-        "selection_reason": "The README presents a Money value object and a proportional allocation example.",
-        "questions": [
-          "How are allocation remainders assigned for positive, negative and zero amounts?",
-          "Which arithmetic and comparison operations reject mismatched currencies?"
-        ],
-        "context_limits": "The README credits Fowler’s Money pattern; similar libraries may share design ancestry."
-      },
       "editions": [
         {
           "id": "CE-EDITION-0001",
           "version": "v4.9.0",
-          "ref_type": "release_tag",
           "commit_sha": "d49ee625c6ba79b9d7a228ce153b02fc1032152b",
-          "commit_date": "2026-05-04T20:23:15Z",
-          "release_published_at": "2026-05-04T20:25:17Z",
-          "release_url": "https://github.com/moneyphp/money/releases/tag/v4.9.0",
-          "tree_url": "https://github.com/moneyphp/money/tree/d49ee625c6ba79b9d7a228ce153b02fc1032152b",
           "observed_on": "2026-11-18",
-          "selection_source_url": "https://api.github.com/repos/moneyphp/money/releases/latest",
-          "selection_note": "GitHub latest release at observation time; resolved the release tag through the commits API.",
-          "commit_source_url": "https://api.github.com/repos/moneyphp/money/commits/v4.9.0",
-          "readme": {
-            "path": "README.md",
-            "url": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/README.md",
-            "reading_extent": "selected_passages"
-          },
-          "analysis_status": "not_started"
+          "reading_status": "complete"
         }
       ]
     },
     {
       "id": "CE-REPO-0002",
       "name": "Brick Money",
+      "repository": "brick/money",
       "github_id": 36608028,
-      "full_name": "brick/money",
-      "url": "https://github.com/brick/money",
-      "owner": {
-        "login": "brick",
-        "url": "https://github.com/brick",
-        "type": "Organization"
-      },
-      "authors": {
-        "names": null,
-        "source_url": null
-      },
-      "kind": "library",
-      "primary_language": "PHP",
-      "upstream_license": {
-        "reported_spdx_id": "MIT",
-        "verification": "github_metadata_only"
-      },
-      "archived": false,
-      "fork": false,
-      "observed_on": "2026-11-18",
-      "metadata_source_url": "https://api.github.com/repos/brick/money",
-      "investigation": {
-        "scope": "mixed",
-        "topics": [
-          "rounding",
-          "calculation scale",
-          "allocation",
-          "currency conversion"
-        ],
-        "selection_reason": "The README describes exact arithmetic, explicit rounding and several allocation strategies.",
-        "questions": [
-          "Where do contexts impose a scale or require a rounding decision?",
-          "Which allocation policies preserve totals, and how do tie and negative cases differ?"
-        ],
-        "context_limits": "Another PHP Money library; language diversity and independence require separate assessment."
-      },
       "editions": [
         {
           "id": "CE-EDITION-0002",
           "version": "0.15.2",
-          "ref_type": "release_tag",
           "commit_sha": "d025eb4a105071028764859d93537d394a147c31",
-          "commit_date": "2026-09-29T22:27:31Z",
-          "release_published_at": "2026-09-29T22:29:26Z",
-          "release_url": "https://github.com/brick/money/releases/tag/0.15.2",
-          "tree_url": "https://github.com/brick/money/tree/d025eb4a105071028764859d93537d394a147c31",
           "observed_on": "2026-11-18",
-          "selection_source_url": "https://api.github.com/repos/brick/money/releases/latest",
-          "selection_note": "GitHub latest release at observation time; resolved the release tag through the commits API.",
-          "commit_source_url": "https://api.github.com/repos/brick/money/commits/0.15.2",
-          "readme": {
-            "path": "README.md",
-            "url": "https://github.com/brick/money/blob/d025eb4a105071028764859d93537d394a147c31/README.md",
-            "reading_extent": "selected_passages"
-          },
-          "analysis_status": "not_started"
+          "reading_status": "complete"
         }
       ]
     },
     {
       "id": "CE-REPO-0003",
       "name": "RubyMoney",
+      "repository": "RubyMoney/money",
       "github_id": 70121,
-      "full_name": "RubyMoney/money",
-      "url": "https://github.com/RubyMoney/money",
-      "owner": {
-        "login": "RubyMoney",
-        "url": "https://github.com/RubyMoney",
-        "type": "Organization"
-      },
-      "authors": {
-        "names": null,
-        "source_url": null
-      },
-      "kind": "library",
-      "primary_language": "Ruby",
-      "upstream_license": {
-        "reported_spdx_id": "MIT",
-        "verification": "github_metadata_only"
-      },
-      "archived": false,
-      "fork": false,
-      "observed_on": "2026-11-18",
-      "metadata_source_url": "https://api.github.com/repos/RubyMoney/money",
-      "investigation": {
-        "scope": "mixed",
-        "topics": [
-          "monetary representation",
-          "currency compatibility",
-          "currency conversion"
-        ],
-        "selection_reason": "The README presents amount/currency values, integer subunits and exchange operations.",
-        "questions": [
-          "Which defaults or mutable configuration can affect an otherwise identical calculation?",
-          "How are numeric subunits, currency changes and exchange operations distinguished?"
-        ],
-        "context_limits": null
-      },
       "editions": [
         {
           "id": "CE-EDITION-0003",
           "version": "v7.1.1",
-          "ref_type": "tag",
           "commit_sha": "26e2829c34f165847040a5a40d4d2daa5eb72927",
-          "commit_date": "2026-07-31T09:54:23Z",
-          "release_published_at": null,
-          "release_url": null,
-          "tree_url": "https://github.com/RubyMoney/money/tree/26e2829c34f165847040a5a40d4d2daa5eb72927",
           "observed_on": "2026-11-18",
-          "selection_source_url": "https://api.github.com/repos/RubyMoney/money/tags?per_page=5",
-          "selection_note": "Highest numeric stable tag in the inspected tag page; not a claim about all tags or package registries.",
-          "commit_source_url": "https://api.github.com/repos/RubyMoney/money/commits/v7.1.1",
-          "readme": {
-            "path": "README.md",
-            "url": "https://github.com/RubyMoney/money/blob/26e2829c34f165847040a5a40d4d2daa5eb72927/README.md",
-            "reading_extent": "selected_passages"
-          },
-          "analysis_status": "not_started"
+          "reading_status": "complete"
         }
       ]
     },
     {
       "id": "CE-REPO-0004",
       "name": "Joda-Money",
+      "repository": "JodaOrg/joda-money",
       "github_id": 1728400,
-      "full_name": "JodaOrg/joda-money",
-      "url": "https://github.com/JodaOrg/joda-money",
-      "owner": {
-        "login": "JodaOrg",
-        "url": "https://github.com/JodaOrg",
-        "type": "Organization"
-      },
-      "authors": {
-        "names": null,
-        "source_url": null
-      },
-      "kind": "library",
-      "primary_language": "Java",
-      "upstream_license": {
-        "reported_spdx_id": "Apache-2.0",
-        "verification": "github_metadata_only"
-      },
-      "archived": false,
-      "fork": false,
-      "observed_on": "2026-11-18",
-      "metadata_source_url": "https://api.github.com/repos/JodaOrg/joda-money",
-      "investigation": {
-        "scope": "core_related",
-        "topics": [
-          "monetary representation",
-          "calculation scale",
-          "rounding"
-        ],
-        "selection_reason": "The README distinguishes Money from BigMoney and illustrates explicit rounding.",
-        "questions": [
-          "What differs between currency-scale Money and the scale of BigMoney?",
-          "Which paths preserve an exact result and which require rounding?"
-        ],
-        "context_limits": null
-      },
       "editions": [
         {
           "id": "CE-EDITION-0004",
           "version": "v2.0.3",
-          "ref_type": "release_tag",
           "commit_sha": "2e8a1fd4263de2ce6fcc9c2ae703d559dd86c61e",
-          "commit_date": "2025-12-14T11:11:31Z",
-          "release_published_at": "2025-12-14T11:15:16Z",
-          "release_url": "https://github.com/JodaOrg/joda-money/releases/tag/v2.0.3",
-          "tree_url": "https://github.com/JodaOrg/joda-money/tree/2e8a1fd4263de2ce6fcc9c2ae703d559dd86c61e",
           "observed_on": "2026-11-18",
-          "selection_source_url": "https://api.github.com/repos/JodaOrg/joda-money/releases/latest",
-          "selection_note": "GitHub latest release at observation time; resolved the release tag through the commits API.",
-          "commit_source_url": "https://api.github.com/repos/JodaOrg/joda-money/commits/v2.0.3",
-          "readme": {
-            "path": "README.md",
-            "url": "https://github.com/JodaOrg/joda-money/blob/2e8a1fd4263de2ce6fcc9c2ae703d559dd86c61e/README.md",
-            "reading_extent": "selected_passages"
-          },
-          "analysis_status": "not_started"
+          "reading_status": "complete"
         }
       ]
     },
     {
       "id": "CE-REPO-0005",
       "name": "Dinero.js",
+      "repository": "dinerojs/dinero.js",
       "github_id": 124708624,
-      "full_name": "dinerojs/dinero.js",
-      "url": "https://github.com/dinerojs/dinero.js",
-      "owner": {
-        "login": "dinerojs",
-        "url": "https://github.com/dinerojs",
-        "type": "Organization"
-      },
-      "authors": {
-        "names": null,
-        "source_url": null
-      },
-      "kind": "library",
-      "primary_language": "TypeScript",
-      "upstream_license": {
-        "reported_spdx_id": "MIT",
-        "verification": "github_metadata_only"
-      },
-      "archived": false,
-      "fork": false,
-      "observed_on": "2026-11-18",
-      "metadata_source_url": "https://api.github.com/repos/dinerojs/dinero.js",
-      "investigation": {
-        "scope": "mixed",
-        "topics": [
-          "monetary representation",
-          "precision",
-          "currency subdivisions"
-        ],
-        "selection_reason": "The README describes monetary calculations, configurable numeric precision and non-decimal subdivisions.",
-        "questions": [
-          "How do number and bigint backends bound precision and overflow?",
-          "Which assumptions about scale and non-decimal subdivisions differ from FinKore Core?"
-        ],
-        "context_limits": null
-      },
       "editions": [
         {
           "id": "CE-EDITION-0005",
           "version": "v2.0.2",
-          "ref_type": "release_tag",
           "commit_sha": "cc7df3e6d986445eab42dffc33f8c2d14e4d588a",
-          "commit_date": "2026-03-13T15:37:57Z",
-          "release_published_at": "2026-03-13T15:39:30Z",
-          "release_url": "https://github.com/dinerojs/dinero.js/releases/tag/v2.0.2",
-          "tree_url": "https://github.com/dinerojs/dinero.js/tree/cc7df3e6d986445eab42dffc33f8c2d14e4d588a",
           "observed_on": "2026-11-18",
-          "selection_source_url": "https://api.github.com/repos/dinerojs/dinero.js/releases/latest",
-          "selection_note": "GitHub latest release at observation time; resolved the release tag through the commits API.",
-          "commit_source_url": "https://api.github.com/repos/dinerojs/dinero.js/commits/v2.0.2",
-          "readme": {
-            "path": "README.md",
-            "url": "https://github.com/dinerojs/dinero.js/blob/cc7df3e6d986445eab42dffc33f8c2d14e4d588a/README.md",
-            "reading_extent": "selected_passages"
-          },
-          "analysis_status": "not_started"
+          "reading_status": "complete"
         }
       ]
     },
     {
       "id": "CE-REPO-0006",
       "name": "GoMoney",
+      "repository": "Rhymond/go-money",
       "github_id": 85599716,
-      "full_name": "Rhymond/go-money",
-      "url": "https://github.com/Rhymond/go-money",
-      "owner": {
-        "login": "Rhymond",
-        "url": "https://github.com/Rhymond",
-        "type": "User"
-      },
-      "authors": {
-        "names": null,
-        "source_url": null
-      },
-      "kind": "library",
-      "primary_language": "Go",
-      "upstream_license": {
-        "reported_spdx_id": "MIT",
-        "verification": "github_metadata_only"
-      },
-      "archived": false,
-      "fork": false,
-      "observed_on": "2026-11-18",
-      "metadata_source_url": "https://api.github.com/repos/Rhymond/go-money",
-      "investigation": {
-        "scope": "core_related",
-        "topics": [
-          "monetary representation",
-          "allocation",
-          "currency compatibility"
-        ],
-        "selection_reason": "The README describes integer subunits, currency checks, splitting and allocation.",
-        "questions": [
-          "How are residual units distributed, including negative amounts and zero ratios?",
-          "Which input paths can lose precision or exceed the representation range?"
-        ],
-        "context_limits": "The repository explicitly identifies its design as Fowler’s Money pattern."
-      },
       "editions": [
         {
           "id": "CE-EDITION-0006",
           "version": "v1.0.15",
-          "ref_type": "release_tag",
           "commit_sha": "b43ce49343a684c955ffb1a4e4165b81db8989b7",
-          "commit_date": "2025-04-30T05:15:53Z",
-          "release_published_at": "2025-04-30T05:16:30Z",
-          "release_url": "https://github.com/Rhymond/go-money/releases/tag/v1.0.15",
-          "tree_url": "https://github.com/Rhymond/go-money/tree/b43ce49343a684c955ffb1a4e4165b81db8989b7",
           "observed_on": "2026-11-18",
-          "selection_source_url": "https://api.github.com/repos/Rhymond/go-money/releases/latest",
-          "selection_note": "GitHub latest release at observation time; resolved the release tag through the commits API.",
-          "commit_source_url": "https://api.github.com/repos/Rhymond/go-money/commits/v1.0.15",
-          "readme": {
-            "path": "README.md",
-            "url": "https://github.com/Rhymond/go-money/blob/b43ce49343a684c955ffb1a4e4165b81db8989b7/README.md",
-            "reading_extent": "selected_passages"
-          },
-          "analysis_status": "not_started"
+          "reading_status": "complete"
         }
       ]
     },
     {
       "id": "CE-REPO-0007",
       "name": "NodaMoney",
+      "repository": "RemyDuijkeren/NodaMoney",
       "github_id": 27265209,
-      "full_name": "RemyDuijkeren/NodaMoney",
-      "url": "https://github.com/RemyDuijkeren/NodaMoney",
-      "owner": {
-        "login": "RemyDuijkeren",
-        "url": "https://github.com/RemyDuijkeren",
-        "type": "User"
-      },
-      "authors": {
-        "names": null,
-        "source_url": null
-      },
-      "kind": "library",
-      "primary_language": "C#",
-      "upstream_license": {
-        "reported_spdx_id": "Apache-2.0",
-        "verification": "github_metadata_only"
-      },
-      "archived": false,
-      "fork": false,
-      "observed_on": "2026-11-18",
-      "metadata_source_url": "https://api.github.com/repos/RemyDuijkeren/NodaMoney",
-      "investigation": {
-        "scope": "mixed",
-        "topics": [
-          "rounding",
-          "calculation scale",
-          "currency compatibility",
-          "monetary context"
-        ],
-        "selection_reason": "The README describes money contexts, default minor-unit rounding and a fixed-scale FastMoney type.",
-        "questions": [
-          "When does default rounding occur, and can repeated operations change monetary meaning?",
-          "Which implicit currency or context choices would require an explicit fact in FinKore?"
-        ],
-        "context_limits": "The README identifies Joda-Money as an inspiration; these are not automatically independent evidence."
-      },
       "editions": [
         {
           "id": "CE-EDITION-0007",
           "version": "2.10.0",
-          "ref_type": "release_tag",
           "commit_sha": "1844718cc007b0699ab8aefbbdbcd3f532103708",
-          "commit_date": "2026-11-16T10:22:50Z",
-          "release_published_at": "2026-11-16T13:07:52Z",
-          "release_url": "https://github.com/RemyDuijkeren/NodaMoney/releases/tag/2.10.0",
-          "tree_url": "https://github.com/RemyDuijkeren/NodaMoney/tree/1844718cc007b0699ab8aefbbdbcd3f532103708",
           "observed_on": "2026-11-18",
-          "selection_source_url": "https://api.github.com/repos/RemyDuijkeren/NodaMoney/releases/latest",
-          "selection_note": "GitHub latest release at observation time; resolved the release tag through the commits API.",
-          "commit_source_url": "https://api.github.com/repos/RemyDuijkeren/NodaMoney/commits/2.10.0",
-          "readme": {
-            "path": "README.md",
-            "url": "https://github.com/RemyDuijkeren/NodaMoney/blob/1844718cc007b0699ab8aefbbdbcd3f532103708/README.md",
-            "reading_extent": "selected_passages"
-          },
-          "analysis_status": "not_started"
+          "reading_status": "complete"
         }
       ]
     },
     {
       "id": "CE-REPO-0008",
       "name": "py-moneyed",
+      "repository": "py-moneyed/py-moneyed",
       "github_id": 1351437,
-      "full_name": "py-moneyed/py-moneyed",
-      "url": "https://github.com/py-moneyed/py-moneyed",
-      "owner": {
-        "login": "py-moneyed",
-        "url": "https://github.com/py-moneyed",
-        "type": "Organization"
-      },
-      "authors": {
-        "names": null,
-        "source_url": null
-      },
-      "kind": "library",
-      "primary_language": "Python",
-      "upstream_license": {
-        "reported_spdx_id": "BSD-3-Clause",
-        "verification": "github_metadata_only"
-      },
-      "archived": false,
-      "fork": false,
-      "observed_on": "2026-11-18",
-      "metadata_source_url": "https://api.github.com/repos/py-moneyed/py-moneyed",
-      "investigation": {
-        "scope": "core_related",
-        "topics": [
-          "monetary representation",
-          "currency compatibility",
-          "decimal inputs"
-        ],
-        "selection_reason": "The README provides Money and Currency abstractions for Python.",
-        "questions": [
-          "How are decimal inputs and host decimal context handled at operation boundaries?",
-          "Which arithmetic operations enforce currency compatibility?"
-        ],
-        "context_limits": "The README records that some code derives from python-money."
-      },
       "editions": [
         {
           "id": "CE-EDITION-0008",
           "version": "v3.0",
-          "ref_type": "release_tag",
           "commit_sha": "f45c0078b5ca2af098d5d75f2c54295e7196388e",
-          "commit_date": "2022-11-27T21:27:16Z",
-          "release_published_at": "2022-11-27T21:28:28Z",
-          "release_url": "https://github.com/py-moneyed/py-moneyed/releases/tag/v3.0",
-          "tree_url": "https://github.com/py-moneyed/py-moneyed/tree/f45c0078b5ca2af098d5d75f2c54295e7196388e",
           "observed_on": "2026-11-18",
-          "selection_source_url": "https://api.github.com/repos/py-moneyed/py-moneyed/releases/latest",
-          "selection_note": "GitHub latest release at observation time; resolved the release tag through the commits API.",
-          "commit_source_url": "https://api.github.com/repos/py-moneyed/py-moneyed/commits/v3.0",
-          "readme": {
-            "path": "README.rst",
-            "url": "https://github.com/py-moneyed/py-moneyed/blob/f45c0078b5ca2af098d5d75f2c54295e7196388e/README.rst",
-            "reading_extent": "selected_passages"
-          },
-          "analysis_status": "not_started"
+          "reading_status": "complete"
         }
       ]
     },
     {
       "id": "CE-REPO-0009",
       "name": "Beancount",
+      "repository": "beancount/beancount",
       "github_id": 266158455,
-      "full_name": "beancount/beancount",
-      "url": "https://github.com/beancount/beancount",
-      "owner": {
-        "login": "beancount",
-        "url": "https://github.com/beancount",
-        "type": "Organization"
-      },
-      "authors": {
-        "names": [
-          "Martin Blais"
-        ],
-        "source_url": "https://github.com/beancount/beancount/blob/eeda2aa2a3204ffb980dab11220b2abde5e80b38/README.rst"
-      },
-      "kind": "language_and_library",
-      "primary_language": "Python",
-      "upstream_license": {
-        "reported_spdx_id": "GPL-2.0",
-        "verification": "github_metadata_only"
-      },
-      "archived": false,
-      "fork": false,
-      "observed_on": "2026-11-18",
-      "metadata_source_url": "https://api.github.com/repos/beancount/beancount",
-      "investigation": {
-        "scope": "exploratory",
-        "topics": [
-          "double-entry accounting",
-          "balance validation",
-          "financial records"
-        ],
-        "selection_reason": "The README describes a language for financial transaction records and reports.",
-        "questions": [
-          "How are balancing tolerances derived, and which assumptions are commodity-specific?",
-          "How do transaction validation and historical record corrections interact?"
-        ],
-        "context_limits": "Study accounting semantics as future-domain questions; ledger posting is outside current Core."
-      },
       "editions": [
         {
           "id": "CE-EDITION-0009",
           "version": "3.2.3",
-          "ref_type": "tag",
           "commit_sha": "eeda2aa2a3204ffb980dab11220b2abde5e80b38",
-          "commit_date": "2026-05-05T22:57:11Z",
-          "release_published_at": null,
-          "release_url": null,
-          "tree_url": "https://github.com/beancount/beancount/tree/eeda2aa2a3204ffb980dab11220b2abde5e80b38",
           "observed_on": "2026-11-18",
-          "selection_source_url": "https://api.github.com/repos/beancount/beancount/tags?per_page=100",
-          "selection_note": "Highest numeric stable tag in the inspected tag page; not a claim about all tags or package registries.",
-          "commit_source_url": "https://api.github.com/repos/beancount/beancount/commits/3.2.3",
-          "readme": {
-            "path": "README.rst",
-            "url": "https://github.com/beancount/beancount/blob/eeda2aa2a3204ffb980dab11220b2abde5e80b38/README.rst",
-            "reading_extent": "selected_passages"
-          },
-          "analysis_status": "not_started"
+          "reading_status": "partial"
         }
       ]
     },
     {
       "id": "CE-REPO-0010",
       "name": "QuantLib",
+      "repository": "lballabio/QuantLib",
       "github_id": 48185587,
-      "full_name": "lballabio/QuantLib",
-      "url": "https://github.com/lballabio/QuantLib",
-      "owner": {
-        "login": "lballabio",
-        "url": "https://github.com/lballabio",
-        "type": "User"
-      },
-      "authors": {
-        "names": null,
-        "source_url": null
-      },
-      "kind": "library",
-      "primary_language": "C++",
-      "upstream_license": {
-        "reported_spdx_id": "NOASSERTION",
-        "verification": "github_metadata_only"
-      },
-      "archived": false,
-      "fork": false,
-      "observed_on": "2026-11-18",
-      "metadata_source_url": "https://api.github.com/repos/lballabio/QuantLib",
-      "investigation": {
-        "scope": "exploratory",
-        "topics": [
-          "quantitative finance",
-          "financial dates",
-          "interest conventions",
-          "valuation"
-        ],
-        "selection_reason": "The README describes a quantitative-finance library for modeling, trading and risk management.",
-        "questions": [
-          "Which date, calendar and day-count conventions change financial outcomes?",
-          "Which calculations depend on market data or evaluation dates that must be explicit?"
-        ],
-        "context_limits": "Interest/date topics are investigation hypotheses; the inspected README does not verify specific algorithms."
-      },
       "editions": [
         {
           "id": "CE-EDITION-0010",
           "version": "v1.44",
-          "ref_type": "release_tag",
           "commit_sha": "ab4cb476d35f7275834bc05b47d1324403d1823b",
-          "commit_date": "2026-10-13T07:07:18Z",
-          "release_published_at": "2026-10-13T10:44:57Z",
-          "release_url": "https://github.com/lballabio/QuantLib/releases/tag/v1.44",
-          "tree_url": "https://github.com/lballabio/QuantLib/tree/ab4cb476d35f7275834bc05b47d1324403d1823b",
           "observed_on": "2026-11-18",
-          "selection_source_url": "https://api.github.com/repos/lballabio/QuantLib/releases/latest",
-          "selection_note": "GitHub latest release at observation time; resolved the release tag through the commits API.",
-          "commit_source_url": "https://api.github.com/repos/lballabio/QuantLib/commits/v1.44",
-          "readme": {
-            "path": "README.md",
-            "url": "https://github.com/lballabio/QuantLib/blob/ab4cb476d35f7275834bc05b47d1324403d1823b/README.md",
-            "reading_extent": "selected_passages"
-          },
-          "analysis_status": "not_started"
+          "reading_status": "partial"
         }
       ]
     },
     {
       "id": "CE-REPO-0011",
       "name": "Moov ACH",
+      "repository": "moov-io/ach",
       "github_id": 76497520,
-      "full_name": "moov-io/ach",
-      "url": "https://github.com/moov-io/ach",
-      "owner": {
-        "login": "moov-io",
-        "url": "https://github.com/moov-io",
-        "type": "Organization"
-      },
-      "authors": {
-        "names": null,
-        "source_url": null
-      },
-      "kind": "library_and_service",
-      "primary_language": "Go",
-      "upstream_license": {
-        "reported_spdx_id": "Apache-2.0",
-        "verification": "github_metadata_only"
-      },
-      "archived": false,
-      "fork": false,
-      "observed_on": "2026-11-18",
-      "metadata_source_url": "https://api.github.com/repos/moov-io/ach",
-      "investigation": {
-        "scope": "exploratory",
-        "topics": [
-          "payment file validation",
-          "payment amounts",
-          "control totals"
-        ],
-        "selection_reason": "The README describes reading, writing and validating ACH payment files against Nacha formats.",
-        "questions": [
-          "Which amount limits, control totals and cross-record checks protect financial meaning?",
-          "Which validations depend on a particular Nacha edition or jurisdiction?"
-        ],
-        "context_limits": "Payment and settlement rules are outside current Core; implementation code is not an authoritative Nacha rulebook."
-      },
       "editions": [
         {
           "id": "CE-EDITION-0011",
           "version": "v1.69.0",
-          "ref_type": "release_tag",
           "commit_sha": "314f990cf2809d6f9848d0b8df5767eb19b0cf17",
-          "commit_date": "2026-11-18T20:56:10Z",
-          "release_published_at": "2026-11-18T21:03:21Z",
-          "release_url": "https://github.com/moov-io/ach/releases/tag/v1.69.0",
-          "tree_url": "https://github.com/moov-io/ach/tree/314f990cf2809d6f9848d0b8df5767eb19b0cf17",
           "observed_on": "2026-11-18",
-          "selection_source_url": "https://api.github.com/repos/moov-io/ach/releases/latest",
-          "selection_note": "GitHub latest release at observation time; resolved the release tag through the commits API.",
-          "commit_source_url": "https://api.github.com/repos/moov-io/ach/commits/v1.69.0",
-          "readme": {
-            "path": "README.md",
-            "url": "https://github.com/moov-io/ach/blob/314f990cf2809d6f9848d0b8df5767eb19b0cf17/README.md",
-            "reading_extent": "selected_passages"
-          },
-          "analysis_status": "not_started"
+          "reading_status": "partial"
         }
       ]
     },
     {
       "id": "CE-REPO-0012",
       "name": "Apache Fineract",
+      "repository": "apache/fineract",
       "github_id": 48418599,
-      "full_name": "apache/fineract",
-      "url": "https://github.com/apache/fineract",
-      "owner": {
-        "login": "apache",
-        "url": "https://github.com/apache",
-        "type": "Organization"
-      },
-      "authors": {
-        "names": null,
-        "source_url": null
-      },
-      "kind": "application",
-      "primary_language": "Java",
-      "upstream_license": {
-        "reported_spdx_id": "Apache-2.0",
-        "verification": "github_metadata_only"
-      },
-      "archived": false,
-      "fork": false,
-      "observed_on": "2026-11-18",
-      "metadata_source_url": "https://api.github.com/repos/apache/fineract",
-      "investigation": {
-        "scope": "exploratory",
-        "topics": [
-          "core banking",
-          "lending",
-          "repayment allocation",
-          "financial lifecycle"
-        ],
-        "selection_reason": "The README describes a core banking platform; lending and lifecycle rules are candidates for deeper inspection.",
-        "questions": [
-          "How do repayment allocation, accrual and recalculation policies affect loan outcomes?",
-          "Which changes invalidate a prior approval or prevent a lifecycle transition?"
-        ],
-        "context_limits": "A large platform with configurable product policies; no particular lending or approval behavior has been verified."
-      },
       "editions": [
         {
           "id": "CE-EDITION-0012",
           "version": "1.16.1",
-          "ref_type": "release_tag",
           "commit_sha": "c643dab306fe29798951591ce825fd5e5272923e",
-          "commit_date": "2026-10-26T16:21:58Z",
-          "release_published_at": "2026-10-26T19:22:08Z",
-          "release_url": "https://github.com/apache/fineract/releases/tag/1.16.1",
-          "tree_url": "https://github.com/apache/fineract/tree/c643dab306fe29798951591ce825fd5e5272923e",
           "observed_on": "2026-11-18",
-          "selection_source_url": "https://api.github.com/repos/apache/fineract/releases/latest",
-          "selection_note": "GitHub latest release at observation time; resolved the release tag through the commits API.",
-          "commit_source_url": "https://api.github.com/repos/apache/fineract/commits/1.16.1",
-          "readme": {
-            "path": "README.md",
-            "url": "https://github.com/apache/fineract/blob/c643dab306fe29798951591ce825fd5e5272923e/README.md",
-            "reading_extent": "selected_passages"
-          },
-          "analysis_status": "not_started"
+          "reading_status": "partial"
         }
       ]
     },
     {
       "id": "CE-REPO-0013",
       "name": "Formance Ledger",
+      "repository": "formancehq/ledger",
       "github_id": 371644903,
-      "full_name": "formancehq/ledger",
-      "url": "https://github.com/formancehq/ledger",
-      "owner": {
-        "login": "formancehq",
-        "url": "https://github.com/formancehq",
-        "type": "Organization"
-      },
-      "authors": {
-        "names": null,
-        "source_url": null
-      },
-      "kind": "service",
-      "primary_language": "Go",
-      "upstream_license": {
-        "reported_spdx_id": "MIT",
-        "verification": "github_metadata_only"
-      },
-      "archived": false,
-      "fork": false,
-      "observed_on": "2026-11-18",
-      "metadata_source_url": "https://api.github.com/repos/formancehq/ledger",
-      "investigation": {
-        "scope": "exploratory",
-        "topics": [
-          "ledger posting",
-          "transaction atomicity",
-          "financial history"
-        ],
-        "selection_reason": "The README describes an account-based programmable ledger and atomic multi-posting transactions.",
-        "questions": [
-          "What is the exact atomicity boundary of a multi-posting transaction?",
-          "How are duplicate instructions, reversals and recorded history distinguished?"
-        ],
-        "context_limits": "Ledger posting and concrete reversal effects remain outside current Core; a README claim is not execution evidence."
-      },
       "editions": [
         {
           "id": "CE-EDITION-0013",
           "version": "v2.4.18",
-          "ref_type": "release_tag",
           "commit_sha": "83cd8dc7a66ba02a0418a36ec45663b19e26dcb3",
-          "commit_date": "2026-11-05T16:03:57Z",
-          "release_published_at": "2026-11-05T16:13:03Z",
-          "release_url": "https://github.com/formancehq/ledger/releases/tag/v2.4.18",
-          "tree_url": "https://github.com/formancehq/ledger/tree/83cd8dc7a66ba02a0418a36ec45663b19e26dcb3",
           "observed_on": "2026-11-18",
-          "selection_source_url": "https://api.github.com/repos/formancehq/ledger/releases/latest",
-          "selection_note": "GitHub latest release at observation time; resolved the release tag through the commits API.",
-          "commit_source_url": "https://api.github.com/repos/formancehq/ledger/commits/v2.4.18",
-          "readme": {
-            "path": "README.md",
-            "url": "https://github.com/formancehq/ledger/blob/83cd8dc7a66ba02a0418a36ec45663b19e26dcb3/README.md",
-            "reading_extent": "selected_passages"
-          },
-          "analysis_status": "not_started"
+          "reading_status": "partial"
         }
       ]
     },
     {
       "id": "CE-REPO-0014",
       "name": "TigerBeetle",
+      "repository": "tigerbeetle/tigerbeetle",
       "github_id": 254418044,
-      "full_name": "tigerbeetle/tigerbeetle",
-      "url": "https://github.com/tigerbeetle/tigerbeetle",
-      "owner": {
-        "login": "tigerbeetle",
-        "url": "https://github.com/tigerbeetle",
-        "type": "Organization"
-      },
-      "authors": {
-        "names": null,
-        "source_url": null
-      },
-      "kind": "database",
-      "primary_language": "Zig",
-      "upstream_license": {
-        "reported_spdx_id": "Apache-2.0",
-        "verification": "github_metadata_only"
-      },
-      "archived": false,
-      "fork": false,
-      "observed_on": "2026-11-18",
-      "metadata_source_url": "https://api.github.com/repos/tigerbeetle/tigerbeetle",
-      "investigation": {
-        "scope": "exploratory",
-        "topics": [
-          "financial transactions",
-          "debit and credit controls",
-          "pending transfers"
-        ],
-        "selection_reason": "The README presents a financial-transactions database with debit, credit, pending and posted account fields.",
-        "questions": [
-          "Which invariants connect pending transfers, posted transfers and account limits?",
-          "How are transfer identity, repeated requests and failure atomicity handled?"
-        ],
-        "context_limits": "Distributed coordination and ledger effects are outside current Core; database guarantees require their own assumptions."
-      },
       "editions": [
         {
           "id": "CE-EDITION-0014",
           "version": "0.17.9",
-          "ref_type": "release_tag",
           "commit_sha": "cc1c06a924e49b11089c521b2209d34c92caaf18",
-          "commit_date": "2026-07-03T21:58:57Z",
-          "release_published_at": "2026-07-06T17:24:50Z",
-          "release_url": "https://github.com/tigerbeetle/tigerbeetle/releases/tag/0.17.9",
-          "tree_url": "https://github.com/tigerbeetle/tigerbeetle/tree/cc1c06a924e49b11089c521b2209d34c92caaf18",
           "observed_on": "2026-11-18",
-          "selection_source_url": "https://api.github.com/repos/tigerbeetle/tigerbeetle/releases/latest",
-          "selection_note": "GitHub latest release at observation time; resolved the release tag through the commits API.",
-          "commit_source_url": "https://api.github.com/repos/tigerbeetle/tigerbeetle/commits/0.17.9",
-          "readme": {
-            "path": "README.md",
-            "url": "https://github.com/tigerbeetle/tigerbeetle/blob/cc1c06a924e49b11089c521b2209d34c92caaf18/README.md",
-            "reading_extent": "selected_passages"
-          },
-          "analysis_status": "not_started"
+          "reading_status": "partial"
         }
       ]
     },
     {
       "id": "CE-REPO-0015",
       "name": "ERPNext",
+      "repository": "frappe/erpnext",
       "github_id": 1864233,
-      "full_name": "frappe/erpnext",
-      "url": "https://github.com/frappe/erpnext",
-      "owner": {
-        "login": "frappe",
-        "url": "https://github.com/frappe",
-        "type": "Organization"
-      },
-      "authors": {
-        "names": null,
-        "source_url": null
-      },
-      "kind": "application",
-      "primary_language": "Python",
-      "upstream_license": {
-        "reported_spdx_id": "GPL-3.0",
-        "verification": "github_metadata_only"
-      },
-      "archived": false,
-      "fork": false,
-      "observed_on": "2026-11-18",
-      "metadata_source_url": "https://api.github.com/repos/frappe/erpnext",
-      "investigation": {
-        "scope": "exploratory",
-        "topics": [
-          "accounting",
-          "invoices",
-          "financial documents",
-          "financial lifecycle"
-        ],
-        "selection_reason": "The README describes an ERP with accounting, cash-flow and order-management functions.",
-        "questions": [
-          "Which changes to financial documents require cancellation, amendment or renewed approval?",
-          "How are invoice totals, taxes and reconciliation policies bounded by configuration and jurisdiction?"
-        ],
-        "context_limits": "Only financial modules are relevant to this catalog; tax, reconciliation and concrete accounting effects remain deferred."
-      },
       "editions": [
         {
           "id": "CE-EDITION-0015",
           "version": "v16.60.0",
-          "ref_type": "release_tag",
           "commit_sha": "886ab6ae187244e7f1b852393384ab6019d56264",
-          "commit_date": "2026-11-17T15:01:10Z",
-          "release_published_at": "2026-11-17T15:01:17Z",
-          "release_url": "https://github.com/frappe/erpnext/releases/tag/v16.60.0",
-          "tree_url": "https://github.com/frappe/erpnext/tree/886ab6ae187244e7f1b852393384ab6019d56264",
           "observed_on": "2026-11-18",
-          "selection_source_url": "https://api.github.com/repos/frappe/erpnext/releases/latest",
-          "selection_note": "GitHub latest release at observation time; resolved the release tag through the commits API.",
-          "commit_source_url": "https://api.github.com/repos/frappe/erpnext/commits/v16.60.0",
-          "readme": {
-            "path": "README.md",
-            "url": "https://github.com/frappe/erpnext/blob/886ab6ae187244e7f1b852393384ab6019d56264/README.md",
-            "reading_extent": "selected_passages"
-          },
-          "analysis_status": "not_started"
+          "reading_status": "partial"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0016",
+      "name": "java-payment-core",
+      "repository": "lmoraesdev/java-payment-core",
+      "github_id": 1225120375,
+      "editions": [
+        {
+          "id": "CE-EDITION-0016",
+          "version": "main",
+          "commit_sha": "6892c754006515a0900a22ba4b45ac9b1de194fe",
+          "observed_on": "2026-11-20",
+          "reading_status": "partial"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0017",
+      "name": "money",
+      "repository": "Dintero/money",
+      "github_id": 405099833,
+      "editions": [
+        {
+          "id": "CE-EDITION-0017",
+          "version": "master",
+          "commit_sha": "b79c441a3ce228fd7eec61d2ebee26b4a3fad195",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0018",
+      "name": "currency.js",
+      "repository": "scurker/currency.js",
+      "github_id": 10105419,
+      "editions": [
+        {
+          "id": "CE-EDITION-0018",
+          "version": "main",
+          "commit_sha": "72898ce024509ddfbe75d14a07e1a5f4c1bdd03a",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0019",
+      "name": "laravel-money",
+      "repository": "cknow/laravel-money",
+      "github_id": 40018123,
+      "editions": [
+        {
+          "id": "CE-EDITION-0019",
+          "version": "main",
+          "commit_sha": "41e9caafb2c19e403841967130de880cf69423fd",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0020",
+      "name": "laravel-money",
+      "repository": "akaunting/laravel-money",
+      "github_id": 112121508,
+      "editions": [
+        {
+          "id": "CE-EDITION-0020",
+          "version": "master",
+          "commit_sha": "2e8a0c025efb1fad3507a606bfee8856a79181c3",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0021",
+      "name": "money",
+      "repository": "sebastianbergmann/money",
+      "github_id": 4005255,
+      "editions": [
+        {
+          "id": "CE-EDITION-0021",
+          "version": "master",
+          "commit_sha": "4c907e523288826a71e80d786fc56590aaa9de66",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0022",
+      "name": "currency",
+      "repository": "bojanz/currency",
+      "github_id": 256256886,
+      "editions": [
+        {
+          "id": "CE-EDITION-0022",
+          "version": "main",
+          "commit_sha": "091afda7f000eddfc785af06676298f64fa6f2ab",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0023",
+      "name": "money",
+      "repository": "govalues/money",
+      "github_id": 604710194,
+      "editions": [
+        {
+          "id": "CE-EDITION-0023",
+          "version": "main",
+          "commit_sha": "159fd14549a2a2fd354d46e4c1e76651bac02f7f",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0024",
+      "name": "money",
+      "repository": "clojurewerkz/money",
+      "github_id": 3687299,
+      "editions": [
+        {
+          "id": "CE-EDITION-0024",
+          "version": "main",
+          "commit_sha": "58c0150f58d898c52d9c4ef29c3ccf26012b9167",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0025",
+      "name": "BusinessDays.jl",
+      "repository": "JuliaFinance/BusinessDays.jl",
+      "github_id": 38406987,
+      "editions": [
+        {
+          "id": "CE-EDITION-0025",
+          "version": "master",
+          "commit_sha": "5f099dd96c47d90be78632e93effc58dbc3914b0",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0026",
+      "name": "DayCounts.jl",
+      "repository": "JuliaFinance/DayCounts.jl",
+      "github_id": 165365062,
+      "editions": [
+        {
+          "id": "CE-EDITION-0026",
+          "version": "master",
+          "commit_sha": "2f20d22b18190942f90125650e6de8cf2aa9ad60",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0027",
+      "name": "ActuaryUtilities.jl",
+      "repository": "JuliaActuary/ActuaryUtilities.jl",
+      "github_id": 251478307,
+      "editions": [
+        {
+          "id": "CE-EDITION-0027",
+          "version": "master",
+          "commit_sha": "046df0a5b25773830f19f791135cdae14f2a6986",
+          "observed_on": "2026-11-20",
+          "reading_status": "partial"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0028",
+      "name": "LifeContingencies.jl",
+      "repository": "JuliaActuary/LifeContingencies.jl",
+      "github_id": 73773366,
+      "editions": [
+        {
+          "id": "CE-EDITION-0028",
+          "version": "master",
+          "commit_sha": "f59d609964a437d5e858fa0ed891b32e9271f00c",
+          "observed_on": "2026-11-20",
+          "reading_status": "partial"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0029",
+      "name": "MortalityTables.jl",
+      "repository": "JuliaActuary/MortalityTables.jl",
+      "github_id": 147053243,
+      "editions": [
+        {
+          "id": "CE-EDITION-0029",
+          "version": "master",
+          "commit_sha": "411fe06340cc6ecb4d571baf9341a20f34794518",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0030",
+      "name": "FinanceModels.jl",
+      "repository": "JuliaActuary/FinanceModels.jl",
+      "github_id": 275886378,
+      "editions": [
+        {
+          "id": "CE-EDITION-0030",
+          "version": "master",
+          "commit_sha": "5ed979c305c525644ab43bb16f6661c770f5eaed",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0031",
+      "name": "money",
+      "repository": "ex-money/money",
+      "github_id": 61912483,
+      "editions": [
+        {
+          "id": "CE-EDITION-0031",
+          "version": "main",
+          "commit_sha": "412bb9f646063387544ddf3fb9044bae2bbc119a",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0032",
+      "name": "money.dart",
+      "repository": "onepub-dev/money.dart",
+      "github_id": 210225319,
+      "editions": [
+        {
+          "id": "CE-EDITION-0032",
+          "version": "master",
+          "commit_sha": "b259b19f2b2299d4d361a070bec0cefc1245b30b",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0033",
+      "name": "monetize",
+      "repository": "RubyMoney/monetize",
+      "github_id": 15425537,
+      "editions": [
+        {
+          "id": "CE-EDITION-0033",
+          "version": "main",
+          "commit_sha": "4a655271d873901f98f216b70e1da1e827a20c7c",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0034",
+      "name": "money-rails",
+      "repository": "RubyMoney/money-rails",
+      "github_id": 3833911,
+      "editions": [
+        {
+          "id": "CE-EDITION-0034",
+          "version": "main",
+          "commit_sha": "d577b19084a27340ceca3a809940f49e151d50cd",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0035",
+      "name": "spree",
+      "repository": "spree/spree",
+      "github_id": 3314,
+      "editions": [
+        {
+          "id": "CE-EDITION-0035",
+          "version": "main",
+          "commit_sha": "6f7cf3571ca571cd2896580698794065ddd8c723",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0036",
+      "name": "solidus",
+      "repository": "solidusio/solidus",
+      "github_id": 30985840,
+      "editions": [
+        {
+          "id": "CE-EDITION-0036",
+          "version": "main",
+          "commit_sha": "b1e19778b8db34a76f200e43c928b05f987dea92",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0037",
+      "name": "saleor",
+      "repository": "saleor/saleor",
+      "github_id": 8162715,
+      "editions": [
+        {
+          "id": "CE-EDITION-0037",
+          "version": "main",
+          "commit_sha": "e1ccf4d580025b06c2ff01441a1e798dc4635f24",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0038",
+      "name": "prices",
+      "repository": "mirumee/prices",
+      "github_id": 5771151,
+      "editions": [
+        {
+          "id": "CE-EDITION-0038",
+          "version": "master",
+          "commit_sha": "95fd44366d9ba1ab2684d8313542bae3be3922b9",
+          "observed_on": "2026-11-20",
+          "reading_status": "partial"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0039",
+      "name": "django-money",
+      "repository": "django-money/django-money",
+      "github_id": 1750874,
+      "editions": [
+        {
+          "id": "CE-EDITION-0039",
+          "version": "main",
+          "commit_sha": "b255e278870a24cf70b200787c5fa4c8081df465",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0040",
+      "name": "python-money",
+      "repository": "poswald/python-money",
+      "github_id": 871577,
+      "editions": [
+        {
+          "id": "CE-EDITION-0040",
+          "version": "master",
+          "commit_sha": "2398f78dc6fa3af95632b7faf77129264044c897",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0041",
+      "name": "money",
+      "repository": "carlospalol/money",
+      "github_id": 14442636,
+      "editions": [
+        {
+          "id": "CE-EDITION-0041",
+          "version": "master",
+          "commit_sha": "1e51f651f93edd62c16eb3d7aa034fec03096046",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0042",
+      "name": "pyxirr",
+      "repository": "Anexen/pyxirr",
+      "github_id": 364376889,
+      "editions": [
+        {
+          "id": "CE-EDITION-0042",
+          "version": "main",
+          "commit_sha": "5f31a85684051fb6badb542afba0ac1af5a68f9c",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0043",
+      "name": "numpy-financial",
+      "repository": "numpy/numpy-financial",
+      "github_id": 210925251,
+      "editions": [
+        {
+          "id": "CE-EDITION-0043",
+          "version": "main",
+          "commit_sha": "031ed55d322b7aad57311b9d63b589c79df942a1",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0044",
+      "name": "lifelib",
+      "repository": "lifelib-dev/lifelib",
+      "github_id": 110305447,
+      "editions": [
+        {
+          "id": "CE-EDITION-0044",
+          "version": "main",
+          "commit_sha": "d44068e2a7c6aecbc14688569b1108e7bfd6a123",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0045",
+      "name": "FinancePy",
+      "repository": "FinancePy-Org/FinancePy",
+      "github_id": 217872093,
+      "editions": [
+        {
+          "id": "CE-EDITION-0045",
+          "version": "master",
+          "commit_sha": "3e902104e122928ba3ca5e23fcccb20b22205aed",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0046",
+      "name": "Strata",
+      "repository": "tradingtechnologies/Strata",
+      "github_id": 20882897,
+      "editions": [
+        {
+          "id": "CE-EDITION-0046",
+          "version": "main",
+          "commit_sha": "171b1c3c9347e36534f014779064b1ff1bc19216",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0047",
+      "name": "finmath-lib",
+      "repository": "finmath/finmath-lib",
+      "github_id": 8832601,
+      "editions": [
+        {
+          "id": "CE-EDITION-0047",
+          "version": "main",
+          "commit_sha": "c09575a923809d90aed5a16a0e3477f62432eff3",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0048",
+      "name": "lib-money",
+      "repository": "paysera/lib-money",
+      "github_id": 132426831,
+      "editions": [
+        {
+          "id": "CE-EDITION-0048",
+          "version": "master",
+          "commit_sha": "107c3f4e8f536fd11296197f49b3ca02be34bca1",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0049",
+      "name": "tax",
+      "repository": "commerceguys/tax",
+      "github_id": 24883470,
+      "editions": [
+        {
+          "id": "CE-EDITION-0049",
+          "version": "master",
+          "commit_sha": "8451e5a01b1e7ca2ce0c1b33a0e1a91a2b3c6eaf",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0050",
+      "name": "pricing",
+      "repository": "commerceguys/pricing",
+      "github_id": 21419002,
+      "editions": [
+        {
+          "id": "CE-EDITION-0050",
+          "version": "master",
+          "commit_sha": "55269e9603d28cf1de644f49d7af7c1d36b5864d",
+          "observed_on": "2026-11-20",
+          "reading_status": "partial"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0051",
+      "name": "Sylius",
+      "repository": "Sylius/Sylius",
+      "github_id": 2717549,
+      "editions": [
+        {
+          "id": "CE-EDITION-0051",
+          "version": "2.3",
+          "commit_sha": "9a37349f664271b3b739f5e3742562417dfc8650",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0052",
+      "name": "Pricing",
+      "repository": "Sylius/Pricing",
+      "github_id": 17992584,
+      "editions": [
+        {
+          "id": "CE-EDITION-0052",
+          "version": "master",
+          "commit_sha": "b50060c2b94bd9477b9c1c42bdee912ae3787e49",
+          "observed_on": "2026-11-20",
+          "reading_status": "partial"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0053",
+      "name": "Taxation",
+      "repository": "Sylius/Taxation",
+      "github_id": 14362071,
+      "editions": [
+        {
+          "id": "CE-EDITION-0053",
+          "version": "master",
+          "commit_sha": "6456d9d2bca3af73e2ce26a734c2cd555c22f5ac",
+          "observed_on": "2026-11-20",
+          "reading_status": "partial"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0054",
+      "name": "Promotion",
+      "repository": "Sylius/Promotion",
+      "github_id": 14664979,
+      "editions": [
+        {
+          "id": "CE-EDITION-0054",
+          "version": "master-old",
+          "commit_sha": "99fa93cab518f6b0627ea8b725d44a0104d1844a",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0055",
+      "name": "RefundPlugin",
+      "repository": "Sylius/RefundPlugin",
+      "github_id": 139500281,
+      "editions": [
+        {
+          "id": "CE-EDITION-0055",
+          "version": "2.2",
+          "commit_sha": "0ca6789ac408f43e05452ee8595c1fe219c3c3d2",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0056",
+      "name": "Payum",
+      "repository": "Payum/Payum",
+      "github_id": 6825542,
+      "editions": [
+        {
+          "id": "CE-EDITION-0056",
+          "version": "2.x",
+          "commit_sha": "530f6f9456ece5c61a17b087e3eb3ba4a0845c73",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0057",
+      "name": "killbill",
+      "repository": "killbill/killbill",
+      "github_id": 6325420,
+      "editions": [
+        {
+          "id": "CE-EDITION-0057",
+          "version": "master",
+          "commit_sha": "8881b6617a7ef2d0bd5e1dd354d37405eb1362d6",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0058",
+      "name": "lago",
+      "repository": "getlago/lago",
+      "github_id": 464415161,
+      "editions": [
+        {
+          "id": "CE-EDITION-0058",
+          "version": "main",
+          "commit_sha": "1a30b73b951cc14e329605b1329207ffbb93fc8c",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0059",
+      "name": "lago-api",
+      "repository": "getlago/lago-api",
+      "github_id": 464630029,
+      "editions": [
+        {
+          "id": "CE-EDITION-0059",
+          "version": "main",
+          "commit_sha": "89885040af362088d5daef922c7b930d690c21ad",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0060",
+      "name": "laravel-wallet",
+      "repository": "bavix/laravel-wallet",
+      "github_id": 156552715,
+      "editions": [
+        {
+          "id": "CE-EDITION-0060",
+          "version": "master",
+          "commit_sha": "00637f47c487d95e3f0cb15502a951e3dc6446c0",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0061",
+      "name": "laravel-wallet-swap",
+      "repository": "bavix/laravel-wallet-swap",
+      "github_id": 193879613,
+      "editions": [
+        {
+          "id": "CE-EDITION-0061",
+          "version": "master",
+          "commit_sha": "c2b4d1fe29982407df1d6e7e3e01d8d2a641c447",
+          "observed_on": "2026-11-20",
+          "reading_status": "partial"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0062",
+      "name": "akaunting",
+      "repository": "akaunting/akaunting",
+      "github_id": 95011974,
+      "editions": [
+        {
+          "id": "CE-EDITION-0062",
+          "version": "master",
+          "commit_sha": "ff5a7c207d82db7e38f85ab88b3542053500daeb",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0063",
+      "name": "python-accounting",
+      "repository": "ekmungai/python-accounting",
+      "github_id": 720668099,
+      "editions": [
+        {
+          "id": "CE-EDITION-0063",
+          "version": "main",
+          "commit_sha": "b77367ebd1c31b24cc11a597ed0aa361be23eb5e",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0064",
+      "name": "django-ledger",
+      "repository": "arrobalytics/django-ledger",
+      "github_id": 155289518,
+      "editions": [
+        {
+          "id": "CE-EDITION-0064",
+          "version": "master",
+          "commit_sha": "1a2f0048e2195df0bb2965a5059a087438d5aa07",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0065",
+      "name": "django-oscar",
+      "repository": "django-oscar/django-oscar",
+      "github_id": 1151051,
+      "editions": [
+        {
+          "id": "CE-EDITION-0065",
+          "version": "master",
+          "commit_sha": "a5ed3c9c17d4cf6ee18aa9795b493172416ab68b",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0066",
+      "name": "ledger",
+      "repository": "ledger/ledger",
+      "github_id": 16309,
+      "editions": [
+        {
+          "id": "CE-EDITION-0066",
+          "version": "main",
+          "commit_sha": "fe58299d2e8c2c39c4f263f9eae6c667cdcc149f",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0067",
+      "name": "hledger",
+      "repository": "hledgerorg/hledger",
+      "github_id": 9301414,
+      "editions": [
+        {
+          "id": "CE-EDITION-0067",
+          "version": "main",
+          "commit_sha": "67893cc5a58cc119d58febc12e46f7ab3eb93f9d",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0068",
+      "name": "abacus-minimal",
+      "repository": "epogrebnyak/abacus-minimal",
+      "github_id": 869738697,
+      "editions": [
+        {
+          "id": "CE-EDITION-0068",
+          "version": "main",
+          "commit_sha": "c4d4d2be5208c0bd85316c91788ef7d74b9f9487",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0069",
+      "name": "plutus",
+      "repository": "mbulat/plutus",
+      "github_id": 1091687,
+      "editions": [
+        {
+          "id": "CE-EDITION-0069",
+          "version": "master",
+          "commit_sha": "32cc7ae50d0ce529cfa50ddbaa2711c469a89ee1",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0070",
+      "name": "double_entry",
+      "repository": "envato/double_entry",
+      "github_id": 20909885,
+      "editions": [
+        {
+          "id": "CE-EDITION-0070",
+          "version": "main",
+          "commit_sha": "f1474f0fe160edadd3b3264397b85d38d3a7751d",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0071",
+      "name": "dbl-entry",
+      "repository": "danielgerlag/dbl-entry",
+      "github_id": 666192908,
+      "editions": [
+        {
+          "id": "CE-EDITION-0071",
+          "version": "master",
+          "commit_sha": "00bc47b1d1f3754730fcb18e456047bcccd80397",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0072",
+      "name": "finac",
+      "repository": "alttch/finac",
+      "github_id": 216699607,
+      "editions": [
+        {
+          "id": "CE-EDITION-0072",
+          "version": "master",
+          "commit_sha": "e76d2be4e626b819fe209b5461db390d49c33c09",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0073",
+      "name": "bigcapital",
+      "repository": "bigcapitalhq/bigcapital",
+      "github_id": 408868487,
+      "editions": [
+        {
+          "id": "CE-EDITION-0073",
+          "version": "develop",
+          "commit_sha": "3dffac172b43dba576c326ef6e5319b1aa4d7ccd",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0074",
+      "name": "numscript",
+      "repository": "formancehq/numscript",
+      "github_id": 832688732,
+      "editions": [
+        {
+          "id": "CE-EDITION-0074",
+          "version": "main",
+          "commit_sha": "7593b4ff9fff4d78b11599237b895f20c43d2b83",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0075",
+      "name": "machine",
+      "repository": "formancehq/machine",
+      "github_id": 373166542,
+      "editions": [
+        {
+          "id": "CE-EDITION-0075",
+          "version": "main",
+          "commit_sha": "bfb3b69566080eef71a4178ddebb22941aa1e55c",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0076",
+      "name": "wire",
+      "repository": "moov-io/wire",
+      "github_id": 174186064,
+      "editions": [
+        {
+          "id": "CE-EDITION-0076",
+          "version": "master",
+          "commit_sha": "e35f00214a2713d7c7964da763136fa038aebc9b",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0077",
+      "name": "iso20022",
+      "repository": "moov-io/iso20022",
+      "github_id": 323967648,
+      "editions": [
+        {
+          "id": "CE-EDITION-0077",
+          "version": "master",
+          "commit_sha": "05aa282eb151466fd6b80c431e1cf9b2fada9cdd",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0078",
+      "name": "iso8583",
+      "repository": "moov-io/iso8583",
+      "github_id": 271368248,
+      "editions": [
+        {
+          "id": "CE-EDITION-0078",
+          "version": "master",
+          "commit_sha": "df3b9939839054706f7235d12cc904fbcbb0d174",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0079",
+      "name": "irs",
+      "repository": "moov-io/irs",
+      "github_id": 275895599,
+      "editions": [
+        {
+          "id": "CE-EDITION-0079",
+          "version": "master",
+          "commit_sha": "981af0ae62d4b3aeb8d01d3609a4ac2964238089",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0080",
+      "name": "active_merchant",
+      "repository": "activemerchant/active_merchant",
+      "github_id": 18294,
+      "editions": [
+        {
+          "id": "CE-EDITION-0080",
+          "version": "master",
+          "commit_sha": "a0214be588f12b03ca2cf5b6cf989730f5baa227",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0081",
+      "name": "ibantools",
+      "repository": "Simplify/ibantools",
+      "github_id": 47496099,
+      "editions": [
+        {
+          "id": "CE-EDITION-0081",
+          "version": "master",
+          "commit_sha": "d42c8af6f6dd8ee29033bc98cc41baf8323b0744",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0082",
+      "name": "php-iban",
+      "repository": "globalcitizen/php-iban",
+      "github_id": 32118519,
+      "editions": [
+        {
+          "id": "CE-EDITION-0082",
+          "version": "master",
+          "commit_sha": "9dd1884d9b62235eceed0918e9538753ec5988cb",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0083",
+      "name": "iban-validation",
+      "repository": "jschaedl/iban-validation",
+      "github_id": 145147552,
+      "editions": [
+        {
+          "id": "CE-EDITION-0083",
+          "version": "3.x",
+          "commit_sha": "af9987299645a8f85c703e36b6e7fed409a7fe84",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0084",
+      "name": "schwifty",
+      "repository": "mdomke/schwifty",
+      "github_id": 53139847,
+      "editions": [
+        {
+          "id": "CE-EDITION-0084",
+          "version": "main",
+          "commit_sha": "53a4adf2c203df507502053816ee6c4325c1e685",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0085",
+      "name": "jPOS",
+      "repository": "jpos/jPOS",
+      "github_id": 1057490,
+      "editions": [
+        {
+          "id": "CE-EDITION-0085",
+          "version": "main",
+          "commit_sha": "71a6ccbd006432010e3c61ec8e1583c2c0eebca5",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0086",
+      "name": "php_qrcode_pix",
+      "repository": "renatomb/php_qrcode_pix",
+      "github_id": 313320585,
+      "editions": [
+        {
+          "id": "CE-EDITION-0086",
+          "version": "main",
+          "commit_sha": "27ae1e716b7d6d38907f83a7f1c27ff52c8490b0",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0087",
+      "name": "sped-nfe",
+      "repository": "nfephp-org/sped-nfe",
+      "github_id": 39446330,
+      "editions": [
+        {
+          "id": "CE-EDITION-0087",
+          "version": "master",
+          "commit_sha": "4596b89e457d27ad2c114dda2b2ed04043f6327c",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0088",
+      "name": "sped-common",
+      "repository": "nfephp-org/sped-common",
+      "github_id": 39446043,
+      "editions": [
+        {
+          "id": "CE-EDITION-0088",
+          "version": "master",
+          "commit_sha": "39ca47cce3b2b750e305cd84b7d98f3d670f6504",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0089",
+      "name": "nfe",
+      "repository": "wmixvideo/nfe",
+      "github_id": 11797332,
+      "editions": [
+        {
+          "id": "CE-EDITION-0089",
+          "version": "master",
+          "commit_sha": "9c785df1a6efa1889e446219d88f031e760bf60f",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0090",
+      "name": "caelum-stella",
+      "repository": "caelum/caelum-stella",
+      "github_id": 209853,
+      "editions": [
+        {
+          "id": "CE-EDITION-0090",
+          "version": "master",
+          "commit_sha": "54ce3f900ef23395928a480b90c4857ca61eea48",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0091",
+      "name": "boletonet",
+      "repository": "BoletoNet/boletonet",
+      "github_id": 29553223,
+      "editions": [
+        {
+          "id": "CE-EDITION-0091",
+          "version": "master",
+          "commit_sha": "4a316bc20a02df231bceec95fc7fbf5ac8c71953",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0092",
+      "name": "boleto2net",
+      "repository": "BoletoNet/boleto2net",
+      "github_id": 69307776,
+      "editions": [
+        {
+          "id": "CE-EDITION-0092",
+          "version": "master",
+          "commit_sha": "8813d0d002350e3fa08352728d6c44da80676277",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0093",
+      "name": "laravel-boleto",
+      "repository": "eduardokum/laravel-boleto",
+      "github_id": 47883688,
+      "editions": [
+        {
+          "id": "CE-EDITION-0093",
+          "version": "master",
+          "commit_sha": "50024ae74f46794105589cf62bf5156784bc14d4",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0094",
+      "name": "python-bizdays",
+      "repository": "wilsonfreitas/python-bizdays",
+      "github_id": 12521224,
+      "editions": [
+        {
+          "id": "CE-EDITION-0094",
+          "version": "main",
+          "commit_sha": "fd6e87d446341643eadfb0580f641d7688498b22",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0095",
+      "name": "businessdate",
+      "repository": "sonntagsgesicht/businessdate",
+      "github_id": 86940394,
+      "editions": [
+        {
+          "id": "CE-EDITION-0095",
+          "version": "master",
+          "commit_sha": "f7102a95c484aa30b8ac70bec00cd7e448ee2c5d",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0096",
+      "name": "rateslib",
+      "repository": "attack68/rateslib",
+      "github_id": 621812704,
+      "editions": [
+        {
+          "id": "CE-EDITION-0096",
+          "version": "main",
+          "commit_sha": "1c4e6f060e1b251f166221a03323336c295ba68a",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0097",
+      "name": "moneylib",
+      "repository": "mfirhas/moneylib",
+      "github_id": 1147737253,
+      "editions": [
+        {
+          "id": "CE-EDITION-0097",
+          "version": "master",
+          "commit_sha": "1dda04ef17c370c76f51fcd9268b3cd7530f1ee4",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0098",
+      "name": "money",
+      "repository": "gocanto/money",
+      "github_id": 1110472262,
+      "editions": [
+        {
+          "id": "CE-EDITION-0098",
+          "version": "main",
+          "commit_sha": "6a37e121ae7865f2b9b8c331bf0f3d11e3c578c6",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0099",
+      "name": "FinCal",
+      "repository": "cran/FinCal",
+      "github_id": 17679237,
+      "editions": [
+        {
+          "id": "CE-EDITION-0099",
+          "version": "master",
+          "commit_sha": "c444d3270d97f8293b8fdf9b3f912e7446754eb5",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0100",
+      "name": "RQuantLib",
+      "repository": "cran/RQuantLib",
+      "github_id": 17692953,
+      "editions": [
+        {
+          "id": "CE-EDITION-0100",
+          "version": "master",
+          "commit_sha": "0d915541fa76e076c09153cfdf5c460a03ad6958",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0101",
+      "name": "lifecontingencies",
+      "repository": "cran/lifecontingencies",
+      "github_id": 17697053,
+      "editions": [
+        {
+          "id": "CE-EDITION-0101",
+          "version": "master",
+          "commit_sha": "103e6851f253056bbbf9102c781eb195e6b12daf",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0102",
+      "name": "bizdays",
+      "repository": "cran/bizdays",
+      "github_id": 17694808,
+      "editions": [
+        {
+          "id": "CE-EDITION-0102",
+          "version": "master",
+          "commit_sha": "cfcede07480d96f4e6f0fef040fa06be3acca311",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0103",
+      "name": "finance.js",
+      "repository": "ebradyjobory/finance.js",
+      "github_id": 27359165,
+      "editions": [
+        {
+          "id": "CE-EDITION-0103",
+          "version": "master",
+          "commit_sha": "6d571ea2a86d08491ceb584e292e9b76b0a60636",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0104",
+      "name": "financial",
+      "repository": "lmammino/financial",
+      "github_id": 275629272,
+      "editions": [
+        {
+          "id": "CE-EDITION-0104",
+          "version": "main",
+          "commit_sha": "9f1eef08b7f57d4082f9a13f2bc0ea745aea54b4",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0105",
+      "name": "ExcelFinancialFunctions",
+      "repository": "fsprojects/ExcelFinancialFunctions",
+      "github_id": 15284484,
+      "editions": [
+        {
+          "id": "CE-EDITION-0105",
+          "version": "master",
+          "commit_sha": "97756a375769e45059c7d58fc51fc7e391bc4984",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0106",
+      "name": "phpSepaXml",
+      "repository": "nemiah/phpSepaXml",
+      "github_id": 90469486,
+      "editions": [
+        {
+          "id": "CE-EDITION-0106",
+          "version": "master",
+          "commit_sha": "fbb6403da804921e7001325c381783efb1a414e3",
+          "observed_on": "2026-11-20",
+          "reading_status": "partial"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0107",
+      "name": "php-sepa-xml",
+      "repository": "digitick/php-sepa-xml",
+      "github_id": 6332172,
+      "editions": [
+        {
+          "id": "CE-EDITION-0107",
+          "version": "master",
+          "commit_sha": "70d1798c5175e2b46356af0c7fe688a731285160",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0108",
+      "name": "iban4j",
+      "repository": "arturmkrtchyan/iban4j",
+      "github_id": 12573454,
+      "editions": [
+        {
+          "id": "CE-EDITION-0108",
+          "version": "master",
+          "commit_sha": "b2f6be595cdd30cd722ef9d1706da0d100ba8eff",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0109",
+      "name": "jsr354-api",
+      "repository": "JavaMoney/jsr354-api",
+      "github_id": 6513204,
+      "editions": [
+        {
+          "id": "CE-EDITION-0109",
+          "version": "master",
+          "commit_sha": "1e0b77795a183b1f4dba7212df790a9df8a67977",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0110",
+      "name": "jsr354-ri",
+      "repository": "JavaMoney/jsr354-ri",
+      "github_id": 13424587,
+      "editions": [
+        {
+          "id": "CE-EDITION-0110",
+          "version": "master",
+          "commit_sha": "dd0e4bf3b5ff60ce6c2db384711cd01bbcbd22a3",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0111",
+      "name": "javamoney-lib",
+      "repository": "JavaMoney/javamoney-lib",
+      "github_id": 9553726,
+      "editions": [
+        {
+          "id": "CE-EDITION-0111",
+          "version": "master",
+          "commit_sha": "2682f474ab5bda071d9e3a766c957aa59cb5a3cb",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0112",
+      "name": "go-finance",
+      "repository": "pieterclaerhout/go-finance",
+      "github_id": 211794144,
+      "editions": [
+        {
+          "id": "CE-EDITION-0112",
+          "version": "master",
+          "commit_sha": "dbfb00702cb5a9387b701607c09f93ebe5bf222f",
+          "observed_on": "2026-11-20",
+          "reading_status": "partial"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0113",
+      "name": "go-finance",
+      "repository": "alpeb/go-finance",
+      "github_id": 93074935,
+      "editions": [
+        {
+          "id": "CE-EDITION-0113",
+          "version": "master",
+          "commit_sha": "f58acb7292b73bb4fcac26d5171b968583ed69b5",
+          "observed_on": "2026-11-20",
+          "reading_status": "complete"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0114",
+      "name": "ibandit",
+      "repository": "gocardless/ibandit",
+      "github_id": 28593794,
+      "editions": [
+        {
+          "id": "CE-EDITION-0114",
+          "version": "master",
+          "commit_sha": "5207a1cda2df8815c2c6b4f73cdac062724595cc",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
+        }
+      ]
+    },
+    {
+      "id": "CE-REPO-0115",
+      "name": "paisa",
+      "repository": "ananthakumaran/paisa",
+      "github_id": 474376253,
+      "editions": [
+        {
+          "id": "CE-EDITION-0115",
+          "version": "master",
+          "commit_sha": "c481872120ade8f123f74a501fd6a13842495c93",
+          "observed_on": "2026-11-20",
+          "reading_status": "not_started"
         }
       ]
     }

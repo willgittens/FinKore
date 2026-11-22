@@ -8,6 +8,7 @@
 import { createHash } from 'node:crypto'
 import { existsSync, readFileSync, realpathSync } from 'node:fs'
 import { resolve, relative, isAbsolute } from 'node:path'
+import { compactCodePublication } from './code-evidence-publication.js'
 
 const escape = value => value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;')
 const normal = value => value.trim().replace(/\s+/gu, ' ')
@@ -28,9 +29,11 @@ const codeRelationships = new Map([
 const text = value => typeof value === 'string' && value.trim().length > 0
 
 function validateCodeSource(source) {
+  const compact = source.publication_format === 'code-evidence-v2'
+  const compactPath = /^experts\/code-evidence\/rules\/CE-RULE-\d{4}\.json$/
   const path = /^experts\/code-evidence\/analyses\/(CE-REPO-\d{4})\/(CE-EDITION-\d{4})\.md$/
-  if (!/^CE-FINDING-\d{4}$/.test(source.id) || !path.test(source.publication_path) ||
-      source.href !== `${projectBase}${source.publication_path}#${source.id.toLowerCase()}` ||
+  if (!/^CE-FINDING-\d{4}$/.test(source.id) || !(compact ? compactPath : path).test(source.publication_path) ||
+      source.href !== `${projectBase}${source.publication_path}${compact ? '' : '#' + source.id.toLowerCase()}` ||
       !/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(source.repository) ||
       source.repository.split('/').some(part => part === '.' || part === '..') ||
       !text(source.project) || !text(source.version) || !/^[a-f0-9]{40}$/.test(source.commit_sha) ||
@@ -87,19 +90,20 @@ export function loadLearnEvidence(root, suppliedData) {
   const data = suppliedData === undefined
     ? JSON.parse(readFileSync(contained(root, 'learn/related-evidence.json'), 'utf8'))
     : suppliedData
-  if (!data || !['1.0.0', '1.1.0', '1.2.0'].includes(data.schema_version) || !Array.isArray(data.sources) || !Array.isArray(data.bindings)) throw new Error('Unsupported Learn evidence format')
+  if (!data || !['1.0.0', '1.1.0', '1.2.0', '1.3.0'].includes(data.schema_version) || !Array.isArray(data.sources) || !Array.isArray(data.bindings)) throw new Error('Unsupported Learn evidence format')
   for (const source of data.sources) {
     if (index.sources.has(source.id) || !['research', 'legacy', 'code', 'review'].includes(source.kind) ||
         !text(source.title) || !text(source.limits) || source.status !== 'pending_validation' ||
         !/^[a-f0-9]{64}$/.test(source.publication_sha256)) throw new Error('Invalid or duplicate Learn evidence source')
     if (source.kind === 'code') {
-      if (!['1.1.0', '1.2.0'].includes(data.schema_version)) throw new Error('Code Evidence requires Learn evidence format 1.1.0 or later')
+      if (!['1.1.0', '1.2.0', '1.3.0'].includes(data.schema_version)) throw new Error('Code Evidence requires Learn evidence format 1.1.0 or later')
+      if (source.publication_format === 'code-evidence-v2' && data.schema_version !== '1.3.0') throw new Error('Compact Code Evidence requires Learn evidence format 1.3.0')
       validateCodeSource(source)
     } else {
       if (!Array.isArray(source.authors) || !source.authors.length || source.authors.some(author => !text(author))) throw new Error('Invalid Learn evidence attribution')
       if (source.kind === 'review') {
         const filename = source.publication_path?.match(/^experts\/reviews\/reports\/(\d{3}-[a-z0-9-]+)\.md$/)?.[1]
-        if (data.schema_version !== '1.2.0' || !/^ER-\d{4}-F\d{2}$/.test(source.id) || !/^ER-\d{4}$/.test(source.report_id) ||
+        if (!['1.2.0', '1.3.0'].includes(data.schema_version) || !/^ER-\d{4}-F\d{2}$/.test(source.id) || !/^ER-\d{4}$/.test(source.report_id) ||
             !source.id.startsWith(source.report_id + '-F') || !filename || source.href !== `review-${filename}.html#${source.id.toLowerCase()}` ||
             source.authors.length !== 1 || !/^[a-z]{2}$/.test(source.original_language) || !/^[a-z]{2}$/.test(source.interview_language) ||
             !['original', 'editorial_translation'].includes(source.translation_status) || !['authorized', 'not_recorded'].includes(source.publication_authorization) ||
@@ -115,7 +119,12 @@ export function loadLearnEvidence(root, suppliedData) {
     try {
       const bytes = readFileSync(contained(root, source.publication_path))
       current = sha(bytes) === source.publication_sha256
-      if (source.kind === 'code') {
+      if (source.kind === 'code' && source.publication_format === 'code-evidence-v2') {
+        try {
+          const compact = compactCodePublication(bytes, source)
+          current = compact.fingerprint === source.publication_sha256
+        } catch { current = false } // Malformed or inconsistent publication text is stale, never approved.
+      } else if (source.kind === 'code') {
         const body = bytes.toString('utf8')
         current &&= body.includes(source.id) && body.includes(source.commit_sha) &&
           source.functions.every(fn => body.includes(fn.name) && body.includes(fn.href))
@@ -198,7 +207,7 @@ function renderCodeEvidence(id, bindings, index, stale) {
             <p>${escape(source.title)}</p><ul class="code-evidence-functions">${source.functions.map(fn => `<li><a href="${escape(fn.href)}" target="_blank" rel="noopener noreferrer"><code>${escape(fn.name)}</code></a></li>`).join('')}</ul>
             <p>${escape(source.limits)}</p>
             <p>Selected code and tests read · Not executed · Pending validation</p>
-            <p><a href="${escape(source.href)}" target="_blank" rel="noopener noreferrer">Read the full analysis</a></p>
+            <p><a href="${escape(source.href)}" target="_blank" rel="noopener noreferrer">${source.publication_format === 'code-evidence-v2' ? 'Read the evidence record' : 'Read the full analysis'}</a></p>
           </details></article>`
       }).join('')}</div></section>`
   }).join('')

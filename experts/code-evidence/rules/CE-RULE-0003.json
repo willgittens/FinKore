@@ -1,0 +1,2676 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0003",
+  "title": "Calculation precision and rounding policy are explicit",
+  "scope": "existing_core_subject",
+  "question": "Separate construction, intermediate and output rounding. Record negative ties, fixed scales and ambient numeric context.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0007",
+      "title": "Context-selected rounding can change a value at construction",
+      "library_id": "CE-REPO-0007",
+      "edition_id": "CE-EDITION-0007",
+      "collected_on": "2026-11-18",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn01",
+          "path": "src/NodaMoney/Money.cs",
+          "name": "NodaMoney.Money.Money",
+          "start_line": 38,
+          "end_line": 75
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn02",
+          "path": "src/NodaMoney/Context/StandardRounding.cs",
+          "name": "NodaMoney.Context.StandardRounding.Round (Currency overload)",
+          "start_line": 13,
+          "end_line": 31
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn03",
+          "path": "src/NodaMoney/Context/StandardRounding.cs",
+          "name": "NodaMoney.Context.StandardRounding.Round (CurrencyInfo overload)",
+          "start_line": 36,
+          "end_line": 70
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn04",
+          "path": "src/NodaMoney/Context/MoneyContext.cs",
+          "name": "NodaMoney.Context.MoneyContext.Round",
+          "start_line": 121,
+          "end_line": 129
+        }
+      ],
+      "explanation": [
+        "Noda Money rounds a nonzero decimal through its selected/current MoneyContext before storing it; the standard context normally derives currency scale and defaults to midpoint-even.",
+        "The constructor selects CurrentContext on omission, applies either the two-digit fast path or context.Round, and stores the rounded bits. A zero input returns before invoking a custom rounding strategy.",
+        "A nonzero supported decimal input, the selected context/strategy and valid currency metadata; explicitly declared composing-domain policy is distinct from an omitted ambient default. A finer-than-currency amount can be changed at construction. A custom strategy can replace a nonzero amount, but the zero fast path prevents the unqualified claim that every constructor call invokes it. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0021",
+      "title": "Construction and arithmetic repeatedly apply a scale policy",
+      "library_id": "CE-REPO-0017",
+      "edition_id": "CE-EDITION-0017",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn05",
+          "path": "src/index.ts",
+          "name": "Money.constructor",
+          "start_line": 67,
+          "end_line": 93
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn09",
+          "path": "src/index.ts",
+          "name": "Money.fromPrice",
+          "start_line": 179,
+          "end_line": 188
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn10",
+          "path": "src/index.ts",
+          "name": "Money.fromPriceAndQuantity",
+          "start_line": 194,
+          "end_line": 203
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn32",
+          "path": "src/index.ts",
+          "name": "Money.round",
+          "start_line": 412,
+          "end_line": 418
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn33",
+          "path": "src/index.ts",
+          "name": "Money.multiply",
+          "start_line": 420,
+          "end_line": 423
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn34",
+          "path": "src/index.ts",
+          "name": "Money.divide",
+          "start_line": 433,
+          "end_line": 435
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn30",
+          "path": "src/index.ts",
+          "name": "Money.resetDecimals",
+          "start_line": 394,
+          "end_line": 396
+        }
+      ],
+      "explanation": [
+        "Dintero reconstructs values through constructor rounding after arithmetic; fromPrice adds a default price scale and resetDecimals returns to currency-derived scale.",
+        "The constructor rounds amount at decimals??currencyToDecimals, multiply/divide merge the result, and fromPriceAndQuantity explicitly resets decimals after multiplication.",
+        "The selected decimals/roundingMode and Big.js context, with supported finite decimal inputs; a composing domain could separately declare such a policy. A .0005 price multiplied by30 can become.02 after reset rather than preserving the exact.015 product. Preserved Big.js storage precision does not remove reconstruction boundaries. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0025",
+      "title": "Positive and negative ties are not the same HALF_UP policy",
+      "library_id": "CE-REPO-0018",
+      "edition_id": "CE-EDITION-0018",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn01",
+          "path": "src/currency.js",
+          "name": "round",
+          "start_line": 13,
+          "end_line": 13
+        },
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn04",
+          "path": "src/currency.js",
+          "name": "currency",
+          "start_line": 25,
+          "end_line": 53
+        },
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn05",
+          "path": "src/currency.js",
+          "name": "parse",
+          "start_line": 55,
+          "end_line": 89
+        },
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn15",
+          "path": "src/currency.js",
+          "name": "currency.prototype.toString",
+          "start_line": 210,
+          "end_line": 213
+        }
+      ],
+      "explanation": [
+        "currency.js uses Math.round after its parsing/scaling path, giving negative half ties toward the greater integer rather than Core HALF_UP away from zero.",
+        "The constructor delegates to parse, which scales, formats four guard digits and invokes the round helper. Display increment rounding is a separate toString path.",
+        "The selected precision and finite native number/string input, with the actual binary scaling path. The documented/tested-17.955→-17.95 policy is not Core HALF_UP(-17.955,2)=-17.96. Binary conversion and the intermediate toFixed stage prevent extrapolation to every tie. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0029",
+      "title": "A fixed calculation scale also changes exact comparison",
+      "library_id": "CE-REPO-0050",
+      "edition_id": "CE-EDITION-0050",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0050:CE-EDITION-0050:fn06",
+          "path": "src/Price.php",
+          "name": "CommerceGuys\\Pricing\\Price::add",
+          "start_line": 78,
+          "end_line": 84
+        },
+        {
+          "id": "CE-REPO-0050:CE-EDITION-0050:fn07",
+          "path": "src/Price.php",
+          "name": "CommerceGuys\\Pricing\\Price::subtract",
+          "start_line": 89,
+          "end_line": 95
+        },
+        {
+          "id": "CE-REPO-0050:CE-EDITION-0050:fn08",
+          "path": "src/Price.php",
+          "name": "CommerceGuys\\Pricing\\Price::multiply",
+          "start_line": 100,
+          "end_line": 106
+        },
+        {
+          "id": "CE-REPO-0050:CE-EDITION-0050:fn09",
+          "path": "src/Price.php",
+          "name": "CommerceGuys\\Pricing\\Price::divide",
+          "start_line": 111,
+          "end_line": 117
+        },
+        {
+          "id": "CE-REPO-0050:CE-EDITION-0050:fn10",
+          "path": "src/Price.php",
+          "name": "CommerceGuys\\Pricing\\Price::compareTo",
+          "start_line": 122,
+          "end_line": 126
+        },
+        {
+          "id": "CE-REPO-0050:CE-EDITION-0050:fn11",
+          "path": "src/Price.php",
+          "name": "CommerceGuys\\Pricing\\Price::equals",
+          "start_line": 131,
+          "end_line": 134
+        }
+      ],
+      "explanation": [
+        "Arithmetic and compareTo explicitly pass scale 6 to BCMath, regardless of input precision. Insignificant zeros are trimmed during result reconstruction, but significant precision beyond that scale is not retained by the operation.",
+        "Proposed boundary: add a nonzero seventh decimal digit or compare two inputs differing only there. No source tests are present among the inventoried archive paths; these are analyst-proposed scenarios, not observed executions."
+      ],
+      "context_requirement_ids": [
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-008",
+        "MONEY-COMPARISON-001",
+        "MONEY-COMPARISON-002"
+      ]
+    },
+    {
+      "id": "CE-FINDING-0076",
+      "title": "Nearest whole-major rounding implicitly sends ties toward zero",
+      "library_id": "CE-REPO-0006",
+      "edition_id": "CE-EDITION-0006",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0006:CE-EDITION-0006:fn26",
+          "path": "money.go",
+          "name": "money.(*Money).Round",
+          "start_line": 255,
+          "end_line": 257
+        },
+        {
+          "id": "CE-REPO-0006:CE-EDITION-0006:fn39",
+          "path": "calculator.go",
+          "name": "money.(*calculator).round",
+          "start_line": 51,
+          "end_line": 73
+        }
+      ],
+      "explanation": [
+        "GoMoney Round selects currency Fraction as its exponent and resolves exact half ties toward zero in the whole-major rounding path.",
+        "The correction condition is m>exp/2 rather than>=, followed by magnitude truncation and sign restoration; there is no explicit mode/scale argument.",
+        "Ordinary valid currency fraction and representable intermediate magnitude; MinInt64/custom invalid fraction behavior is not certified. For exponent2, both150 and-150 minor units become100 and-100, respectively. This differs from Core HALF_UP and is not a general HALF_EVEN implementation. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0080",
+      "title": "Negative magnitude differs from exact additive inverse",
+      "library_id": "CE-REPO-0006",
+      "edition_id": "CE-EDITION-0006",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0006:CE-EDITION-0006:fn22",
+          "path": "money.go",
+          "name": "money.(*Money).Negative",
+          "start_line": 197,
+          "end_line": 199
+        },
+        {
+          "id": "CE-REPO-0006:CE-EDITION-0006:fn38",
+          "path": "calculator.go",
+          "name": "money.(*calculator).negative",
+          "start_line": 43,
+          "end_line": 49
+        }
+      ],
+      "explanation": [
+        "GoMoney Negative is a negative-magnitude operation: it negates positive amounts but returns already-negative amounts unchanged.",
+        "calculator.negative branches only when a>0; the Money wrapper retains currency and constructs a result.",
+        "The named native operation on an already valid int64 Money amount. Negative(-1) remains-1, whereas Core negate(-1) is+1. The behavior is intentional operation meaning, not evidence of a defective sign-reversal implementation. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0082",
+      "title": "Fixed intermediate scale and default minor-unit rounding are separate precision boundaries",
+      "library_id": "CE-REPO-0001",
+      "edition_id": "CE-EDITION-0001",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn21",
+          "path": "src/Money.php",
+          "name": "Money\\Money::multiply",
+          "start_line": 252,
+          "end_line": 261
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn22",
+          "path": "src/Money.php",
+          "name": "Money\\Money::divide",
+          "start_line": 272,
+          "end_line": 282
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn36",
+          "path": "src/Money.php",
+          "name": "Money\\Money::avg",
+          "start_line": 545,
+          "end_line": 548
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn57",
+          "path": "src/Calculator/BcMathCalculator.php",
+          "name": "Money\\Calculator\\BcMathCalculator::multiply",
+          "start_line": 49,
+          "end_line": 52
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn58",
+          "path": "src/Calculator/BcMathCalculator.php",
+          "name": "Money\\Calculator\\BcMathCalculator::divide",
+          "start_line": 57,
+          "end_line": 64
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn41",
+          "path": "src/Number.php",
+          "name": "Money\\Number::fromFloat",
+          "start_line": 63,
+          "end_line": 66
+        }
+      ],
+      "explanation": [
+        "The BCMath path imposes scale14 before integer-minor rounding, and tests a divisor against zero at that same scale. Public multiply/divide therefore need separate exactness and policy qualifications.",
+        "bcmul/bcdiv use SCALE14; Money then calls round with default HALF_UP. bccomp(divisor,0,14) can reject a nonzero tiny scalar before quotient formation.",
+        "The selected BCMath calculator and supported integer-minor Money inputs; no claim about an alternative injected calculator. A nonzero 0.000000000000001 divisor compares as zero at14 places. An exactly representable sub-minor product can also be reduced before output; this is a path observation, not an assertion of unlimited supported precision. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0084",
+      "title": "GMP fractional quotient reconstruction can lose a negative zero-integer sign",
+      "library_id": "CE-REPO-0001",
+      "edition_id": "CE-EDITION-0001",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn68",
+          "path": "src/Calculator/GmpCalculator.php",
+          "name": "Money\\Calculator\\GmpCalculator::divide",
+          "start_line": 122,
+          "end_line": 167
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn22",
+          "path": "src/Money.php",
+          "name": "Money\\Money::divide",
+          "start_line": 272,
+          "end_line": 282
+        }
+      ],
+      "explanation": [
+        "GMP quotient reconstruction can discard the negative sign when the integer quotient is zero and the remainder is negative. The later Money rounding inherits the reconstructed sign.",
+        "The path concatenates gmp_strval(integer) with the magnitude-only remainder; the leading minus is removed without a separate quotient sign. A negative nonzero integer quotient masks this branch.",
+        "GMP calculator, a signed division whose truncated integer quotient is zero, and the documented GMP quotient/remainder primitive contract. The source-level -2/3 trace has integer0 and negative remainder, then reconstructs positive fractional text. The existing negative-whole-quotient example does not cover this branch. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0088",
+      "title": "Rounding names and validation branches need explicit signed interpretation",
+      "library_id": "CE-REPO-0001",
+      "edition_id": "CE-EDITION-0001",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn25",
+          "path": "src/Money.php",
+          "name": "Money\\Money::round",
+          "start_line": 402,
+          "end_line": 416
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn26",
+          "path": "src/Money.php",
+          "name": "Money\\Money::roundToUnit",
+          "start_line": 424,
+          "end_line": 443
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn61",
+          "path": "src/Calculator/BcMathCalculator.php",
+          "name": "Money\\Calculator\\BcMathCalculator::round",
+          "start_line": 113,
+          "end_line": 190
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn72",
+          "path": "src/Calculator/GmpCalculator.php",
+          "name": "Money\\Calculator\\GmpCalculator::round",
+          "start_line": 216,
+          "end_line": 290
+        }
+      ],
+      "explanation": [
+        "MoneyPHP UP/DOWN mean ceiling/floor in the inspected dispatcher; they are not aliases for Core away-from-zero/toward-zero. Its backend validation and roundToUnit shortcuts also leave narrower input-dependent behavior than a uniform mode contract.",
+        "Integer and non-half backend paths return before the final unknown-mode exception. roundToUnit returns zero when the minor-unit text is shorter than unit, before selecting directional rounding.",
+        "The native mode constants and minor-unit roundToUnit operation, with signed operands and integer unit argument. A negative discarded fraction distinguishes DOWN/floor from Core DOWN/toward-zero. An unrecognized backend mode on a non-half value may return a rounded value instead of error; small positive directed unit rounding can take the zero shortcut. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0092",
+      "title": "Exact intermediate arithmetic and context fitting are separate policy boundaries",
+      "library_id": "CE-REPO-0002",
+      "edition_id": "CE-EDITION-0002",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn224",
+          "path": "src/Money.php",
+          "name": "Brick\\Money\\Money::create",
+          "start_line": 752,
+          "end_line": 757
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn213",
+          "path": "src/Money.php",
+          "name": "Brick\\Money\\Money::dividedBy",
+          "start_line": 406,
+          "end_line": 411
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn272",
+          "path": "src/RationalMoney.php",
+          "name": "Brick\\Money\\RationalMoney::dividedBy",
+          "start_line": 221,
+          "end_line": 226
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn06",
+          "path": "src/AbstractMoney.php",
+          "name": "Brick\\Money\\AbstractMoney::toContext",
+          "start_line": 49,
+          "end_line": 52
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn36",
+          "path": "src/Context/AutoContext.php",
+          "name": "Brick\\Money\\Context\\AutoContext::applyTo",
+          "start_line": 23,
+          "end_line": 30
+        }
+      ],
+      "explanation": [
+        "Brick separates rational intermediate arithmetic from context fitting. Fixed-scale Money can reject or round a finer exact quotient; AutoContext permits finite decimal results and rejects nonterminating rational conversion.",
+        "dividedBy creates a BigRational and passes it through Context.applyTo; RationalMoney can retain the rational instead. AutoContext prohibits an explicit rounding mode and converts to a finite BigDecimal.",
+        "The named context and its declared scale/step are part of the native API; results remain in the supported Brick Math domain. At a two-digit fixed context, 1/8 cannot simply preserve0.125; Unnecessary rejects or another mode quantizes it. Core divide preserves an exact finite quotient even with a coarser optional policy. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0101",
+      "title": "Currency-significant exactness still permits implicit precision rounding",
+      "library_id": "CE-REPO-0023",
+      "edition_id": "CE-EDITION-0023",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn36",
+          "path": "amount.go",
+          "name": "govalues/money.Amount.add",
+          "start_line": 645,
+          "end_line": 655
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn46",
+          "path": "amount.go",
+          "name": "govalues/money.Amount.mul",
+          "start_line": 785,
+          "end_line": 792
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn52",
+          "path": "amount.go",
+          "name": "govalues/money.Amount.quo",
+          "start_line": 872,
+          "end_line": 879
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn15",
+          "path": "amount.go",
+          "name": "govalues/money.ParseAmount",
+          "start_line": 270,
+          "end_line": 283
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn02",
+          "path": "amount.go",
+          "name": "govalues/money.newAmountSafe",
+          "start_line": 32,
+          "end_line": 40
+        }
+      ],
+      "explanation": [
+        "govalues Exact operations protect currency-significant digits while fitting a bounded decimal result, rather than promising all stored/intermediate digits remain unchanged.",
+        "Money delegates to AddExact/MulExact/QuoExact with currency scale and then pads through newAmountSafe. The meaning of Exact is therefore the dependency contract, not the method name alone.",
+        "Supported decimal coefficients/scales and the selected currency significance, with actual decimal dependency context; no universal Core precision maximum is inferred. The recorded max-USD plus.004 case can keep the old amount while losing subcurrency digits. A nonterminating division can also use implicit precision; neither observation certifies unrestricted exact Core arithmetic. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0106",
+      "title": "Fused monetary expressions have a single combined precision boundary",
+      "library_id": "CE-REPO-0023",
+      "edition_id": "CE-EDITION-0023",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn44",
+          "path": "amount.go",
+          "name": "govalues/money.Amount.addMul",
+          "start_line": 759,
+          "end_line": 769
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn42",
+          "path": "amount.go",
+          "name": "govalues/money.Amount.subMul",
+          "start_line": 727,
+          "end_line": 737
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn50",
+          "path": "amount.go",
+          "name": "govalues/money.Amount.addQuo",
+          "start_line": 844,
+          "end_line": 854
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn48",
+          "path": "amount.go",
+          "name": "govalues/money.Amount.subQuo",
+          "start_line": 813,
+          "end_line": 823
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn40",
+          "path": "amount.go",
+          "name": "govalues/money.Amount.FMA",
+          "start_line": 703,
+          "end_line": 705
+        }
+      ],
+      "explanation": [
+        "govalues fused add/subtract-product or quotient methods fit a combined expression once rather than independently rounding each chained intermediate.",
+        "The Money methods check currency then call distinct decimal AddMulExact/SubMulExact/AddQuoExact/SubQuoExact delegates; FMA reverses the receiver into AddMul.",
+        "The selected bounded decimal contract and supported same-currency operands; fused and chained expressions must use explicitly compared contexts. Avoiding one intermediate fit can change an expression result, but neither source path supplies unrestricted exactness or an accepted canonical fused Money operation. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0113",
+      "title": "Integral native amounts do not establish exact intermediate arithmetic",
+      "library_id": "CE-REPO-0005",
+      "edition_id": "CE-EDITION-0005",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn487",
+          "path": "packages/dinero.js/src/dinero.ts",
+          "name": "packages/dinero.js/src/dinero.ts::onCreate@22",
+          "start_line": 22,
+          "end_line": 25
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn331",
+          "path": "packages/dinero.js/src/calculator/number/api/add.ts",
+          "name": "packages/dinero.js/src/calculator/number/api/add.ts::add@11",
+          "start_line": 11,
+          "end_line": 13
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn409",
+          "path": "packages/dinero.js/src/core/api/normalizeScale.ts",
+          "name": "packages/dinero.js/src/core/api/normalizeScale.ts::normalizeScale._normalizeScale@21",
+          "start_line": 21,
+          "end_line": 37
+        }
+      ],
+      "explanation": [
+        "Dinero number creation checks Number.isInteger but not safe-integer exactness; native addition and scale promotion can preserve integrality while changing the mathematical coefficient.",
+        "The onCreate hook accepts integral binary64 values and add is the native + operator. normalizeScale raises scales through the same calculator; a distinct bigint variant exists.",
+        "The number-backed implementation and accepted coefficients at the binary safe-integer boundary; no claim about the bigint backend or all supported precision domains. 9007199254740992 is integral and accepted, yet adding1 can leave the coefficient unchanged. The concern is accepted-input exactness, not the mere existence of a finite backend. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0115",
+      "title": "Rounding method names distinguish infinity ties from sign-aware ties",
+      "library_id": "CE-REPO-0005",
+      "edition_id": "CE-EDITION-0005",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn430",
+          "path": "packages/dinero.js/src/core/divide/down.ts",
+          "name": "packages/dinero.js/src/core/divide/down.ts::down@15",
+          "start_line": 15,
+          "end_line": 30
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn437",
+          "path": "packages/dinero.js/src/core/divide/up.ts",
+          "name": "packages/dinero.js/src/core/divide/up.ts::up@15",
+          "start_line": 15,
+          "end_line": 30
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn436",
+          "path": "packages/dinero.js/src/core/divide/halfUp.ts",
+          "name": "packages/dinero.js/src/core/divide/halfUp.ts::halfUp@21",
+          "start_line": 21,
+          "end_line": 41
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn432",
+          "path": "packages/dinero.js/src/core/divide/halfDown.ts",
+          "name": "packages/dinero.js/src/core/divide/halfDown.ts::halfDown@21",
+          "start_line": 21,
+          "end_line": 29
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn431",
+          "path": "packages/dinero.js/src/core/divide/halfAwayFromZero.ts",
+          "name": "packages/dinero.js/src/core/divide/halfAwayFromZero.ts::halfAwayFromZero@16",
+          "start_line": 16,
+          "end_line": 33
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn433",
+          "path": "packages/dinero.js/src/core/divide/halfEven.ts",
+          "name": "packages/dinero.js/src/core/divide/halfEven.ts::halfEven@16",
+          "start_line": 16,
+          "end_line": 27
+        }
+      ],
+      "explanation": [
+        "Dinero down/up are floor/ceiling; halfUp/halfDown choose the positive/negative infinity candidate on a tie. Core HALF_UP corresponds to halfAwayFromZero under matched radix/factor conditions.",
+        "down decrements negative nonintegral quotients; up increments positive ones. halfUp delegates ties to up, while halfAwayFromZero reapplies sign after rounding magnitude.",
+        "Positive scaling factor, an exact-enough selected backend, and a separately selected target scale; method names are not canonical mode identifiers. For negative half ties, halfUp moves toward positive infinity while Core HALF_UP moves away from zero. The source helper halfAwayFromZero has the latter branch, so the library is not simply missing every equivalent mode. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0121",
+      "title": "Custom Big.js integer division rounds before truncating",
+      "library_id": "CE-REPO-0005",
+      "edition_id": "CE-EDITION-0005",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn498",
+          "path": "test/utils/createBigjsDinero.ts",
+          "name": "test/utils/createBigjsDinero.ts::integerDivide@12",
+          "start_line": 12,
+          "end_line": 12
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn564",
+          "path": "docs/guides/precision-and-large-numbers.md",
+          "name": "docs/guides/precision-and-large-numbers.md::integerDivide@80",
+          "start_line": 80,
+          "end_line": 80
+        }
+      ],
+      "explanation": [
+        "The illustrative Dinero Big.js integerDivide calculator first rounds decimal division at ambient DP/RM, then truncates that rounded value, so it is not generally exact integer quotient.",
+        "Both the test utility and documentation use a.div(b).round(0,Big.roundDown). The second rounding cannot undo a first rounding that crossed an integer boundary.",
+        "This first-party custom example/test calculator, Big.js default DP20/RM behavior as previously pinned, and positive exact operands. 999999999999999999999 divided by1000000000000000000000 rounds to1 at20 decimal places before truncation, while the exact integer quotient is0. This is not the native bigint calculator. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0126",
+      "title": "Fractional quantity precision inferred from notation can erase a holding",
+      "library_id": "CE-REPO-0005",
+      "edition_id": "CE-EDITION-0005",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn273",
+          "path": "examples/portfolio-tracker/src/lib/money.ts",
+          "name": "examples/portfolio-tracker/src/lib/money.ts::countDecimals@90",
+          "start_line": 90,
+          "end_line": 95
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn274",
+          "path": "examples/portfolio-tracker/src/lib/money.ts",
+          "name": "examples/portfolio-tracker/src/lib/money.ts::holdingValue@102",
+          "start_line": 102,
+          "end_line": 111
+        }
+      ],
+      "explanation": [
+        "The portfolio example infers quantity scale by a literal decimal point in String(quantity); a direct scientific-notation quantity can therefore be quantized to zero before multiplication.",
+        "countDecimals returns0 when String(n) has no dot, and holdingValue computes Math.round(quantity*10**scale). This is a quantity-preprocessing policy in an example application.",
+        "Direct typed holdingValue invocation with a small finite quantity such as1e-7, independently of any UI step validation, and a nonzero supported price. String(1e-7) has no literal dot, so its constructed scaled quantity is0. No end-to-end UI valuation or portfolio accounting rule was executed or inferred. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0132",
+      "title": "Unary negation and absolute value can round before a financial calculation",
+      "library_id": "CE-REPO-0008",
+      "edition_id": "CE-EDITION-0008",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0008:CE-EDITION-0008:fn026",
+          "path": "src/moneyed/classes.py",
+          "name": "moneyed.classes.Money.__neg__",
+          "start_line": 214,
+          "end_line": 218
+        },
+        {
+          "id": "CE-REPO-0008:CE-EDITION-0008:fn032",
+          "path": "src/moneyed/classes.py",
+          "name": "moneyed.classes.Money.__abs__",
+          "start_line": 287,
+          "end_line": 291
+        },
+        {
+          "id": "CE-REPO-0008:CE-EDITION-0008:fn02",
+          "path": "src/moneyed/classes.py",
+          "name": "moneyed.classes.Money.__sub__",
+          "start_line": 237,
+          "end_line": 241
+        }
+      ],
+      "explanation": [
+        "py-moneyed unary negation and absolute value use context-applying Decimal operations, so a valid stored exact amount can lose digits before a later calculation.",
+        "__neg__ applies unary minus to self.amount and __abs__ calls abs; subtraction invokes negation before addition. Constructor-preserved Decimal storage does not bypass those operator contexts.",
+        "A supported stored Decimal amount and an explicitly lowered ambient precision, with ordinary finite input. Stored123.45 under precision3 can be negated as-123 rather than exact-123.45. The original operand can remain unchanged, so value exactness and operand immutability are separate questions. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0144",
+      "title": "Unary and quotient variants expose ambient precision and truncation policy",
+      "library_id": "CE-REPO-0041",
+      "edition_id": "CE-EDITION-0041",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn052",
+          "path": "money/money.py",
+          "name": "money.money.py::Money.__neg__",
+          "start_line": 224,
+          "end_line": 225
+        },
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn053",
+          "path": "money/money.py",
+          "name": "money.money.py::Money.__pos__",
+          "start_line": 227,
+          "end_line": 228
+        },
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn054",
+          "path": "money/money.py",
+          "name": "money.money.py::Money.__abs__",
+          "start_line": 230,
+          "end_line": 231
+        },
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn057",
+          "path": "money/money.py",
+          "name": "money.money.py::Money.__round__",
+          "start_line": 239,
+          "end_line": 240
+        },
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn048",
+          "path": "money/money.py",
+          "name": "money.money.py::Money.__floordiv__",
+          "start_line": 181,
+          "end_line": 192
+        },
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn050",
+          "path": "money/money.py",
+          "name": "money.money.py::Money.__divmod__",
+          "start_line": 203,
+          "end_line": 215
+        },
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn047",
+          "path": "money/money.py",
+          "name": "money.money.py::Money.__truediv__",
+          "start_line": 168,
+          "end_line": 179
+        }
+      ],
+      "explanation": [
+        "carlospalol Money exposes ambient-context Decimal unary/true-division behavior and truncating quotient/remainder helpers; their names do not imply Core explicit rounding or mathematical floor semantics.",
+        "Unary minus/plus/abs reconstruct from Decimal operators, scalar true division uses the ambient context, and // delegates directly to Decimal //. Money/Money paths return numeric ratios or tuples after currency checks.",
+        "Supported Decimal inputs and the active Python3 contract; Python2 and native unsupported operands remain outside this conclusion. With low precision, negation can round an exact stored value; Decimal -7//4 is truncation toward zero rather than floor-2. A1/3 scalar division does not require an explicit supplied scale/mode. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0160",
+      "title": "Four-digit intermediate introduces a second rounding boundary",
+      "library_id": "CE-REPO-0018",
+      "edition_id": "CE-EDITION-0018",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn05",
+          "path": "src/currency.js",
+          "name": "parse",
+          "start_line": 55,
+          "end_line": 89
+        },
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn04",
+          "path": "src/currency.js",
+          "name": "currency",
+          "start_line": 25,
+          "end_line": 53
+        }
+      ],
+      "explanation": [
+        "currency.js parsing has two rounding stages: scaled Number.toFixed(4) followed by Math.round, which can carry a near-half value across the final integer boundary.",
+        "The intermediate string is passed to the round helper only after four-decimal formatting. This differs from a single exact rounding operation at the requested scale.",
+        "Selected precision2 and a finite scaled value near123.49999 under the native Number formatting contract. The intermediate becomes123.5000 then124, while a single nearest integer decision below123.5 would produce123. This is a static branch example, not a complete binary-input error analysis. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0170",
+      "title": "Percentage normalization inherits the division decimal-place ceiling",
+      "library_id": "CE-REPO-0017",
+      "edition_id": "CE-EDITION-0017",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn03",
+          "path": "src/index.ts",
+          "name": "percentToRate",
+          "start_line": 52,
+          "end_line": 52
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn02",
+          "path": "src/index.ts",
+          "name": "percentToMultiplier",
+          "start_line": 50,
+          "end_line": 51
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn50",
+          "path": "src/index.ts",
+          "name": "Money.getVat",
+          "start_line": 629,
+          "end_line": 637
+        }
+      ],
+      "explanation": [
+        "Dintero percentage conversion first divides by100 under ambient Big.DP, so an exact terminating scalar can be reduced before application. VAT interpretation remains a separate application policy.",
+        "percentToRate and percentToMultiplier both invoke Big.div(100); getVat subsequently multiplies an already selected taxable base.",
+        "A sufficiently small finite percentage under the selected default or mutated Big.js division context, with an otherwise supported Money amount. Under DP20, a percentage requiring more than20 fractional scalar places can become0 before multiplication, even when a later product would be significant. No tax-law or business-base correctness is inferred. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0175",
+      "title": "Opposite-sign exact divisibility can produce a nonzero remainder",
+      "library_id": "CE-REPO-0003",
+      "edition_id": "CE-EDITION-0003",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn115",
+          "path": "lib/money/money/arithmetic.rb",
+          "name": "Money::Arithmetic::remainder",
+          "start_line": 301,
+          "end_line": 311
+        },
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn110",
+          "path": "lib/money/money/arithmetic.rb",
+          "name": "Money::Arithmetic::divmod",
+          "start_line": 243,
+          "end_line": 249
+        },
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn113",
+          "path": "lib/money/money/arithmetic.rb",
+          "name": "Money::Arithmetic::modulo",
+          "start_line": 278,
+          "end_line": 280
+        }
+      ],
+      "explanation": [
+        "RubyMoney remainder subtracts an opposite-sign divisor even when modulo is exactly zero. This is a source-level remainder identity concern, outside the current Core scalar-division operation.",
+        "The sign branch sends opposite signs to modulo(val)-val; there is no zero-modulo exception. modulo selects the second result of the separate divmod path.",
+        "A scalar divisor of opposite sign and an exactly divisible represented amount, under the documented Ruby numeric/divmod contract. For fractional100 and scalar-10, modulo0 becomes remainder10 instead of0. Nonzero-remainder examples do not distinguish this exact-divisibility branch. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0181",
+      "title": "Money division ratio can cross binary floating point",
+      "library_id": "CE-REPO-0003",
+      "edition_id": "CE-EDITION-0003",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn108",
+          "path": "lib/money/money/arithmetic.rb",
+          "name": "Money::Arithmetic::/",
+          "start_line": 204,
+          "end_line": 218
+        },
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn107",
+          "path": "lib/money/money/arithmetic.rb",
+          "name": "Money::Arithmetic::*",
+          "start_line": 180,
+          "end_line": 187
+        }
+      ],
+      "explanation": [
+        "RubyMoney Money/Money division converts the exchanged denominator to Float; scalar multiplication can also enter native binary arithmetic before Money reconstruction.",
+        "The operator branches distinguish Money and scalar operands. The Money branch explicitly calls to_f on the decimal denominator; scalar multiplication performs fractional*other before dup_with.",
+        "Money/Money ratio uses an exchange-to-receiver path; scalar behavior depends on the admitted numeric type and infinite-precision setting. An already rounded Float denominator cannot supply an exact decimal ratio merely because the result is later wrapped. The Money/Money ratio itself is outside current Core arithmetic. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0191",
+      "title": "Validation can enter binary arithmetic before checking financial bounds",
+      "library_id": "CE-REPO-0034",
+      "edition_id": "CE-EDITION-0034",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0034:CE-EDITION-0034:fn032",
+          "path": "lib/money-rails/active_model/validator.rb",
+          "name": "MoneyRails::ActiveModel::MoneyValidator::validate_each",
+          "start_line": 46,
+          "end_line": 89
+        }
+      ],
+      "explanation": [
+        "MoneyRails validation can reconstruct a major amount through subunit.to_f/unit, then delegate normalized input to the selected Rails numericality validator. Exact stored cents do not by themselves prove exact boundary validation.",
+        "The nil-raw-value branch converts subunit to Float before generate_details and super. The previously read compatible Rails7.0.8.7 contract adds its own numeric parsing boundary.",
+        "The raw before-type-cast value is unavailable, subunit storage is present, and the relevant compatible Rails validator/version is actually selected. A sufficiently large or fine-boundary subunit value can change under Float conversion before a comparison. The package admits a broader unlocked Rails range, so no single outcome is claimed for every deployment. The direct Float conversion is visible, but complete installed Rails validator behavior and a paired numeric boundary were not executed. No universal validation acceptance/rejection is reported."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0197",
+      "title": "Currency-fixed construction distinguishes lexical scale from representable value",
+      "library_id": "CE-REPO-0004",
+      "edition_id": "CE-EDITION-0004",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn129",
+          "path": "src/main/java/org/joda/money/Money.java",
+          "name": "org.joda.money.Money.of",
+          "start_line": 70,
+          "end_line": 77
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn130",
+          "path": "src/main/java/org/joda/money/Money.java",
+          "name": "org.joda.money.Money.of",
+          "start_line": 92,
+          "end_line": 98
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn137",
+          "path": "src/main/java/org/joda/money/Money.java",
+          "name": "org.joda.money.Money.of",
+          "start_line": 226,
+          "end_line": 230
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn029",
+          "path": "src/main/java/org/joda/money/BigMoney.java",
+          "name": "org.joda.money.BigMoney.withScale",
+          "start_line": 546,
+          "end_line": 552
+        }
+      ],
+      "explanation": [
+        "Joda Money direct construction imposes the currency lexical scale, while an explicit UNNECESSARY/provider path can remove insignificant zeros and BigMoney can retain another calculation scale.",
+        "Money.of first compares BigDecimal.scale with currency digits; the explicit mode overload instead calls setScale. withScale is an explicit distinct operation.",
+        "Supported BigDecimal input and the precise constructor overload; currencies with known decimal places. A two-digit Money.of receives1.230 and rejects its lexical scale, whereas explicit UNNECESSARY can preserve the numeric1.23 value. This does not make storage scale a FinKore rule. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0198",
+      "title": "Division retains numerator scale even for a finite exact quotient",
+      "library_id": "CE-REPO-0004",
+      "edition_id": "CE-EDITION-0004",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn069",
+          "path": "src/main/java/org/joda/money/BigMoney.java",
+          "name": "org.joda.money.BigMoney.dividedBy",
+          "start_line": 1377,
+          "end_line": 1385
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn070",
+          "path": "src/main/java/org/joda/money/BigMoney.java",
+          "name": "org.joda.money.BigMoney.dividedBy",
+          "start_line": 1409,
+          "end_line": 1416
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn071",
+          "path": "src/main/java/org/joda/money/BigMoney.java",
+          "name": "org.joda.money.BigMoney.dividedBy",
+          "start_line": 1433,
+          "end_line": 1439
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn187",
+          "path": "src/main/java/org/joda/money/Money.java",
+          "name": "org.joda.money.Money.dividedBy",
+          "start_line": 1073,
+          "end_line": 1075
+        }
+      ],
+      "explanation": [
+        "Joda divide with a rounding mode retains numerator scale, and mode-validation order differs between decimal/double and long overloads.",
+        "The decimal method checks mode before invoking BigDecimal.divide(divisor,mode); long divisor1 returns this before any mode use. Money simply delegates.",
+        "The inspected retain-scale division overload and a valid finite decimal numerator/divisor; JDK divide contract is reused from the prior pinned review. 1.00 divided by8 with DOWN returns the scale2 quotient0.12 rather than Core exact0.125. A null mode with a zero decimal divisor is checked before zero division, unlike Core optional-policy precedence. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0207",
+      "title": "Double conversion uses decimal rendering rather than recovering exact binary value",
+      "library_id": "CE-REPO-0004",
+      "edition_id": "CE-EDITION-0004",
+      "collected_on": "2026-11-21",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn005",
+          "path": "src/main/java/org/joda/money/BigMoney.java",
+          "name": "org.joda.money.BigMoney.of",
+          "start_line": 112,
+          "end_line": 119
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn131",
+          "path": "src/main/java/org/joda/money/Money.java",
+          "name": "org.joda.money.Money.of",
+          "start_line": 120,
+          "end_line": 122
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn049",
+          "path": "src/main/java/org/joda/money/BigMoney.java",
+          "name": "org.joda.money.BigMoney.plus",
+          "start_line": 904,
+          "end_line": 910
+        }
+      ],
+      "explanation": [
+        "Joda double overloads construct decimal values from the canonical double rendering, while the direct BigDecimal path stays separately available.",
+        "BigDecimal.valueOf is invoked for double construction and addition; zero shortcuts do not reconstruct any earlier decimal computation.",
+        "A supported finite native double versus an explicitly supplied exact BigDecimal, with the selected constructor overload. A decimal literal may render as its expected short text, but prior binary0.1+0.2 rounding cannot generally be undone by decimal rendering. No particular floating outcome was executed. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0211",
+      "title": "Public multiplication loses decimal multiplier precision before protocol dispatch",
+      "library_id": "CE-REPO-0024",
+      "edition_id": "CE-EDITION-0024",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn035",
+          "path": "src/clojure/clojurewerkz/money/amounts.clj",
+          "name": "clojurewerkz.money.amounts/multiply[arity2]",
+          "start_line": 199,
+          "end_line": 200
+        },
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn036",
+          "path": "src/clojure/clojurewerkz/money/amounts.clj",
+          "name": "clojurewerkz.money.amounts/multiply[arity3]",
+          "start_line": 201,
+          "end_line": 202
+        },
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn021",
+          "path": "src/clojure/clojurewerkz/money/amounts.clj",
+          "name": "clojurewerkz.money.amounts/op-multiply[java.math.BigDecimal]",
+          "start_line": 137,
+          "end_line": 138
+        }
+      ],
+      "explanation": [
+        "The public Clojure multiply arities declare a double multiplier, so an exact native BigDecimal can be narrowed before protocol dispatch; a separate BigDecimal protocol body does not protect that public path.",
+        "Both public arities carry ^double before invoking op-multiply. The distinct BigDecimal protocol implementation forwards its value directly to Joda only when that implementation is actually reached.",
+        "The inspected Clojure1.11.1 unboxing/Number contract and public multiply entry, with an exact BigDecimal beyond binary64 integer precision. 9007199254740993M can become9007199254740992 before Joda multiplication. This is a path-specific narrowing concern, not proof that every protocol invocation narrows. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0212",
+      "title": "Unknown rounding names silently select UNNECESSARY under host locale",
+      "library_id": "CE-REPO-0024",
+      "edition_id": "CE-EDITION-0024",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn064",
+          "path": "src/clojure/clojurewerkz/money/conversion.clj",
+          "name": "clojurewerkz.money.conversion/to-rounding-mode[String]",
+          "start_line": 54,
+          "end_line": 64
+        },
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn063",
+          "path": "src/clojure/clojurewerkz/money/conversion.clj",
+          "name": "clojurewerkz.money.conversion/to-rounding-mode[clojure.lang.Named]",
+          "start_line": 50,
+          "end_line": 51
+        },
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn065",
+          "path": "src/clojure/clojurewerkz/money/conversion.clj",
+          "name": "clojurewerkz.money.conversion/to-rounding-mode[nil]",
+          "start_line": 67,
+          "end_line": 68
+        }
+      ],
+      "explanation": [
+        "Clojure money string mode normalization uses the host default locale and maps unrecognized names to UNNECESSARY; missing and unsupported policies therefore collapse into one native fallback.",
+        "The String implementation calls toLowerCase without an explicit locale and its case default is UNNECESSARY. The nil protocol branch also selects that mode.",
+        "The native string/Named policy path and an actual default locale; explicit canonical mode inputs are not inferred from these names. An unsupported string may succeed when no digits need removal. A Turkish-style case mapping can make an uppercase ASCII name miss its branch, but no concrete locale execution was observed. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0232",
+      "title": "Integer add/subtract detect overflow but other numeric paths use weaker guards",
+      "library_id": "CE-REPO-0021",
+      "edition_id": "CE-EDITION-0021",
+      "collected_on": "2026-11-21",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0021:CE-EDITION-0021:fn018",
+          "path": "src/Money.php",
+          "name": "Money::add",
+          "start_line": 156,
+          "end_line": 165
+        },
+        {
+          "id": "CE-REPO-0021:CE-EDITION-0021:fn019",
+          "path": "src/Money.php",
+          "name": "Money::subtract",
+          "start_line": 176,
+          "end_line": 185
+        },
+        {
+          "id": "CE-REPO-0021:CE-EDITION-0021:fn020",
+          "path": "src/Money.php",
+          "name": "Money::negate",
+          "start_line": 193,
+          "end_line": 196
+        },
+        {
+          "id": "CE-REPO-0021:CE-EDITION-0021:fn033",
+          "path": "src/Money.php",
+          "name": "Money::assertInsideIntegerBounds",
+          "start_line": 428,
+          "end_line": 433
+        },
+        {
+          "id": "CE-REPO-0021:CE-EDITION-0021:fn034",
+          "path": "src/Money.php",
+          "name": "Money::castToInt",
+          "start_line": 442,
+          "end_line": 447
+        },
+        {
+          "id": "CE-REPO-0021:CE-EDITION-0021:fn013",
+          "path": "src/Money.php",
+          "name": "Money::fromString",
+          "start_line": 77,
+          "end_line": 100
+        }
+      ],
+      "explanation": [
+        "Sebastian Money add/subtract validate the native integer result before construction, while negate and numeric import take different overflow/narrowing routes.",
+        "The guarded arithmetic calls assertIsInteger on the computed result; negate immediately constructs from -1*amount. fromString uses nested round/intval rather than the explicit bounds helper.",
+        "The selected legacy PHP integer width/runtime and valid native minor-unit inputs; no out-of-range integer result is made portable by inference. Negating the minimum signed integer can enter a float-valued construction path, whereas add/sub overflow is rejected earlier. The exact out-of-range cast result/error is runtime-specific and not asserted. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0235",
+      "title": "String construction rounds twice through native numeric conversion",
+      "library_id": "CE-REPO-0021",
+      "edition_id": "CE-EDITION-0021",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0021:CE-EDITION-0021:fn013",
+          "path": "src/Money.php",
+          "name": "Money::fromString",
+          "start_line": 77,
+          "end_line": 100
+        },
+        {
+          "id": "CE-REPO-0021:CE-EDITION-0021:fn021",
+          "path": "src/Money.php",
+          "name": "Money::multiply",
+          "start_line": 207,
+          "end_line": 220
+        }
+      ],
+      "explanation": [
+        "Sebastian Money fromString coerces decimal text to native numeric rounding twice, and multiplication quantizes its native product to integer minor units with a default mode.",
+        "fromString checks string type then rounds major digits, multiplies by subunit and rounds again before intval. multiply applies round(factor*amount,0,mode) before casting.",
+        "The supported legacy PHP version/width, currency subunit metadata and the actual rounding mode; malformed-string behavior is not generalized to PHP8. A product with a nonzero fractional minor unit can be rounded without an explicit caller target scale, while large exact decimal text can already be narrowed during import. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0236",
+      "title": "Included-percentage extraction differs from simple multiplication and stale example",
+      "library_id": "CE-REPO-0021",
+      "edition_id": "CE-EDITION-0021",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0021:CE-EDITION-0021:fn024",
+          "path": "src/Money.php",
+          "name": "Money::extractPercentage",
+          "start_line": 295,
+          "end_line": 307
+        }
+      ],
+      "explanation": [
+        "Sebastian extractPercentage calculates an included component as gross*p/(100+p), rounds that component and computes the subtotal by subtraction; it is not ordinary application of rate p/100 to gross.",
+        "The denominator explicitly adds100 to the percentage. Reusing subtract preserves the selected rounded component/subtotal sum; there is no local guard for p=-100 or mode allowlist.",
+        "A finite supported native amount/percentage and chosen rounding mode, with the denominator nonzero for ordinary results. The source/tests give1736 from gross10000 and percentage21, while README1735 is a documentary discrepancy. Percentage-100 reaches a singular expression; no jurisdictional tax outcome is accepted. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0238",
+      "title": "Exact decimal storage is followed by capped significant-digit arithmetic",
+      "library_id": "CE-REPO-0022",
+      "edition_id": "CE-EDITION-0022",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn032",
+          "path": "amount.go",
+          "name": "decimalContext",
+          "start_line": 483,
+          "end_line": 492
+        },
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn013",
+          "path": "amount.go",
+          "name": "(a Amount)::Add",
+          "start_line": 161,
+          "end_line": 176
+        },
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn014",
+          "path": "amount.go",
+          "name": "(a Amount)::Sub",
+          "start_line": 179,
+          "end_line": 197
+        },
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn015",
+          "path": "amount.go",
+          "name": "(a Amount)::Mul",
+          "start_line": 200,
+          "end_line": 209
+        },
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn016",
+          "path": "amount.go",
+          "name": "(a Amount)::Div",
+          "start_line": 212,
+          "end_line": 225
+        },
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn012",
+          "path": "amount.go",
+          "name": "(a Amount)::Convert",
+          "start_line": 146,
+          "end_line": 158
+        }
+      ],
+      "explanation": [
+        "Bojanz stores decimal values independently of arithmetic precision, then selects19 or39 significant digits from operand coefficient bit length and discards arithmetic conditions/errors.",
+        "decimalContext ignores exponent separation, and Add/Sub/Mul/Quo calls do not inspect returned status. A small coefficient with a large exponent can therefore select a context too small for the exact combined result.",
+        "Accepted finite amounts such as1E+50 and1, the selected apd3.2.3 contract and unchanged context constants. The coefficients of1E+50 and1 are small, so Add chooses19 digits and can lose the1, although the representation accepts the exact result. No universal implementation precision range is prescribed. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0239",
+      "title": "Rounding failure can return NaN and zero integer projection",
+      "library_id": "CE-REPO-0022",
+      "edition_id": "CE-EDITION-0022",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn020",
+          "path": "amount.go",
+          "name": "(a Amount)::RoundTo",
+          "start_line": 302,
+          "end_line": 312
+        },
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn010",
+          "path": "amount.go",
+          "name": "(a Amount)::BigInt",
+          "start_line": 125,
+          "end_line": 134
+        },
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn011",
+          "path": "amount.go",
+          "name": "(a Amount)::Int64",
+          "start_line": 138,
+          "end_line": 143
+        },
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn033",
+          "path": "amount.go",
+          "name": "roundingContext",
+          "start_line": 496,
+          "end_line": 505
+        }
+      ],
+      "explanation": [
+        "Bojanz RoundTo ignores Quantize failure and can return an Amount containing NaN; BigInt then copies its coefficient without the nonfinite check used by Int64.",
+        "The pinned apd Quantize sets NaN when coefficient digits exceed context precision and returns InvalidOperation. RoundTo ignores both results; BigInt calls Round then returns the coefficient.",
+        "An accepted large finite input whose quantized coefficient exceeds39 digits, the selected apd3.2.3 contract, and the actual default currency rounding path. A40-digit integer quantized to two places can produce NaN; the shared decimalNaN value has zero coefficient, so BigInt can expose0 rather than an explicit failure. This is not an executed process result. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0247",
+      "title": "Decoder truncation precedes requested Money precision",
+      "library_id": "CE-REPO-0032",
+      "edition_id": "CE-EDITION-0032",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn069",
+          "path": "lib/src/money.dart",
+          "name": "Money::Money.parseWithCurrency",
+          "start_line": 350,
+          "end_line": 371
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn148",
+          "path": "lib/src/pattern_decoder.dart",
+          "name": "ValueQueue::takeMinorDigits",
+          "start_line": 460,
+          "end_line": 476
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn065",
+          "path": "lib/src/money.dart",
+          "name": "Money::Money.fromFixedWithCurrency",
+          "start_line": 251,
+          "end_line": 259
+        }
+      ],
+      "explanation": [
+        "Money2 text parsing truncates excess fractional digits at currency precision before applying the requested Money precision; Fixed-to-Money reconstruction instead uses its scale-copy policy.",
+        "PatternDecoder is created with currency metadata, takeMinorDigits discards excess text, and only then parseWithCurrency copies to the optional decimalDigits override.",
+        "The specified human pattern/currency and compatible Fixed6.0.0 context; this is not a canonical portable Money JSON parser. USD currency digits2 with text1.239 and requested precision4 can become1.2300; increasing scale later cannot recover the truncated9. Direct Fixed conversion can instead round to1.24. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0248",
+      "title": "BigInt storage does not prevent binary division and num conversion",
+      "library_id": "CE-REPO-0032",
+      "edition_id": "CE-EDITION-0032",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn059",
+          "path": "lib/src/money.dart",
+          "name": "Money::Money.fromNumWithCurrency",
+          "start_line": 136,
+          "end_line": 142
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn110",
+          "path": "lib/src/money.dart",
+          "name": "Money::/",
+          "start_line": 762,
+          "end_line": 763
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn115",
+          "path": "lib/src/money.dart",
+          "name": "Money::divideByFixed",
+          "start_line": 794,
+          "end_line": 797
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn052",
+          "path": "lib/src/exchange_rates/exchange_rate.dart",
+          "name": "ExchangeRate::applyInverseRate",
+          "start_line": 218,
+          "end_line": 237
+        }
+      ],
+      "explanation": [
+        "Money2 BigInt storage does not protect the selected Fixed6.0.0 division/num-import paths from binary intermediates and conversion limits.",
+        "Fixed division converts aligned BigInt operands with / to double and reconstructs via fromNum; scalar divide constructs a reciprocal double. fromNum uses toStringAsFixed and rejects decimalDigits>20.",
+        "The actually inspected compatible Fixed6.0.0 dependency, its Dart contracts and selected overload; the package constraint does not prove that every deployment resolves this version. The inverse-rate path can request scale1000 but then enter fromNum, which rejects above20. An exact BigInt coefficient does not repair a prior binary quotient; no actual assertion execution is claimed. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0250",
+      "title": "Operator variants select different implicit result scales",
+      "library_id": "CE-REPO-0032",
+      "edition_id": "CE-EDITION-0032",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn108",
+          "path": "lib/src/money.dart",
+          "name": "Money::*",
+          "start_line": 749,
+          "end_line": 751
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn109",
+          "path": "lib/src/money.dart",
+          "name": "Money::multiplyByNum",
+          "start_line": 753,
+          "end_line": 759
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn110",
+          "path": "lib/src/money.dart",
+          "name": "Money::/",
+          "start_line": 762,
+          "end_line": 763
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn114",
+          "path": "lib/src/money.dart",
+          "name": "Money::multiplyByFixed",
+          "start_line": 791,
+          "end_line": 792
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn112",
+          "path": "lib/src/money.dart",
+          "name": "Money::multipliedByPercentage",
+          "start_line": 777,
+          "end_line": 779
+        }
+      ],
+      "explanation": [
+        "Money2 multiplication/division entry points choose different result scales; percentage application additionally rescales the product before dividing100. The reviewed Fixed6.0.0 reduction is half-away, not the README banker label.",
+        "operator* converts at16 then restores Money scale, multiplyByNum defaults to16, and Fixed paths reconstruct through currency scale. The dependency reduction helper works on absolute remainder then restores sign.",
+        "The named overload, source and currency scales and the selected compatible Fixed version; native num imports add separate limits. A result needing extra fractional digits can be removed by one overload but retained by another. Midpoint reduction follows half-away rather than half-even for the selected dependency. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0251",
+      "title": "Named Percentage constants use minor coefficients inconsistent with their names",
+      "library_id": "CE-REPO-0032",
+      "edition_id": "CE-EDITION-0032",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn164",
+          "path": "lib/src/percentage.dart",
+          "name": "Percentage::Percentage",
+          "start_line": 27,
+          "end_line": 27
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn169",
+          "path": "lib/src/percentage.dart",
+          "name": "Percentage::toString",
+          "start_line": 74,
+          "end_line": 74
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn112",
+          "path": "lib/src/money.dart",
+          "name": "Money::multipliedByPercentage",
+          "start_line": 777,
+          "end_line": 779
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn167",
+          "path": "lib/src/percentage.dart",
+          "name": "Percentage::tryParse",
+          "start_line": 51,
+          "end_line": 65
+        }
+      ],
+      "explanation": [
+        "Money2 named Percentage constants use coefficient/scale values that encode much smaller percentages than their names under the inspected Fixed constructor contract.",
+        "Percentage forwards to Fixed.fromInt, whose input is minor units. The constants ten=100/scale3, twenty=200/scale3 and onehundred=1000/scale3 therefore represent0.100%,0.200% and1.000%.",
+        "The exact Percentage declarations and Fixed6.0.0 constructor; percentage is an unconverted percentage value before Money divides100. Percentage.onehundred has displayed value1.000%, so it cannot stand for100% merely by its name. tryParse also narrows the parsed BigInt coefficient through toInt; that separate range issue remains bounded. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0259",
+      "title": "Six-place calculation and equality narrow unrestricted stored decimal text",
+      "library_id": "CE-REPO-0048",
+      "edition_id": "CE-EDITION-0048",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn062",
+          "path": "src/Money.php",
+          "name": "Money::getMath",
+          "start_line": 1082,
+          "end_line": 1091
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn006",
+          "path": "src/BcMath.php",
+          "name": "BcMath::add",
+          "start_line": 34,
+          "end_line": 37
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn010",
+          "path": "src/BcMath.php",
+          "name": "BcMath::comp",
+          "start_line": 94,
+          "end_line": 97
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn041",
+          "path": "src/Money.php",
+          "name": "Money::isEqual",
+          "start_line": 699,
+          "end_line": 710
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn036",
+          "path": "src/Money.php",
+          "name": "Money::check",
+          "start_line": 594,
+          "end_line": 600
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn069",
+          "path": "src/MoneyNormalizer.php",
+          "name": "MoneyNormalizer::mapFromAmount",
+          "start_line": 40,
+          "end_line": 51
+        }
+      ],
+      "explanation": [
+        "Paysera stored decimal text can exceed the six-place default arithmetic/comparison context; numeric zero/equality and validation then use that narrower context.",
+        "getMath builds BcMath(DEFAULT_SCALE6); add and comp use that scale. isEqual returns true for two values classified zero before checking currency, and precision checks reuse rounded equality.",
+        "The default local BcMath strategy, accepted finite decimal strings and selected PHP8.2 BCMath contract; an injected alternative math strategy is a separate path. Adding0 to stored1.0000001 can return1.000000. Amounts below six places may be treated as equal zero even across currencies; the round/isEqual validation loop is not an independent exact oracle. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0260",
+      "title": "Rounding helpers misclassify negative fractions near zero",
+      "library_id": "CE-REPO-0048",
+      "edition_id": "CE-EDITION-0048",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn013",
+          "path": "src/BcMath.php",
+          "name": "BcMath::floor",
+          "start_line": 149,
+          "end_line": 161
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn011",
+          "path": "src/BcMath.php",
+          "name": "BcMath::round",
+          "start_line": 107,
+          "end_line": 112
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn046",
+          "path": "src/Money.php",
+          "name": "Money::abs",
+          "start_line": 759,
+          "end_line": 767
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn032",
+          "path": "src/Money.php",
+          "name": "Money::negate",
+          "start_line": 527,
+          "end_line": 538
+        }
+      ],
+      "explanation": [
+        "Paysera local floor/round helpers use a scale-limited sign test after narrowing or splitting, which can misclassify negative values near zero.",
+        "floor tests the extracted integer component rather than the original fractional sign; round compares at the default math scale before choosing +/-half increment. abs and negate reuse zero/sign classification.",
+        "The local BcMath strategy, supported finite signed strings, DEFAULT_SCALE6 and the reviewed PHP8.2 zero normalization contract. floor(-0.1,0) can return0 instead of-1. round(-0.0000005,6) can choose the positive increment and return0 instead of the negative half-away result. No universal result for every PHP version is claimed. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0268",
+      "title": "Manager addition and subtraction bypass checked calculator methods",
+      "library_id": "CE-REPO-0098",
+      "edition_id": "CE-EDITION-0098",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn279",
+          "path": "money/manager.go",
+          "name": "(mm *Manager)::Add",
+          "start_line": 109,
+          "end_line": 128
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn280",
+          "path": "money/manager.go",
+          "name": "(mm *Manager)::Subtract",
+          "start_line": 131,
+          "end_line": 151
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn012",
+          "path": "calculator/ration.go",
+          "name": "SafeAdd",
+          "start_line": 10,
+          "end_line": 16
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn013",
+          "path": "calculator/ration.go",
+          "name": "SafeSubtract",
+          "start_line": 19,
+          "end_line": 25
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn281",
+          "path": "money/manager.go",
+          "name": "(mm *Manager)::Multiply",
+          "start_line": 154,
+          "end_line": 170
+        }
+      ],
+      "explanation": [
+        "Go Money Manager Add/Subtract bypass their checked calculator helpers and perform native int64 accumulation; Multiply instead propagates SafeMultiply errors.",
+        "The public loops use +=/-= after currency checks, while separate SafeAdd/SafeSubtract return zero on overflow and are not called here. The original operand is not updated.",
+        "Accepted int64 operands, Go signed overflow contract and same currencies; exact mathematical result may exceed the declared storage range. MaxInt64 plus1 follows a wrapping native operation without an error return. This is an unreported overflow concern, not a claim that any finite representation must accommodate unlimited Money. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0270",
+      "title": "Unary boundaries and rounding use inconsistent failure and tie policies",
+      "library_id": "CE-REPO-0098",
+      "edition_id": "CE-EDITION-0098",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn009",
+          "path": "calculator/calculator.go",
+          "name": "(c *Calculator)::Absolute",
+          "start_line": 68,
+          "end_line": 78
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn011",
+          "path": "calculator/calculator.go",
+          "name": "(c *Calculator)::Round",
+          "start_line": 94,
+          "end_line": 136
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn283",
+          "path": "money/manager.go",
+          "name": "(mm *Manager)::Negative",
+          "start_line": 184,
+          "end_line": 190
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn276",
+          "path": "money/manager.go",
+          "name": "(mm *Manager)::CreateFromFloat",
+          "start_line": 57,
+          "end_line": 64
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn284",
+          "path": "money/manager.go",
+          "name": "(mm *Manager)::Round",
+          "start_line": 193,
+          "end_line": 201
+        }
+      ],
+      "explanation": [
+        "Calculator Absolute cannot negate MinInt64 safely, and Round has implicit range and tie policies; distinguish the missing extreme-value guard from intentional toward-zero ties.",
+        "Absolute checks amount<MinInt64, an unreachable condition for int64. Round returns the input for unsupported exponent and increments only when remainder exceeds half. Manager Negative directly negates.",
+        "Accepted native MinInt64 or explicit integer exponent within the helper domain, using the inspected Go overflow contract. Absolute(MinInt64) remains negative through native negation. At ordinary ties Round moves toward zero; that is a policy choice rather than a universal rounding defect. CreateFromFloat uses math.Round and is a separate path. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0281",
+      "title": "Receiver reconstruction selects implicit currency rounding and mixed-operation policy",
+      "library_id": "CE-REPO-0097",
+      "edition_id": "CE-EDITION-0097",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn116",
+          "path": "src/money.rs",
+          "name": "src/money.rs::BaseMoney<C> for Money<C>::from_decimal",
+          "start_line": 192,
+          "end_line": 197
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn227",
+          "path": "src/raw_money/raw_money.rs",
+          "name": "src/raw_money/raw_money.rs::RawMoney<C>::finish",
+          "start_line": 99,
+          "end_line": 101
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn241",
+          "path": "src/raw_money/raw_money.rs",
+          "name": "src/raw_money/raw_money.rs::BaseMoney<C> for RawMoney<C>::from_decimal",
+          "start_line": 232,
+          "end_line": 237
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn005",
+          "path": "src/base.rs",
+          "name": "src/base.rs::BaseMoney::round_with",
+          "start_line": 199,
+          "end_line": 204
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn030",
+          "path": "src/base.rs",
+          "name": "src/base.rs::BaseOps::checked_add",
+          "start_line": 722,
+          "end_line": 729
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn032",
+          "path": "src/base.rs",
+          "name": "src/base.rs::BaseOps::checked_mul",
+          "start_line": 773,
+          "end_line": 780
+        }
+      ],
+      "explanation": [
+        "Rust Money reconstructs each result at currency minor digits, while RawMoney preserves the Decimal result until finish; receiver reconstruction therefore selects an implicit arithmetic policy.",
+        "Money.from_decimal invokes round_dp, RawMoney.from_decimal stores the Decimal and BaseOps checked_add/checked_mul reconstruct Self. Base round_with likewise reconstructs after the selected strategy.",
+        "The inspected Money/RawMoney implementations and pinned rust_decimal contract; operands and mathematical result within supported backend bounds. USD Money1.00 multiplied by0.005 is quantized by Money reconstruction, whereas RawMoney can retain0.005 until finish. Explicit rounding cannot restore previously removed digits, but an already-stored2.5 rounded to integer scale remains a meaningful mode example. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0282",
+      "title": "Ceil and Floor names select away-from-zero and toward-zero semantics",
+      "library_id": "CE-REPO-0097",
+      "edition_id": "CE-EDITION-0097",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn005",
+          "path": "src/base.rs",
+          "name": "src/base.rs::BaseMoney::round_with",
+          "start_line": 199,
+          "end_line": 204
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn046",
+          "path": "src/base.rs",
+          "name": "src/base.rs::From<RoundingStrategy> for DecimalRoundingStrategy::from",
+          "start_line": 1282,
+          "end_line": 1290
+        }
+      ],
+      "explanation": [
+        "Rust RoundingStrategy Ceil and Floor map to away-from-zero and toward-zero respectively; these documented native names are not signed Core CEILING/FLOOR.",
+        "The explicit enum conversion selects AwayFromZero and ToZero; Bankers/HalfUp/HalfDown select distinct midpoint strategies. round_with passes that strategy to Decimal before receiver reconstruction.",
+        "An admitted receiver whose stored value retains the relevant fractional digits and requested target scale. On retained -2.1, native Ceil corresponds to-3 rather than signed ceiling-2. Native Floor on-2.9 corresponds to-2 rather than signed floor-3. Constructor quantization must be accounted for before choosing examples. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0285",
+      "title": "Percent and FX composition round before the final financial unit is known",
+      "library_id": "CE-REPO-0097",
+      "edition_id": "CE-EDITION-0097",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn219",
+          "path": "src/percent_ops.rs",
+          "name": "src/percent_ops.rs::PercentOps<C> for M::percent",
+          "start_line": 188,
+          "end_line": 193
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn221",
+          "path": "src/percent_ops.rs",
+          "name": "src/percent_ops.rs::PercentOps<C> for M::percent_adds_fixed",
+          "start_line": 202,
+          "end_line": 212
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn222",
+          "path": "src/percent_ops.rs",
+          "name": "src/percent_ops.rs::PercentOps<C> for M::percent_adds_compound",
+          "start_line": 214,
+          "end_line": 226
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn224",
+          "path": "src/percent_ops.rs",
+          "name": "src/percent_ops.rs::PercentOps<C> for M::percent_subs_sequence",
+          "start_line": 235,
+          "end_line": 247
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn225",
+          "path": "src/percent_ops.rs",
+          "name": "src/percent_ops.rs::PercentOps<C> for M::percent_of",
+          "start_line": 249,
+          "end_line": 256
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn059",
+          "path": "src/exchange.rs",
+          "name": "src/exchange.rs::Exchange<From> for M::convert",
+          "start_line": 137,
+          "end_line": 161
+        }
+      ],
+      "explanation": [
+        "Rust percentage and typed FX composition reuse receiver-policy Money operations before the final percentage/target-currency result, so intermediate currency quantization can change the outcome.",
+        "percent calls checked_mul then checked_div100; percent_of divides into a Money value before multiplying100. Typed conversion multiplies through source M before target reconstruction. Fixed-base and compound helpers use different bases.",
+        "The named Money receiver and currency minor digits; RawMoney or dynamic conversion may follow a different path. With source JPY1 and rate0.5, Money source reconstruction can yield JPY0 before target USD construction, rather than retaining USD0.50. This is a static path example; it is not a current Core FX contract. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0293",
+      "title": "Fixed-four division changes rounding policy by divisor path",
+      "library_id": "CE-REPO-0007",
+      "edition_id": "CE-EDITION-0007",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn177",
+          "path": "src/NodaMoney/FastMoney.BinaryOperators.cs",
+          "name": "NodaMoney.FastMoney::public static FastMoney Add(in FastMoney money1, in decimal decimal2)",
+          "start_line": 156,
+          "end_line": 170
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn179",
+          "path": "src/NodaMoney/FastMoney.BinaryOperators.cs",
+          "name": "NodaMoney.FastMoney::public static FastMoney Subtract(in FastMoney money1, in decimal decimal2)",
+          "start_line": 201,
+          "end_line": 215
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn180",
+          "path": "src/NodaMoney/FastMoney.BinaryOperators.cs",
+          "name": "NodaMoney.FastMoney::public static FastMoney Multiply(in FastMoney money, in decimal multiplier)",
+          "start_line": 221,
+          "end_line": 249
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn182",
+          "path": "src/NodaMoney/FastMoney.BinaryOperators.cs",
+          "name": "NodaMoney.FastMoney::public static FastMoney Divide(in FastMoney money, in decimal divisor)",
+          "start_line": 277,
+          "end_line": 310
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn183",
+          "path": "src/NodaMoney/FastMoney.BinaryOperators.cs",
+          "name": "NodaMoney.FastMoney::public static FastMoney Divide(in FastMoney money, in long divisor)",
+          "start_line": 317,
+          "end_line": 330
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn187",
+          "path": "src/NodaMoney/FastMoney.BinaryOperators.cs",
+          "name": "NodaMoney.FastMoney::private static bool TryDivideFixedPoint(long ticks, decimal divisor, out long result)",
+          "start_line": 390,
+          "end_line": 413
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn285",
+          "path": "src/NodaMoney/Money.BinaryOperators.cs",
+          "name": "NodaMoney.Money::public static Money Multiply(in Money money, in decimal multiplier)",
+          "start_line": 177,
+          "end_line": 188
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn286",
+          "path": "src/NodaMoney/Money.BinaryOperators.cs",
+          "name": "NodaMoney.Money::public static Money Divide(in Money money, in decimal divisor)",
+          "start_line": 195,
+          "end_line": 200
+        }
+      ],
+      "explanation": [
+        "Noda FastMoney division selects truncating integer ticks for integral divisors and midpoint-even conversion for other divisor paths; scalar multiplication also has its own fixed-four conversion boundary.",
+        "Integral decimal/long paths divide ticks directly. Nonintegral TryDivideFixedPoint rounds its quotient by remainder/parity, while decimal fallback converts through ToOACurrency. Money reconstructs scalar results with its context.",
+        "The named Money/FastMoney type, selected overload, framework-conditional path and representable native operands. An exact quotient needing finer than four tick places can be truncated in the integral path; a nonintegral path can round instead. This difference is not evidence that one shared stored strategy governs all overloads. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0298",
+      "title": "Binary construction intentionally applies a source-derived fifteen-digit normalization",
+      "library_id": "CE-REPO-0007",
+      "edition_id": "CE-EDITION-0007",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn134",
+          "path": "src/NodaMoney/DoubleConversion.cs",
+          "name": "NodaMoney.DoubleConversion::public static decimal ToDecimal(double value)",
+          "start_line": 28,
+          "end_line": 81
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn264",
+          "path": "src/NodaMoney/IntegerRounding.cs",
+          "name": "NodaMoney.IntegerRounding::public static bool TryRound(long quotient, long remainder, long divisor, MidpointRounding mode, bool isNegative, out long rounded)",
+          "start_line": 29,
+          "end_line": 64
+        }
+      ],
+      "explanation": [
+        "Noda DoubleConversion deliberately normalizes a binary input to a roughly fifteen-significant-digit decimal, with midpoint-even rounding and tiny-input zero/range branches.",
+        "The exponent drives decimal scaling, Math.Round constructs a mantissa and trailing zeros are removed before decimal construction. Its ancestry/comment is not new independent numerical evidence.",
+        "Finite native double inputs on the applicable .NET path, before later currency/context rounding; exact decimal construction is a separate route. Very small values can take the exponent<-94 zero branch. Decimal rendering/normalization cannot generally restore exact intent lost before a binary input was supplied. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0301",
+      "title": "ex-money: exact storage does not imply context-free exact arithmetic",
+      "library_id": "CE-REPO-0031",
+      "edition_id": "CE-EDITION-0031",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn238",
+          "path": "lib/money.ex",
+          "name": "Money.new [clause 226]",
+          "start_line": 226,
+          "end_line": 238
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn239",
+          "path": "lib/money.ex",
+          "name": "Money.new [clause 240]",
+          "start_line": 240,
+          "end_line": 242
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn240",
+          "path": "lib/money.ex",
+          "name": "Money.new [clause 246]",
+          "start_line": 246,
+          "end_line": 251
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn241",
+          "path": "lib/money.ex",
+          "name": "Money.new [clause 253]",
+          "start_line": 253,
+          "end_line": 258
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn242",
+          "path": "lib/money.ex",
+          "name": "Money.new [clause 262]",
+          "start_line": 262,
+          "end_line": 264
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn243",
+          "path": "lib/money.ex",
+          "name": "Money.new [clause 266]",
+          "start_line": 266,
+          "end_line": 268
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn244",
+          "path": "lib/money.ex",
+          "name": "Money.new [clause 270]",
+          "start_line": 270,
+          "end_line": 272
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn245",
+          "path": "lib/money.ex",
+          "name": "Money.new [clause 274]",
+          "start_line": 274,
+          "end_line": 276
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn246",
+          "path": "lib/money.ex",
+          "name": "Money.new [clause 281]",
+          "start_line": 281,
+          "end_line": 293
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn297",
+          "path": "lib/money.ex",
+          "name": "Money.abs [clause 1179]",
+          "start_line": 1179,
+          "end_line": 1181
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn298",
+          "path": "lib/money.ex",
+          "name": "Money.add [clause 1210]",
+          "start_line": 1210,
+          "end_line": 1215
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn299",
+          "path": "lib/money.ex",
+          "name": "Money.add [clause 1217]",
+          "start_line": 1217,
+          "end_line": 1226
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn301",
+          "path": "lib/money.ex",
+          "name": "Money.sub [clause 1283]",
+          "start_line": 1283,
+          "end_line": 1288
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn302",
+          "path": "lib/money.ex",
+          "name": "Money.sub [clause 1290]",
+          "start_line": 1290,
+          "end_line": 1295
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn304",
+          "path": "lib/money.ex",
+          "name": "Money.mult [clause 1361]",
+          "start_line": 1361,
+          "end_line": 1363
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn305",
+          "path": "lib/money.ex",
+          "name": "Money.mult [clause 1365]",
+          "start_line": 1365,
+          "end_line": 1367
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn306",
+          "path": "lib/money.ex",
+          "name": "Money.mult [clause 1369]",
+          "start_line": 1369,
+          "end_line": 1371
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn307",
+          "path": "lib/money.ex",
+          "name": "Money.mult [clause 1373]",
+          "start_line": 1373,
+          "end_line": 1375
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn309",
+          "path": "lib/money.ex",
+          "name": "Money.div [clause 1441]",
+          "start_line": 1441,
+          "end_line": 1443
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn310",
+          "path": "lib/money.ex",
+          "name": "Money.div [clause 1445]",
+          "start_line": 1445,
+          "end_line": 1447
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn311",
+          "path": "lib/money.ex",
+          "name": "Money.div [clause 1449]",
+          "start_line": 1449,
+          "end_line": 1451
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn312",
+          "path": "lib/money.ex",
+          "name": "Money.div [clause 1453]",
+          "start_line": 1453,
+          "end_line": 1455
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn328",
+          "path": "lib/money.ex",
+          "name": "Money.negate [clause 1865]",
+          "start_line": 1865,
+          "end_line": 1867
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn381",
+          "path": "lib/money.ex",
+          "name": "Money.normalize [clause 2910]",
+          "start_line": 2910,
+          "end_line": 2912
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn382",
+          "path": "lib/money.ex",
+          "name": "Money.normalize [clause 2914]",
+          "start_line": 2914,
+          "end_line": 2916
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn486",
+          "path": "lib/money.ex",
+          "name": "lib/money.ex def new(currency_code, amount, options) guarded implementation",
+          "start_line": 207,
+          "end_line": 217
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn487",
+          "path": "lib/money.ex",
+          "name": "lib/money.ex def new(amount, currency_code, options) guarded implementation",
+          "start_line": 219,
+          "end_line": 222
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn488",
+          "path": "lib/money.ex",
+          "name": "lib/money.ex def new!(currency_code, amount, options) guarded implementation",
+          "start_line": 361,
+          "end_line": 368
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn489",
+          "path": "lib/money.ex",
+          "name": "lib/money.ex def new!(amount, currency_code, options) guarded implementation",
+          "start_line": 370,
+          "end_line": 373
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn490",
+          "path": "lib/money.ex",
+          "name": "lib/money.ex def new!(%Decimal{} = amount, currency_code, options) guarded implementation",
+          "start_line": 375,
+          "end_line": 378
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn491",
+          "path": "lib/money.ex",
+          "name": "lib/money.ex def from_float(currency_code, amount, options) guarded implementation",
+          "start_line": 441,
+          "end_line": 453
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn492",
+          "path": "lib/money.ex",
+          "name": "lib/money.ex def from_float(amount, currency_code, options) guarded implementation",
+          "start_line": 455,
+          "end_line": 458
+        }
+      ],
+      "explanation": [
+        "Ex-money preserves Decimal storage at construction but arithmetic delegates to the ambient Decimal context and can round without a per-call Money policy.",
+        "new validates finite Decimal input; add/sub/mult/div and unary helpers update the struct with Decimal results rather than reentering new. Float scalar overloads also bypass from_float construction digit checks.",
+        "Pinned Decimal3.2.0 contract reused from R1-M1, selected ambient precision/traps/exponent bounds and the actual numeric overload. At default precision34, an accepted larger coefficient can lose significant digits during addition; division1/3 uses ambient rounding rather than an explicit Core policy. This does not imply every operation or every context loses precision. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0303",
+      "title": "ex-money: currency digit rounding precedes cash increment rounding",
+      "library_id": "CE-REPO-0031",
+      "edition_id": "CE-EDITION-0031",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn361",
+          "path": "lib/money.ex",
+          "name": "Money.round [clause 2479]",
+          "start_line": 2479,
+          "end_line": 2481
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn362",
+          "path": "lib/money.ex",
+          "name": "Money.round [clause 2483]",
+          "start_line": 2483,
+          "end_line": 2487
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn363",
+          "path": "lib/money.ex",
+          "name": "Money.round_to_decimal_digits [clause 2489]",
+          "start_line": 2489,
+          "end_line": 2496
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn364",
+          "path": "lib/money.ex",
+          "name": "Money.round_to_nearest [clause 2498]",
+          "start_line": 2498,
+          "end_line": 2504
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn365",
+          "path": "lib/money.ex",
+          "name": "Money.round_to_nearest [clause 2506]",
+          "start_line": 2506,
+          "end_line": 2508
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn366",
+          "path": "lib/money.ex",
+          "name": "Money.do_round_to_nearest [clause 2510]",
+          "start_line": 2510,
+          "end_line": 2512
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn367",
+          "path": "lib/money.ex",
+          "name": "Money.do_round_to_nearest [clause 2514]",
+          "start_line": 2514,
+          "end_line": 2530
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn368",
+          "path": "lib/money.ex",
+          "name": "Money.increment_from_options [clause 2532]",
+          "start_line": 2532,
+          "end_line": 2537
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn386",
+          "path": "lib/money.ex",
+          "name": "Money.digits_from_options [clause 3071]",
+          "start_line": 3071,
+          "end_line": 3079
+        }
+      ],
+      "explanation": [
+        "Ex-money round first quantizes decimal digits and then currency increment, creating a two-stage rounding policy beyond Core explicit-scale rounding.",
+        "round_to_decimal_digits reconstructs a Money at selected digits; round_to_nearest builds an increment using native float and then Decimal division/round/mult. Invalid digit-option tuple is pattern matched as success.",
+        "Valid ISO currency metadata, selected explicit/default digit options, increment and Decimal context; private token bypass is outside this comparison. An amount near an increment midpoint can move across that midpoint in the first digit reduction. Invalid digit options can raise at the success match rather than yield its error tuple. Neither fact validates a universal cash rule. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0330",
+      "title": "Moneta FastMoney: overloads select truncation, binary rounding or exact decimal rejection",
+      "library_id": "CE-REPO-0110",
+      "edition_id": "CE-EDITION-0110",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn157",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/FastMoney.java",
+          "name": "org.javamoney.moneta.FastMoney.getInternalNumber",
+          "start_line": 196,
+          "end_line": 207
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn170",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/FastMoney.java",
+          "name": "org.javamoney.moneta.FastMoney.divide",
+          "start_line": 347,
+          "end_line": 358
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn173",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/FastMoney.java",
+          "name": "org.javamoney.moneta.FastMoney.multiply",
+          "start_line": 386,
+          "end_line": 401
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn200",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/FastMoney.java",
+          "name": "org.javamoney.moneta.FastMoney.checkNumber",
+          "start_line": 591,
+          "end_line": 616
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn208",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/FastMoney.java",
+          "name": "org.javamoney.moneta.FastMoney.multiply",
+          "start_line": 695,
+          "end_line": 704
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn209",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/FastMoney.java",
+          "name": "org.javamoney.moneta.FastMoney.divide",
+          "start_line": 707,
+          "end_line": 712
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn210",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/FastMoney.java",
+          "name": "org.javamoney.moneta.FastMoney.divide",
+          "start_line": 715,
+          "end_line": 726
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn216",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/FastMoney.java",
+          "name": "org.javamoney.moneta.FastMoney.multiply",
+          "start_line": 763,
+          "end_line": 771
+        }
+      ],
+      "explanation": [
+        "Moneta FastMoney overloads implement materially different arithmetic policies: integer quotient truncation, binary quotient rounding, or exact BigDecimal quotient followed by fixed-scale admission.",
+        "divide(long) uses raw integer /; divide(double) calls Math.round; divide(Number) BigDecimal.divide has no rounding context. Number multiplication truncates the scaled product on the no-overflow path but constructs a checked decimal on fallback.",
+        "The exact overload, fixed five-place FastMoney range and JDK numeric contracts reused from R1-M1; no accepted arbitrary-precision domain is assumed. Raw unit1 divided by2L becomes0, whereas the double overload uses Math.round on0.5. A Number result with excessive scale can reject instead. An overflowing binary intermediate may saturate via Math.round rather than propagate an overflow error. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0331",
+      "title": "Moneta: significant precision and decimal scale are separate, sometimes repeated rounding stages",
+      "library_id": "CE-REPO-0110",
+      "edition_id": "CE-EDITION-0110",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn750",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/MoneyUtils.java",
+          "name": "org.javamoney.moneta.spi.MoneyUtils.getBigDecimal",
+          "start_line": 66,
+          "end_line": 68
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn751",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/MoneyUtils.java",
+          "name": "org.javamoney.moneta.spi.MoneyUtils.getBigDecimal",
+          "start_line": 77,
+          "end_line": 84
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn752",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/MoneyUtils.java",
+          "name": "org.javamoney.moneta.spi.MoneyUtils.getBigDecimal",
+          "start_line": 93,
+          "end_line": 95
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn753",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/MoneyUtils.java",
+          "name": "org.javamoney.moneta.spi.MoneyUtils.getBigDecimal",
+          "start_line": 105,
+          "end_line": 121
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn754",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/MoneyUtils.java",
+          "name": "org.javamoney.moneta.spi.MoneyUtils.getMathContext",
+          "start_line": 131,
+          "end_line": 141
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn228",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/Money.java",
+          "name": "org.javamoney.moneta.Money.divide",
+          "start_line": 207,
+          "end_line": 212
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn229",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/Money.java",
+          "name": "org.javamoney.moneta.Money.divide",
+          "start_line": 220,
+          "end_line": 228
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn246",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/Money.java",
+          "name": "org.javamoney.moneta.Money.divide",
+          "start_line": 432,
+          "end_line": 446
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn539",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/function/PrecisionScaleRoundedOperator.java",
+          "name": "org.javamoney.moneta.function.PrecisionScaleRoundedOperator.apply",
+          "start_line": 92,
+          "end_line": 94
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn476",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/function/MonetaryOperators.java",
+          "name": "org.javamoney.moneta.function.MonetaryOperators.permil",
+          "start_line": 102,
+          "end_line": 104
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn477",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/function/MonetaryOperators.java",
+          "name": "org.javamoney.moneta.function.MonetaryOperators.permil",
+          "start_line": 113,
+          "end_line": 115
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn478",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/function/MonetaryOperators.java",
+          "name": "org.javamoney.moneta.function.MonetaryOperators.permil",
+          "start_line": 126,
+          "end_line": 128
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn313",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/RoundedMoney.java",
+          "name": "org.javamoney.moneta.RoundedMoney.add",
+          "start_line": 341,
+          "end_line": 348
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn314",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/RoundedMoney.java",
+          "name": "org.javamoney.moneta.RoundedMoney.divide",
+          "start_line": 355,
+          "end_line": 363
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn320",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/RoundedMoney.java",
+          "name": "org.javamoney.moneta.RoundedMoney.subtract",
+          "start_line": 432,
+          "end_line": 441
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn359",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/RoundedMoney.java",
+          "name": "org.javamoney.moneta.RoundedMoney.divide",
+          "start_line": 883,
+          "end_line": 888
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn360",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/RoundedMoney.java",
+          "name": "org.javamoney.moneta.RoundedMoney.divide",
+          "start_line": 891,
+          "end_line": 899
+        }
+      ],
+      "explanation": [
+        "Moneta significant-precision and decimal-scale policies occur at separate stages, and selected RoundedMoney operations reapply the configured rounding operator inconsistently.",
+        "MoneyUtils first constructs under MathContext then clamps only positive maxScale; divide may round at maxScale and reconstruct. PrecisionScaleRoundedOperator applies scale then context. RoundedMoney add/divide call with(rounding), while subtract constructs without that explicit call. The permil overload ignores its MathContext parameter.",
+        "The selected factory/context, actual constructor/operator and input path; default deployment configuration is not inferred from an unexecuted build. A maxScale0 setting skips the clamp in the inspected helper, and a finite exact quotient can be quantized when maxScale>0. A precision-stage carry can change the result again after a scale-stage reduction. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0333",
+      "title": "Moneta cash rounding: minor-unit bracket and tie policy differ for negatives and parity",
+      "library_id": "CE-REPO-0110",
+      "edition_id": "CE-EDITION-0110",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn644",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/DefaultCashRounding.java",
+          "name": "org.javamoney.moneta.spi.DefaultCashRounding.DefaultCashRounding",
+          "start_line": 66,
+          "end_line": 74
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn645",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/DefaultCashRounding.java",
+          "name": "org.javamoney.moneta.spi.DefaultCashRounding.DefaultCashRounding",
+          "start_line": 84,
+          "end_line": 86
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn646",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/DefaultCashRounding.java",
+          "name": "org.javamoney.moneta.spi.DefaultCashRounding.DefaultCashRounding",
+          "start_line": 96,
+          "end_line": 98
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn647",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/DefaultCashRounding.java",
+          "name": "org.javamoney.moneta.spi.DefaultCashRounding.apply",
+          "start_line": 106,
+          "end_line": 135
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn694",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/DefaultRoundingProvider.java",
+          "name": "org.javamoney.moneta.spi.DefaultRoundingProvider.getRounding",
+          "start_line": 51,
+          "end_line": 97
+        }
+      ],
+      "explanation": [
+        "Moneta cash rounding locates increment neighbors using truncating signed integer division and always selects the higher neighbor for HALF_EVEN ties; this fails symmetric nearest/parity expectations.",
+        "For negative nonmultiples, low/high computed from a toward-zero quotient do not bracket the input. At ties HALF_EVEN shares the unconditional high branch. Constructor does not validate a positive minimalMinors. Provider literals for CNY/HKD/NZD include an extra diaeresis.",
+        "Representable long minor coefficient, positive increment, requested cash provider path and the actual native rounding mode; no jurisdictional cash requirement is asserted. With minors-13 and increment5, factor-2 gives low-10/high-5, selecting-10 although-15 is nearer. With minors5 and increment10, HALF_EVEN selects10 without inspecting parity. These are static branch examples. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0374",
+      "title": "Financial dtype and eager masking change exactness and zero-limit behavior",
+      "library_id": "CE-REPO-0043",
+      "edition_id": "CE-EDITION-0043",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0043:CE-EDITION-0043:fn005",
+          "path": "numpy_financial/_financial.py",
+          "name": "fv",
+          "start_line": 163,
+          "end_line": 267
+        },
+        {
+          "id": "CE-REPO-0043:CE-EDITION-0043:fn02",
+          "path": "numpy_financial/_financial.py",
+          "name": "numpy_financial._financial.pmt",
+          "start_line": 301,
+          "end_line": 401
+        },
+        {
+          "id": "CE-REPO-0043:CE-EDITION-0043:fn011",
+          "path": "numpy_financial/_financial.py",
+          "name": "pv",
+          "start_line": 793,
+          "end_line": 885
+        },
+        {
+          "id": "CE-REPO-0043:CE-EDITION-0043:fn006",
+          "path": "numpy_financial/_financial.py",
+          "name": "nper",
+          "start_line": 427,
+          "end_line": 497
+        },
+        {
+          "id": "CE-REPO-0043:CE-EDITION-0043:fn016",
+          "path": "numpy_financial/_financial.py",
+          "name": "npv",
+          "start_line": 1192,
+          "end_line": 1283
+        },
+        {
+          "id": "CE-REPO-0043:CE-EDITION-0043:fn017",
+          "path": "numpy_financial/_financial.py",
+          "name": "mirr",
+          "start_line": 1310,
+          "end_line": 1428
+        }
+      ],
+      "explanation": [
+        "NumPy Financial numerical dtype and eager array-expression evaluation control exactness and zero-rate observations in its valuation routines.",
+        "fv allocates empty_like(rate), so assignment follows rate dtype; nper/npv/mirr coerce float64. pv forms the denominator expression before np.where selects the zero branch, while pmt substitutes a safe denominator and fv separates indices.",
+        "Pinned NumPy/Python Decimal contracts reused from R1-M1, explicit array dtypes and Decimal trap context; this is numerical valuation code rather than a Core Money representation. Integer rate0 with fractional pv can assign a fractional future balance into an integer result array. Object Decimal zero in pv can encounter0/0 during eager branch evaluation even though a zero-rate formula is selected afterward. No new runtime result is asserted. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified. This behavior is not currently defined by FinKore Core."
+      ]
+    }
+  ],
+  "historical_publications": [
+    {
+      "id": "CE-FINDING-0007",
+      "title": "NodaMoney — Context-selected rounding can change a value at construction",
+      "collected_on": "2026-11-18",
+      "function_ids": [
+        "CE-REPO-0007:CE-EDITION-0007:fn01",
+        "CE-REPO-0007:CE-EDITION-0007:fn02",
+        "CE-REPO-0007:CE-EDITION-0007:fn03",
+        "CE-REPO-0007:CE-EDITION-0007:fn04"
+      ],
+      "explanation": [
+        "Money construction applies the selected or ambient context before storing the amount. Standard rounding defaults to ToEven and, absent a decimal override, normally derives scale from currency metadata. A custom strategy can replace the amount completely, so its policy must be treated as meaningful financial input.",
+        "Constructor and rounding/context paths only. A missing context can select an ambient policy; standard rounding normally derives scale from currency. An expressly declared composing-domain policy is a separate assessment."
+      ]
+    }
+  ]
+}

@@ -2,6 +2,8 @@
 # Tests shared evidence normalization, isolation and change detection without
 # defining or executing financial behavior.
 import copy
+import io
+import json
 import shutil
 import subprocess
 import sys
@@ -176,6 +178,34 @@ class ExpertsTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Duplicate target'):
             tool.assemble(self.contract, {}, [record], {})
 
+    def test_unmapped_cohort_records_keep_source_and_collection_navigation(self):
+        doc = self.docs['code-evidence']
+        row = profiles.normalize('code-evidence', doc, self.contract)[0]
+        row.update(id='CE-COMPARISON-0001', key='code-evidence/CE-COMPARISON-0001', bindings=[])
+        row['assessment'].update(curation='pending_curation', editorial_eligible=False)
+        row['source']['details'].update(disposition='not_mapped', reason='Unresolved future domain.')
+        doc['resolved']['cohort_records'] = [row]
+        records = profiles.normalize('code-evidence', doc, self.contract)
+        result = tool.assemble(self.contract, {}, records, {})
+        key = row['key']
+        self.assertIn(key, result['by_collection']['code-evidence'])
+        self.assertIn(key, result['by_source']['code-evidence/' + row['source']['groups'][0]])
+        self.assertNotIn(key, result['by_target']['CORE-003.3'])
+        self.assertEqual(records[-1]['assessment']['publication_authorization'], 'not_recorded')
+
+    def test_source_lookup_is_read_only(self):
+        document = tool.build(self.repo)
+        paths = [self.repo / 'experts/traceability.json', self.repo / 'experts/traceability.md']
+        before = [p.read_bytes() for p in paths]
+        source = next(iter(document['by_source']))
+        output = io.StringIO()
+        with patch('sys.stdout', output), patch.object(tool, 'build', return_value=document) as build:
+            tool.main(['--repo-root', str(self.repo), '--source', source])
+        self.assertTrue(build.call_args.kwargs['preview'])
+        selected = json.loads(output.getvalue())['records']
+        self.assertEqual([r['key'] for r in selected], document['by_source'][source])
+        self.assertEqual(before, [p.read_bytes() for p in paths])
+
     def test_stale_local_output_and_hand_edited_global_output_are_detected(self):
         tool.build(self.repo)
         self.write('experts/traceability.md', b'Hand-edited global output\n')
@@ -214,56 +244,55 @@ class CodeProfileTests(unittest.TestCase):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)
         self.repo = Path(temporary.name)
-        self.doc = samples()['code-evidence']
-        self.doc['resolved'] = None
-        self.source = self.doc['curation']['sources'][0]
-        self.binding = self.doc['curation']['bindings'][0]
-        self.binding.pop('reviewed_clause_sha256')
-        self.body = '\n'.join([self.source['id'], self.source['commit_sha'], self.source['functions'][0]['name'], self.source['functions'][0]['href']])
-        path = self.repo / self.source['publication_path']
-        path.parent.mkdir(parents=True)
-        path.write_text(self.body)
-        self.source['publication_sha256'] = sha(self.body.encode())
-        self.target = {'id': 'CORE-003.3', 'layer': 'coredoc', 'path': 'docs/coreDoc/core-doc.md', 'clause_sha256': 'a' * 64}
-        reader = patch.object(profiles, 'read_contract', return_value={'files': {}, 'targets': {'CORE-003.3': self.target}})
-        reader.start()
-        self.addCleanup(reader.stop)
-        self.save()
+        self.path = self.repo / 'experts/code-evidence/traceability.json'
+        self.path.parent.mkdir(parents=True)
+        self.doc = {'schema_version': '2.0.0', 'records': [], 'publications': {}}
+        self.path.write_bytes(encoded(self.doc))
+        self.row = profiles.normalize('code-evidence', samples()['code-evidence'],
+                                      {'targets': {'CORE-003.3': {'path': 'docs/coreDoc/core-doc.md', 'clause_sha256': 'a' * 64}}})[0]
+        self.exported = {'schema_version': '2.0.0', 'records': [self.row], 'inputs': {},
+                         'markdown': '# Compact navigation\n'}
+        runner = patch.object(profiles.subprocess, 'run', side_effect=self.export)
+        self.runner = runner.start()
+        self.addCleanup(runner.stop)
 
-    def save(self):
-        (self.repo / 'experts/code-evidence/traceability.json').write_bytes(encoded(self.doc))
+    def export(self, *args, **kwargs):
+        return subprocess.CompletedProcess(args, 0, encoded(self.exported), b'')
 
-    def test_code_curation_works_without_learn_snapshot_and_preserves_pins(self):
-        result, _ = profiles.code_document(self.repo)
-        self.assertEqual(result['resolved']['records'][0]['status'], 'reviewed')
-        self.assertEqual(result['curation'], self.doc['curation'])
+    def test_compact_curation_stays_canonical_without_persisted_resolved_copy(self):
+        before = self.path.read_bytes()
+        result, markdown = profiles.code_document(self.repo)
+        self.assertEqual(self.path.read_bytes(), before)
+        self.assertNotIn('resolved', json.loads(before))
+        self.assertEqual(result['resolved']['records'], [self.row])
+        self.assertEqual(self.path.with_suffix('.md').read_bytes(), markdown)
         self.assertFalse((self.repo / 'learn').exists())
         profiles.code_document(self.repo, check=True)
 
-    def test_code_changes_require_recheck_without_refreshing_reviewed_hash(self):
-        (self.repo / self.source['publication_path']).write_text(self.body + '\nChanged reading limits.')
-        result, _ = profiles.code_document(self.repo)
-        self.assertEqual(result['resolved']['records'][0]['status'], 'needs_recheck')
-        self.assertEqual(result['curation'], self.doc['curation'])
+    def test_compact_check_and_preview_do_not_write_or_publish(self):
+        profiles.code_document(self.repo)
+        before = {str(p): p.read_bytes() for p in self.repo.rglob('*') if p.is_file()}
+        profiles.code_document(self.repo, check=True)
+        profiles.code_document(self.repo, preview=True)
+        self.assertEqual(before, {str(p): p.read_bytes() for p in self.repo.rglob('*') if p.is_file()})
+
+    def test_compact_stale_interpretation_does_not_refresh_curation(self):
+        self.row['assessment'].update(freshness='needs_recheck', recheck_reasons=['evidence_record_changed'])
+        profiles.code_document(self.repo)
         with self.assertRaisesRegex(ValueError, 'semantic recheck'):
             profiles.code_document(self.repo, check=True)
+        self.assertEqual(json.loads(self.path.read_bytes()), self.doc)
 
-    def test_code_profile_retains_owner_commit_function_and_execution_guards(self):
-        baseline = copy.deepcopy(self.doc)
-        for field, value in [('commit_sha', 'main'), ('owner', 'invented-author'), ('execution_status', 'passed')]:
-            self.doc = copy.deepcopy(baseline)
-            self.doc['curation']['sources'][0][field] = value
-            self.save()
-            with self.assertRaisesRegex(ValueError, 'Code Evidence validation'):
-                profiles.code_document(self.repo)
+    def test_compact_source_validator_failure_is_explicit(self):
+        self.runner.side_effect = None
+        self.runner.return_value = subprocess.CompletedProcess([], 1, b'', b'Invalid source pin')
+        with self.assertRaisesRegex(ValueError, 'Invalid source pin'):
+            profiles.code_document(self.repo)
+        self.assertFalse(self.path.with_suffix('.md').exists())
 
-    def test_upstream_project_labels_remain_literal_markdown_text(self):
-        self.doc['curation']['sources'][0]['project'] = '<img src=x onerror=alert(1)> | [unsafe]'
-        self.save()
-        _, markdown = profiles.code_document(self.repo)
-        self.assertNotIn(b'<img', markdown)
-        self.assertIn(b'&lt;img', markdown)
-        self.assertIn(b'&#124;', markdown)
+    def test_compact_normalization_uses_the_validated_export(self):
+        doc, _ = profiles.code_document(self.repo, preview=True)
+        self.assertEqual(profiles.normalize('code-evidence', doc, {}), [self.row])
 
 
 @unittest.skipUnless(shutil.which('git'), 'Git is needed to check contract revision stability')

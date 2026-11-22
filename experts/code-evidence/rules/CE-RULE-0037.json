@@ -1,0 +1,132 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0037",
+  "title": "Payment serialization declares validation order and mutation on failure",
+  "scope": "candidate_rule",
+  "question": "Compare entry-point guards, shared validators, normalization, partial object mutation and assertion evidence.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0075",
+      "title": "Serialization entry points do not share the same rejection boundary",
+      "library_id": "CE-REPO-0106",
+      "edition_id": "CE-EDITION-0106",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0106:CE-EDITION-0106:fn08",
+          "path": "src/nemiah/phpSepaXml/SEPATransfer.php",
+          "name": "nemiah\\phpSepaXml\\SEPATransfer::toXML($paymentInitiation='')",
+          "start_line": 71,
+          "end_line": 135
+        },
+        {
+          "id": "CE-REPO-0106:CE-EDITION-0106:fn13",
+          "path": "src/nemiah/phpSepaXml/SEPADirectDebitBasic.php",
+          "name": "nemiah\\phpSepaXml\\SEPADirectDebitBasic::toXML($format='pain.008.001.02')",
+          "start_line": 74,
+          "end_line": 150
+        },
+        {
+          "id": "CE-REPO-0106:CE-EDITION-0106:fn19",
+          "path": "src/nemiah/phpSepaXml/SEPAParty.php",
+          "name": "nemiah\\phpSepaXml\\SEPAParty::validateRequiredFields($context=null)",
+          "start_line": 88,
+          "end_line": 114
+        },
+        {
+          "id": "CE-REPO-0106:CE-EDITION-0106:fn20",
+          "path": "src/nemiah/phpSepaXml/SEPACreditor.php",
+          "name": "nemiah\\phpSepaXml\\SEPACreditor::XMLDirectDebit(SimpleXMLElement $xml,$format)",
+          "start_line": 44,
+          "end_line": 70
+        },
+        {
+          "id": "CE-REPO-0106:CE-EDITION-0106:fn21",
+          "path": "src/nemiah/phpSepaXml/SEPACreditor.php",
+          "name": "nemiah\\phpSepaXml\\SEPACreditor::validateRequiredFields($context=null)",
+          "start_line": 72,
+          "end_line": 81
+        },
+        {
+          "id": "CE-REPO-0106:CE-EDITION-0106:fn23",
+          "path": "src/nemiah/phpSepaXml/SEPADebitor.php",
+          "name": "nemiah\\phpSepaXml\\SEPADebitor::XMLDirectDebit(SimpleXMLElement $xml,$format)",
+          "start_line": 30,
+          "end_line": 67
+        },
+        {
+          "id": "CE-REPO-0106:CE-EDITION-0106:fn24",
+          "path": "src/nemiah/phpSepaXml/SEPADebitor.php",
+          "name": "nemiah\\phpSepaXml\\SEPADebitor::validateRequiredFields($context=null)",
+          "start_line": 70,
+          "end_line": 89
+        }
+      ],
+      "explanation": [
+        "Basic direct debit validates parties before building XML, but transfer output calls no required-field validator; XML functions mutate stored identifiers and missing IDs are filled from time. Validation and formatting are observable steps with different preconditions.",
+        "The two supplied PHPUnit-named examples only write XML files and contain no assertions. They do not prove validation, nonmutation, determinism, totals or output correctness. Error paths may occur after format/ID/party mutation; no in-memory rollback is implemented."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0104",
+      "title": "Currency decoder failures can mutate destination and nullable validity",
+      "library_id": "CE-REPO-0023",
+      "edition_id": "CE-EDITION-0023",
+      "collected_on": "2026-11-21",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn84",
+          "path": "currency.go",
+          "name": "govalues/money.Currency.UnmarshalJSON",
+          "start_line": 67,
+          "end_line": 80
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn86",
+          "path": "currency.go",
+          "name": "govalues/money.Currency.UnmarshalText",
+          "start_line": 99,
+          "end_line": 106
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn96",
+          "path": "currency.go",
+          "name": "govalues/money.Currency.Scan",
+          "start_line": 226,
+          "end_line": 242
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn102",
+          "path": "currency.go",
+          "name": "govalues/money.NullCurrency.Scan",
+          "start_line": 382,
+          "end_line": 390
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn104",
+          "path": "currency.go",
+          "name": "govalues/money.NullCurrency.UnmarshalJSON",
+          "start_line": 407,
+          "end_line": 415
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn106",
+          "path": "currency.go",
+          "name": "govalues/money.NullCurrency.UnmarshalBSONValue",
+          "start_line": 432,
+          "end_line": 440
+        }
+      ],
+      "explanation": [
+        "Currency decoders assign failed parse results before reporting error, while nullable wrappers change Valid before delegating.",
+        "ParseCurr returns XXX on invalid code. UnmarshalJSON/Text and supported Scan types assign that result then wrap error; unsupported Scan types skip currency assignment. NullCurrency sets Valid=true before nonnull delegation, so an unsupported type can preserve old currency with changed Valid. JSON currency decoding strips quotes without JSON-unescaping, rejecting escaped valid codes. These are actual currency decoder state boundaries, not automatically Core Money failure atomicity.",
+        "Decode invalid supported text into a populated Currency or decode unsupported nonnull value into an invalid NullCurrency; escaped JSON code exposes lexical issue. Exactnull resets nullable state and is a no-op for plain Currency JSON. No Currency decoder execution or enclosing Money-operation mutation was observed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    }
+  ]
+}

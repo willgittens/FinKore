@@ -1,0 +1,74 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0029",
+  "title": "Expiry declares eligibility, time boundaries and failure observations",
+  "scope": "candidate_rule",
+  "question": "Separate selection-time checks, direct invocation, optimistic conflicts, persistence rollback and unchanged caller objects.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0054",
+      "title": "Expiry eligibility and failure observations depend on the invocation boundary",
+      "library_id": "CE-REPO-0016",
+      "edition_id": "CE-EDITION-0016",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn08",
+          "path": "src/main/java/com/lmoraesdev/payment/application/usecase/ProcessWebhookService.java",
+          "name": "ProcessWebhookService.process(ProcessWebhookCommand)",
+          "start_line": 40,
+          "end_line": 92
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn11",
+          "path": "src/main/java/com/lmoraesdev/payment/adapter/out/scheduling/ChargeExpirationCoordinator.java",
+          "name": "ChargeExpirationCoordinator.expireOne(Charge)",
+          "start_line": 26,
+          "end_line": 50
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn12",
+          "path": "src/main/java/com/lmoraesdev/payment/adapter/out/scheduling/ChargeExpirationJob.java",
+          "name": "ChargeExpirationJob.expireOverdueCharges()",
+          "start_line": 26,
+          "end_line": 36
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn13",
+          "path": "src/main/java/com/lmoraesdev/payment/adapter/out/scheduling/ChargeExpirationJob.java",
+          "name": "ChargeExpirationJob.logSkippedDueToConflict(Charge,OptimisticLockingFailureException)",
+          "start_line": 38,
+          "end_line": 49
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn14",
+          "path": "src/main/java/com/lmoraesdev/payment/adapter/out/persistence/ChargeRepositoryAdapter.java",
+          "name": "ChargeRepositoryAdapter.save(Charge)",
+          "start_line": 21,
+          "end_line": 27
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn16",
+          "path": "src/main/java/com/lmoraesdev/payment/adapter/out/persistence/ChargeRepositoryAdapter.java",
+          "name": "ChargeRepositoryAdapter.findExpiredActive(Instant)",
+          "start_line": 35,
+          "end_line": 41
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn28",
+          "path": "src/main/java/com/lmoraesdev/payment/adapter/out/persistence/ChargeJpaEntity.java",
+          "name": "ChargeJpaEntity.isNew()",
+          "start_line": 45,
+          "end_line": 47
+        }
+      ],
+      "explanation": [
+        "The scheduled entry point supplies current time and selects ACTIVE charges through a named top-50/before/ordered query; expireOne itself checks only the transition. Per-item optimistic-lock failures are skipped. A Charge object is mutated before persistence/outbox calls, so an annotation alone does not establish unchanged in-memory observations on failure.",
+        "Direct expireOne invocation bypasses the selection-time check. Strict timestamp comparison and query locking require generated-query/dependency verification. The stale-save test checks the exception and absent dedup write, but not restored object state. Database rollback, caller object restoration, log/metric atomicity, clock boundaries and fairness are separate questions."
+      ],
+      "context_requirement_ids": []
+    }
+  ]
+}

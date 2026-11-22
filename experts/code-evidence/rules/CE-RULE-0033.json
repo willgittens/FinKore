@@ -1,0 +1,580 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0033",
+  "title": "Remote financial validation distinguishes negative answers from lookup failure",
+  "scope": "candidate_rule",
+  "question": "Separate syntax normalization, authority response, transport failure, incomplete response and tax exemption.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0058",
+      "title": "A negative validation answer differs from an unavailable authority",
+      "library_id": "CE-REPO-0112",
+      "edition_id": "CE-EDITION-0112",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0112:CE-EDITION-0112:fn03",
+          "path": "iban_bic.go",
+          "name": "finance.CheckIBAN(string) (*IBANBICInfo,error)",
+          "start_line": 46,
+          "end_line": 77
+        },
+        {
+          "id": "CE-REPO-0112:CE-EDITION-0112:fn04",
+          "path": "iban_bic.go",
+          "name": "finance.performIBANBICRequest(string,string) (string,error)",
+          "start_line": 79,
+          "end_line": 111
+        },
+        {
+          "id": "CE-REPO-0112:CE-EDITION-0112:fn05",
+          "path": "vies.go",
+          "name": "finance.CheckVAT(string) (*VATInfo,error)",
+          "start_line": 50,
+          "end_line": 121
+        },
+        {
+          "id": "CE-REPO-0112:CE-EDITION-0112:fn06",
+          "path": "vies.go",
+          "name": "finance.sanitizeVatNumber(string) string",
+          "start_line": 124,
+          "end_line": 129
+        },
+        {
+          "id": "CE-REPO-0112:CE-EDITION-0112:fn07",
+          "path": "vies.go",
+          "name": "finance.buildViewEnvelope(string) (string,error)",
+          "start_line": 132,
+          "end_line": 150
+        }
+      ],
+      "explanation": [
+        "VAT lookup distinguishes a decoded invalid result with nil error from transport/service/XML failure. Bank information uses sequential remote requests, with nil result on either failure; identifier sanitation/formatting is not independent financial validation.",
+        "No live authority was queried. Malformed-but-parseable replies, empty IBAN/BIC parts, unknown countries, tab/newline sanitation, XML concatenation and quote/authority effective dates need explicit assessment. A false VAT validity flag alone is not an exemption or tax conclusion."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0074",
+      "title": "Identifier presence and shape are distinct from authoritative validity",
+      "library_id": "CE-REPO-0106",
+      "edition_id": "CE-EDITION-0106",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0106:CE-EDITION-0106:fn15",
+          "path": "src/nemiah/phpSepaXml/SEPAParty.php",
+          "name": "nemiah\\phpSepaXml\\SEPAParty::__construct($data=null)",
+          "start_line": 36,
+          "end_line": 47
+        },
+        {
+          "id": "CE-REPO-0106:CE-EDITION-0106:fn16",
+          "path": "src/nemiah/phpSepaXml/SEPAParty.php",
+          "name": "nemiah\\phpSepaXml\\SEPAParty::fixNm($name,$length=70)",
+          "start_line": 49,
+          "end_line": 51
+        },
+        {
+          "id": "CE-REPO-0106:CE-EDITION-0106:fn17",
+          "path": "src/nemiah/phpSepaXml/SEPAParty.php",
+          "name": "nemiah\\phpSepaXml\\SEPAParty::fixNmS($name)",
+          "start_line": 53,
+          "end_line": 56
+        },
+        {
+          "id": "CE-REPO-0106:CE-EDITION-0106:fn19",
+          "path": "src/nemiah/phpSepaXml/SEPAParty.php",
+          "name": "nemiah\\phpSepaXml\\SEPAParty::validateRequiredFields($context=null)",
+          "start_line": 88,
+          "end_line": 114
+        },
+        {
+          "id": "CE-REPO-0106:CE-EDITION-0106:fn21",
+          "path": "src/nemiah/phpSepaXml/SEPACreditor.php",
+          "name": "nemiah\\phpSepaXml\\SEPACreditor::validateRequiredFields($context=null)",
+          "start_line": 72,
+          "end_line": 81
+        },
+        {
+          "id": "CE-REPO-0106:CE-EDITION-0106:fn24",
+          "path": "src/nemiah/phpSepaXml/SEPADebitor.php",
+          "name": "nemiah\\phpSepaXml\\SEPADebitor::validateRequiredFields($context=null)",
+          "start_line": 70,
+          "end_line": 89
+        }
+      ],
+      "explanation": [
+        "Construction strips spaces from IBAN/BIC; validation checks nonempty fields and broad regex shape; serialization can later transliterate/truncate stored identifiers. No checksum or country-specific bank validation is implemented locally.",
+        "BIC regex accepts 9/10 characters and IBAN regex does not enforce each country length or modulo-97. No assertion-backed bank validity or current regulatory/scheme correctness is claimed. Input normalization can also change previously held source data."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0306",
+      "title": "ex-money: API exceptions, callback failures and cache writes have different failure boundaries",
+      "library_id": "CE-REPO-0031",
+      "edition_id": "CE-EDITION-0031",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn126",
+          "path": "lib/money/exchange_rates/retriever.ex",
+          "name": "Money.ExchangeRates.Retriever.fetch_latest_rates [clause 433]",
+          "start_line": 433,
+          "end_line": 450
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn128",
+          "path": "lib/money/exchange_rates/retriever.ex",
+          "name": "Money.ExchangeRates.Retriever.fetch_historic_rates [clause 459]",
+          "start_line": 459,
+          "end_line": 487
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn129",
+          "path": "lib/money/exchange_rates/retriever.ex",
+          "name": "Money.ExchangeRates.Retriever.call_cache_module [clause 494]",
+          "start_line": 494,
+          "end_line": 502
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn130",
+          "path": "lib/money/exchange_rates/retriever.ex",
+          "name": "Money.ExchangeRates.Retriever.call_api_module [clause 511]",
+          "start_line": 511,
+          "end_line": 520
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn131",
+          "path": "lib/money/exchange_rates/retriever.ex",
+          "name": "Money.ExchangeRates.Retriever.normalize_api_error [clause 530]",
+          "start_line": 530,
+          "end_line": 532
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn132",
+          "path": "lib/money/exchange_rates/retriever.ex",
+          "name": "Money.ExchangeRates.Retriever.normalize_api_error [clause 534]",
+          "start_line": 534,
+          "end_line": 536
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn133",
+          "path": "lib/money/exchange_rates/retriever.ex",
+          "name": "Money.ExchangeRates.Retriever.normalize_api_error [clause 538]",
+          "start_line": 538,
+          "end_line": 540
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn134",
+          "path": "lib/money/exchange_rates/retriever.ex",
+          "name": "Money.ExchangeRates.Retriever.run_callback [clause 546]",
+          "start_line": 546,
+          "end_line": 558
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn136",
+          "path": "lib/money/exchange_rates/retriever.ex",
+          "name": "Money.ExchangeRates.Retriever.schedule_historic_rates_preload [clause 564]",
+          "start_line": 564,
+          "end_line": 568
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn137",
+          "path": "lib/money/exchange_rates/retriever.ex",
+          "name": "Money.ExchangeRates.Retriever.schedule_historic_rates_preload [clause 582]",
+          "start_line": 582,
+          "end_line": 590
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn138",
+          "path": "lib/money/exchange_rates/retriever.ex",
+          "name": "Money.ExchangeRates.Retriever.schedule_historic_rates_preload [clause 592]",
+          "start_line": 592,
+          "end_line": 594
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn139",
+          "path": "lib/money/exchange_rates/retriever.ex",
+          "name": "Money.ExchangeRates.Retriever.schedule_historic_rates_preload [clause 596]",
+          "start_line": 596,
+          "end_line": 609
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn140",
+          "path": "lib/money/exchange_rates/retriever.ex",
+          "name": "Money.ExchangeRates.Retriever.schedule_historic_rates_preload [clause 614]",
+          "start_line": 614,
+          "end_line": 616
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn469",
+          "path": "lib/money/exchange_rates/retriever.ex",
+          "name": "lib/money/exchange_rates/retriever.ex def historic_rates(retriever, %Date{calendar: Calendar.ISO} = date) guarded implementation",
+          "start_line": 154,
+          "end_line": 157
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn470",
+          "path": "lib/money/exchange_rates/retriever.ex",
+          "name": "lib/money/exchange_rates/retriever.ex def historic_rates(retriever, %{year: _year, month: _month, day: _day} = date) guarded implementation",
+          "start_line": 159,
+          "end_line": 164
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn471",
+          "path": "lib/money/exchange_rates/retriever.ex",
+          "name": "lib/money/exchange_rates/retriever.ex defp date_from_map(%{year: year, month: month, day: day} = date) guarded implementation",
+          "start_line": 224,
+          "end_line": 230
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn472",
+          "path": "lib/money/exchange_rates/retriever.ex",
+          "name": "lib/money/exchange_rates/retriever.ex defp normalize_api_error({:error, {module, message}} = error) guarded implementation",
+          "start_line": 525,
+          "end_line": 528
+        }
+      ],
+      "explanation": [
+        "Exchange-rate retrieval has distinct API, callback, cache and preload failure boundaries; ISO string preload misses the date clauses.",
+        "Raised API exceptions are rescued/normalized, callbacks are rescued only after cache storage, and cache dispatch has no such rescue or return-value check. not_modified reads the cache again. The string preload passes Date.from_iso8601 tuples, rather than unwrapped Date values, to date-pattern clauses and reaches the fallback. This establishes an apparent local preload defect without claiming remote rates, cache atomicity or Core workflow effects.",
+        "Use ISO string preload, or independently a cache/provider/callback that returns or raises the relevant outcome. Date-valued preload follows its separate valid clause. Rescue is not universal handling of exits/throws; actual caches, callbacks and remote facts were not executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0314",
+      "title": "JSR354 API: availability predicates can describe provider membership instead of rate existence",
+      "library_id": "CE-REPO-0109",
+      "edition_id": "CE-EDITION-0109",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn217",
+          "path": "src/main/java/javax/money/convert/ExchangeRateProvider.java",
+          "name": "javax.money.convert.ExchangeRateProvider.isAvailable",
+          "start_line": 93,
+          "end_line": 102
+        },
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn220",
+          "path": "src/main/java/javax/money/convert/ExchangeRateProvider.java",
+          "name": "javax.money.convert.ExchangeRateProvider.isAvailable",
+          "start_line": 144,
+          "end_line": 146
+        },
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn221",
+          "path": "src/main/java/javax/money/convert/ExchangeRateProvider.java",
+          "name": "javax.money.convert.ExchangeRateProvider.isAvailable",
+          "start_line": 160,
+          "end_line": 162
+        },
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn332",
+          "path": "src/main/java/javax/money/spi/MonetaryConversionsSingletonSpi.java",
+          "name": "javax.money.spi.MonetaryConversionsSingletonSpi.isExchangeRateProviderAvailable",
+          "start_line": 95,
+          "end_line": 101
+        },
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn333",
+          "path": "src/main/java/javax/money/spi/MonetaryConversionsSingletonSpi.java",
+          "name": "javax.money.spi.MonetaryConversionsSingletonSpi.isConversionAvailable",
+          "start_line": 115,
+          "end_line": 121
+        },
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn334",
+          "path": "src/main/java/javax/money/spi/MonetaryConversionsSingletonSpi.java",
+          "name": "javax.money.spi.MonetaryConversionsSingletonSpi.isConversionAvailable",
+          "start_line": 138,
+          "end_line": 141
+        }
+      ],
+      "explanation": [
+        "Default exchange-rate availability checks can report provider membership rather than availability of the currency pair.",
+        "ExchangeRateProvider.isAvailable checks empty provider names or own name and does not obtain the rate; null query is rejected before its catch. Other SPI predicates catch exceptions and collapse them to false after selecting a provider/conversion. Thus distinct notions of availability and loss of diagnostic causes are explicit API policies, not evidence of actual available remote quotes.",
+        "A provider using the default rather than overriding it; a query with empty provider names or the provider name. Overrides may perform actual pair lookups. No Core FX availability contract or current remote result is defined. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0317",
+      "title": "JSR354 API: service cache exposes different mutation behavior on hit and first load",
+      "library_id": "CE-REPO-0109",
+      "edition_id": "CE-EDITION-0109",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn321",
+          "path": "src/main/java/javax/money/spi/DefaultServiceProvider.java",
+          "name": "javax.money.spi.DefaultServiceProvider.getServices",
+          "start_line": 49,
+          "end_line": 57
+        },
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn322",
+          "path": "src/main/java/javax/money/spi/DefaultServiceProvider.java",
+          "name": "javax.money.spi.DefaultServiceProvider.loadServices",
+          "start_line": 67,
+          "end_line": 82
+        }
+      ],
+      "explanation": [
+        "The default service cache exposes its mutable cached list on hits, despite returning an unmodifiable view after successful first load.",
+        "getServices returns found directly. loadServices builds and stores a mutable ArrayList, sorting simple class names, then wraps only the returned first-load view. A later caller can modify the hit result and thereby the service selection data; load exceptions return the partial list. This is a local cache/API consistency concern, not a financial amount calculation.",
+        "At least one successful service load followed by cache hit; a caller then modifies the directly returned cached list. First-load unmodifiable view prevents direct mutation through that view only. Runtime classpath contents, races and actual provider selection were not observed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0327",
+      "title": "JavaMoney Yahoo binding and asynchronous failure paths limit source availability guarantees",
+      "library_id": "CE-REPO-0111",
+      "edition_id": "CE-EDITION-0111",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn357",
+          "path": "exchange/exchange-rate-frb/src/main/java/org/javamoney/moneta/convert/frb/USFederalReserveRateProvider.java",
+          "name": "org.javamoney.moneta.convert.frb.USFederalReserveRateProvider.newDataLoaded",
+          "start_line": 156,
+          "end_line": 180
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn388",
+          "path": "exchange/exchange-rate-yahoo/src/main/java/org/javamoney/moneta/convert/yahoo/YahooAbstractRateProvider.java",
+          "name": "org.javamoney.moneta.convert.yahoo.YahooAbstractRateProvider.newDataLoaded",
+          "start_line": 87,
+          "end_line": 102
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn432",
+          "path": "exchange/exchange-rate-yahoo/src/main/java/org/javamoney/moneta/convert/yahoo/YahooRateReadingHandler.java",
+          "name": "org.javamoney.moneta.convert.yahoo.YahooRateReadingHandler.parse",
+          "start_line": 52,
+          "end_line": 66
+        }
+      ],
+      "explanation": [
+        "Yahoo parser binding names a different JAXB package from its DTOs, and asynchronous completion does not imply a fresh usable cache.",
+        "parse names org.javamoney.moneta.internal.convert.yahoo while YahooRoot is in org.javamoney.moneta.convert.yahoo. FRB parses a temporary map then updates/prunes old dates; Yahoo passes its live map to the parser. Both catch exceptions, record error text and always count down the latch. This supports a binding integration concern and bounded cache lifecycle observations, without a claim that current remote rates load or fail.",
+        "Exercise the packaged JAXB context without an externally supplied matching binding package, or trigger parser/load failure after previous data exists. Classpath/JAXB execution was not observed; FRB parse failure before putAll retains the old map, while Yahoo partial updates depend on parser progress. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0339",
+      "title": "Moneta ECB loader ignores delivered stream and updates cache through another remote read",
+      "library_id": "CE-REPO-0110",
+      "edition_id": "CE-EDITION-0110",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn067",
+          "path": "moneta-convert/moneta-convert-ecb/src/main/java/org/javamoney/moneta/convert/ecb/ECBAbstractRateProvider.java",
+          "name": "org.javamoney.moneta.convert.ecb.ECBAbstractRateProvider.newDataLoaded",
+          "start_line": 112,
+          "end_line": 143
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn068",
+          "path": "moneta-convert/moneta-convert-ecb/src/main/java/org/javamoney/moneta/convert/ecb/ECBAbstractRateProvider.java",
+          "name": "org.javamoney.moneta.convert.ecb.ECBAbstractRateProvider.getExchangeRate",
+          "start_line": 146,
+          "end_line": 168
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn070",
+          "path": "moneta-convert/moneta-convert-ecb/src/main/java/org/javamoney/moneta/convert/ecb/ECBAbstractRateProvider.java",
+          "name": "org.javamoney.moneta.convert.ecb.ECBAbstractRateProvider.createExchangeRate",
+          "start_line": 196,
+          "end_line": 226
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn086",
+          "path": "moneta-convert/moneta-convert-ecb/src/main/java/org/javamoney/moneta/convert/ecb/ECBRateReadingHandler.java",
+          "name": "org.javamoney.moneta.convert.ecb.ECBRateReadingHandler.startElement",
+          "start_line": 78,
+          "end_line": 93
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn087",
+          "path": "moneta-convert/moneta-convert-ecb/src/main/java/org/javamoney/moneta/convert/ecb/ECBRateReadingHandler.java",
+          "name": "org.javamoney.moneta.convert.ecb.ECBRateReadingHandler.addRate",
+          "start_line": 101,
+          "end_line": 127
+        }
+      ],
+      "explanation": [
+        "ECB load callback ignores supplied bytes and opens the remote resource again; cache completion does not certify successful fresh rates.",
+        "newDataLoaded parses a newly opened URL rather than its InputStream argument and passes the existing rates map to SAX. It catches exceptions and always releases loadLock. getExchangeRate can then return null on empty rates; cross-rate missing-leg error construction dereferences sourceRate. The SAX reader converts decimal rate text through double and chooses rate type against LocalDate.now. These are bounded loader/FX facts, not Core financial-domain conformance claims.",
+        "Invoke callback with supplied local/fallback bytes different from remoteResource, or trigger partial SAX failure/missing cross leg. No URL was requested; current ECB facts, actual partial progress and concrete binary conversion loss remain unexecuted and input-dependent. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0340",
+      "title": "Moneta IMF history caches month even after caught partial fetch or parse failure",
+      "library_id": "CE-REPO-0110",
+      "edition_id": "CE-EDITION-0110",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn098",
+          "path": "moneta-convert/moneta-convert-imf/src/main/java/org/javamoney/moneta/convert/imf/IMFHistoricRateProvider.java",
+          "name": "org.javamoney.moneta.convert.imf.IMFHistoricRateProvider.getExchangeRate",
+          "start_line": 72,
+          "end_line": 89
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn099",
+          "path": "moneta-convert/moneta-convert-imf/src/main/java/org/javamoney/moneta/convert/imf/IMFHistoricRateProvider.java",
+          "name": "org.javamoney.moneta.convert.imf.IMFHistoricRateProvider.loadFromRemote",
+          "start_line": 91,
+          "end_line": 101
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn100",
+          "path": "moneta-convert/moneta-convert-imf/src/main/java/org/javamoney/moneta/convert/imf/IMFHistoricRateProvider.java",
+          "name": "org.javamoney.moneta.convert.imf.IMFHistoricRateProvider.combine",
+          "start_line": 103,
+          "end_line": 110
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn101",
+          "path": "moneta-convert/moneta-convert-imf/src/main/java/org/javamoney/moneta/convert/imf/IMFHistoricRateProvider.java",
+          "name": "org.javamoney.moneta.convert.imf.IMFHistoricRateProvider.merge",
+          "start_line": 111,
+          "end_line": 115
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn093",
+          "path": "moneta-convert/moneta-convert-imf/src/main/java/org/javamoney/moneta/convert/imf/IMFAbstractRateProvider.java",
+          "name": "org.javamoney.moneta.convert.imf.IMFAbstractRateProvider.newDataLoaded",
+          "start_line": 110,
+          "end_line": 124
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn094",
+          "path": "moneta-convert/moneta-convert-imf/src/main/java/org/javamoney/moneta/convert/imf/IMFAbstractRateProvider.java",
+          "name": "org.javamoney.moneta.convert.imf.IMFAbstractRateProvider.getExchangeRate",
+          "start_line": 127,
+          "end_line": 169
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn095",
+          "path": "moneta-convert/moneta-convert-imf/src/main/java/org/javamoney/moneta/convert/imf/IMFAbstractRateProvider.java",
+          "name": "org.javamoney.moneta.convert.imf.IMFAbstractRateProvider.getExchangeRate",
+          "start_line": 171,
+          "end_line": 190
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn119",
+          "path": "moneta-convert/moneta-convert-imf/src/main/java/org/javamoney/moneta/convert/imf/IMFRemoteSearchCallable.java",
+          "name": "org.javamoney.moneta.convert.imf.IMFRemoteSearchCallable.IMFRemoteSearchCallable",
+          "start_line": 39,
+          "end_line": 43
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn120",
+          "path": "moneta-convert/moneta-convert-imf/src/main/java/org/javamoney/moneta/convert/imf/IMFRemoteSearchCallable.java",
+          "name": "org.javamoney.moneta.convert.imf.IMFRemoteSearchCallable.call",
+          "start_line": 46,
+          "end_line": 69
+        }
+      ],
+      "explanation": [
+        "IMF history marks a month cached after loadFromRemote catches parse/merge failure, potentially suppressing retry.",
+        "getExchangeRate calls loadFromRemote then unconditionally adds yearMonth; loadFromRemote catches exceptions after sequential per-resource merges. merge concatenates/sorts without date deduplication. Initial loader replaces two leg maps in order and releases its latch only on success; timeout lookup releases it before raising. HTTP callable ignores userAgent and reads body without status validation. None proves current market-rate validity.",
+        "Historic fetch returns a resource map and a read/merge failure is caught inside loadFromRemote; subsequent requests revisit the same month. An exception thrown by getResources before loadFromRemote does not reach cachedHistoric.add. Transport and actual parser failure were not executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0341",
+      "title": "Moneta HTTP cache: fallback and remote success flags do not establish valid new data",
+      "library_id": "CE-REPO-0110",
+      "edition_id": "CE-EDITION-0110",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn912",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/loader/okhttp/LoadableHttpResource.java",
+          "name": "org.javamoney.moneta.spi.loader.okhttp.LoadableHttpResource.load",
+          "start_line": 140,
+          "end_line": 150
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn921",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/loader/okhttp/LoadableHttpResource.java",
+          "name": "org.javamoney.moneta.spi.loader.okhttp.LoadableHttpResource.loadRemote",
+          "start_line": 224,
+          "end_line": 233
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn922",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/loader/okhttp/LoadableHttpResource.java",
+          "name": "org.javamoney.moneta.spi.loader.okhttp.LoadableHttpResource.loadFallback",
+          "start_line": 241,
+          "end_line": 255
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn926",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/loader/okhttp/LoadableHttpResource.java",
+          "name": "org.javamoney.moneta.spi.loader.okhttp.LoadableHttpResource.load",
+          "start_line": 310,
+          "end_line": 403
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn927",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/loader/okhttp/LoadableHttpResource.java",
+          "name": "org.javamoney.moneta.spi.loader.okhttp.LoadableHttpResource.getData",
+          "start_line": 411,
+          "end_line": 433
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn930",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/loader/okhttp/LoadableHttpResource.java",
+          "name": "org.javamoney.moneta.spi.loader.okhttp.LoadableHttpResource.unload",
+          "start_line": 439,
+          "end_line": 446
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn907",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/loader/okhttp/HttpLoadRemoteDataService.java",
+          "name": "org.javamoney.moneta.spi.loader.okhttp.HttpLoadRemoteDataService.execute",
+          "start_line": 36,
+          "end_line": 57
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn896",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/loader/LoaderListener.java",
+          "name": "org.javamoney.moneta.spi.loader.LoaderListener.trigger",
+          "start_line": 66,
+          "end_line": 89
+        }
+      ],
+      "explanation": [
+        "HTTP load booleans, callbacks and cached bytes have distinct success meanings and can diverge.",
+        "loadFallback ignores load false, clears cache and returns true; loadRemote returns the first load result even false instead of trying remaining URLs. HTTP load reads body without response-status guard, sets data before writing cache and maps write-timeout configuration to readTimeout. execute ignores cache/remote booleans and triggers listeners twice; global listener errors are logged while resource-specific failures abort. getData exposes shared bytes on hits. These paths do not certify validated fresh rates.",
+        "A failed fallback read, first remote false with further URLs, cache-write failure after data update, or listeners invoked around unsuccessful loads. No HTTP request/status, actual data mutation or runtime listener result was observed. A correctly loaded first URL may work normally; byte-cache APIs have no Core domain contract. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,560 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0025",
+  "title": "A financial composite declares what equality and ordering compare",
+  "scope": "candidate_rule",
+  "question": "Net/gross pair equality and gross-only ordering have different subjects and need explicit policy.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0049",
+      "title": "Taxed-price equality and ordering compare different subjects",
+      "library_id": "CE-REPO-0038",
+      "edition_id": "CE-EDITION-0038",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0038:CE-EDITION-0038:fn28",
+          "path": "prices/taxed_money.py",
+          "name": "prices.taxed_money.TaxedMoney.__lt__",
+          "start_line": 31,
+          "end_line": 38
+        },
+        {
+          "id": "CE-REPO-0038:CE-EDITION-0038:fn29",
+          "path": "prices/taxed_money.py",
+          "name": "prices.taxed_money.TaxedMoney.__eq__",
+          "start_line": 40,
+          "end_line": 45
+        },
+        {
+          "id": "CE-REPO-0038:CE-EDITION-0038:fn30",
+          "path": "prices/taxed_money.py",
+          "name": "prices.taxed_money.TaxedMoney.__le__",
+          "start_line": 47,
+          "end_line": 50
+        },
+        {
+          "id": "CE-REPO-0038:CE-EDITION-0038:fn45",
+          "path": "prices/taxed_money_range.py",
+          "name": "prices.taxed_money_range.TaxedMoneyRange.__contains__",
+          "start_line": 76,
+          "end_line": 81
+        }
+      ],
+      "explanation": [
+        "TaxedMoney equality compares net and gross, while strict ordering compares gross only. Comparing to plain Money is rejected to require an explicit base choice.",
+        "Pairs with equal gross and different net are unequal but neither strictly ordered. Membership and total-order expectations need explicit domain policy. Constructor checks do not guarantee immutable aliased components."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0085",
+      "title": "GMP decimal comparison does not align fraction widths or negative fractional signs",
+      "library_id": "CE-REPO-0001",
+      "edition_id": "CE-EDITION-0001",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn64",
+          "path": "src/Calculator/GmpCalculator.php",
+          "name": "Money\\Calculator\\GmpCalculator::compare",
+          "start_line": 44,
+          "end_line": 62
+        }
+      ],
+      "explanation": [
+        "The GMP helper can order equal-integer decimal inputs by unscaled fractional digit integers rather than decimal magnitude; the claim is confined to that helper and does not establish defective comparison for every integer-minor-unit Money value.",
+        "The body compares integer parts first, then passes fractional strings directly to gmp_cmp. Core comparison is relevant only if this helper decides an accepted Money comparison; native integer Money paths must not be conflated with decimal helper inputs.",
+        "Both parsed integer parts must compare equal and at least one operand must have a fractional part; GMP is the selected backend. For helper inputs1.11 and1.2, fractional integers11 and2 invert decimal order; -0.1/+0.1 can also lose the fractional sign when integer parts compare equal. The helper branch was traced, not executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0103",
+      "title": "Total ordering makes equal monetary values select different scales",
+      "library_id": "CE-REPO-0023",
+      "edition_id": "CE-EDITION-0023",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn80",
+          "path": "amount.go",
+          "name": "govalues/money.Amount.Cmp",
+          "start_line": 1284,
+          "end_line": 1290
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn76",
+          "path": "amount.go",
+          "name": "govalues/money.Amount.CmpTotal",
+          "start_line": 1218,
+          "end_line": 1224
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn74",
+          "path": "amount.go",
+          "name": "govalues/money.Amount.Min",
+          "start_line": 1153,
+          "end_line": 1162
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn73",
+          "path": "amount.go",
+          "name": "govalues/money.Amount.Max",
+          "start_line": 1138,
+          "end_line": 1147
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn75",
+          "path": "amount.go",
+          "name": "govalues/money.Amount.Clamp",
+          "start_line": 1177,
+          "end_line": 1205
+        }
+      ],
+      "explanation": [
+        "govalues distinguishes numeric Cmp from scale-sensitive CmpTotal; extrema and Clamp intentionally use CmpTotal and can select an equal numeric value with a different presentation scale.",
+        "Both wrappers reject currency mismatch. The selected Decimal CmpTotal body first compares numeric value, then reverses the scale comparison on numeric ties. MONEY-COMPARISON-005 permits separate representation equality; Core numeric comparison must use Cmp, not substitute CmpTotal.",
+        "Same currency and numerically equal amounts with differing scale; extrema/Clamp request representation-sensitive selection. Min can select10.00 rather than10.0 while Max selects the smaller-scale representation. This changes representation, not numeric amount, and is not an arithmetic exactness defect. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0174",
+      "title": "Zero equality ignores currency while hashing still includes it",
+      "library_id": "CE-REPO-0003",
+      "edition_id": "CE-EDITION-0003",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn099",
+          "path": "lib/money/money/arithmetic.rb",
+          "name": "Money::Arithmetic::eql?",
+          "start_line": 40,
+          "end_line": 54
+        },
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn100",
+          "path": "lib/money/money/arithmetic.rb",
+          "name": "Money::Arithmetic::<=>",
+          "start_line": 65,
+          "end_line": 81
+        },
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn101",
+          "path": "lib/money/money/arithmetic.rb",
+          "name": "Money::Arithmetic::==",
+          "start_line": 85,
+          "end_line": 91
+        },
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn171",
+          "path": "lib/money/money.rb",
+          "name": "Money::hash",
+          "start_line": 404,
+          "end_line": 406
+        }
+      ],
+      "explanation": [
+        "RubyMoney default eql? treats two cross-currency zeros as equal while its hash still includes currency; ordinary comparison also has a zero shortcut and nonzero bank conversion. These are distinct policies from Core explicit mismatch semantics.",
+        "The equality/hash input mismatch is structural, while actual hash values and collisions are runtime-dependent. Strict eql mode removes the zero shortcut but returns false rather than the portable mismatch error. No hash-number outcome or complete conformance verdict is claimed.",
+        "Default strict_eql_compare is false for the cross-currency-zero eql? branch; ordinary <=> may use stored bank context for nonzero operands. Zero USD and zero EUR can satisfy eql? while hash inputs differ; a coincidental hash collision does not restore a general hash/equality guarantee. Core comparison would reject incompatible currencies rather than silently compare zeros. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0199",
+      "title": "Representation equality and numeric equality deliberately differ",
+      "library_id": "CE-REPO-0004",
+      "edition_id": "CE-EDITION-0004",
+      "collected_on": "2026-11-21",
+      "relationship": "corroborates",
+      "qualification": "support",
+      "functions": [
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn081",
+          "path": "src/main/java/org/joda/money/BigMoney.java",
+          "name": "org.joda.money.BigMoney.compareTo",
+          "start_line": 1608,
+          "end_line": 1615
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn082",
+          "path": "src/main/java/org/joda/money/BigMoney.java",
+          "name": "org.joda.money.BigMoney.isEqual",
+          "start_line": 1630,
+          "end_line": 1632
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn087",
+          "path": "src/main/java/org/joda/money/BigMoney.java",
+          "name": "org.joda.money.BigMoney.equals",
+          "start_line": 1695,
+          "end_line": 1705
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn088",
+          "path": "src/main/java/org/joda/money/BigMoney.java",
+          "name": "org.joda.money.BigMoney.hashCode",
+          "start_line": 1712,
+          "end_line": 1715
+        }
+      ],
+      "explanation": [
+        "BigMoney provides numeric comparison separately from scale-sensitive representation equality.",
+        "compareTo first rejects a different currency and then uses BigDecimal.compareTo; isEqual delegates to that numeric relation. equals requires BigMoney and BigDecimal.equals, so 1.0 and 1.00 can have distinct representation equality while numeric equality succeeds. This distinction is expressly permitted by MONEY-COMPARISON-005, provided canonical numeric comparison uses isEqual/compareTo.",
+        "Use same-currency BigMoney values with numerically equal amounts and different decimal scale. Do not use equals as the canonical Core numeric equality or infer portable error normalization from native exceptions. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0204",
+      "title": "Style equality omits an observable grouping field",
+      "library_id": "CE-REPO-0004",
+      "edition_id": "CE-EDITION-0004",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn256",
+          "path": "src/main/java/org/joda/money/format/MoneyAmountStyle.java",
+          "name": "org.joda.money.format.MoneyAmountStyle.withExtendedGroupingSize",
+          "start_line": 514,
+          "end_line": 527
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn263",
+          "path": "src/main/java/org/joda/money/format/MoneyAmountStyle.java",
+          "name": "org.joda.money.format.MoneyAmountStyle.equals",
+          "start_line": 626,
+          "end_line": 644
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn264",
+          "path": "src/main/java/org/joda/money/format/MoneyAmountStyle.java",
+          "name": "org.joda.money.format.MoneyAmountStyle.hashCode",
+          "start_line": 651,
+          "end_line": 664
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn230",
+          "path": "src/main/java/org/joda/money/format/AmountPrinterParser.java",
+          "name": "org.joda.money.format.AmountPrinterParser.print",
+          "start_line": 46,
+          "end_line": 112
+        }
+      ],
+      "explanation": [
+        "MoneyAmountStyle equality and hashing omit extendedGroupingSize although amount printing uses it.",
+        "withExtendedGroupingSize changes an immutable style property; equals/hashCode compare other style fields but omit this one. AmountPrinterParser obtains extendedGroupingSize and uses it to determine grouping boundaries. Thus styles differing only there can compare equal yet produce different grouping for sufficiently long amounts. This concerns configuration identity, not numerical Money equality.",
+        "Two otherwise identical grouping-enabled styles with different effective extended grouping sizes and enough integer digits. A short amount or disabled grouping may render identical text; no observed hash collision value or runtime formatted output is asserted. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0210",
+      "title": "Variadic comparisons can accept nonmonotonic four-value sequences",
+      "library_id": "CE-REPO-0024",
+      "edition_id": "CE-EDITION-0024",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn050",
+          "path": "src/clojure/clojurewerkz/money/amounts.clj",
+          "name": "clojurewerkz.money.amounts/>[arity4]",
+          "start_line": 255,
+          "end_line": 260
+        },
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn056",
+          "path": "src/clojure/clojurewerkz/money/amounts.clj",
+          "name": "clojurewerkz.money.amounts/<[arity4]",
+          "start_line": 281,
+          "end_line": 286
+        },
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn059",
+          "path": "src/clojure/clojurewerkz/money/amounts.clj",
+          "name": "clojurewerkz.money.amounts/<=[arity4]",
+          "start_line": 294,
+          "end_line": 299
+        },
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn053",
+          "path": "src/clojure/clojurewerkz/money/amounts.clj",
+          "name": "clojurewerkz.money.amounts/>=[arity4]",
+          "start_line": 268,
+          "end_line": 273
+        }
+      ],
+      "explanation": [
+        "ClojureWerkz variadic >, < and <= recur with the original first operand instead of the previous operand, so some four-value sequences with an adjacent reversal can pass; >= uses the previous operand.",
+        "The recurrence is directly visible and the binary comparisons remain delegated to Joda. Core defines binary Money ordering, not this variadic monotonic API, so the bounded defect concerns the helper sequence contract rather than all Money comparisons.",
+        "Supply four same-currency amounts so the first is more extreme than both middle values but a middle adjacent pair reverses the requested order. [5,3,4,2] passes the inspected > recurrence; [1,3,2,4] passes < or <= despite the middle reversal. This is a static branch trace, not an executed Clojure result. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0249",
+      "title": "Numeric equality and operators disagree with representation ordering",
+      "library_id": "CE-REPO-0032",
+      "edition_id": "CE-EDITION-0032",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn093",
+          "path": "lib/src/money.dart",
+          "name": "Money::compareTo",
+          "start_line": 624,
+          "end_line": 628
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn094",
+          "path": "lib/src/money.dart",
+          "name": "Money::==",
+          "start_line": 633,
+          "end_line": 635
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn097",
+          "path": "lib/src/money.dart",
+          "name": "Money::>",
+          "start_line": 663,
+          "end_line": 668
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn089",
+          "path": "lib/src/money.dart",
+          "name": "Money::hashCode",
+          "start_line": 601,
+          "end_line": 607
+        }
+      ],
+      "explanation": [
+        "Money.dart delegates compareTo to Fixed6.0.0 representation ordering, while its equality and relational operators normalize scales numerically; the two observations must not be treated as interchangeable Core numeric comparison.",
+        "The pinned Fixed body documents raw minorUnits/decimalDigits ordering and compares coefficients first; == and > instead call _scale. This is a representation-policy distinction unless an application exposes compareTo as canonical numeric ordering. Hash inputs also differ from normalized equality, but exact runtime hash values were not computed.",
+        "Use equal currencies with different admitted stored scales and the examined compatible Fixed6.0.0 dependency. Money1.0 with coefficient10/scale1 can compareTo below0.99 with99/2 while > is true;1.0 and1.00 can be == with nonzero compareTo. This is a static cross-scale trace. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0299",
+      "title": "Increment and scalar-left operator paths require their own semantic comparison",
+      "library_id": "CE-REPO-0007",
+      "edition_id": "CE-EDITION-0007",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn400",
+          "path": "src/NodaMoney/Money.UnaryOperators.cs",
+          "name": "NodaMoney.Money::private static Money AdjustByMinorUnit(in Money money, bool increment)",
+          "start_line": 63,
+          "end_line": 86
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn245",
+          "path": "src/NodaMoney/FastMoney.UnaryOperators.cs",
+          "name": "NodaMoney.FastMoney::private static FastMoney AdjustByMinorUnit(in FastMoney money, bool increment)",
+          "start_line": 58,
+          "end_line": 84
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn275",
+          "path": "src/NodaMoney/Money.BinaryOperators.cs",
+          "name": "NodaMoney.Money::public static Money operator -(decimal left, Money right)",
+          "start_line": 54,
+          "end_line": 54
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn166",
+          "path": "src/NodaMoney/FastMoney.BinaryOperators.cs",
+          "name": "NodaMoney.FastMoney::public static FastMoney operator -(decimal left, FastMoney right)",
+          "start_line": 69,
+          "end_line": 69
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn174",
+          "path": "src/NodaMoney/FastMoney.BinaryOperators.cs",
+          "name": "NodaMoney.FastMoney::public static FastMoney operator /(long left, FastMoney right)",
+          "start_line": 119,
+          "end_line": 119
+        }
+      ],
+      "explanation": [
+        "NodaMoney extra increment/scalar-left operators use source-selected semantics: Money steps by stored scale, FastMoney by currency digits, and scalar-left subtraction/division delegate with Money as the left arithmetic operand.",
+        "The forwarded argument order and increment construction are explicit. Core defines Money-minus-Money and Money-divided-by-scalar, not these additional scalar-left or increment APIs, so their spelling is not sufficient to declare canonical subtraction/division reversed.",
+        "Use the exact native overloads shown, distinguishing decimal-left subtraction from Money-left subtraction and long-left FastMoney division. decimal left minus Money right calls Subtract(right,left), while long left divided by FastMoney right calls Divide(right,left). Normalized Money zero can increment by a whole unit because its stored scale is zero. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0316",
+      "title": "JSR354 API: numeric comparison delegates through potentially inexact NumberValue extraction",
+      "library_id": "CE-REPO-0109",
+      "edition_id": "CE-EDITION-0109",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "open_question",
+      "functions": [
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn148",
+          "path": "src/main/java/javax/money/NumberValue.java",
+          "name": "javax.money.NumberValue.compareTo",
+          "start_line": 186,
+          "end_line": 188
+        }
+      ],
+      "explanation": [
+        "NumberValue.compareTo requests BigDecimal through the potentially inexact conversion API; concrete comparison exactness remains implementation-dependent.",
+        "The actual body calls numberValue(BigDecimal.class) on both values and BigDecimal.compareTo. It does not call numberValueExact. This creates a precision obligation for concrete NumberValue implementations but does not prove their BigDecimal conversion loses information; arbitrary declared Number may already be exactly representable. Core numeric equality must compare exact amount values, so this mapping is conditional rather than a demonstrated violation.",
+        "A concrete NumberValue whose conversion to BigDecimal is inexact for an admitted value, and use as a canonical Money comparison path. For exact BigDecimal-backed implementations the same body is numerically exact; NumberValue alone has no currency validation. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0325",
+      "title": "JavaMoney rate equality includes scale and info in calculation guards",
+      "library_id": "CE-REPO-0111",
+      "edition_id": "CE-EDITION-0111",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn224",
+          "path": "calc/src/main/java/org/javamoney/calc/common/Rate.java",
+          "name": "org.javamoney.calc.common.Rate.hashCode",
+          "start_line": 108,
+          "end_line": 114
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn225",
+          "path": "calc/src/main/java/org/javamoney/calc/common/Rate.java",
+          "name": "org.javamoney.calc.common.Rate.equals",
+          "start_line": 121,
+          "end_line": 140
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn133",
+          "path": "calc/src/main/java/org/javamoney/calc/common/FutureValueGrowingAnnuity.java",
+          "name": "org.javamoney.calc.common.FutureValueGrowingAnnuity.FutureValueGrowingAnnuity",
+          "start_line": 75,
+          "end_line": 85
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn138",
+          "path": "calc/src/main/java/org/javamoney/calc/common/FutureValueGrowingAnnuity.java",
+          "name": "org.javamoney.calc.common.FutureValueGrowingAnnuity.calculate",
+          "start_line": 135,
+          "end_line": 147
+        }
+      ],
+      "explanation": [
+        "Growing-annuity zero-denominator guards use representation/metadata Rate equality rather than numeric rate equality.",
+        "Rate.equals/hashCode include BigDecimal scale and info. Both constructor and static calculate reject discountRate.equals(growthRate), then calculate subtracts the numeric rates as denominator. Numerically equal nonnegative rates with different info/scale bypass the guard and yield zero denominator. Rate equality may validly be representational; its use as a numeric singularity guard is the local concern, separate from Core Money equality.",
+        "Equal nonnegative numeric rates with distinct scales or labels and call growing-annuity calculation. Negative discount rate takes its separate zero-output branch; neither actual exception class nor executed calculation outcome was observed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0334",
+      "title": "Moneta rate equality ignores chain while hash includes mutable chain",
+      "library_id": "CE-REPO-0110",
+      "edition_id": "CE-EDITION-0110",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn010",
+          "path": "moneta-convert/moneta-convert-base/src/main/java/org/javamoney/moneta/convert/DefaultExchangeRate.java",
+          "name": "org.javamoney.moneta.convert.DefaultExchangeRate.getExchangeRateChain",
+          "start_line": 206,
+          "end_line": 208
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn014",
+          "path": "moneta-convert/moneta-convert-base/src/main/java/org/javamoney/moneta/convert/DefaultExchangeRate.java",
+          "name": "org.javamoney.moneta.convert.DefaultExchangeRate.hashCode",
+          "start_line": 261,
+          "end_line": 280
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn015",
+          "path": "moneta-convert/moneta-convert-base/src/main/java/org/javamoney/moneta/convert/DefaultExchangeRate.java",
+          "name": "org.javamoney.moneta.convert.DefaultExchangeRate.equals",
+          "start_line": 288,
+          "end_line": 300
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn033",
+          "path": "moneta-convert/moneta-convert-base/src/main/java/org/javamoney/moneta/convert/ExchangeRateBuilder.java",
+          "name": "org.javamoney.moneta.convert.ExchangeRateBuilder.setRateChain",
+          "start_line": 117,
+          "end_line": 123
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn034",
+          "path": "moneta-convert/moneta-convert-base/src/main/java/org/javamoney/moneta/convert/ExchangeRateBuilder.java",
+          "name": "org.javamoney.moneta.convert.ExchangeRateBuilder.setRateChain",
+          "start_line": 131,
+          "end_line": 137
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn038",
+          "path": "moneta-convert/moneta-convert-base/src/main/java/org/javamoney/moneta/convert/ExchangeRateBuilder.java",
+          "name": "org.javamoney.moneta.convert.ExchangeRateBuilder.setRate",
+          "start_line": 182,
+          "end_line": 190
+        }
+      ],
+      "explanation": [
+        "Exchange-rate equality omits provenance chain while hashCode traverses its mutable chain, and builder setRate aliases that chain.",
+        "equals compares base, term, context and numeric factor; hash includes additionally chainHash and the getter returns the live list. setRate stores the getter list directly, then setRateChain clears that list before adding replacement entries. Equal-rate states can therefore feed distinct hashes and copying through a builder can alter source provenance. This is an upstream Java value/hash concern, not Core Money equality.",
+        "Equal pair/context/numeric factor with different chain contents, or builder.setRate(source) followed by setRateChain. A hash collision can accidentally mask the different hash inputs; no concrete hash number was executed. Custom chain getter implementations may provide immutable lists and instead reject mutation. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0350",
+      "title": "Calendar compatibility checks do not automatically cover inherited period division",
+      "library_id": "CE-REPO-0025",
+      "edition_id": "CE-EDITION-0025",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "open_question",
+      "functions": [
+        {
+          "id": "CE-REPO-0025:CE-EDITION-0025:fn001",
+          "path": "src/bday.jl",
+          "name": "BusinessDays.BDay(x, calendar::C) where {C<:HolidayCalendar} [L41]",
+          "start_line": 41,
+          "end_line": 43
+        },
+        {
+          "id": "CE-REPO-0025:CE-EDITION-0025:fn012",
+          "path": "src/bday.jl",
+          "name": "Base.isless(bd1::BDay{C}, bd2::BDay{C}) where {C<:HolidayCalendar} [L70]",
+          "start_line": 70,
+          "end_line": 74
+        },
+        {
+          "id": "CE-REPO-0025:CE-EDITION-0025:fn022",
+          "path": "src/bday.jl",
+          "name": "Base.div(bd1::BDay{C}, bd2::BDay{C}, r::RoundingMode) where {C<:HolidayCalendar} [L116]",
+          "start_line": 116,
+          "end_line": 120
+        }
+      ],
+      "explanation": [
+        "Calendar equality guards cover explicit BDay div/comparison methods, but same-parameter inherited period division needs runtime/version confirmation.",
+        "Local isless and rounded div require actual calendar equality. The inspected Julia1.6.7 periods implementation defines /(x::P,y::P) as division of stored values with no calendar lookup. If selected for same BDay parameter type with different calendar instances, that path omits local instance compatibility. This is a conditional dispatch inference, not an executed division outcome.",
+        "Julia1.6.7-compatible method table, BDay values with the same calendar concrete type and different calendar instances, and no more-specific slash overload. Other Julia versions or additional overloads may dispatch differently; calendar compatibility is not Core Money currency compatibility. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    }
+  ]
+}

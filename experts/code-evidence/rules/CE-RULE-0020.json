@@ -1,0 +1,39 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0020",
+  "title": "Unresolved tax classification is not silently treated as exemption",
+  "scope": "candidate_rule",
+  "question": "Null lookup, zero rate and exemption have different meanings; rate source/effective date and matching criteria need policy.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0044",
+      "title": "Unresolved tax classification remains nullable and externally determined",
+      "library_id": "CE-REPO-0053",
+      "edition_id": "CE-EDITION-0053",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0053:CE-EDITION-0053:fn04",
+          "path": "Resolver/TaxRateResolver.php",
+          "name": "Sylius\\Component\\Taxation\\Resolver\\TaxRateResolver::__construct",
+          "start_line": 22,
+          "end_line": 24
+        },
+        {
+          "id": "CE-REPO-0053:CE-EDITION-0053:fn05",
+          "path": "Resolver/TaxRateResolver.php",
+          "name": "Sylius\\Component\\Taxation\\Resolver\\TaxRateResolver::resolve",
+          "start_line": 26,
+          "end_line": 35
+        }
+      ],
+      "explanation": [
+        "Resolver returns null for no category or no matching repository result; supplied criteria augment or override its category criterion.",
+        "Null is not an exemption, zero rate or proof that tax does not apply. Repository ordering, uniqueness, caller-criteria overrides and historical rate selection require further reading."
+      ],
+      "context_requirement_ids": []
+    }
+  ]
+}

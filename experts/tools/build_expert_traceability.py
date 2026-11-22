@@ -43,7 +43,8 @@ def collect(repo, contract, write=False):
             normalized = normalize(collection, doc, contract)
             has_recheck = any(r['assessment']['freshness'] != 'current' for r in normalized)
             local_md = path.with_suffix('.md')
-            stale = path.read_bytes() != encoded(doc) or not local_md.is_file() or local_md.read_bytes() != markdown
+            canonical_doc = {k: v for k, v in doc.items() if k != 'resolved'} if collection == 'code-evidence' and doc['schema_version'] == '2.0.0' else doc
+            stale = json.loads(path.read_bytes()) != canonical_doc or not local_md.is_file() or local_md.read_bytes() != markdown
             info['status'] = 'needs_recheck' if has_recheck else 'stale' if stale else 'current'
             if stale:
                 info['errors'].append('Local generated output is stale; rebuild before relying on the index.')
@@ -129,7 +130,7 @@ def render(document):
     lines += ['', '## Reading the index', '',
               'Curation, freshness, independent validation and publication authorization are separate fields. `reviewed` describes an analyst-curated comparison; it is not specialist approval of a rule or permission to publish. Pending and negative assessments remain visible.', '',
               'Evidence roles, relationships, explanations, limits, reviewed/current fingerprints and typed source details are retained in [traceability.json](traceability.json). Its `by_source` grouping supports source-aware navigation; it does not assert that groups are independent studies or implementations.', '',
-              'Research and Legacy may reference CoreDoc and specification requirements. Reviews and Code Evidence retain their CoreDoc-only binding boundaries. Code ownership is not inferred authorship; reading tests is not execution; translated interview excerpts are identified explicitly.', '',
+              'Research and Legacy may reference CoreDoc and specification requirements. Reviews and Code Evidence retain their CoreDoc-only binding boundaries. Explicit Code Evidence dispositions without a target remain in collection/source queries with no artificial binding. Historical and current comparisons of one finding share a source group and are not additional independent support. Code ownership is not inferred authorship; reading tests is not execution; translated interview excerpts are identified explicitly.', '',
               'Use the [shared tools](tools/README.md) to rebuild, check or look up a rule. The index is generated, has no second manual curation and does not change the Learn publication snapshot or normative conformance traceability.', '']
     return '\n'.join(lines)
 
@@ -162,11 +163,13 @@ def main(argv=None):
     mode.add_argument('--check', action='store_true')
     mode.add_argument('--target', help='Look up one CoreDoc or specification requirement')
     mode.add_argument('--collection', choices=COLLECTIONS, help='Look up one collection')
+    mode.add_argument('--source', help='Look up a qualified by_source key, including collection and source group')
     args = parser.parse_args(argv)
     try:
-        document = build(args.repo_root, check=args.check, preview=bool(args.target or args.collection))
-        if args.target or args.collection:
-            keys = document['by_target' if args.target else 'by_collection'].get(args.target or args.collection, [])
+        document = build(args.repo_root, check=args.check, preview=bool(args.target or args.collection or args.source))
+        if args.target or args.collection or args.source:
+            field = 'by_target' if args.target else 'by_collection' if args.collection else 'by_source'
+            keys = document[field].get(args.target or args.collection or args.source, [])
             print(encoded({'status': document['status'], 'collections': document['collections'],
                            'records': [r for r in document['records'] if r['key'] in keys]}).decode(), end='')
         else:
