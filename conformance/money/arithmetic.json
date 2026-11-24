@@ -1092,6 +1092,577 @@
         "negation-context-rounded-amount",
         "arithmetic-mutates-operand"
       ]
+    },
+    {
+      "id": "money.add.signed-minor-boundary-control-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-001",
+        "MONEY-ARITHMETIC-002",
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009"
+      ],
+      "description": "An exact sum reaches a signed 64-bit minor coefficient boundary without overflowing it.",
+      "operation": "finkore.money.add",
+      "input": {
+        "left": {
+          "amount": "92233720368547758.06",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "0.01",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "92233720368547758.07",
+          "currency": "EUR"
+        },
+        "observations": {
+          "left": {
+            "amount": "92233720368547758.06",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "0.01",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "premature-native-integer-overflow"
+      ]
+    },
+    {
+      "id": "money.add.signed-minor-boundary-growth-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-001",
+        "MONEY-ARITHMETIC-002",
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009"
+      ],
+      "description": "Accepted exact operands must not produce an unchecked wrapped amount when their sum crosses a native coefficient boundary.",
+      "operation": "finkore.money.add",
+      "input": {
+        "left": {
+          "amount": "92233720368547758.07",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "0.01",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "92233720368547758.08",
+          "currency": "EUR"
+        },
+        "observations": {
+          "left": {
+            "amount": "92233720368547758.07",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "0.01",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "unchecked-signed-minor-wrap"
+      ],
+      "pairedControl": "money.add.signed-minor-boundary-control-001"
+    },
+    {
+      "id": "money.multiply.negative-scalar-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-004",
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009"
+      ],
+      "description": "A negative exact scalar reverses the product sign without discarding a fractional minor unit.",
+      "operation": "finkore.money.multiply",
+      "input": {
+        "value": {
+          "amount": "10.25",
+          "currency": "EUR"
+        },
+        "scalar": "-1.5"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "-15.375",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "10.25",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "negative-scalar-or-exact-product-lost"
+      ]
+    },
+    {
+      "id": "money.multiply.zero-scalar-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-004",
+        "MONEY-ARITHMETIC-009"
+      ],
+      "description": "Zero multiplication returns monetary zero in the source currency without changing the source.",
+      "operation": "finkore.money.multiply",
+      "input": {
+        "value": {
+          "amount": "-10.25",
+          "currency": "EUR"
+        },
+        "scalar": "0"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "0",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "-10.25",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "zero-scalar-or-source-mutation"
+      ]
+    },
+    {
+      "id": "money.subtract.signed-minor-boundary-growth-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-001",
+        "MONEY-ARITHMETIC-002",
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009"
+      ],
+      "description": "Subtraction must not expose an unchecked wrapped positive amount below a native signed coefficient boundary.",
+      "operation": "finkore.money.subtract",
+      "input": {
+        "left": {
+          "amount": "-92233720368547758.08",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "0.01",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "-92233720368547758.09",
+          "currency": "EUR"
+        },
+        "observations": {
+          "left": {
+            "amount": "-92233720368547758.08",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "0.01",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "unchecked-signed-minor-subtraction-wrap"
+      ]
+    },
+    {
+      "id": "money.negate.signed-minor-minimum-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-003",
+        "MONEY-ARITHMETIC-009"
+      ],
+      "description": "Negating an accepted negative boundary amount must not return an unchanged negative magnitude.",
+      "operation": "finkore.money.negate",
+      "input": {
+        "value": {
+          "amount": "-92233720368547758.08",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "92233720368547758.08",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "-92233720368547758.08",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "minimum-signed-coefficient-negation-wrap"
+      ]
+    },
+    {
+      "id": "money.add.safe-integer-coefficient-control-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-001",
+        "MONEY-ARITHMETIC-002",
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009"
+      ],
+      "description": "Preserves exact addition at a binary64 integer coefficient boundary from individually representable operands.",
+      "operation": "finkore.money.add",
+      "input": {
+        "left": {
+          "amount": "90071992547409.90",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "0.01",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "90071992547409.91",
+          "currency": "EUR"
+        },
+        "observations": {
+          "left": {
+            "amount": "90071992547409.90",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "0.01",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "unsafe-integer-result-loss"
+      ]
+    },
+    {
+      "id": "money.add.safe-integer-coefficient-growth-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-001",
+        "MONEY-ARITHMETIC-002",
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009"
+      ],
+      "description": "Preserves exact addition at a binary64 integer coefficient boundary from individually representable operands.",
+      "operation": "finkore.money.add",
+      "input": {
+        "left": {
+          "amount": "90071992547409.91",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "0.02",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "90071992547409.93",
+          "currency": "EUR"
+        },
+        "observations": {
+          "left": {
+            "amount": "90071992547409.91",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "0.02",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "unsafe-integer-result-loss"
+      ]
+    },
+    {
+      "id": "money.multiply.exact-integer-scalar-beyond-binary64-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-004",
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009"
+      ],
+      "description": "Preserves an exact decimal scalar that cannot be narrowed to binary64 without changing its value.",
+      "operation": "finkore.money.multiply",
+      "input": {
+        "value": {
+          "amount": "1.00",
+          "currency": "EUR"
+        },
+        "scalar": "9007199254740993"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "9007199254740993",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "1.00",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "scalar-narrowed-before-native-dispatch"
+      ]
+    },
+    {
+      "id": "money.add.finer-stored-value-zero-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009"
+      ],
+      "description": "Adding zero preserves all accepted nonzero fractional digits.",
+      "operation": "finkore.money.add",
+      "input": {
+        "left": {
+          "amount": "1.0000001",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "0",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "1.0000001",
+          "currency": "EUR"
+        },
+        "observations": {
+          "left": {
+            "amount": "1.0000001",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "0",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "fixed-calculation-scale-truncation",
+        "zero-shortcut-hides-precision-loss"
+      ]
+    },
+    {
+      "id": "money.add.zero-currency-mismatch-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-001",
+        "MONEY-CURRENCY-003",
+        "MONEY-CURRENCY-004",
+        "MONEY-ERROR-003",
+        "MONEY-ERROR-007"
+      ],
+      "description": "Rejects incompatible currencies even when both operands have zero amount.",
+      "operation": "finkore.money.add",
+      "input": {
+        "left": {
+          "amount": "0",
+          "currency": "EUR"
+        },
+        "right": {
+          "amount": "0",
+          "currency": "USD"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_CURRENCY_MISMATCH"
+        },
+        "observations": {
+          "left": {
+            "amount": "0",
+            "currency": "EUR"
+          },
+          "right": {
+            "amount": "0",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "negative",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "zero-bypasses-currency-compatibility"
+      ]
+    },
+    {
+      "id": "money.multiply.bounded-operands-product-growth-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "SPEC-DECIMAL-001",
+        "MONEY-ARITHMETIC-004",
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009",
+        "MONEY-REPRESENTATION-002"
+      ],
+      "description": "Preserves exact result growth from individually representable 28-digit and nine-digit decimal operands.",
+      "operation": "finkore.money.multiply",
+      "input": {
+        "value": {
+          "amount": "12345678901234567890.12345678",
+          "currency": "EUR"
+        },
+        "scalar": "1.00000001"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "12345679024691356902.4691356812345678",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "12345678901234567890.12345678",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "regression",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "decimal-context-precision-loss",
+        "implicit-rounding-policy"
+      ]
+    },
+    {
+      "id": "money.multiply.sub-six-place-product-001",
+      "spec": "money/arithmetic",
+      "requirements": [
+        "MONEY-ARITHMETIC-004",
+        "MONEY-ARITHMETIC-007",
+        "MONEY-ARITHMETIC-009"
+      ],
+      "description": "Preserves a six-place exact product from an integral Money operand and an exact decimal scalar.",
+      "operation": "finkore.money.multiply",
+      "input": {
+        "value": {
+          "amount": "1.00",
+          "currency": "EUR"
+        },
+        "scalar": "0.000001"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "0.000001",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "1.00",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "fixed-point-scalar-narrowing",
+        "implicit-result-quantization"
+      ]
     }
   ]
 }

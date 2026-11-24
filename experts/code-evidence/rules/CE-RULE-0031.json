@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.0.0",
+  "schema_version": "2.1.0",
   "id": "CE-RULE-0031",
   "title": "Entity identity does not substitute for a full-state observation",
   "scope": "candidate_rule",
@@ -12,7 +12,7 @@
       "edition_id": "CE-EDITION-0016",
       "collected_on": "2026-11-20",
       "relationship": "proposes",
-      "qualification": "not_critically_reviewed",
+      "qualification": "partial_support",
       "functions": [
         {
           "id": "CE-REPO-0016:CE-EDITION-0016:fn25",
@@ -38,9 +38,26 @@
       ],
       "explanation": [
         "Restored Charge requires identity and financial fields, while equals/hashCode compare identity only. Comparing equal entities therefore does not verify that status, amount, timestamps or revision remained unchanged.",
-        "Entity identity semantics can support a control but cannot replace full-state observations for rejected operations. No general immutability, concurrency or snapshot guarantee follows from ID-only equality; the restore path does not verify timestamp order/history."
+        "Entity identity semantics can support a control but cannot replace full-state observations for rejected operations. No general immutability, concurrency or snapshot guarantee follows from ID-only equality; the restore path does not verify timestamp order/history.",
+        "On 2026-11-22, the unchanged pinned Charge.restore, equals and hashCode paths were exercised outside the repository using Temurin JDK 21.0.12.1. Two restored charges with the same UUID but different amounts and states compared equal and had the same hash while their complete observed financial snapshots differed. The sixteen native transition calls recorded in CE-FINDING-0016 also preserved that identity. These observations do not execute a FinKore Entity creation, mutation, import or evolution vector: caller-defined Entity schemas, mutability policies, revision history and required Audit correspondence are not exposed by these functions. The native probe is separate from the later published-case applicability evaluation; no conformance pass or general Entity implementation claim is inferred from those probe observations."
       ],
       "context_requirement_ids": []
+    }
+  ],
+  "historical_publications": [
+    {
+      "id": "CE-FINDING-0056",
+      "title": "java-payment-core — Native identity and Entity applicability limits",
+      "collected_on": "2026-11-20",
+      "function_ids": [
+        "CE-REPO-0016:CE-EDITION-0016:fn25",
+        "CE-REPO-0016:CE-EDITION-0016:fn26",
+        "CE-REPO-0016:CE-EDITION-0016:fn27"
+      ],
+      "explanation": [
+        "Charge.restore retains a supplied native UUID and equals/hashCode use that identity, as the separate native probe observed. The four selected FinKore Entity cases could not be represented without identifier substitution or adding generic Entity/history/evolution behavior. This is bounded identity context and an applicability limitation, not evidence that those Entity operations passed or failed.",
+        "All four selected Entity cases are unsupported and no native Entity create/import/evolution operation was invoked for them. Native UUID representability was checked without rewriting supplied opaque identifiers. Earlier Charge identity and transition probes remain separate; they do not provide caller-defined Entity schemas, revision/mapping history or atomic Audit-correlated evolution."
+      ]
     }
   ]
 }

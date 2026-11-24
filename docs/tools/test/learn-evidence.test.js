@@ -70,7 +70,9 @@ test('code cards expose pinned attribution and keep different policies separate 
     assert.ok(html.includes(`href="${href}" target="_blank" rel="noopener noreferrer"`))
     assert.match(html, /Money\.allocate/)
     assert.match(html, /Read the full analysis/)
-    assert.match(html, /Not executed · Pending validation/)
+    assert.match(html, /No selected conformance result/)
+    assert.match(html, /Historical source reading · Pending specialist validation/)
+    assert.doesNotMatch(html, /Not executed/)
     assert.deepEqual([...codeEvidenceDestinations(index)], [href])
   }
   data.bindings.push({ ...data.bindings[0], target_id: 'CORE-001.4', target_path: clause.path })
@@ -235,7 +237,40 @@ test('CoreDoc evidence is separate from every original obligation and governance
   const baseline = renderReader(doc, version)
   const html = renderReader(doc, version, { evidence: loadLearnEvidence(new URL('../../../', import.meta.url).pathname), clauses: requirementClauses(markdown, 'docs/coreDoc/core-doc.md') })
   assert.match(html, /rule-evidence-card/)
+  assert.doesNotMatch(html, /id="conformance-results"|class="rule-conformance-results"/)
   assert.equal(html.replace(/\n\s*<aside class="rule-evidence"[\s\S]*?<\/aside>/g, ''), baseline)
+})
+
+test('conformance stays collapsed inside existing finding cards without creating cards or groups', () => {
+  const root = new URL('../../../', import.meta.url).pathname
+  const index = loadLearnEvidence(root)
+  const markdown = readFileSync(new URL('docs/coreDoc/core-doc.md', repository), 'utf8')
+  const clauses = requirementClauses(markdown, 'docs/coreDoc/core-doc.md')
+  let scored = 0, omitted = 0
+  const withoutResults = {...index, conformanceByTarget:new Map()}
+  for (const [id, reports] of index.conformanceByTarget) {
+    const clause = clauses.get(id)
+    if (!clause) continue
+    const html = renderRelatedEvidence(id, clause, index)
+    const baseline = renderRelatedEvidence(id, clause, withoutResults)
+    const cards = [...html.matchAll(/<article class="rule-evidence-card"([^>]*)>([\s\S]*?)<\/article>/g)]
+    assert.equal(cards.length, [...baseline.matchAll(/class="rule-evidence-card"/g)].length, id)
+    assert.equal([...html.matchAll(/class="code-evidence-group"/g)].length, [...baseline.matchAll(/class="code-evidence-group"/g)].length, id)
+    assert.doesNotMatch(html, /Recorded conformance results|<h4>Conformance results<|id="conformance-results"/, id)
+    for (const report of reports.filter(r => r.current)) {
+      const resultCards = cards.filter(m => m[1].includes(`data-conformance="${report.id}"`))
+      const selected = (index.byTarget.get(id) ?? []).some(b => b.source_id === report.finding_id && index.sources.get(b.source_id).current)
+      assert.equal(resultCards.length, selected ? 1 : 0, report.id)
+      if (!selected) { omitted++; continue }
+      assert.ok(resultCards[0][1].includes(`data-finding="${report.finding_id}"`))
+      assert.match(resultCards[0][2], /<details class="rule-evidence-limits finding-conformance"><summary>Conformance assessment: <strong>\d+\/\d+<\/strong> selected cases matched<\/summary>/)
+      assert.doesNotMatch(resultCards[0][2], /finding-conformance" open|Selected cases:<|Recorded source functions/)
+      assert.match(resultCards[0][2], /Functions, source &amp; scope/)
+      scored++
+    }
+  }
+  assert.ok(scored > 0, 'Selected finding cards must expose their results')
+  assert.ok(omitted > 0, 'Execution-only observations must not create extra cards')
 })
 
 test('compact code publications preserve selected text and function identity without hashing unrelated findings', async t => {
@@ -251,6 +286,9 @@ test('compact code publications preserve selected text and function identity wit
   f.data.schema_version='1.2.0';f.save()
   assert.throws(()=>loadLearnEvidence(f.root),/requires Learn evidence format 1.3.0/)
   f.data.schema_version='1.3.0';f.save()
+  rule.schema_version='2.1.0'
+  rule.evidence[0].conformance={passed:1,total:1,description:['A later bounded execution.']}
+  save();assert.equal(loadLearnEvidence(f.root).sources.get(source.id).current,true)
   rule.evidence.push({id:'CE-FINDING-0002',explanation:['An unrelated observation.']})
   save();assert.equal(loadLearnEvidence(f.root).sources.get(source.id).current,true)
   publication.explanation[0]='A materially changed interpretation.'
@@ -260,4 +298,18 @@ test('compact code publications preserve selected text and function identity wit
   save();assert.equal(loadLearnEvidence(f.root).sources.get(source.id).current,false)
   put(f.root,path,'invalid JSON')
   assert.equal(loadLearnEvidence(f.root).sources.get(source.id).current,false)
+})
+
+test('a finding evaluated under another rule does not claim that it was never executed', t => {
+  const {root, clause} = codeFixture(t)
+  const index=loadLearnEvidence(root)
+  const source=index.sources.get('CE-FINDING-0001')
+  index.conformanceResults.set('CE-COMPARISON-0999', {...source,finding_id:source.id,current:true,targets:[{target_id:'CORE-002.3'}]})
+  const html=renderRelatedEvidence('CORE-001.4',clause,index)
+  assert.match(html,/No conformance result linked to this rule/)
+  assert.doesNotMatch(html,/Not executed|data-conformance=/)
+  index.conformanceResults.get('CE-COMPARISON-0999').current=false
+  const stale=renderRelatedEvidence('CORE-001.4',clause,index)
+  assert.match(stale,/Recorded conformance result needs review/)
+  assert.doesNotMatch(stale,/Not executed|data-conformance=/)
 })

@@ -372,6 +372,487 @@
         "machine-locale-formatting",
         "json-number-serialization"
       ]
+    },
+    {
+      "id": "money.deserialize.finer-than-currency-scale-001",
+      "spec": "money/serialization",
+      "requirements": [
+        "MONEY-REPRESENTATION-002",
+        "MONEY-SERIALIZATION-008"
+      ],
+      "description": "Preserves a finite amount finer than customary currency minor units without an implicit rounding request.",
+      "operation": "money.deserialize",
+      "input": {
+        "value": {
+          "amount": "10.005",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "10.005",
+          "currency": "EUR"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "component-coercion-or-implicit-precision-loss"
+      ]
+    },
+    {
+      "id": "money.deserialize.negative-finer-than-currency-scale-001",
+      "spec": "money/serialization",
+      "requirements": [
+        "MONEY-REPRESENTATION-002",
+        "MONEY-SERIALIZATION-008"
+      ],
+      "description": "Preserves a negative finer-scale amount; signed precision is not currency metadata.",
+      "operation": "money.deserialize",
+      "input": {
+        "value": {
+          "amount": "-10.005",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "-10.005",
+          "currency": "EUR"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "component-coercion-or-implicit-precision-loss"
+      ]
+    },
+    {
+      "id": "money.deserialize.insignificant-fraction-zeros-001",
+      "spec": "money/serialization",
+      "requirements": [
+        "MONEY-REPRESENTATION-002",
+        "MONEY-REPRESENTATION-005",
+        "MONEY-SERIALIZATION-008"
+      ],
+      "description": "Accepts insignificant fractional zeros without imposing currency lexical scale.",
+      "operation": "money.deserialize",
+      "input": {
+        "value": {
+          "amount": "1.230",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "1.23",
+          "currency": "EUR"
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "component-coercion-or-implicit-precision-loss"
+      ]
+    },
+    {
+      "id": "money.deserialize.empty-currency-001",
+      "spec": "money/serialization",
+      "requirements": [
+        "MONEY-CURRENCY-001",
+        "MONEY-ERROR-002"
+      ],
+      "description": "Rejects an explicitly empty currency rather than substituting a default.",
+      "operation": "money.deserialize",
+      "input": {
+        "value": {
+          "amount": "1",
+          "currency": ""
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_CURRENCY"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "component-coercion-or-implicit-precision-loss"
+      ]
+    },
+    {
+      "id": "money.deserialize.null-amount-001",
+      "spec": "money/serialization",
+      "requirements": [
+        "MONEY-ERROR-001",
+        "MONEY-SERIALIZATION-002",
+        "MONEY-SERIALIZATION-005"
+      ],
+      "description": "Rejects explicit null instead of constructing monetary zero.",
+      "operation": "money.deserialize",
+      "input": {
+        "value": {
+          "amount": null,
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_AMOUNT"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "component-coercion-or-implicit-precision-loss"
+      ]
+    },
+    {
+      "id": "money.deserialize.boolean-amount-001",
+      "spec": "money/serialization",
+      "requirements": [
+        "MONEY-ERROR-001",
+        "MONEY-SERIALIZATION-002",
+        "MONEY-SERIALIZATION-005"
+      ],
+      "description": "Rejects Boolean false instead of coercing it to monetary zero.",
+      "operation": "money.deserialize",
+      "input": {
+        "value": {
+          "amount": false,
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_AMOUNT"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "component-coercion-or-implicit-precision-loss"
+      ]
+    },
+    {
+      "id": "money.deserialize.invalid-amount-text-001",
+      "spec": "money/serialization",
+      "requirements": [
+        "MONEY-ERROR-001",
+        "MONEY-SERIALIZATION-002",
+        "MONEY-SERIALIZATION-005"
+      ],
+      "description": "Rejects text with no numeric amount rather than sanitizing it into zero.",
+      "operation": "money.deserialize",
+      "input": {
+        "value": {
+          "amount": "invalid",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_AMOUNT"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "component-coercion-or-implicit-precision-loss"
+      ]
+    },
+    {
+      "id": "money.deserialize.empty-amount-text-001",
+      "spec": "money/serialization",
+      "requirements": [
+        "MONEY-ERROR-001",
+        "MONEY-SERIALIZATION-002",
+        "MONEY-SERIALIZATION-005"
+      ],
+      "description": "Rejects empty amount text rather than defaulting to zero.",
+      "operation": "money.deserialize",
+      "input": {
+        "value": {
+          "amount": "",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_AMOUNT"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "component-coercion-or-implicit-precision-loss"
+      ]
+    },
+    {
+      "id": "money.deserialize.positive-infinity-001",
+      "spec": "money/serialization",
+      "requirements": [
+        "MONEY-ERROR-001",
+        "MONEY-SERIALIZATION-002",
+        "MONEY-SERIALIZATION-005"
+      ],
+      "description": "Rejects positive infinity text before exposing Money.",
+      "operation": "money.deserialize",
+      "input": {
+        "value": {
+          "amount": "Infinity",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_AMOUNT"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "component-coercion-or-implicit-precision-loss"
+      ]
+    },
+    {
+      "id": "money.deserialize.negative-infinity-001",
+      "spec": "money/serialization",
+      "requirements": [
+        "MONEY-ERROR-001",
+        "MONEY-SERIALIZATION-002",
+        "MONEY-SERIALIZATION-005"
+      ],
+      "description": "Rejects negative infinity text before exposing Money.",
+      "operation": "money.deserialize",
+      "input": {
+        "value": {
+          "amount": "-Infinity",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_AMOUNT"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "component-coercion-or-implicit-precision-loss"
+      ]
+    },
+    {
+      "id": "money.serialize.nonzero-fraction-preservation-001",
+      "spec": "money/serialization",
+      "requirements": [
+        "MONEY-SERIALIZATION-001",
+        "MONEY-SERIALIZATION-002",
+        "MONEY-SERIALIZATION-008"
+      ],
+      "description": "Serialization preserves significant fractional digits beyond currency minor units without an implicit truncation or rounding policy.",
+      "operation": "money.serialize",
+      "input": {
+        "value": {
+          "amount": "10.559",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "10.559",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "10.559",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "serializer-discards-nonzero-fraction"
+      ]
+    },
+    {
+      "id": "money.serialize.negative-nonzero-fraction-preservation-001",
+      "spec": "money/serialization",
+      "requirements": [
+        "MONEY-SERIALIZATION-001",
+        "MONEY-SERIALIZATION-002",
+        "MONEY-SERIALIZATION-008"
+      ],
+      "description": "Serialization preserves significant fractional digits beyond currency minor units without an implicit truncation or rounding policy.",
+      "operation": "money.serialize",
+      "input": {
+        "value": {
+          "amount": "-10.559",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "-10.559",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "-10.559",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "serializer-discards-nonzero-fraction"
+      ]
+    },
+    {
+      "id": "money.deserialize.long-fraction-invalid-suffix-001",
+      "spec": "money/serialization",
+      "requirements": [
+        "MONEY-ERROR-001",
+        "MONEY-SERIALIZATION-002",
+        "MONEY-SERIALIZATION-005"
+      ],
+      "description": "Rejects amount text that does not denote a complete finite decimal value.",
+      "operation": "money.deserialize",
+      "input": {
+        "value": {
+          "amount": "1.12345678901234567890123456789invalid",
+          "currency": "EUR"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_AMOUNT"
+        }
+      },
+      "tags": [
+        "negative",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "partial-amount-parse",
+        "invalid-suffix-ignored",
+        "missing-digits-coerced-to-zero"
+      ]
+    },
+    {
+      "id": "money.deserialize.zero-missing-currency-001",
+      "spec": "money/serialization",
+      "requirements": [
+        "MONEY-ERROR-002",
+        "MONEY-REPRESENTATION-001",
+        "MONEY-REPRESENTATION-003",
+        "MONEY-SERIALIZATION-001",
+        "MONEY-SERIALIZATION-004"
+      ],
+      "description": "Rejects a missing currency even when the amount is zero or is below a native comparison scale.",
+      "operation": "money.deserialize",
+      "input": {
+        "value": {
+          "amount": "0"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_CURRENCY"
+        }
+      },
+      "tags": [
+        "negative"
+      ],
+      "guardsAgainst": [
+        "zero-bypasses-required-currency",
+        "tiny-nonzero-classified-as-currencyless-zero"
+      ]
+    },
+    {
+      "id": "money.deserialize.tiny-nonzero-missing-currency-001",
+      "spec": "money/serialization",
+      "requirements": [
+        "MONEY-ERROR-002",
+        "MONEY-REPRESENTATION-001",
+        "MONEY-REPRESENTATION-003",
+        "MONEY-SERIALIZATION-001",
+        "MONEY-SERIALIZATION-004"
+      ],
+      "description": "Rejects a missing currency even when the amount is zero or is below a native comparison scale.",
+      "operation": "money.deserialize",
+      "input": {
+        "value": {
+          "amount": "0.0000001"
+        }
+      },
+      "expected": {
+        "status": "error",
+        "error": {
+          "code": "FINKORE_MONEY_INVALID_CURRENCY"
+        }
+      },
+      "tags": [
+        "negative"
+      ],
+      "guardsAgainst": [
+        "zero-bypasses-required-currency",
+        "tiny-nonzero-classified-as-currencyless-zero"
+      ]
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.0.0",
+  "schema_version": "2.1.0",
   "id": "CE-RULE-0025",
   "title": "A financial composite declares what equality and ordering compare",
   "scope": "candidate_rule",
@@ -121,7 +121,23 @@
         "govalues distinguishes numeric Cmp from scale-sensitive CmpTotal; extrema and Clamp intentionally use CmpTotal and can select an equal numeric value with a different presentation scale.",
         "Both wrappers reject currency mismatch. The selected Decimal CmpTotal body first compares numeric value, then reverses the scale comparison on numeric ties. MONEY-COMPARISON-005 permits separate representation equality; Core numeric comparison must use Cmp, not substitute CmpTotal.",
         "Same currency and numerically equal amounts with differing scale; extrema/Clamp request representation-sensitive selection. Min can select10.00 rather than10.0 while Max selects the smaller-scale representation. This changes representation, not numeric amount, and is not an arithmetic exactness defect. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
-      ]
+      ],
+      "conformance": {
+        "passed": 6,
+        "total": 6,
+        "description": [
+          "Assessed 2026-11-23 using Go 1.25.5. Primary profile declared_native_profile; native path: Amount.Cmp. Selected outcomes: 6 matched.",
+          "Native numeric Cmp passes all three value-order cases, including insignificant zeros and negative ordering. CmpTotal is no longer dispatched as numeric comparison; its representation ordering remains a separate source observation."
+        ],
+        "test_ids": [
+          "money.compare.equal-trailing-zeros-001",
+          "money.compare.less-001",
+          "money.compare.greater-negative-001",
+          "money.compare.equal-zero-scale-001",
+          "money.compare.equality-currency-mismatch-001",
+          "money.compare.order-currency-mismatch-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0174",
@@ -165,7 +181,23 @@
         "RubyMoney default eql? treats two cross-currency zeros as equal while its hash still includes currency; ordinary comparison also has a zero shortcut and nonzero bank conversion. These are distinct policies from Core explicit mismatch semantics.",
         "The equality/hash input mismatch is structural, while actual hash values and collisions are runtime-dependent. Strict eql mode removes the zero shortcut but returns false rather than the portable mismatch error. No hash-number outcome or complete conformance verdict is claimed.",
         "Default strict_eql_compare is false for the cross-currency-zero eql? branch; ordinary <=> may use stored bank context for nonzero operands. Zero USD and zero EUR can satisfy eql? while hash inputs differ; a coincidental hash collision does not restore a general hash/equality guarantee. Core comparison would reject incompatible currencies rather than silently compare zeros. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
-      ]
+      ],
+      "conformance": {
+        "passed": 6,
+        "total": 6,
+        "description": [
+          "Assessed 2026-11-23 using Ruby 3.1.2, BigDecimal 3.1.1. Primary profile null_bank_strict_zero; native path: Money#== and #<=> with configured native bank. Selected outcomes: 6 matched.",
+          "SingleCurrency/strict-zero enforces the selected comparison guards. VariableExchange/default-zero admits different shortcuts with explicit EUR/USD reciprocal rates. These numeric comparison tests do not execute hash values or the separate eql?/hash consistency claim. Control profiles, excluded from the primary score: native_fixed_bank_default_zero (same test_ids): 4 matched, 2 mismatched."
+        ],
+        "test_ids": [
+          "money.compare.equal-trailing-zeros-001",
+          "money.compare.less-001",
+          "money.compare.greater-negative-001",
+          "money.compare.equal-zero-scale-001",
+          "money.compare.equality-currency-mismatch-001",
+          "money.compare.order-currency-mismatch-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0199",
@@ -209,7 +241,23 @@
         "BigMoney provides numeric comparison separately from scale-sensitive representation equality.",
         "compareTo first rejects a different currency and then uses BigDecimal.compareTo; isEqual delegates to that numeric relation. equals requires BigMoney and BigDecimal.equals, so 1.0 and 1.00 can have distinct representation equality while numeric equality succeeds. This distinction is expressly permitted by MONEY-COMPARISON-005, provided canonical numeric comparison uses isEqual/compareTo.",
         "Use same-currency BigMoney values with numerically equal amounts and different decimal scale. Do not use equals as the canonical Core numeric equality or infer portable error normalization from native exceptions. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
-      ]
+      ],
+      "conformance": {
+        "passed": 6,
+        "total": 6,
+        "description": [
+          "Assessed 2026-11-23 using Java 21.0.12.1, pinned Joda source. Primary profile declared_native_profile; native path: BigMoney.isEqual/compareTo. Selected outcomes: 6 matched.",
+          "The selected complete observations matched at the declared context."
+        ],
+        "test_ids": [
+          "money.compare.equal-trailing-zeros-001",
+          "money.compare.less-001",
+          "money.compare.greater-negative-001",
+          "money.compare.equal-zero-scale-001",
+          "money.compare.equality-currency-mismatch-001",
+          "money.compare.order-currency-mismatch-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0204",
@@ -341,7 +389,23 @@
         "Money.dart delegates compareTo to Fixed6.0.0 representation ordering, while its equality and relational operators normalize scales numerically; the two observations must not be treated as interchangeable Core numeric comparison.",
         "The pinned Fixed body documents raw minorUnits/decimalDigits ordering and compares coefficients first; == and > instead call _scale. This is a representation-policy distinction unless an application exposes compareTo as canonical numeric ordering. Hash inputs also differ from normalized equality, but exact runtime hash values were not computed.",
         "Use equal currencies with different admitted stored scales and the examined compatible Fixed6.0.0 dependency. Money1.0 with coefficient10/scale1 can compareTo below0.99 with99/2 while > is true;1.0 and1.00 can be == with nonzero compareTo. This is a static cross-scale trace. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
-      ]
+      ],
+      "conformance": {
+        "passed": 5,
+        "total": 6,
+        "description": [
+          "Assessed 2026-11-23 using Dart 3.14.1, Fixed 6.0.0/Decimal 3.0.2/Rational 2.0.0. Primary profile declared_native_profile; native path: Money numeric == and relational operators. Selected outcomes: 5 matched, 1 mismatched.",
+          "The corrected numeric profile invokes native equality and relational operators. All three comparisons pass. Representation-sensitive compareTo is not used to establish numeric comparison semantics."
+        ],
+        "test_ids": [
+          "money.compare.equal-trailing-zeros-001",
+          "money.compare.less-001",
+          "money.compare.greater-negative-001",
+          "money.compare.equal-zero-scale-001",
+          "money.compare.equality-currency-mismatch-001",
+          "money.compare.order-currency-mismatch-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0299",

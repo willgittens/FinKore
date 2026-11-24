@@ -7,7 +7,8 @@ import { tmpdir } from 'node:os'
 import { dirname, join } from 'node:path'
 import test from 'node:test'
 import { buildLearnEvidence, comparisonFingerprint } from '../build-learn-evidence.js'
-import { requirementClauses, loadLearnEvidence, renderRelatedEvidence } from '../learn-evidence.js'
+import { recordHash, conformanceReportFromRecord } from '../code-evidence-publication.js'
+import { codeEvidenceDestinations, requirementClauses, loadLearnEvidence, renderRelatedEvidence } from '../learn-evidence.js'
 
 const digest = value => createHash('sha256').update(value).digest('hex')
 function put(root, path, value) {
@@ -136,4 +137,161 @@ test('Review publication rejects unsafe destinations, incorrect languages and sp
   const changedData = structuredClone(original)
   changedData.sources[0].publication_sha256 = digest(changed)
   assert.equal(loadLearnEvidence(f.root, changedData).sources.get('ER-0001-F01').current, false)
+})
+
+function executionFixture(t, { mapped = true } = {}) {
+  const f = fixture(t)
+  const path = 'experts/code-evidence/rules/CE-RULE-0001.json'
+  const repository = 'example/money', commit = 'a'.repeat(40)
+  const reading = {id:'CE-FINDING-0001',library_id:'CE-REPO-0001',edition_id:'CE-EDITION-0001',
+    explanation:['A bounded reading.'],functions:[{id:'fn01',name:'Money.add',path:'src/money.js',start_line:1,end_line:9}]}
+  const conformance = {passed:1,total:2,description:['Two selected cases on an explicit runtime.', 'One mismatch: <unsafe> & an exact match.']}
+  const rule = {schema_version:'2.1.0',id:'CE-RULE-0001',evidence:[{...reading,conformance:structuredClone(conformance)}]}
+  const record = {key:'code-evidence/CE-COMPARISON-0001',id:'CE-COMPARISON-0001',collection:'code-evidence',
+    source:{id:reading.id,kind:'pinned_code_analysis',references:[{path}],reviewed_fingerprints:{record_sha256:recordHash({evidence:reading,source:{library_id:reading.library_id,edition_id:reading.edition_id,repository,version:'1.0',commit_sha:commit}})},
+      details:{project:'Example Money',repository,version:'1.0',commit_sha:commit,
+        functions:[{name:'Money.add',href:`https://github.com/${repository}/blob/${commit}/src/money.js#L1-L9`}],
+        conformance,conformance_test_ids:['money.case-001','money.case-002']}},
+    assessment:{curation:mapped?'reviewed':'pending_curation',freshness:'current',independent_validation:'pending_validation',publication_authorization:'not_recorded',editorial_eligible:false},
+    bindings:mapped?[{target_id:'CORE-001.1',target_path:f.target,reviewed_clause_sha256:f.clause.sha256,current_clause_sha256:f.clause.sha256}]:[]}
+  f.index.records.push(record)
+  f.index.collections['code-evidence']={status:'current',index:'experts/code-evidence/traceability.json'}
+  f.index.inputs['experts/code-evidence/traceability.json']=digest('{}')
+  const saveRule=()=>{const bytes=JSON.stringify(rule);put(f.root,path,bytes);f.index.inputs[path]=digest(bytes)}
+  put(f.root,'experts/code-evidence/traceability.json','{}');saveRule()
+  const select=()=>{const target_ids=record.bindings.map(b=>b.target_id);f.selection.conformance_selections=[{comparison_key:record.key,target_ids,reviewed_result_sha256:recordHash(conformanceReportFromRecord(record,target_ids))}]}
+  select();f.save()
+  return {...f,path,rule,execution:record,select,saveRule}
+}
+
+// A pre-existing, independently selected interpretation is required for a card.
+function selectFinding(f) {
+  const d=f.execution.source.details
+  const limits='One inspected path, pending specialist validation.'
+  const historical={id:f.execution.source.id,title:'A bounded reading',function_ids:['fn01'],explanation:['The native path is inspected.',limits]}
+  f.rule.historical_publications=[historical]
+  f.saveRule()
+  const publication={id:historical.id,kind:'code',title:historical.title,limits,status:'pending_validation',
+    publication_format:'code-evidence-v2',publication_path:f.path,publication_sha256:recordHash(historical),
+    href:'https://github.com/willgittens/FinKore/blob/main/'+f.path,
+    project:d.project,repository:d.repository,owner:'example',version:d.version,commit_sha:d.commit_sha,functions:d.functions,
+    reading_extent:'selected_code_and_tests',execution_status:'not_executed'}
+  const record={...structuredClone(f.execution),key:'code-evidence/'+historical.id,id:historical.id,
+    assessment:{...f.execution.assessment,editorial_eligible:true},
+    source:{...f.execution.source,details:publication},
+    bindings:f.execution.bindings.map(b=>({...b,implementation_relationship:'partial_match',evidence_role:'context_only',relationship:'application_policy',explanation:'A bounded partial comparison.'}))}
+  f.index.records.push(record)
+  f.selection.selections.push({comparison_key:record.key,reviewed_comparison_sha256:comparisonFingerprint(record),target_ids:record.bindings.map(b=>b.target_id),publication})
+  f.save()
+}
+
+test('execution selection publishes bounded scores without accepting ineligible interpretations', t => {
+  const f=executionFixture(t)
+  f.index.records.push({...structuredClone(f.execution),key:'code-evidence/CE-COMPARISON-0002',id:'CE-COMPARISON-0002'})
+  f.save();buildLearnEvidence(f.root)
+  const data=JSON.parse(readFileSync(join(f.root,'learn/related-evidence.json')))
+  assert.equal(data.schema_version,'1.4.0')
+  assert.equal(data.sources.length,1)
+  assert.equal(data.conformance_results.length,1)
+  assert.equal(f.execution.assessment.editorial_eligible,false)
+  assert.equal(f.execution.assessment.independent_validation,'pending_validation')
+  assert.doesNotMatch(renderRelatedEvidence('CORE-001.1',f.clause,loadLearnEvidence(f.root)),/data-conformance=|Who does it this way/)
+  selectFinding(f);buildLearnEvidence(f.root)
+  const index=loadLearnEvidence(f.root),html=renderRelatedEvidence('CORE-001.1',f.clause,index)
+  assert.match(html,/1\/2<\/strong> selected cases matched/)
+  assert.match(html,/&lt;unsafe&gt; &amp;/)
+  assert.doesNotMatch(html,/<unsafe>/)
+  assert.doesNotMatch(html,/Selected cases:<|Recorded conformance results/)
+  assert.match(html,/<details class="rule-evidence-limits finding-conformance"><summary>Conformance assessment:/)
+  assert.match(html,/conditional cases remain in the denominator/)
+  assert.equal(codeEvidenceDestinations(index).has(f.execution.source.details.functions[0].href),true)
+  assert.match(html, /class="rule-implementations"[\s\S]*Who does it this way\?[\s\S]*data-conformance=/)
+  assert.doesNotMatch(html, /id="conformance-results"|class="rule-conformance-results"/)
+  f.selection.selections.push({comparison_key:f.execution.key,reviewed_comparison_sha256:comparisonFingerprint(f.execution),publication:{id:f.execution.id,kind:'code'},target_ids:['CORE-001.1']})
+  f.save();assert.throws(()=>buildLearnEvidence(f.root),/needs review/)
+})
+
+test('unmapped execution observations stay separate without inventing CoreDoc bindings', t => {
+  const f=executionFixture(t,{mapped:false});buildLearnEvidence(f.root)
+  const index=loadLearnEvidence(f.root)
+  assert.equal(index.conformanceByTarget.size,0)
+  assert.equal(index.conformanceResults.size,1)
+  assert.equal(f.execution.assessment.curation,'pending_curation')
+  assert.doesNotMatch(renderRelatedEvidence('CORE-001.1',f.clause,index),/data-conformance/)
+})
+
+test('finding cards suppress a score from a different pinned source or function while retaining the reading', t => {
+  const f=executionFixture(t)
+  selectFinding(f);buildLearnEvidence(f.root)
+  const index=loadLearnEvidence(f.root), report=index.conformanceResults.get(f.execution.id)
+  const original=structuredClone(report)
+  for (const mutate of [
+    r=>{r.repository='other/money'}, r=>{r.version='2.0'},
+    r=>{r.commit_sha='b'.repeat(40)},
+    r=>{r.publication_path='experts/code-evidence/rules/CE-RULE-9999.json'},
+    r=>{r.functions[0].name='Money.other'},
+    r=>{r.functions[0].href=r.functions[0].href.replace('L1-L9','L2-L9')},
+    r=>{r.targets[0].clause_sha256='0'.repeat(64)},
+  ]) {
+    Object.assign(report,structuredClone(original));mutate(report)
+    const html=renderRelatedEvidence('CORE-001.1',f.clause,index)
+    assert.match(html,/data-finding="CE-FINDING-0001"/)
+    assert.match(html,/Recorded conformance result needs review/)
+    assert.doesNotMatch(html,/data-conformance=|Not executed/)
+  }
+})
+
+test('zero-match unsupported assessments do not imply native execution or financial rejection', t => {
+  const f=executionFixture(t)
+  f.rule.evidence[0].conformance.passed=0
+  f.rule.evidence[0].conformance.description=['Two selected cases are unsupported; zero native comparisons were completed.']
+  f.execution.source.details.conformance=structuredClone(f.rule.evidence[0].conformance)
+  f.saveRule();f.select();selectFinding(f);buildLearnEvidence(f.root)
+  const html=renderRelatedEvidence('CORE-001.1',f.clause,loadLearnEvidence(f.root))
+  assert.match(html,/Conformance assessment: <strong>0\/2<\/strong> selected cases matched/)
+  assert.match(html,/unsupported; zero native comparisons/)
+  assert.match(html,/Finding-level selection/)
+  assert.doesNotMatch(html,/selected cases passed|tests failed|Not executed|finding-conformance" open/)
+  // An observed mismatch may also have zero matches; it must not be called unsupported by inference.
+  const index=loadLearnEvidence(f.root)
+  index.conformanceResults.get(f.execution.id).conformance.description=['Two native observations mismatched; both required states were inspected.']
+  assert.match(renderRelatedEvidence('CORE-001.1',f.clause,index),/Two native observations mismatched/)
+})
+
+test('changed results, source functions and clauses need review; stale reports do not render', t => {
+  const f=executionFixture(t);selectFinding(f);buildLearnEvidence(f.root)
+  const before=readFileSync(join(f.root,'learn/related-evidence.json'),'utf8')
+  f.execution.source.details.conformance.passed=0;f.save()
+  assert.throws(()=>buildLearnEvidence(f.root),/execution result changed/)
+  f.execution.source.details.conformance.passed=1;f.save()
+  f.rule.evidence[0].conformance.description=['Changed native observation.'];f.saveRule();f.save()
+  assert.throws(()=>buildLearnEvidence(f.root),/execution source changed/)
+  const stale=loadLearnEvidence(f.root)
+  assert.match(renderRelatedEvidence('CORE-001.1',f.clause,stale),/Conformance results need review/)
+  assert.equal(stale.conformanceResults.get(f.execution.id).current,false)
+  assert.equal(codeEvidenceDestinations(stale).size,1) // The separately selected static source remains current.
+  assert.equal(readFileSync(join(f.root,'learn/related-evidence.json'),'utf8'),before)
+  f.rule.evidence[0].conformance=f.execution.source.details.conformance;f.saveRule();f.save()
+  assert.doesNotMatch(renderRelatedEvidence('CORE-001.1',{...f.clause,sha256:'0'.repeat(64)},loadLearnEvidence(f.root)),/data-conformance/)
+  f.rule.evidence[0].functions[0].start_line=2;f.saveRule();f.save()
+  assert.equal(loadLearnEvidence(f.root).conformanceResults.get(f.execution.id).current,false)
+})
+
+test('execution metadata rejects impossible scores, unpinned links and duplicate selections', t => {
+  const f=executionFixture(t);selectFinding(f);buildLearnEvidence(f.root)
+  const data=JSON.parse(readFileSync(join(f.root,'learn/related-evidence.json')))
+  for (const mutate of [
+    r=>{r.conformance.passed=3},r=>{r.test_ids=['duplicate','duplicate']},
+    r=>{r.conformance.description=['one','two','three']},r=>{r.conformance.description=['multiple\nlines']},
+    r=>{r.functions[0].href=r.functions[0].href.replace('a'.repeat(40),'main')},
+    r=>{r.targets[0].target_path='spec/other.md'},r=>{r.publication_path='../outside.json'},
+  ]) {
+    const copy=structuredClone(data);mutate(copy.conformance_results[0]);
+    assert.throws(()=>loadLearnEvidence(f.root,copy),/Invalid/)
+  }
+  f.selection.conformance_selections.push(f.selection.conformance_selections[0]);f.save()
+  assert.throws(()=>buildLearnEvidence(f.root),/duplicate execution selection/)
+  rmSync(join(f.root,'experts/traceability.json'))
+  assert.equal(buildLearnEvidence(f.root).status,'snapshot_only')
+  assert.match(renderRelatedEvidence('CORE-001.1',f.clause,loadLearnEvidence(f.root)),/data-conformance/)
 })

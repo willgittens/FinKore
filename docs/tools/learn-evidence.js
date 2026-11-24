@@ -8,7 +8,7 @@
 import { createHash } from 'node:crypto'
 import { existsSync, readFileSync, realpathSync } from 'node:fs'
 import { resolve, relative, isAbsolute } from 'node:path'
-import { compactCodePublication } from './code-evidence-publication.js'
+import { compactCodePublication, compactConformanceCurrent, validateConformanceReport } from './code-evidence-publication.js'
 
 const escape = value => value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;')
 const normal = value => value.trim().replace(/\s+/gu, ' ')
@@ -85,25 +85,25 @@ function contained(root, path) {
 
 export function loadLearnEvidence(root, suppliedData) {
   const path = resolve(root, 'learn/related-evidence.json')
-  const index = { sources: new Map(), byTarget: new Map() }
+  const index = { sources: new Map(), byTarget: new Map(), conformanceResults: new Map(), conformanceByTarget: new Map() }
   if (suppliedData === undefined && !existsSync(path)) return index // Contract readers also work without research.
   const data = suppliedData === undefined
     ? JSON.parse(readFileSync(contained(root, 'learn/related-evidence.json'), 'utf8'))
     : suppliedData
-  if (!data || !['1.0.0', '1.1.0', '1.2.0', '1.3.0'].includes(data.schema_version) || !Array.isArray(data.sources) || !Array.isArray(data.bindings)) throw new Error('Unsupported Learn evidence format')
+  if (!data || !['1.0.0', '1.1.0', '1.2.0', '1.3.0', '1.4.0'].includes(data.schema_version) || !Array.isArray(data.sources) || !Array.isArray(data.bindings)) throw new Error('Unsupported Learn evidence format')
   for (const source of data.sources) {
     if (index.sources.has(source.id) || !['research', 'legacy', 'code', 'review'].includes(source.kind) ||
         !text(source.title) || !text(source.limits) || source.status !== 'pending_validation' ||
         !/^[a-f0-9]{64}$/.test(source.publication_sha256)) throw new Error('Invalid or duplicate Learn evidence source')
     if (source.kind === 'code') {
-      if (!['1.1.0', '1.2.0', '1.3.0'].includes(data.schema_version)) throw new Error('Code Evidence requires Learn evidence format 1.1.0 or later')
-      if (source.publication_format === 'code-evidence-v2' && data.schema_version !== '1.3.0') throw new Error('Compact Code Evidence requires Learn evidence format 1.3.0')
+      if (!['1.1.0', '1.2.0', '1.3.0', '1.4.0'].includes(data.schema_version)) throw new Error('Code Evidence requires Learn evidence format 1.1.0 or later')
+      if (source.publication_format === 'code-evidence-v2' && !['1.3.0', '1.4.0'].includes(data.schema_version)) throw new Error('Compact Code Evidence requires Learn evidence format 1.3.0')
       validateCodeSource(source)
     } else {
       if (!Array.isArray(source.authors) || !source.authors.length || source.authors.some(author => !text(author))) throw new Error('Invalid Learn evidence attribution')
       if (source.kind === 'review') {
         const filename = source.publication_path?.match(/^experts\/reviews\/reports\/(\d{3}-[a-z0-9-]+)\.md$/)?.[1]
-        if (!['1.2.0', '1.3.0'].includes(data.schema_version) || !/^ER-\d{4}-F\d{2}$/.test(source.id) || !/^ER-\d{4}$/.test(source.report_id) ||
+        if (!['1.2.0', '1.3.0', '1.4.0'].includes(data.schema_version) || !/^ER-\d{4}-F\d{2}$/.test(source.id) || !/^ER-\d{4}$/.test(source.report_id) ||
             !source.id.startsWith(source.report_id + '-F') || !filename || source.href !== `review-${filename}.html#${source.id.toLowerCase()}` ||
             source.authors.length !== 1 || !/^[a-z]{2}$/.test(source.original_language) || !/^[a-z]{2}$/.test(source.interview_language) ||
             !['original', 'editorial_translation'].includes(source.translation_status) || !['authorized', 'not_recorded'].includes(source.publication_authorization) ||
@@ -146,6 +146,22 @@ export function loadLearnEvidence(root, suppliedData) {
     catch (error) { if (error.code !== 'ENOENT') throw error }
     index.sources.set(source.id, { ...source, current })
   }
+  if (data.conformance_results !== undefined && (data.schema_version !== '1.4.0' || !Array.isArray(data.conformance_results))) throw new Error('Unsupported Learn execution results')
+  for (const report of data.conformance_results ?? []) {
+    validateConformanceReport(report)
+    if (index.conformanceResults.has(report.id)) throw new Error('Duplicate Learn execution result')
+    let current = false
+    try {
+      const bytes = readFileSync(contained(root, report.publication_path))
+      try { current = compactConformanceCurrent(bytes, report) } catch { current = false }
+    } catch (error) { if (error.code !== 'ENOENT') throw error }
+    const resolved = { ...report, current }
+    index.conformanceResults.set(report.id, resolved)
+    for (const target of report.targets) {
+      if (!index.conformanceByTarget.has(target.target_id)) index.conformanceByTarget.set(target.target_id, [])
+      index.conformanceByTarget.get(target.target_id).push(resolved)
+    }
+  }
   const seen = new Set()
   for (const binding of data.bindings) {
     const key = `${binding.source_id}/${binding.target_id}`
@@ -170,11 +186,14 @@ export function loadLearnEvidence(root, suppliedData) {
 
 export function renderRelatedEvidence(id, clause, index) {
   const bindings = index?.byTarget.get(id) ?? []
-  if (!bindings.length) return ''
+  const reports = index?.conformanceByTarget?.get(id) ?? []
   const current = bindings.filter(binding => binding.target_path === clause.path && binding.clause_sha256 === clause.sha256 && index.sources.get(binding.source_id).current)
   const stale = bindings.length - current.length
-  if (!current.length) return `<aside class="rule-evidence-stale"><p>Related reading for ${escape(id)} needs review after a source or rule changed.</p></aside>`
   const code = current.filter(binding => index.sources.get(binding.source_id).kind === 'code')
+  const findingIds = new Set(code.map(binding => binding.source_id))
+  const relevantReports = reports.filter(report => findingIds.has(report.finding_id))
+  const results = relevantReports.filter(report => report.current && resultMatchesSource(report, index.sources.get(report.finding_id)) && report.targets.some(target => target.target_id === id && target.target_path === clause.path && target.clause_sha256 === clause.sha256))
+  const staleResults = relevantReports.length - results.length
   const readings = current.filter(binding => index.sources.get(binding.source_id).kind !== 'code')
   const kinds = readings.reduce((counts, binding) => { const kind = index.sources.get(binding.source_id).kind; counts[kind] = (counts[kind] ?? 0) + 1; return counts }, {})
   const reviewCount = new Set(readings.filter(binding => index.sources.get(binding.source_id).kind === 'review').map(binding => index.sources.get(binding.source_id).report_id)).size
@@ -187,40 +206,63 @@ export function renderRelatedEvidence(id, clause, index) {
       return `<article class="rule-evidence-card"><p class="rule-evidence-kind">${({ research: 'Research', legacy: 'Legacy', review: 'Review' })[source.kind]} <span aria-hidden="true">/</span> ${roles.get(binding.evidence_role)}</p><p class="rule-evidence-title"><a href="${escape(source.href)}">${escape(source.title)} <span aria-hidden="true">↗</span></a></p><p class="rule-evidence-authors">${escape(source.authors.join('; '))}</p><p>${escape(binding.explanation)}</p><details class="rule-evidence-limits"><summary>Scope and limitations</summary><p>${escape(source.limits)}</p></details></article>`
     }).join('')}</div>${stale ? '<p class="rule-evidence-stale">Some other related readings need review after a source or rule changed.</p>' : ''}
   </details></aside>` : ''
-  return [editorial, code.length ? renderCodeEvidence(id, code, index, stale) : ''].filter(Boolean).join('\n            ')
+  const staleReading = bindings.length && !current.length ? `<aside class="rule-evidence-stale"><p>Related reading for ${escape(id)} needs review after a source or rule changed.</p></aside>` : ''
+  return [editorial, staleReading, code.length ? renderCodeEvidence(id, code, index, stale, results, staleResults) : ''].filter(Boolean).join('\n            ')
 }
 
-function renderCodeEvidence(id, bindings, index, stale) {
+function resultMatchesSource(report, source) {
+  return source && report.finding_id === source.id &&
+    ['repository', 'version', 'commit_sha', 'publication_path'].every(key => report[key] === source[key]) &&
+    Array.isArray(report.functions) && source.functions.every(fn => report.functions.some(other => other.name === fn.name && other.href === fn.href))
+}
+
+function renderCodeEvidence(id, bindings, index, stale, results, staleResults) {
+  const byFinding = new Map(results.map(report => [report.finding_id, report]))
+  const count = bindings.length
   const groups = [...codeRelationships].map(([kind, label]) => {
     const matches = bindings.filter(binding => binding.implementation_relationship === kind)
     if (!matches.length) return ''
     return `<section class="code-evidence-group" aria-label="${escape(label)}"><h4>${escape(label)}</h4>
       <div class="rule-evidence-grid">${matches.map(binding => {
         const source = index.sources.get(binding.source_id)
-        return `<article class="rule-evidence-card" data-finding="${escape(source.id)}">
+        const report = byFinding.get(source.id)
+        const recorded = [...(index.conformanceResults?.values() ?? [])].filter(result => result.finding_id === source.id)
+        const needsReview = !report && (recorded.some(result => !result.current || !resultMatchesSource(result, source)) ||
+          recorded.some(result => result.targets.some(target => target.target_id === id)))
+        const resultElsewhere = !report && !needsReview && recorded.some(result => result.current && resultMatchesSource(result, source))
+        const status = needsReview ? 'Recorded conformance result needs review' : resultElsewhere ? 'No conformance result linked to this rule' : 'No selected conformance result'
+        return `<article class="rule-evidence-card" data-finding="${escape(source.id)}"${report ? ` data-conformance="${escape(report.id)}"` : ''}>
           <p class="rule-evidence-kind">Code Evidence · ${escape(source.id)}</p>
           <h5 class="rule-evidence-title">${escape(source.project)} <span>${escape(source.version)}</span></h5>
           <p class="code-evidence-repository">${escape(source.repository)} · GitHub owner: ${escape(source.owner)}</p>
-          <p class="code-evidence-status">Code and tests read · Not executed</p>
-          <p>${escape(binding.explanation)}</p>
-          <details class="rule-evidence-limits"><summary>Functions, source &amp; scope</summary>
+${report ? '' : `          <p class="code-evidence-status">${status}</p>\n`}          <p>${escape(binding.explanation)}</p>
+${report ? renderConformanceDetails(report) + '\n' : ''}          <details class="rule-evidence-limits"><summary>Functions, source &amp; scope</summary>
             <p>${escape(source.title)}</p><ul class="code-evidence-functions">${source.functions.map(fn => `<li><a href="${escape(fn.href)}" target="_blank" rel="noopener noreferrer"><code>${escape(fn.name)}</code></a></li>`).join('')}</ul>
             <p>${escape(source.limits)}</p>
-            <p>Selected code and tests read · Not executed · Pending validation</p>
+            <p>Historical source reading · Pending specialist validation</p>
             <p><a href="${escape(source.href)}" target="_blank" rel="noopener noreferrer">${source.publication_format === 'code-evidence-v2' ? 'Read the evidence record' : 'Read the full analysis'}</a></p>
           </details></article>`
       }).join('')}</div></section>`
   }).join('')
   return `<aside class="rule-evidence" aria-label="Implementation comparisons for ${escape(id)}"><details class="rule-implementations" open>
-    <summary><span>Who does it this way?<span class="rule-evidence-count">${bindings.length} compared ${bindings.length === 1 ? 'finding' : 'findings'}</span></span><span aria-hidden="true">+</span></summary>
-    <p class="rule-evidence-intro">Compare the inspected paths below. Matches, partial matches and different policies are identified separately. These source readings are pending validation, not conformance certification. Shared design ancestry is not independent confirmation.</p>
-    ${groups}${stale ? '<p class="rule-evidence-stale">Some other implementation comparisons need review after a source or rule changed.</p>' : ''}
+    <summary><span>Who does it this way?<span class="rule-evidence-count">${count} ${count === 1 ? 'finding' : 'findings'}</span></span><span aria-hidden="true">+</span></summary>
+    <p class="rule-evidence-intro">Compare the inspected paths below. Matches, partial matches and different policies are identified separately. Scores summarize each finding's selected cases. Source readings remain pending validation; results do not certify a rule or library. Shared design ancestry is not independent confirmation.</p>
+    ${groups}${staleResults ? '<p class="rule-evidence-stale">Conformance results need review after a source or rule changed.</p>' : ''}${stale ? '<p class="rule-evidence-stale">Some other implementation comparisons need review after a source or rule changed.</p>' : ''}
   </details></aside>`
 }
 
+function renderConformanceDetails(report) {
+  return `<details class="rule-evidence-limits finding-conformance"><summary>Conformance assessment: <strong>${report.conformance.passed}/${report.conformance.total}</strong> selected cases matched</summary>
+    ${report.conformance.description.map(p => `<p>${escape(p)}</p>`).join('')}
+    <p class="finding-conformance-scope">Finding-level selection; see the observed outcomes and limits above. Unsupported, unmapped, resource-bound and conditional cases remain in the denominator, along with infrastructure errors. This is not a rule or library certificate. Pending specialist validation.</p>
+  </details>`
+}
+
 export function codeEvidenceDestinations(index) {
-  return new Set([...index.sources.values()].filter(source => source.kind === 'code' && source.current)
-    .flatMap(source => source.functions.map(fn => fn.href)))
+  return new Set([
+    ...[...index.sources.values()].filter(source => source.kind === 'code' && source.current).flatMap(source => source.functions.map(fn => fn.href)),
+    ...[...(index.conformanceResults?.values() ?? [])].filter(report => report.current).flatMap(report => report.functions.map(fn => fn.href)),
+  ])
 }
 
 export function decorateSpecification(html, markdown, source, index) {

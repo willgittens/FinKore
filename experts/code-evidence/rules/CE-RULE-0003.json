@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.0.0",
+  "schema_version": "2.1.0",
   "id": "CE-RULE-0003",
   "title": "Calculation precision and rounding policy are explicit",
   "scope": "existing_core_subject",
@@ -47,7 +47,29 @@
         "Noda Money rounds a nonzero decimal through its selected/current MoneyContext before storing it; the standard context normally derives currency scale and defaults to midpoint-even.",
         "The constructor selects CurrentContext on omission, applies either the two-digit fast path or context.Round, and stores the rounded bits. A zero input returns before invoking a custom rounding strategy.",
         "A nonzero supported decimal input, the selected context/strategy and valid currency metadata; explicitly declared composing-domain policy is distinct from an omitted ambient default. A finer-than-currency amount can be changed at construction. A custom strategy can replace a nonzero amount, but the zero fast path prevents the unqualified claim that every constructor call invokes it. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 8,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using .NET runtime 10.0.15, SDK 10.0.404. Primary profile declared_native_profile; native path: Money constructor. Selected outcomes: 8 matched, 2 mismatched, 2 unsupported.",
+          "The actual default constructor reduces EUR10.005 and EUR-10.005 to two-place amounts; ordinary and insignificant-zero inputs are controls. This replaces the old explicit-rounding probe, which did not test the constructor claim. Only shared exact-value construction obligations are assessed, not portable JSON grammar."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0021",
@@ -112,7 +134,28 @@
         "Dintero reconstructs values through constructor rounding after arithmetic; fromPrice adds a default price scale and resetDecimals returns to currency-derived scale.",
         "The constructor rounds amount at decimals??currencyToDecimals, multiply/divide merge the result, and fromPriceAndQuantity explicitly resets decimals after multiplication.",
         "The selected decimals/roundingMode and Big.js context, with supported finite decimal inputs; a composing domain could separately declare such a policy. A .0005 price multiplied by30 can become.02 after reset rather than preserving the exact.015 product. Preserved Big.js storage precision does not remove reconstruction boundaries. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 6,
+        "total": 11,
+        "description": [
+          "Assessed 2026-11-23 using Node 24.15.0, Big.js. Primary profile declared_native_profile; native path: Money.multiply/divide. Selected outcomes: 6 matched, 5 mismatched.",
+          "For money.multiply.decimal-001, native observation {\"amount\":\"15.38\",\"currency\":\"EUR\"} differs from expected {\"amount\":\"15.375\",\"currency\":\"EUR\"}."
+        ],
+        "test_ids": [
+          "money.multiply.decimal-001",
+          "money.multiply.negative-scalar-001",
+          "money.multiply.zero-scalar-001",
+          "money.divide.exact-001",
+          "money.divide.zero-001",
+          "money.divide.rounding-required-001",
+          "money.divide.rounded-third-half-up-001",
+          "money.divide.negative-down-001",
+          "money.divide.negative-floor-001",
+          "money.divide.exact-finer-than-policy-001",
+          "money.divide.zero-before-invalid-rounding-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0025",
@@ -249,7 +292,35 @@
         "GoMoney Round selects currency Fraction as its exponent and resolves exact half ties toward zero in the whole-major rounding path.",
         "The correction condition is m>exp/2 rather than>=, followed by magnitude truncation and sign restoration; there is no explicit mode/scale argument.",
         "Ordinary valid currency fraction and representable intermediate magnitude; MinInt64/custom invalid fraction behavior is not certified. For exponent2, both150 and-150 minor units become100 and-100, respectively. This differs from Core HALF_UP and is not a general HALF_EVEN implementation. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 0,
+        "total": 18,
+        "description": [
+          "Assessed 2026-11-23 using Go 1.25.5. Primary profile declared_native_profile; native path: Money.Round (mapping assessment only; no matching-policy dispatch). Selected outcomes: 18 unsupported. No matching native target was dispatched.",
+          "All selected policies remain unsupported: native fixed whole-unit rounding has no caller-selected equivalent for these Core modes. Zero native Core-round comparisons were completed."
+        ],
+        "test_ids": [
+          "money.round.half-up.tie-positive-001",
+          "money.round.half-up.tie-negative-001",
+          "money.round.half-even.tie-even-down-001",
+          "money.round.half-even.tie-odd-up-001",
+          "money.round.half-even.tie-negative-even-001",
+          "money.round.down.positive-001",
+          "money.round.down.negative-001",
+          "money.round.up.positive-001",
+          "money.round.up.negative-001",
+          "money.round.floor.positive-001",
+          "money.round.floor.negative-001",
+          "money.round.ceiling.positive-001",
+          "money.round.ceiling.negative-001",
+          "money.round.explicit-scale-001",
+          "money.round.no-discard-001",
+          "money.round.invalid-mode-001",
+          "money.round.invalid-scale-001",
+          "money.round.near-half-no-double-round-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0080",
@@ -337,7 +408,29 @@
         "The BCMath path imposes scale14 before integer-minor rounding, and tests a divisor against zero at that same scale. Public multiply/divide therefore need separate exactness and policy qualifications.",
         "bcmul/bcdiv use SCALE14; Money then calls round with default HALF_UP. bccomp(divisor,0,14) can reject a nonzero tiny scalar before quotient formation.",
         "The selected BCMath calculator and supported integer-minor Money inputs; no claim about an alternative injected calculator. A nonzero 0.000000000000001 divisor compares as zero at14 places. An exactly representable sub-minor product can also be reduced before output; this is a path observation, not an assertion of unlimited supported precision. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 6,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37, BCMath/GMP. Primary profile declared_native_profile; native path: Money.multiply/divide. Selected outcomes: 6 matched, 6 mismatched.",
+          "For money.multiply.decimal-001, native observation {\"amount\":\"15.38\",\"currency\":\"EUR\"} differs from expected {\"amount\":\"15.375\",\"currency\":\"EUR\"}."
+        ],
+        "test_ids": [
+          "money.multiply.decimal-001",
+          "money.multiply.negative-scalar-001",
+          "money.multiply.zero-scalar-001",
+          "money.divide.exact-001",
+          "money.divide.zero-001",
+          "money.divide.rounding-required-001",
+          "money.divide.rounded-third-half-up-001",
+          "money.divide.negative-down-001",
+          "money.divide.negative-floor-001",
+          "money.divide.exact-finer-than-policy-001",
+          "money.divide.zero-before-invalid-rounding-001",
+          "money.divide.tiny-nonzero-scalar-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0084",
@@ -367,7 +460,27 @@
         "GMP quotient reconstruction can discard the negative sign when the integer quotient is zero and the remainder is negative. The later Money rounding inherits the reconstructed sign.",
         "The path concatenates gmp_strval(integer) with the magnitude-only remainder; the leading minus is removed without a separate quotient sign. A negative nonzero integer quotient masks this branch.",
         "GMP calculator, a signed division whose truncated integer quotient is zero, and the documented GMP quotient/remainder primitive contract. The source-level -2/3 trace has integer0 and negative remainder, then reconstructs positive fractional text. The existing negative-whole-quotient example does not cover this branch. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 6,
+        "total": 10,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37, BCMath/GMP. Primary profile declared_native_profile; native path: Money.divide with GmpCalculator. Selected outcomes: 6 matched, 4 mismatched.",
+          "With GMP selected, native Money.divide returns +0.01 for EUR-0.02/3 under the matched two-place HALF_UP policy, versus Core -0.01; the positive counterpart passes. Division1/3 without an explicit Core policy also returns a rounded amount rather than the required error. No sign correction is supplied by the binding."
+        ],
+        "test_ids": [
+          "money.divide.exact-001",
+          "money.divide.zero-001",
+          "money.divide.rounding-required-001",
+          "money.divide.rounded-third-half-up-001",
+          "money.divide.negative-down-001",
+          "money.divide.negative-floor-001",
+          "money.divide.exact-finer-than-policy-001",
+          "money.divide.zero-before-invalid-rounding-001",
+          "money.divide.negative-subminor-half-up-001",
+          "money.divide.positive-subminor-half-up-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0088",
@@ -411,7 +524,39 @@
         "MoneyPHP UP/DOWN mean ceiling/floor in the inspected dispatcher; they are not aliases for Core away-from-zero/toward-zero. Its backend validation and roundToUnit shortcuts also leave narrower input-dependent behavior than a uniform mode contract.",
         "Integer and non-half backend paths return before the final unknown-mode exception. roundToUnit returns zero when the minor-unit text is shorter than unit, before selecting directional rounding.",
         "The native mode constants and minor-unit roundToUnit operation, with signed operands and integer unit argument. A negative discarded fraction distinguishes DOWN/floor from Core DOWN/toward-zero. An unrecognized backend mode on a non-half value may return a rounded value instead of error; small positive directed unit rounding can take the zero shortcut. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 5,
+        "total": 22,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37, BCMath/GMP. Primary profile declared_native_profile; native path: Money.roundToUnit with BcMathCalculator. Selected outcomes: 5 matched, 17 unsupported.",
+          "Actual roundToUnit passed negative whole-unit HALF_UP, HALF_EVEN, FLOOR and CEILING discriminators. Most finer-than-minor-unit receivers and unavailable signed selectors remain unsupported; native ROUND_DOWN/ROUND_UP correspond here to FLOOR/CEILING, not Core DOWN/UP."
+        ],
+        "test_ids": [
+          "money.round.half-up.tie-positive-001",
+          "money.round.half-up.tie-negative-001",
+          "money.round.half-even.tie-even-down-001",
+          "money.round.half-even.tie-odd-up-001",
+          "money.round.half-even.tie-negative-even-001",
+          "money.round.down.positive-001",
+          "money.round.down.negative-001",
+          "money.round.up.positive-001",
+          "money.round.up.negative-001",
+          "money.round.floor.positive-001",
+          "money.round.floor.negative-001",
+          "money.round.ceiling.positive-001",
+          "money.round.ceiling.negative-001",
+          "money.round.explicit-scale-001",
+          "money.round.no-discard-001",
+          "money.round.invalid-mode-001",
+          "money.round.invalid-scale-001",
+          "money.round.near-half-no-double-round-001",
+          "money.round.half-up.negative-whole-unit-001",
+          "money.round.half-even.negative-whole-unit-001",
+          "money.round.floor.negative-whole-unit-001",
+          "money.round.ceiling.negative-whole-unit-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0092",
@@ -462,7 +607,25 @@
         "Brick separates rational intermediate arithmetic from context fitting. Fixed-scale Money can reject or round a finer exact quotient; AutoContext permits finite decimal results and rejects nonterminating rational conversion.",
         "dividedBy creates a BigRational and passes it through Context.applyTo; RationalMoney can retain the rational instead. AutoContext prohibits an explicit rounding mode and converts to a finite BigDecimal.",
         "The named context and its declared scale/step are part of the native API; results remain in the supported Brick Math domain. At a two-digit fixed context, 1/8 cannot simply preserve0.125; Unnecessary rejects or another mode quantizes it. Core divide preserves an exact finite quotient even with a coarser optional policy. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 5,
+        "total": 8,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37, brick/math 0.15.0. Primary profile declared_native_profile; native path: Money.dividedBy (AutoContext). Selected outcomes: 5 matched, 3 mismatched.",
+          "For money.divide.rounded-third-half-up-001, native observation {\"code\":\"FINKORE_MONEY_ROUNDING_REQUIRED\"} differs from expected {\"amount\":\"0.33\",\"currency\":\"EUR\"}."
+        ],
+        "test_ids": [
+          "money.divide.exact-001",
+          "money.divide.zero-001",
+          "money.divide.rounding-required-001",
+          "money.divide.rounded-third-half-up-001",
+          "money.divide.negative-down-001",
+          "money.divide.negative-floor-001",
+          "money.divide.exact-finer-than-policy-001",
+          "money.divide.zero-before-invalid-rounding-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0101",
@@ -513,7 +676,34 @@
         "govalues Exact operations protect currency-significant digits while fitting a bounded decimal result, rather than promising all stored/intermediate digits remain unchanged.",
         "Money delegates to AddExact/MulExact/QuoExact with currency scale and then pads through newAmountSafe. The meaning of Exact is therefore the dependency contract, not the method name alone.",
         "Supported decimal coefficients/scales and the selected currency significance, with actual decimal dependency context; no universal Core precision maximum is inferred. The recorded max-USD plus.004 case can keep the old amount while losing subcurrency digits. A nonterminating division can also use implicit precision; neither observation certifies unrestricted exact Core arithmetic. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 11,
+        "total": 17,
+        "description": [
+          "Assessed 2026-11-23 using Go 1.25.5. Primary profile declared_native_profile; native path: Amount.Add/Sub/Quo. Selected outcomes: 11 matched, 4 mismatched, 2 unsupported.",
+          "For money.divide.rounding-required-001, native observation {\"amount\":\"0.3333333333333333333\",\"currency\":\"EUR\"} differs from expected {\"code\":\"FINKORE_MONEY_ROUNDING_REQUIRED\"}."
+        ],
+        "test_ids": [
+          "money.add.same-currency.basic-001",
+          "money.add.exact-decimal-001",
+          "money.add.negative-001",
+          "money.add.zero-001",
+          "money.add.currency-mismatch-001",
+          "money.subtract.currency-mismatch-001",
+          "money.divide.exact-001",
+          "money.divide.zero-001",
+          "money.divide.rounding-required-001",
+          "money.divide.rounded-third-half-up-001",
+          "money.divide.negative-down-001",
+          "money.divide.negative-floor-001",
+          "money.divide.exact-finer-than-policy-001",
+          "money.divide.zero-before-invalid-rounding-001",
+          "money.add.large-significant-digits-001",
+          "money.add.finer-stored-value-zero-001",
+          "money.subtract.high-precision-right-operand-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0106",
@@ -601,7 +791,20 @@
         "Dinero number creation checks Number.isInteger but not safe-integer exactness; native addition and scale promotion can preserve integrality while changing the mathematical coefficient.",
         "The onCreate hook accepts integral binary64 values and add is the native + operator. normalizeScale raises scales through the same calculator; a distinct bigint variant exists.",
         "The number-backed implementation and accepted coefficients at the binary safe-integer boundary; no claim about the bigint backend or all supported precision domains. 9007199254740992 is integral and accepted, yet adding1 can leave the coefficient unchanged. The concern is accepted-input exactness, not the mere existence of a finite backend. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 2,
+        "total": 3,
+        "description": [
+          "Assessed 2026-11-23 using Node 24.15.0, first-party Dinero calculators. Primary profile declared_native_profile; native path: dinero.add (Number calculator). Selected outcomes: 2 matched, 1 mismatched.",
+          "Individually exact safe Number coefficients are supplied before addition. The control passes; the next sum returns coefficient9007199254740992 instead of9007199254740993. The old oversized operand was unrepresentable before dispatch and did not test this admitted-input loss."
+        ],
+        "test_ids": [
+          "money.add.same-currency.basic-001",
+          "money.add.safe-integer-coefficient-control-001",
+          "money.add.safe-integer-coefficient-growth-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0115",
@@ -659,7 +862,35 @@
         "Dinero down/up are floor/ceiling; halfUp/halfDown choose the positive/negative infinity candidate on a tie. Core HALF_UP corresponds to halfAwayFromZero under matched radix/factor conditions.",
         "down decrements negative nonintegral quotients; up increments positive ones. halfUp delegates ties to up, while halfAwayFromZero reapplies sign after rounding magnitude.",
         "Positive scaling factor, an exact-enough selected backend, and a separately selected target scale; method names are not canonical mode identifiers. For negative half ties, halfUp moves toward positive infinity while Core HALF_UP moves away from zero. The source helper halfAwayFromZero has the latter branch, so the library is not simply missing every equivalent mode. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 12,
+        "total": 18,
+        "description": [
+          "Assessed 2026-11-23 using Node 24.15.0, first-party Dinero calculators. Primary profile declared_native_profile; native path: dinero.transformScale. Selected outcomes: 12 matched, 1 mismatched, 5 unsupported.",
+          "For money.round.invalid-scale-001, native observation {\"amount\":\"0\",\"currency\":\"EUR\"} differs from expected {\"code\":\"FINKORE_MONEY_INVALID_ROUNDING\"}."
+        ],
+        "test_ids": [
+          "money.round.half-up.tie-positive-001",
+          "money.round.half-up.tie-negative-001",
+          "money.round.half-even.tie-even-down-001",
+          "money.round.half-even.tie-odd-up-001",
+          "money.round.half-even.tie-negative-even-001",
+          "money.round.down.positive-001",
+          "money.round.down.negative-001",
+          "money.round.up.positive-001",
+          "money.round.up.negative-001",
+          "money.round.floor.positive-001",
+          "money.round.floor.negative-001",
+          "money.round.ceiling.positive-001",
+          "money.round.ceiling.negative-001",
+          "money.round.explicit-scale-001",
+          "money.round.no-discard-001",
+          "money.round.invalid-mode-001",
+          "money.round.invalid-scale-001",
+          "money.round.near-half-no-double-round-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0121",
@@ -689,7 +920,24 @@
         "The illustrative Dinero Big.js integerDivide calculator first rounds decimal division at ambient DP/RM, then truncates that rounded value, so it is not generally exact integer quotient.",
         "Both the test utility and documentation use a.div(b).round(0,Big.roundDown). The second rounding cannot undo a first rounding that crossed an integer boundary.",
         "This first-party custom example/test calculator, Big.js default DP20/RM behavior as previously pinned, and positive exact operands. 999999999999999999999 divided by1000000000000000000000 rounds to1 at20 decimal places before truncation, while the exact integer quotient is0. This is not the native bigint calculator. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 5,
+        "total": 7,
+        "description": [
+          "Assessed 2026-11-23 using Node 24.15.0, first-party Dinero calculators. Primary profile Big_DP2_RM1; native path: dinero.allocate (first-party Big.js calculator). Selected outcomes: 5 matched, 2 mismatched.",
+          "The score uses the declared Big DP=2/RM=1 profile; division context can overshoot provisional shares and change residual order. DP=20/RM=1 is a separate control, not an extra independent library or a replacement for the less favorable profile. Control profiles, excluded from the primary score: Big_DP20_RM1 (same test_ids): 6 matched, 1 mismatched."
+        ],
+        "test_ids": [
+          "money.allocate.equal.remainder-positive-001",
+          "money.allocate.equal.remainder-negative-001",
+          "money.allocate.ratio.remainder-positive-001",
+          "money.allocate.ratio.declared-order-001",
+          "money.allocate.ratio.zero-source-001",
+          "money.allocate.ratio.equal-weights-remainder-001",
+          "money.allocate.ratio.near-integer-share-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0126",
@@ -756,7 +1004,21 @@
         "py-moneyed unary negation and absolute value use context-applying Decimal operations, so a valid stored exact amount can lose digits before a later calculation.",
         "__neg__ applies unary minus to self.amount and __abs__ calls abs; subtraction invokes negation before addition. Constructor-preserved Decimal storage does not bypass those operator contexts.",
         "A supported stored Decimal amount and an explicitly lowered ambient precision, with ordinary finite input. Stored123.45 under precision3 can be negated as-123 rather than exact-123.45. The original operand can remain unchanged, so value exactness and operand immutability are separate questions. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 2,
+        "total": 4,
+        "description": [
+          "Assessed 2026-11-23 using Python 3.10.12, Decimal. Primary profile precision28; native path: Money negate/subtract. Selected outcomes: 2 matched, 2 mismatched.",
+          "For money.negate.high-precision-001, native observation {\"amount\":\"-1234567890123456789012345679\",\"currency\":\"EUR\"} differs from expected {\"amount\":\"-1234567890123456789012345678.91\",\"currency\":\"EUR\"}. Control profiles, excluded from the primary score: precision6 (same test_ids): 2 matched, 2 mismatched."
+        ],
+        "test_ids": [
+          "money.negate.positive-001",
+          "money.negate.negative-001",
+          "money.negate.high-precision-001",
+          "money.subtract.high-precision-right-operand-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0144",
@@ -821,7 +1083,28 @@
         "carlospalol Money exposes ambient-context Decimal unary/true-division behavior and truncating quotient/remainder helpers; their names do not imply Core explicit rounding or mathematical floor semantics.",
         "Unary minus/plus/abs reconstruct from Decimal operators, scalar true division uses the ambient context, and // delegates directly to Decimal //. Money/Money paths return numeric ratios or tuples after currency checks.",
         "Supported Decimal inputs and the active Python3 contract; Python2 and native unsupported operands remain outside this conclusion. With low precision, negation can round an exact stored value; Decimal -7//4 is truncation toward zero rather than floor-2. A1/3 scalar division does not require an explicit supplied scale/mode. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified. This behavior is not currently defined by FinKore Core."
-      ]
+      ],
+      "conformance": {
+        "passed": 6,
+        "total": 11,
+        "description": [
+          "Assessed 2026-11-23 using Python 3.10.12, Decimal. Primary profile declared_native_profile; native path: Money negate/divide. Selected outcomes: 6 matched, 5 mismatched.",
+          "For money.negate.high-precision-001, native observation {\"amount\":\"-1234567890123456789012345679\",\"currency\":\"EUR\"} differs from expected {\"amount\":\"-1234567890123456789012345678.91\",\"currency\":\"EUR\"}."
+        ],
+        "test_ids": [
+          "money.negate.positive-001",
+          "money.negate.negative-001",
+          "money.negate.high-precision-001",
+          "money.divide.exact-001",
+          "money.divide.zero-001",
+          "money.divide.rounding-required-001",
+          "money.divide.rounded-third-half-up-001",
+          "money.divide.negative-down-001",
+          "money.divide.negative-floor-001",
+          "money.divide.exact-finer-than-policy-001",
+          "money.divide.zero-before-invalid-rounding-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0160",
@@ -888,7 +1171,22 @@
         "Dintero percentage conversion first divides by100 under ambient Big.DP, so an exact terminating scalar can be reduced before application. VAT interpretation remains a separate application policy.",
         "percentToRate and percentToMultiplier both invoke Big.div(100); getVat subsequently multiplies an already selected taxable base.",
         "A sufficiently small finite percentage under the selected default or mutated Big.js division context, with an otherwise supported Money amount. Under DP20, a percentage requiring more than20 fractional scalar places can become0 before multiplication, even when a later product would be significant. No tax-law or business-base correctness is inferred. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified. This behavior is not currently defined by FinKore Core."
-      ]
+      ],
+      "conformance": {
+        "passed": 2,
+        "total": 5,
+        "description": [
+          "Assessed 2026-11-23 using Node 24.15.0, Big.js. Primary profile declared_native_profile; native path: Money.getVat (percentage portion only). Selected outcomes: 2 matched, 3 mismatched.",
+          "Actual getVat with explicit percentage facts was evaluated only as a percentage-portion calculation. Native decimal/currency rounding loses fractional or tiny products; this is not a tax-domain conformance claim."
+        ],
+        "test_ids": [
+          "money.rate.percentage-conversion-001",
+          "money.rate.fractional-percentage-001",
+          "money.rate.large-percentage-growth-001",
+          "money.rate.tiny-percentage-control-001",
+          "money.rate.tiny-percentage-significant-product-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0175",
@@ -955,7 +1253,21 @@
         "RubyMoney Money/Money division converts the exchanged denominator to Float; scalar multiplication can also enter native binary arithmetic before Money reconstruction.",
         "The operator branches distinguish Money and scalar operands. The Money branch explicitly calls to_f on the decimal denominator; scalar multiplication performs fractional*other before dup_with.",
         "Money/Money ratio uses an exchange-to-receiver path; scalar behavior depends on the admitted numeric type and infinite-precision setting. An already rounded Float denominator cannot supply an exact decimal ratio merely because the result is later wrapped. The Money/Money ratio itself is outside current Core arithmetic. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified. This behavior is not currently defined by FinKore Core."
-      ]
+      ],
+      "conformance": {
+        "passed": 2,
+        "total": 4,
+        "description": [
+          "Assessed 2026-11-23 using Ruby 3.1.2, BigDecimal 3.1.1. Primary profile declared_native_profile; native path: Money#*. Selected outcomes: 2 matched, 2 mismatched.",
+          "For money.multiply.decimal-001, native observation {\"amount\":\"15.38\",\"currency\":\"EUR\"} differs from expected {\"amount\":\"15.375\",\"currency\":\"EUR\"}."
+        ],
+        "test_ids": [
+          "money.multiply.decimal-001",
+          "money.multiply.negative-scalar-001",
+          "money.multiply.zero-scalar-001",
+          "money.multiply.exact-integer-scalar-beyond-binary64-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0191",
@@ -1022,7 +1334,23 @@
         "Joda Money direct construction imposes the currency lexical scale, while an explicit UNNECESSARY/provider path can remove insignificant zeros and BigMoney can retain another calculation scale.",
         "Money.of first compares BigDecimal.scale with currency digits; the explicit mode overload instead calls setScale. withScale is an explicit distinct operation.",
         "Supported BigDecimal input and the precise constructor overload; currencies with known decimal places. A two-digit Money.of receives1.230 and rejects its lexical scale, whereas explicit UNNECESSARY can preserve the numeric1.23 value. This does not make storage scale a FinKore rule. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 3,
+        "total": 6,
+        "description": [
+          "Assessed 2026-11-23 using Java 21.0.12.1, pinned Joda source. Primary profile declared_native_profile; native path: Money.of. Selected outcomes: 3 matched, 3 unsupported.",
+          "The actual Money.of construction overload passes the ordinary value. It rejects fine nonzero digits and the supplied redundant three-place decimal representation under its native currency-scale restriction. Those three cells are representation limitations, not three wrong numeric results. The old equality comparison did not test construction; complete portable JSON grammar is outside this component profile."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0198",
@@ -1066,7 +1394,25 @@
         "Joda divide with a rounding mode retains numerator scale, and mode-validation order differs between decimal/double and long overloads.",
         "The decimal method checks mode before invoking BigDecimal.divide(divisor,mode); long divisor1 returns this before any mode use. Money simply delegates.",
         "The inspected retain-scale division overload and a valid finite decimal numerator/divisor; JDK divide contract is reused from the prior pinned review. 1.00 divided by8 with DOWN returns the scale2 quotient0.12 rather than Core exact0.125. A null mode with a zero decimal divisor is checked before zero division, unlike Core optional-policy precedence. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 3,
+        "total": 8,
+        "description": [
+          "Assessed 2026-11-23 using Java 21.0.12.1, pinned Joda source. Primary profile declared_native_profile; native path: BigMoney.dividedBy(BigDecimal,RoundingMode). Selected outcomes: 3 matched, 5 mismatched.",
+          "Retain-scale division1/8 returns0 at the admitted receiver scale, while an exact ordinary division passes. Zero with null policy throws native NullPointerException before a division-by-zero observation; unchanged operand state is retained. The exception is an observed error-precedence mismatch, not infrastructure failure or an invented portable error mapping."
+        ],
+        "test_ids": [
+          "money.divide.exact-001",
+          "money.divide.zero-001",
+          "money.divide.rounding-required-001",
+          "money.divide.rounded-third-half-up-001",
+          "money.divide.negative-down-001",
+          "money.divide.negative-floor-001",
+          "money.divide.exact-finer-than-policy-001",
+          "money.divide.zero-before-invalid-rounding-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0207",
@@ -1140,7 +1486,21 @@
         "The public Clojure multiply arities declare a double multiplier, so an exact native BigDecimal can be narrowed before protocol dispatch; a separate BigDecimal protocol body does not protect that public path.",
         "Both public arities carry ^double before invoking op-multiply. The distinct BigDecimal protocol implementation forwards its value directly to Joda only when that implementation is actually reached.",
         "The inspected Clojure1.11.1 unboxing/Number contract and public multiply entry, with an exact BigDecimal beyond binary64 integer precision. 9007199254740993M can become9007199254740992 before Joda multiplication. This is a path-specific narrowing concern, not proof that every protocol invocation narrows. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 1,
+        "total": 4,
+        "description": [
+          "Assessed 2026-11-23 using Java 21.0.12.1, Clojure/Joda 0.12, BigDecimal. Primary profile declared_native_profile; native path: amounts/multiply. Selected outcomes: 1 matched, 1 mismatched, 2 unsupported.",
+          "The public multiply entry receives the exact BigDecimal scalar9007199254740993, then returns9007199254740992 after native narrowing. The fractional-product control is rejected by the dependency currency-scale limit and remains unsupported. No Double conversion is performed by the binding before the public entry."
+        ],
+        "test_ids": [
+          "money.multiply.decimal-001",
+          "money.multiply.negative-scalar-001",
+          "money.multiply.zero-scalar-001",
+          "money.multiply.exact-integer-scalar-beyond-binary64-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0212",
@@ -1177,7 +1537,42 @@
         "Clojure money string mode normalization uses the host default locale and maps unrecognized names to UNNECESSARY; missing and unsupported policies therefore collapse into one native fallback.",
         "The String implementation calls toLowerCase without an explicit locale and its case default is UNNECESSARY. The nil protocol branch also selects that mode.",
         "The native string/Named policy path and an actual default locale; explicit canonical mode inputs are not inferred from these names. An unsupported string may succeed when no digits need removal. A Turkish-style case mapping can make an uppercase ASCII name miss its branch, but no concrete locale execution was observed. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 5,
+        "total": 25,
+        "description": [
+          "Assessed 2026-11-23 using Java 21.0.12.1, Clojure/Joda 0.12, BigDecimal. Primary profile Locale_ROOT; native path: amounts/round and divide through to-rounding-mode. Selected outcomes: 5 matched, 2 mismatched, 18 unsupported.",
+          "Locale.ROOT is primary; tr-TR is a separate deterministic context. Exactly representable -2.1 at scale zero with CEILING returns -2 under ROOT but raises Rounding necessary under Turkish lowercase conversion. This is a reproduced native mode-conversion difference; Joda input-scale limits remain visible. Control profiles, excluded from the primary score: Locale_tr_TR (same test_ids except money.round.floor.negative-near-zero-001): 3 matched, 3 mismatched, 18 unsupported."
+        ],
+        "test_ids": [
+          "money.round.half-up.tie-positive-001",
+          "money.round.half-up.tie-negative-001",
+          "money.round.half-even.tie-even-down-001",
+          "money.round.half-even.tie-odd-up-001",
+          "money.round.half-even.tie-negative-even-001",
+          "money.round.down.positive-001",
+          "money.round.down.negative-001",
+          "money.round.up.positive-001",
+          "money.round.up.negative-001",
+          "money.round.floor.positive-001",
+          "money.round.floor.negative-001",
+          "money.round.ceiling.positive-001",
+          "money.round.ceiling.negative-001",
+          "money.round.explicit-scale-001",
+          "money.round.no-discard-001",
+          "money.round.invalid-mode-001",
+          "money.round.invalid-scale-001",
+          "money.round.near-half-no-double-round-001",
+          "money.divide.rounding-unsupported-mode-001",
+          "money.divide.rounding-null-001",
+          "money.round.floor.negative-near-zero-001",
+          "money.round.half-up.negative-whole-unit-001",
+          "money.round.half-even.negative-whole-unit-001",
+          "money.round.floor.negative-whole-unit-001",
+          "money.round.ceiling.negative-whole-unit-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0232",
@@ -1235,7 +1630,29 @@
         "Sebastian Money add/subtract validate the native integer result before construction, while negate and numeric import take different overflow/narrowing routes.",
         "The guarded arithmetic calls assertIsInteger on the computed result; negate immediately constructs from -1*amount. fromString uses nested round/intval rather than the explicit bounds helper.",
         "The selected legacy PHP integer width/runtime and valid native minor-unit inputs; no out-of-range integer result is made portable by inference. Negating the minimum signed integer can enter a float-valued construction path, whereas add/sub overflow is rejected earlier. The exact out-of-range cast result/error is runtime-specific and not asserted. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 8,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using PHP 7.4.33, Intl. Primary profile declared_native_profile; native path: Money.add/subtract/negate. Selected outcomes: 8 matched, 4 unsupported.",
+          "The real CurrencyMismatchException is now normalized by its native class even when its message is empty; both operands are observed after rejection. Native int64 capacity and finer-input limitations remain unsupported rather than fabricated overflow codes."
+        ],
+        "test_ids": [
+          "money.add.same-currency.basic-001",
+          "money.add.exact-decimal-001",
+          "money.add.negative-001",
+          "money.add.zero-001",
+          "money.add.currency-mismatch-001",
+          "money.subtract.currency-mismatch-001",
+          "money.negate.positive-001",
+          "money.negate.negative-001",
+          "money.negate.high-precision-001",
+          "money.add.signed-minor-boundary-control-001",
+          "money.add.signed-minor-boundary-growth-001",
+          "money.negate.signed-minor-minimum-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0235",
@@ -1265,7 +1682,26 @@
         "Sebastian Money fromString coerces decimal text to native numeric rounding twice, and multiplication quantizes its native product to integer minor units with a default mode.",
         "fromString checks string type then rounds major digits, multiplies by subunit and rounds again before intval. multiply applies round(factor*amount,0,mode) before casting.",
         "The supported legacy PHP version/width, currency subunit metadata and the actual rounding mode; malformed-string behavior is not generalized to PHP8. A product with a nonzero fractional minor unit can be rounded without an explicit caller target scale, while large exact decimal text can already be narrowed during import. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 5,
+        "total": 9,
+        "description": [
+          "Assessed 2026-11-23 using PHP 7.4.33, Intl. Primary profile declared_native_profile; native path: Money.fromString/multiply. Selected outcomes: 5 matched, 4 mismatched.",
+          "For money.deserialize.finer-than-currency-scale-001, native observation {\"amount\":\"10.01\",\"currency\":\"EUR\"} differs from expected {\"amount\":\"10.005\",\"currency\":\"EUR\"}. Construction probes cover shared value obligations, not a complete Core JSON decoder."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.multiply.decimal-001",
+          "money.multiply.negative-scalar-001",
+          "money.multiply.zero-scalar-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0236",
@@ -1346,7 +1782,26 @@
         "Bojanz stores decimal values independently of arithmetic precision, then selects19 or39 significant digits from operand coefficient bit length and discards arithmetic conditions/errors.",
         "decimalContext ignores exponent separation, and Add/Sub/Mul/Quo calls do not inspect returned status. A small coefficient with a large exponent can therefore select a context too small for the exact combined result.",
         "Accepted finite amounts such as1E+50 and1, the selected apd3.2.3 contract and unchanged context constants. The coefficients of1E+50 and1 are small, so Add chooses19 digits and can lose the1, although the representation accepts the exact result. No universal implementation precision range is prescribed. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 8,
+        "total": 9,
+        "description": [
+          "Assessed 2026-11-23 using Go 1.25.5. Primary profile declared_native_profile; native path: Amount.Add/Sub. Selected outcomes: 8 matched, 1 mismatched.",
+          "For money.add.large-significant-digits-001, native observation {\"amount\":\"1.23456789012345678901234567890123456789E+59\",\"currency\":\"EUR\"} differs from expected {\"amount\":\"123456789012345678901234567890123456789012345678901234567891\",\"currency\":\"EUR\"}."
+        ],
+        "test_ids": [
+          "money.add.same-currency.basic-001",
+          "money.add.exact-decimal-001",
+          "money.add.negative-001",
+          "money.add.zero-001",
+          "money.add.currency-mismatch-001",
+          "money.subtract.currency-mismatch-001",
+          "money.add.large-significant-digits-001",
+          "money.add.finer-stored-value-zero-001",
+          "money.subtract.high-precision-right-operand-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0239",
@@ -1390,7 +1845,20 @@
         "Bojanz RoundTo ignores Quantize failure and can return an Amount containing NaN; BigInt then copies its coefficient without the nonfinite check used by Int64.",
         "The pinned apd Quantize sets NaN when coefficient digits exceed context precision and returns InvalidOperation. RoundTo ignores both results; BigInt calls Round then returns the coefficient.",
         "An accepted large finite input whose quantized coefficient exceeds39 digits, the selected apd3.2.3 contract, and the actual default currency rounding path. A40-digit integer quantized to two places can produce NaN; the shared decimalNaN value has zero coefficient, so BigInt can expose0 rather than an explicit failure. This is not an executed process result. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 0,
+        "total": 3,
+        "description": [
+          "Assessed 2026-11-23 using Go 1.25.5. Primary profile declared_native_profile; native path: Amount.RoundTo. Selected outcomes: 2 mismatched, 1 unsupported.",
+          "Actual HALF_EVEN RoundTo on an accepted40-digit integral source returns NaN after ignored Quantize failure. The requested FLOOR control has no native signed counterpart and remains unsupported. A missing FLOOR selector does not make all RoundTo behavior unavailable."
+        ],
+        "test_ids": [
+          "money.round.no-discard-001",
+          "money.round.large-integer-no-discard-001",
+          "money.round.scale-50-half-even-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0247",
@@ -1427,7 +1895,23 @@
         "Money2 text parsing truncates excess fractional digits at currency precision before applying the requested Money precision; Fixed-to-Money reconstruction instead uses its scale-copy policy.",
         "PatternDecoder is created with currency metadata, takeMinorDigits discards excess text, and only then parseWithCurrency copies to the optional decimalDigits override.",
         "The specified human pattern/currency and compatible Fixed6.0.0 context; this is not a canonical portable Money JSON parser. USD currency digits2 with text1.239 and requested precision4 can become1.2300; increasing scale later cannot recover the truncated9. Direct Fixed conversion can instead round to1.24. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 1,
+        "total": 6,
+        "description": [
+          "Assessed 2026-11-23 using Dart 3.14.1, Fixed 6.0.0/Decimal 3.0.2/Rational 2.0.0. Primary profile human_parser_decimals4; native path: Money.parseWithCurrency(decimalDigits 4). Selected outcomes: 1 matched, 5 mismatched.",
+          "Native parseWithCurrency at four decimal digits loses values that the Fixed reconstruction control preserves. The parser and exact reconstruction remain separate source paths; a favorable reconstruction does not validate parsing. Construction probes cover shared value obligations, not a complete Core JSON decoder. Control profiles, excluded from the primary score: Fixed_reconstruction (same test_ids): 6 matched."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0248",
@@ -1471,7 +1955,25 @@
         "Money2 BigInt storage does not protect the selected Fixed6.0.0 division/num-import paths from binary intermediates and conversion limits.",
         "Fixed division converts aligned BigInt operands with / to double and reconstructs via fromNum; scalar divide constructs a reciprocal double. fromNum uses toStringAsFixed and rejects decimalDigits>20.",
         "The actually inspected compatible Fixed6.0.0 dependency, its Dart contracts and selected overload; the package constraint does not prove that every deployment resolves this version. The inverse-rate path can request scale1000 but then enter fromNum, which rejects above20. An exact BigInt coefficient does not repair a prior binary quotient; no actual assertion execution is claimed. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified. This behavior is not currently defined by FinKore Core."
-      ]
+      ],
+      "conformance": {
+        "passed": 5,
+        "total": 8,
+        "description": [
+          "Assessed 2026-11-23 using Dart 3.14.1, Fixed 6.0.0/Decimal 3.0.2/Rational 2.0.0. Primary profile operator_num; native path: Money.operator / (num). Selected outcomes: 5 matched, 3 mismatched.",
+          "Both declared division paths were exercised with their actual native overload. Zero-divisor rejection of an Infinity intermediate is normalized after the native parse failure and verified stack path, with unchanged operand state. Exact finite quotient rounding and other native policy differences remain observed mismatches. Control profiles, excluded from the primary score: divideByFixed (same test_ids): 5 matched, 3 mismatched."
+        ],
+        "test_ids": [
+          "money.divide.exact-001",
+          "money.divide.zero-001",
+          "money.divide.rounding-required-001",
+          "money.divide.rounded-third-half-up-001",
+          "money.divide.negative-down-001",
+          "money.divide.negative-floor-001",
+          "money.divide.exact-finer-than-policy-001",
+          "money.divide.zero-before-invalid-rounding-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0250",
@@ -1522,7 +2024,28 @@
         "Money2 multiplication/division entry points choose different result scales; percentage application additionally rescales the product before dividing100. The reviewed Fixed6.0.0 reduction is half-away, not the README banker label.",
         "operator* converts at16 then restores Money scale, multiplyByNum defaults to16, and Fixed paths reconstruct through currency scale. The dependency reduction helper works on absolute remainder then restores sign.",
         "The named overload, source and currency scales and the selected compatible Fixed version; native num imports add separate limits. A result needing extra fractional digits can be removed by one overload but retained by another. Midpoint reduction follows half-away rather than half-even for the selected dependency. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 6,
+        "total": 11,
+        "description": [
+          "Assessed 2026-11-23 using Dart 3.14.1, Fixed 6.0.0/Decimal 3.0.2/Rational 2.0.0. Primary profile operator_num; native path: Money.operator * and / (num). Selected outcomes: 6 matched, 5 mismatched.",
+          "The Fixed control now actually calls multiplyByFixed/divideByFixed; the primary num overload is unchanged. Native zero division rejects its Infinity intermediate and is normalized only after the observed exception. Rounding/scale differences remain native results, without overload substitution or output repair. Control profiles, excluded from the primary score: Fixed (same test_ids): 6 matched, 5 mismatched."
+        ],
+        "test_ids": [
+          "money.multiply.decimal-001",
+          "money.multiply.negative-scalar-001",
+          "money.multiply.zero-scalar-001",
+          "money.divide.exact-001",
+          "money.divide.zero-001",
+          "money.divide.rounding-required-001",
+          "money.divide.rounded-third-half-up-001",
+          "money.divide.negative-down-001",
+          "money.divide.negative-floor-001",
+          "money.divide.exact-finer-than-policy-001",
+          "money.divide.zero-before-invalid-rounding-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0251",
@@ -1624,7 +2147,33 @@
         "Paysera stored decimal text can exceed the six-place default arithmetic/comparison context; numeric zero/equality and validation then use that narrower context.",
         "getMath builds BcMath(DEFAULT_SCALE6); add and comp use that scale. isEqual returns true for two values classified zero before checking currency, and precision checks reuse rounded equality.",
         "The default local BcMath strategy, accepted finite decimal strings and selected PHP8.2 BCMath contract; an injected alternative math strategy is a separate path. Adding0 to stored1.0000001 can return1.000000. Amounts below six places may be treated as equal zero even across currencies; the round/isEqual validation loop is not an independent exact oracle. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 13,
+        "total": 16,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37, Maba monetary 0.10.0/math 1.0.1. Primary profile declared_native_profile; native path: Money.add/sub/isEqual/ordering predicates. Selected outcomes: 13 matched, 3 mismatched.",
+          "The basic control passes. Adding zero to an accepted1.0000001 returns1.000000, and equality treats cross-currency zero values as equal instead of rejecting incompatibility. The real local BcMath scale6 is retained; no alternate math strategy is injected."
+        ],
+        "test_ids": [
+          "money.add.same-currency.basic-001",
+          "money.add.exact-decimal-001",
+          "money.add.negative-001",
+          "money.add.zero-001",
+          "money.add.currency-mismatch-001",
+          "money.subtract.currency-mismatch-001",
+          "money.compare.equal-trailing-zeros-001",
+          "money.compare.less-001",
+          "money.compare.greater-negative-001",
+          "money.compare.equal-zero-scale-001",
+          "money.compare.equality-currency-mismatch-001",
+          "money.compare.order-currency-mismatch-001",
+          "money.add.large-significant-digits-001",
+          "money.add.finer-stored-value-zero-001",
+          "money.subtract.high-precision-right-operand-001",
+          "money.compare.zero-equality-currency-mismatch-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0260",
@@ -1668,7 +2217,37 @@
         "Paysera local floor/round helpers use a scale-limited sign test after narrowing or splitting, which can misclassify negative values near zero.",
         "floor tests the extracted integer component rather than the original fractional sign; round compares at the default math scale before choosing +/-half increment. abs and negate reuse zero/sign classification.",
         "The local BcMath strategy, supported finite signed strings, DEFAULT_SCALE6 and the reviewed PHP8.2 zero normalization contract. floor(-0.1,0) can return0 instead of-1. round(-0.0000005,6) can choose the positive increment and return0 instead of the negative half-away result. No universal result for every PHP version is claimed. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 10,
+        "total": 20,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37, Maba monetary 0.10.0/math 1.0.1. Primary profile declared_native_profile; native path: Money.floor/ceil/round. Selected outcomes: 10 matched, 2 mismatched, 8 unsupported.",
+          "The actual negative-precision rejection in native math is now classified as invalid rounding after its ValueError; unchanged source state is observed. Unsupported signed selectors and the previously observed near-zero sign discrepancies remain unchanged."
+        ],
+        "test_ids": [
+          "money.round.half-up.tie-positive-001",
+          "money.round.half-up.tie-negative-001",
+          "money.round.half-even.tie-even-down-001",
+          "money.round.half-even.tie-odd-up-001",
+          "money.round.half-even.tie-negative-even-001",
+          "money.round.down.positive-001",
+          "money.round.down.negative-001",
+          "money.round.up.positive-001",
+          "money.round.up.negative-001",
+          "money.round.floor.positive-001",
+          "money.round.floor.negative-001",
+          "money.round.ceiling.positive-001",
+          "money.round.ceiling.negative-001",
+          "money.round.explicit-scale-001",
+          "money.round.no-discard-001",
+          "money.round.invalid-mode-001",
+          "money.round.invalid-scale-001",
+          "money.round.near-half-no-double-round-001",
+          "money.round.floor.negative-near-zero-001",
+          "money.round.half-up.negative-tiny-tie-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0268",
@@ -1719,7 +2298,26 @@
         "Go Money Manager Add/Subtract bypass their checked calculator helpers and perform native int64 accumulation; Multiply instead propagates SafeMultiply errors.",
         "The public loops use +=/-= after currency checks, while separate SafeAdd/SafeSubtract return zero on overflow and are not called here. The original operand is not updated.",
         "Accepted int64 operands, Go signed overflow contract and same currencies; exact mathematical result may exceed the declared storage range. MaxInt64 plus1 follows a wrapping native operation without an error return. This is an unreported overflow concern, not a claim that any finite representation must accommodate unlimited Money. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 6,
+        "total": 9,
+        "description": [
+          "Assessed 2026-11-23 using Go 1.25.5. Primary profile declared_native_profile; native path: Manager.Add/Subtract. Selected outcomes: 6 matched, 2 mismatched, 1 unsupported.",
+          "Exact int64-minor inputs pass the boundary control. Add beyond maximum and subtract below minimum return wrapped amounts rather than the exact requested result or an explicit capability rejection. The binding dispatches Subtract separately and supplies no checked-arithmetic repair."
+        ],
+        "test_ids": [
+          "money.add.same-currency.basic-001",
+          "money.add.exact-decimal-001",
+          "money.add.negative-001",
+          "money.add.zero-001",
+          "money.add.currency-mismatch-001",
+          "money.subtract.currency-mismatch-001",
+          "money.add.signed-minor-boundary-control-001",
+          "money.add.signed-minor-boundary-growth-001",
+          "money.subtract.signed-minor-boundary-growth-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0270",
@@ -1770,7 +2368,35 @@
         "Calculator Absolute cannot negate MinInt64 safely, and Round has implicit range and tie policies; distinguish the missing extreme-value guard from intentional toward-zero ties.",
         "Absolute checks amount<MinInt64, an unreachable condition for int64. Round returns the input for unsupported exponent and increments only when remainder exceeds half. Manager Negative directly negates.",
         "Accepted native MinInt64 or explicit integer exponent within the helper domain, using the inspected Go overflow contract. Absolute(MinInt64) remains negative through native negation. At ordinary ties Round moves toward zero; that is a policy choice rather than a universal rounding defect. CreateFromFloat uses math.Round and is a separate path. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 0,
+        "total": 18,
+        "description": [
+          "Assessed 2026-11-23 using Go 1.25.5. Primary profile declared_native_profile; native path: Manager.Round (mapping assessment only; no matching-policy dispatch). Selected outcomes: 18 unsupported. No matching native target was dispatched.",
+          "Native Manager.Round uses its fixed currency-derived whole-unit policy with ties toward zero. No caller-selected Core policy matches this selected matrix; all cells remain unsupported, with zero native Core-round comparisons. Absolute is not substituted for negate."
+        ],
+        "test_ids": [
+          "money.round.half-up.tie-positive-001",
+          "money.round.half-up.tie-negative-001",
+          "money.round.half-even.tie-even-down-001",
+          "money.round.half-even.tie-odd-up-001",
+          "money.round.half-even.tie-negative-even-001",
+          "money.round.down.positive-001",
+          "money.round.down.negative-001",
+          "money.round.up.positive-001",
+          "money.round.up.negative-001",
+          "money.round.floor.positive-001",
+          "money.round.floor.negative-001",
+          "money.round.ceiling.positive-001",
+          "money.round.ceiling.negative-001",
+          "money.round.explicit-scale-001",
+          "money.round.no-discard-001",
+          "money.round.invalid-mode-001",
+          "money.round.invalid-scale-001",
+          "money.round.near-half-no-double-round-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0281",
@@ -1828,7 +2454,28 @@
         "Rust Money reconstructs each result at currency minor digits, while RawMoney preserves the Decimal result until finish; receiver reconstruction therefore selects an implicit arithmetic policy.",
         "Money.from_decimal invokes round_dp, RawMoney.from_decimal stores the Decimal and BaseOps checked_add/checked_mul reconstruct Self. Base round_with likewise reconstructs after the selected strategy.",
         "The inspected Money/RawMoney implementations and pinned rust_decimal contract; operands and mathematical result within supported backend bounds. USD Money1.00 multiplied by0.005 is quantized by Money reconstruction, whereas RawMoney can retain0.005 until finish. Explicit rounding cannot restore previously removed digits, but an already-stored2.5 rounded to integer scale remains a meaningful mode example. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 6,
+        "total": 11,
+        "description": [
+          "Assessed 2026-11-23 using Rust 1.88, rust_decimal 1.40.0, raw_money/serde. Primary profile Money; native path: Money.checked_mul/checked_div. Selected outcomes: 6 matched, 5 mismatched.",
+          "The existing native GBP type removes the artificial EUR/USD dispatcher limit. checked_div is called first; actual None for its zero Decimal divisor is then normalized using the source-defined rejection. Other capacity, currency-type and Money/RawMoney precision differences remain explicit. Control profiles, excluded from the primary score: RawMoney (same test_ids): 7 matched, 4 mismatched."
+        ],
+        "test_ids": [
+          "money.multiply.decimal-001",
+          "money.multiply.negative-scalar-001",
+          "money.multiply.zero-scalar-001",
+          "money.divide.exact-001",
+          "money.divide.zero-001",
+          "money.divide.rounding-required-001",
+          "money.divide.rounded-third-half-up-001",
+          "money.divide.negative-down-001",
+          "money.divide.negative-floor-001",
+          "money.divide.exact-finer-than-policy-001",
+          "money.divide.zero-before-invalid-rounding-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0282",
@@ -1858,7 +2505,35 @@
         "Rust RoundingStrategy Ceil and Floor map to away-from-zero and toward-zero respectively; these documented native names are not signed Core CEILING/FLOOR.",
         "The explicit enum conversion selects AwayFromZero and ToZero; Bankers/HalfUp/HalfDown select distinct midpoint strategies. round_with passes that strategy to Decimal before receiver reconstruction.",
         "An admitted receiver whose stored value retains the relevant fractional digits and requested target scale. On retained -2.1, native Ceil corresponds to-3 rather than signed ceiling-2. Native Floor on-2.9 corresponds to-2 rather than signed floor-3. Constructor quantization must be accounted for before choosing examples. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 11,
+        "total": 18,
+        "description": [
+          "Assessed 2026-11-23 using Rust 1.88, rust_decimal 1.40.0, raw_money/serde. Primary profile declared_native_profile; native path: RawMoney.round_with. Selected outcomes: 11 matched, 7 unsupported.",
+          "Actual RawMoney rounding confirms native Floor/Ceil mean toward/away from zero and correspond to Core DOWN/UP. Signed FLOOR/CEILING without a native enum equivalent remain unsupported; mode names alone were not equated."
+        ],
+        "test_ids": [
+          "money.round.half-up.tie-positive-001",
+          "money.round.half-up.tie-negative-001",
+          "money.round.half-even.tie-even-down-001",
+          "money.round.half-even.tie-odd-up-001",
+          "money.round.half-even.tie-negative-even-001",
+          "money.round.down.positive-001",
+          "money.round.down.negative-001",
+          "money.round.up.positive-001",
+          "money.round.up.negative-001",
+          "money.round.floor.positive-001",
+          "money.round.floor.negative-001",
+          "money.round.ceiling.positive-001",
+          "money.round.ceiling.negative-001",
+          "money.round.explicit-scale-001",
+          "money.round.no-discard-001",
+          "money.round.invalid-mode-001",
+          "money.round.invalid-scale-001",
+          "money.round.near-half-no-double-round-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0285",
@@ -1916,7 +2591,22 @@
         "Rust percentage and typed FX composition reuse receiver-policy Money operations before the final percentage/target-currency result, so intermediate currency quantization can change the outcome.",
         "percent calls checked_mul then checked_div100; percent_of divides into a Money value before multiplying100. Typed conversion multiplies through source M before target reconstruction. Fixed-base and compound helpers use different bases.",
         "The named Money receiver and currency minor digits; RawMoney or dynamic conversion may follow a different path. With source JPY1 and rate0.5, Money source reconstruction can yield JPY0 before target USD construction, rather than retaining USD0.50. This is a static path example; it is not a current Core FX contract. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified. This behavior is not currently defined by FinKore Core."
-      ]
+      ],
+      "conformance": {
+        "passed": 3,
+        "total": 5,
+        "description": [
+          "Assessed 2026-11-23 using Rust 1.88, rust_decimal 1.40.0, raw_money/serde. Primary profile Money; native path: Money.percent. Selected outcomes: 3 matched, 1 mismatched, 1 unsupported.",
+          "Native PercentOps produces rounded fractional percentages for Money, while RawMoney preserves the bounded control. Overflowing decimal input is unsupported; no percentage calculation was supplied by the binding. Control profiles, excluded from the primary score: RawMoney (same test_ids): 4 matched, 1 unsupported."
+        ],
+        "test_ids": [
+          "money.rate.percentage-conversion-001",
+          "money.rate.fractional-percentage-001",
+          "money.rate.large-percentage-growth-001",
+          "money.rate.tiny-percentage-control-001",
+          "money.rate.tiny-percentage-significant-product-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0293",
@@ -1988,7 +2678,29 @@
         "Noda FastMoney division selects truncating integer ticks for integral divisors and midpoint-even conversion for other divisor paths; scalar multiplication also has its own fixed-four conversion boundary.",
         "Integral decimal/long paths divide ticks directly. Nonintegral TryDivideFixedPoint rounds its quotient by remainder/parity, while decimal fallback converts through ToOACurrency. Money reconstructs scalar results with its context.",
         "The named Money/FastMoney type, selected overload, framework-conditional path and representable native operands. An exact quotient needing finer than four tick places can be truncated in the integral path; a nonintegral path can round instead. This difference is not evidence that one shared stored strategy governs all overloads. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 7,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using .NET runtime 10.0.15, SDK 10.0.404. Primary profile FastMoney_decimal_modern; native path: FastMoney decimal multiplication/division. Selected outcomes: 7 matched, 5 mismatched.",
+          "The primary decimal FastMoney path and separate Money/modern/netstandard2.0 controls retain their fixed-scale differences. Profiles named long select long division; multiplication still uses the decimal overload. The real netstandard2.0 library is hosted on .NET 10, not a historical runtime; non-integral long divisors remain outside that profile. Control profiles, excluded from the primary score: FastMoney_long_modern, FastMoney_decimal_netstandard20, FastMoney_long_netstandard20, Money_decimal_control (same test_ids except money.multiply.sub-six-place-product-001): each 7 matched, 4 mismatched."
+        ],
+        "test_ids": [
+          "money.multiply.decimal-001",
+          "money.multiply.negative-scalar-001",
+          "money.multiply.zero-scalar-001",
+          "money.divide.exact-001",
+          "money.divide.zero-001",
+          "money.divide.rounding-required-001",
+          "money.divide.rounded-third-half-up-001",
+          "money.divide.negative-down-001",
+          "money.divide.negative-floor-001",
+          "money.divide.exact-finer-than-policy-001",
+          "money.divide.zero-before-invalid-rounding-001",
+          "money.multiply.sub-six-place-product-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0298",
@@ -2258,7 +2970,37 @@
         "Ex-money preserves Decimal storage at construction but arithmetic delegates to the ambient Decimal context and can round without a per-call Money policy.",
         "new validates finite Decimal input; add/sub/mult/div and unary helpers update the struct with Decimal results rather than reentering new. Float scalar overloads also bypass from_float construction digit checks.",
         "Pinned Decimal3.2.0 contract reused from R1-M1, selected ambient precision/traps/exponent bounds and the actual numeric overload. At default precision34, an accepted larger coefficient can lose significant digits during addition; division1/3 uses ambient rounding rather than an explicit Core policy. This does not imply every operation or every context loses precision. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 13,
+        "total": 20,
+        "description": [
+          "Assessed 2026-11-23 using Elixir 1.17.3/OTP 25, Decimal 3.2.0, precision 34. Primary profile declared_native_profile; native path: Money.add!/sub!/div!/negate. Selected outcomes: 13 matched, 7 mismatched.",
+          "For money.add.large-significant-digits-001, native observation {\"amount\":\"123456789012345678901234567890123500000000000000000000000000\",\"currency\":\"EUR\"} differs from expected {\"amount\":\"123456789012345678901234567890123456789012345678901234567891\",\"currency\":\"EUR\"}."
+        ],
+        "test_ids": [
+          "money.add.same-currency.basic-001",
+          "money.add.exact-decimal-001",
+          "money.add.negative-001",
+          "money.add.zero-001",
+          "money.add.currency-mismatch-001",
+          "money.subtract.currency-mismatch-001",
+          "money.add.large-significant-digits-001",
+          "money.add.finer-stored-value-zero-001",
+          "money.subtract.high-precision-right-operand-001",
+          "money.divide.exact-001",
+          "money.divide.zero-001",
+          "money.divide.rounding-required-001",
+          "money.divide.rounded-third-half-up-001",
+          "money.divide.negative-down-001",
+          "money.divide.negative-floor-001",
+          "money.divide.exact-finer-than-policy-001",
+          "money.divide.zero-before-invalid-rounding-001",
+          "money.negate.positive-001",
+          "money.negate.negative-001",
+          "money.negate.high-precision-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0303",
@@ -2337,7 +3079,35 @@
         "Ex-money round first quantizes decimal digits and then currency increment, creating a two-stage rounding policy beyond Core explicit-scale rounding.",
         "round_to_decimal_digits reconstructs a Money at selected digits; round_to_nearest builds an increment using native float and then Decimal division/round/mult. Invalid digit-option tuple is pattern matched as success.",
         "Valid ISO currency metadata, selected explicit/default digit options, increment and Decimal context; private token bypass is outside this comparison. An amount near an increment midpoint can move across that midpoint in the first digit reduction. Invalid digit options can raise at the success match rather than yield its error tuple. Neither fact validates a universal cash rule. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified. This behavior is not currently defined by FinKore Core."
-      ]
+      ],
+      "conformance": {
+        "passed": 17,
+        "total": 18,
+        "description": [
+          "Assessed 2026-11-23 using Elixir 1.17.3/OTP 25, Decimal 3.2.0, precision 34. Primary profile declared_native_profile; native path: Money.round(currency_digits,rounding_mode). Selected outcomes: 17 matched, 1 mismatched.",
+          "The source-returned Money.InvalidDigitsError inside the native rounding failure now identifies invalid rounding. Actual getters after rejection preserve the operand; no substitute rounding or prevalidation was supplied."
+        ],
+        "test_ids": [
+          "money.round.half-up.tie-positive-001",
+          "money.round.half-up.tie-negative-001",
+          "money.round.half-even.tie-even-down-001",
+          "money.round.half-even.tie-odd-up-001",
+          "money.round.half-even.tie-negative-even-001",
+          "money.round.down.positive-001",
+          "money.round.down.negative-001",
+          "money.round.up.positive-001",
+          "money.round.up.negative-001",
+          "money.round.floor.positive-001",
+          "money.round.floor.negative-001",
+          "money.round.ceiling.positive-001",
+          "money.round.ceiling.negative-001",
+          "money.round.explicit-scale-001",
+          "money.round.no-discard-001",
+          "money.round.invalid-mode-001",
+          "money.round.invalid-scale-001",
+          "money.round.near-half-no-double-round-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0330",
@@ -2409,7 +3179,29 @@
         "Moneta FastMoney overloads implement materially different arithmetic policies: integer quotient truncation, binary quotient rounding, or exact BigDecimal quotient followed by fixed-scale admission.",
         "divide(long) uses raw integer /; divide(double) calls Math.round; divide(Number) BigDecimal.divide has no rounding context. Number multiplication truncates the scaled product on the no-overflow path but constructs a checked decimal on fallback.",
         "The exact overload, fixed five-place FastMoney range and JDK numeric contracts reused from R1-M1; no accepted arbitrary-precision domain is assumed. Raw unit1 divided by2L becomes0, whereas the double overload uses Math.round on0.5. A Number result with excessive scale can reject instead. An overflowing binary intermediate may saturate via Math.round rather than propagate an overflow error. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 8,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using Java 21.0.12.1, pinned Moneta source. Primary profile BigDecimal; native path: FastMoney.multiply/divide(BigDecimal). Selected outcomes: 8 matched, 3 mismatched, 1 unsupported.",
+          "FastMoney BigDecimal overload is primary; long/double are separate controls. Native five-place capacity rejection remains unsupported; exact inputs are inspected before arithmetic and no favorable overload replaces a failing one. Control profiles, excluded from the primary score: long (same test_ids except money.multiply.sub-six-place-product-001): 5 matched, 6 mismatched; double (same test_ids except money.multiply.sub-six-place-product-001): 7 matched, 4 mismatched."
+        ],
+        "test_ids": [
+          "money.multiply.decimal-001",
+          "money.multiply.negative-scalar-001",
+          "money.multiply.zero-scalar-001",
+          "money.divide.exact-001",
+          "money.divide.zero-001",
+          "money.divide.rounding-required-001",
+          "money.divide.rounded-third-half-up-001",
+          "money.divide.negative-down-001",
+          "money.divide.negative-floor-001",
+          "money.divide.exact-finer-than-policy-001",
+          "money.divide.zero-before-invalid-rounding-001",
+          "money.multiply.sub-six-place-product-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0331",
@@ -2544,7 +3336,25 @@
         "Moneta significant-precision and decimal-scale policies occur at separate stages, and selected RoundedMoney operations reapply the configured rounding operator inconsistently.",
         "MoneyUtils first constructs under MathContext then clamps only positive maxScale; divide may round at maxScale and reconstruct. PrecisionScaleRoundedOperator applies scale then context. RoundedMoney add/divide call with(rounding), while subtract constructs without that explicit call. The permil overload ignores its MathContext parameter.",
         "The selected factory/context, actual constructor/operator and input path; default deployment configuration is not inferred from an unexecuted build. A maxScale0 setting skips the clamp in the inspected helper, and a finite exact quotient can be quantized when maxScale>0. A precision-stage carry can change the result again after a scale-stage reduction. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 4,
+        "total": 8,
+        "description": [
+          "Assessed 2026-11-23 using Java 21.0.12.1, pinned Moneta source. Primary profile Money; native path: Money.divide(BigDecimal). Selected outcomes: 4 matched, 4 mismatched.",
+          "Native Money division is primary, with RoundedMoney as a separate context. Finite native precision/policy is compared to Core exact/missing-policy semantics without installing a Core rounding algorithm in the binding. Control profiles, excluded from the primary score: RoundedMoney (same test_ids): 2 matched, 6 mismatched."
+        ],
+        "test_ids": [
+          "money.divide.exact-001",
+          "money.divide.zero-001",
+          "money.divide.rounding-required-001",
+          "money.divide.rounded-third-half-up-001",
+          "money.divide.negative-down-001",
+          "money.divide.negative-floor-001",
+          "money.divide.exact-finer-than-policy-001",
+          "money.divide.zero-before-invalid-rounding-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0333",
@@ -2595,7 +3405,35 @@
         "Moneta cash rounding locates increment neighbors using truncating signed integer division and always selects the higher neighbor for HALF_EVEN ties; this fails symmetric nearest/parity expectations.",
         "For negative nonmultiples, low/high computed from a toward-zero quotient do not bracket the input. At ties HALF_EVEN shares the unconditional high branch. Constructor does not validate a positive minimalMinors. Provider literals for CNY/HKD/NZD include an extra diaeresis.",
         "Representable long minor coefficient, positive increment, requested cash provider path and the actual native rounding mode; no jurisdictional cash requirement is asserted. With minors-13 and increment5, factor-2 gives low-10/high-5, selecting-10 although-15 is nearer. With minors5 and increment10, HALF_EVEN selects10 without inspecting parity. These are static branch examples. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified. This behavior is not currently defined by FinKore Core."
-      ]
+      ],
+      "conformance": {
+        "passed": 7,
+        "total": 18,
+        "description": [
+          "Assessed 2026-11-23 using Java 21.0.12.1, pinned Moneta source. Primary profile declared_native_profile; native path: private DefaultCashRounding.apply (storageScale=targetScale+1, quantum 10). Selected outcomes: 7 matched, 10 mismatched, 1 unsupported.",
+          "The actual private cash-rounding component was invoked with storageScale=targetScale+1 and quantum 10. Signed/tie discrepancies are component-level observations; this does not certify the complete public rounding provider or substitute a new rounding algorithm."
+        ],
+        "test_ids": [
+          "money.round.half-up.tie-positive-001",
+          "money.round.half-up.tie-negative-001",
+          "money.round.half-even.tie-even-down-001",
+          "money.round.half-even.tie-odd-up-001",
+          "money.round.half-even.tie-negative-even-001",
+          "money.round.down.positive-001",
+          "money.round.down.negative-001",
+          "money.round.up.positive-001",
+          "money.round.up.negative-001",
+          "money.round.floor.positive-001",
+          "money.round.floor.negative-001",
+          "money.round.ceiling.positive-001",
+          "money.round.ceiling.negative-001",
+          "money.round.explicit-scale-001",
+          "money.round.no-discard-001",
+          "money.round.invalid-mode-001",
+          "money.round.invalid-scale-001",
+          "money.round.near-half-no-double-round-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0374",

@@ -10,6 +10,7 @@ import { existsSync, readFileSync, realpathSync, writeFileSync } from 'node:fs'
 import { isAbsolute, relative, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { loadLearnEvidence, requirementClauses } from './learn-evidence.js'
+import { conformanceReportFromRecord, recordHash } from './code-evidence-publication.js'
 
 const sha = value => createHash('sha256').update(value).digest('hex')
 function sorted(value) {
@@ -103,8 +104,35 @@ export function buildLearnEvidence(root = process.cwd(), { check = false } = {})
       bindings.push(exported)
     }
   }
-  const snapshot = { schema_version: '1.3.0', description: 'Explicit editorial selection from the unified Experts index. Roles and limits are not endorsements, independent validation or normative acceptance.', sources, bindings }
+  const conformanceResults = [], executionKeys = new Set()
+  if (selection.conformance_selections !== undefined && !Array.isArray(selection.conformance_selections)) throw new Error('Invalid execution selection')
+  for (const item of selection.conformance_selections ?? []) {
+    if (executionKeys.has(item.comparison_key) || !/^[a-f0-9]{64}$/.test(item.reviewed_result_sha256)) throw new Error('Invalid or duplicate execution selection')
+    executionKeys.add(item.comparison_key)
+    const record = records.get(item.comparison_key)
+    if (!record) throw new Error('Unresolved execution selection')
+    const report = conformanceReportFromRecord(record,item.target_ids)
+    if (recordHash(report) !== item.reviewed_result_sha256) throw new Error('Selected execution result changed; review before updating its fingerprint: '+record.key)
+    const collection = index.collections['code-evidence']
+    if (!collection || collection.status !== 'current' || collection.index !== 'experts/code-evidence/traceability.json' || !/^[a-f0-9]{64}$/.test(index.inputs[collection.index])) throw new Error('Missing current execution collection fingerprint')
+    for (const [path,expected] of Object.entries(index.inputs)) {
+      if (!path.startsWith('experts/code-evidence/')) continue
+      if (!guarded.has(path)) guarded.set(path,read(root,path))
+      if (sha(guarded.get(path)) !== expected) throw new Error('Execution input changed; rebuild the unified index: '+path)
+    }
+    for (const target of report.targets) {
+      if (!clauses.has(target.target_path)) {
+        const bytes=read(root,target.target_path)
+        guarded.set(target.target_path,bytes)
+        clauses.set(target.target_path,requirementClauses(bytes.toString('utf8'),target.target_path))
+      }
+      if (clauses.get(target.target_path).get(target.target_id)?.sha256 !== target.clause_sha256) throw new Error('Selected execution rule changed; review before rebuilding')
+    }
+    conformanceResults.push(report)
+  }
+  const snapshot = { schema_version: '1.4.0', description: 'Explicit editorial selection from the unified Experts index. Roles and limits are not endorsements, independent validation or normative acceptance.', sources, bindings, conformance_results:conformanceResults }
   const validated = loadLearnEvidence(root, snapshot)
+  if ([...validated.conformanceResults.values()].some(report => !report.current)) throw new Error('A selected execution source changed; review its result before updating selection')
   if ([...validated.sources.values()].some(source => !source.current)) throw new Error('A selected publication changed; review its text before updating its fingerprint')
   if (read(root, selectionPath).compare(selectionBytes) || read(root, indexPath).compare(indexBytes)) throw new Error('Evidence inputs changed during export')
   for (const [path, bytes] of guarded) if (read(root, path).compare(bytes)) throw new Error(`Evidence input changed during export: ${path}`)

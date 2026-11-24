@@ -7,7 +7,7 @@ evidence across all four collections. These collections are non-normative:
 
 | Collection | Evidence |
 | --- | --- |
-| [Code Evidence](code-evidence/README.md) | Bounded readings of commit-pinned public code and tests. |
+| [Code Evidence](code-evidence/README.md) | Commit-pinned code readings and bounded external evaluation results. |
 | [Legacy](legacy/README.md) | Approved interviews about financial software engineering. |
 | [Research](research/README.md) | Academic discovery, source readings and critical comparisons. |
 | [Reviews](reviews/README.md) | Readable specialist reports and explicit, bidirectional comparisons with CoreDoc rules. |

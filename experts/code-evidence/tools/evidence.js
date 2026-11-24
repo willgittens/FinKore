@@ -18,7 +18,7 @@ function safe(root, path) {
   if (isAbsolute(rel) || rel === '..' || rel.startsWith('../')) throw new Error(`Input escapes repository: ${path}`)
   return dest
 }
-export const evidenceFingerprint = (item, lib, ed) => recordHash({evidence:item, source:{library_id:lib.id, edition_id:ed.id, repository:lib.repository, version:ed.version, commit_sha:ed.commit_sha}})
+export const evidenceFingerprint = (item, lib, ed) => { const {conformance, ...reading} = item; return recordHash({evidence:reading, source:{library_id:lib.id, edition_id:ed.id, repository:lib.repository, version:ed.version, commit_sha:ed.commit_sha}}) }
 const shaPattern = /^[a-f0-9]{40}$/
 export function validateEvidence({catalog, rules, trace}, {clauses = new Map(), baselineChanged = false, publicationSources = [], references} = {}) {
   const libraries = new Map(), editions = new Map(), evidence = new Map(), families = new Map(), seen = new Set(), functionLocations = new Map()
@@ -70,6 +70,10 @@ export function validateEvidence({catalog, rules, trace}, {clauses = new Map(), 
       }
     }
     const {item, rule, lib, ed} = joined, problems = []
+    if (item.conformance) {
+      const result = item.conformance, tests = result.test_ids ?? record.vector_ids
+      if (!Number.isInteger(result.passed) || !Number.isInteger(result.total) || result.passed < 0 || result.total < 1 || result.passed > result.total || result.total !== tests.length || new Set(tests).size !== tests.length || (references && tests.some(id => !references.vectors.has(id))) || !Array.isArray(result.description) || result.description.length < 1 || result.description.length > 2 || result.description.some(p => typeof p !== 'string' || !p.trim() || /[\r\n]/.test(p))) throw new Error('Invalid conformance result or selected test count')
+    }
     if (evidenceFingerprint(item,lib,ed) !== record.record_sha256) problems.push('evidence_record_changed')
     if (baselineChanged) problems.push('review_baseline_changed')
     const targets = new Set()
@@ -89,11 +93,13 @@ export function validateEvidence({catalog, rules, trace}, {clauses = new Map(), 
         reviewed_fingerprints: {record_sha256: record.record_sha256}, observed_fingerprints: {record_sha256: evidenceFingerprint(item,lib,ed)},
         details: {project: lib.name, repository: lib.repository, owner: lib.repository.split('/')[0], version: ed.version, commit_sha: ed.commit_sha,
           functions: item.functions.map(fn => ({name: fn.name, href: sourceUrl(lib, ed, fn)})), collected_on: item.collected_on,
-          relationship: item.relationship, qualification: item.qualification, decision: record.decision, execution_status: 'not_executed',
+          relationship: item.relationship, qualification: item.qualification, decision: record.decision, execution_status: item.conformance ? 'see_conformance_result' : 'not_executed',
+          ...(item.conformance ? {conformance:item.conformance, conformance_test_ids:item.conformance.test_ids ?? record.vector_ids} : {}),
           reviewed_by: record.reviewed_by, reviewed_on: record.reviewed_on, disposition: record.disposition}},
       assessment: {curation: bindings.length ? 'reviewed' : 'pending_curation', freshness: problems.length ? 'needs_recheck' : 'current',
         independent_validation: 'pending_validation', publication_authorization: 'not_recorded', editorial_eligible: false, recheck_reasons: problems}, bindings})
   }
+  for (const {item} of evidence.values()) if (item.conformance && !compared.has(item.id)) throw new Error('Conformance result needs an existing comparison and test references')
   for (const {item} of evidence.values()) if (item.qualification !== 'not_critically_reviewed' && !compared.has(item.id)) throw new Error('Reviewed finding missing comparison')
   for (const item of publicationSources) {
     const source = item.source, problems = [], joined = evidence.get(source.id)
@@ -117,6 +123,10 @@ export function validateEvidence({catalog, rules, trace}, {clauses = new Map(), 
   }
   normalized.sort((a,b) => a.id.localeCompare(b.id))
   return {libraries, editions, evidence, families, records: normalized}
+}
+// Registry headings declare canonical IDs; prose mentions cannot invent operations.
+export function agenticOperationIds(markdown) {
+  return new Set([...markdown.matchAll(/^## `(finkore\.[a-z][a-z0-9]*(?:\.[a-z][a-zA-Z0-9]*)+)`$/gm)].map(match => match[1]))
 }
 export const sourceUrl = (lib, ed, fn) => `https://github.com/${lib.repository}/blob/${ed.commit_sha}/${fn.path}#L${fn.start_line}-L${fn.end_line}`
 
@@ -159,21 +169,21 @@ export function loadEvidence(root = process.cwd()) {
     if (!/^[A-Za-z0-9_./-]+\.json$/.test(path) || path.split('/').some(p => p === '..' || p === '.')) throw new Error('Invalid vector discovery path')
     for (const vector of parse('conformance/'+path).vectors) vectors.add(vector.id)
   }
-  for (const match of read('agentic/operations.md').toString().matchAll(/finkore\.[a-z]+\.[a-zA-Z]+/g)) operations.add(match[0])
+  for (const id of agenticOperationIds(read('agentic/operations.md').toString())) operations.add(id)
   for (const rule of rules) for (const item of rule.evidence) if ((item.context_requirement_ids ?? []).some(id => !requirements.has(id))) throw new Error('Unresolved contextual requirement')
   const state = validateEvidence({catalog, rules, trace}, {clauses, baselineChanged, publicationSources, references:{requirements,vectors,operations}})
   return {catalog, rules, trace, state, inputs}
 }
 export function renderEvidence({catalog,rules,trace,state}) {
   const lines = ['# Code Evidence — traceability', '', '<!-- Generated by tools/evidence.js. Edit rules/*.json and traceability.json. -->', '',
-    'Non-normative static readings. Source functions and tests were not executed; independent financial validation and specialist review remain pending. Repetition does not establish independence or accept a FinKore rule.', '',
+    'Non-normative source readings. Where present, conformance scores report bounded external evaluations; their descriptions distinguish failures, unsupported cases and infrastructure errors. Independent financial validation and specialist review remain separate. Repetition does not establish independence or accept a FinKore rule.', '',
     '## By rule family', '', '| Family | Evidence | Libraries |', '| --- | --- | --- |']
   for (const rule of rules) lines.push(`| [${rule.id}: ${cell(rule.title)}](rules/${rule.id}.json) | ${rule.evidence.length} | ${new Set(rule.evidence.map(e => e.library_id)).size} |`)
-  lines.push('', '## By evidence', '', '| Evidence | Library / collected | Relationship | Location / function | Comparison |', '| --- | --- | --- | --- | --- |')
+  lines.push('', '## By evidence', '', '| Evidence | Library / collected | Relationship | Location / function | Comparison | Conformance |', '| --- | --- | --- | --- | --- | --- |')
   for (const rule of rules) for (const item of rule.evidence) {
     const {lib, ed} = state.evidence.get(item.id), comp = trace.records.find(r => r.finding_id === item.id)
     const fns = item.functions.map(fn => `[${cell(fn.path)}:${fn.start_line} — ${cell(fn.name)}](${sourceUrl(lib,ed,fn)})`).join('; ')
-    lines.push(`| <a id="${item.id.toLowerCase()}"></a>[${item.id}](rules/${rule.id}.json) | ${cell(lib.name)} / ${item.collected_on} | ${item.relationship} (${item.qualification}) | ${fns} | ${comp ? `[${comp.id}](#${comp.id.toLowerCase()})` : 'Not critically curated'} |`)
+    lines.push(`| <a id="${item.id.toLowerCase()}"></a>[${item.id}](rules/${rule.id}.json) | ${cell(lib.name)} / ${item.collected_on} | ${item.relationship} (${item.qualification}) | ${fns} | ${comp ? `[${comp.id}](#${comp.id.toLowerCase()})` : 'Not critically curated'} | ${item.conformance ? `${item.conformance.passed}/${item.conformance.total}` : 'Not evaluated'} |`)
   }
   lines.push('', '## Reviewed comparisons', '', '| Comparison | Evidence | Targets | Freshness | Follow-up |', '| --- | --- | --- | --- | --- |')
   for (const record of trace.records) {
@@ -189,7 +199,10 @@ export function run(root, {check=false, write=false}={}) {
   if (check && (!existsSync(path) || readFileSync(path,'utf8') !== markdown)) throw new Error('Code Evidence view is stale; run code-evidence:build')
   if (check && loaded.state.records.some(r => r.assessment.freshness !== 'current')) throw new Error('Code Evidence requires semantic recheck; build does not renew review fingerprints')
   return {schema_version:'2.0.0', records:loaded.state.records, inputs:loaded.inputs, markdown,
-    counts:{libraries:loaded.state.libraries.size, rules:loaded.rules.length, evidence:loaded.state.evidence.size, comparisons:loaded.state.records.length}}
+    counts:{libraries:loaded.state.libraries.size, rules:loaded.rules.length, evidence:loaded.state.evidence.size, comparisons:loaded.state.records.length,
+      conformance_reports:[...loaded.state.evidence.values()].filter(({item})=>item.conformance).length,
+      conformance_case_applications:[...loaded.state.evidence.values()].reduce((n,{item})=>n+(item.conformance?.total??0),0),
+      conformance_passed:[...loaded.state.evidence.values()].reduce((n,{item})=>n+(item.conformance?.passed??0),0)}}
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
   try {

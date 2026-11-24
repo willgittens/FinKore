@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.0.0",
+  "schema_version": "2.1.0",
   "id": "CE-RULE-0030",
   "title": "Persistence preserves exact amounts within an explicit representable range",
   "scope": "candidate_rule",
@@ -84,7 +84,42 @@
         "Default GoMoney JSON uses numeric integer amounts and decodes via float64 before int64, unlike portable exact decimal-string interchange.",
         "Default decoder validates field types before assigning destination, but missing fields default zero/empty and zero plus empty constructs nil-currency Money. Present amount must be float64 and converts to int64 without fractional/exactness guard. Serializer emits numeric amount. Mapped as portable Core JSON this conflicts with string amounts and required currency/value preservation; native minor-unit schema and injected callbacks are separate policies.",
         "Use default JSON callbacks and map their native minor-unit shape directly to Core portable JSON; loss requires fractional numeric input or integer beyond exact binary64 resolution. Default failed validation leaves destination unchanged; custom callbacks may behave differently. No decoder execution or actual large-integer result was observed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
-      ]
+      ],
+      "conformance": {
+        "passed": 9,
+        "total": 25,
+        "description": [
+          "Assessed 2026-11-23 using Go 1.25.5. Primary profile declared_native_profile; native path: Money.UnmarshalJSON/MarshalJSON. Selected outcomes: 9 matched, 14 mismatched, 2 unsupported.",
+          "The original codec rejects string/null/Boolean amount tokens before currency inspection; that native amount-type rejection is normalized only after the call. Core-valid decimal strings therefore expose wire incompatibility, while matching negative cases do not prove a finiteness guard. Native integer-minor output is unchanged; finer serialization inputs remain unsupported."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001",
+          "money.deserialize.missing-amount-001",
+          "money.deserialize.missing-currency-001",
+          "money.deserialize.numeric-amount-001",
+          "money.deserialize.exponent-001",
+          "money.deserialize.leading-plus-001",
+          "money.deserialize.lowercase-currency-001",
+          "money.deserialize.unknown-members-001",
+          "money.deserialize.null-amount-001",
+          "money.deserialize.boolean-amount-001",
+          "money.serialize.roundtrip-001",
+          "money.serialize.locale-independent-001",
+          "money.serialize.nonzero-fraction-preservation-001",
+          "money.serialize.negative-nonzero-fraction-preservation-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0091",
@@ -114,7 +149,21 @@
         "PHP integer constructor can preserve plus/whitespace spelling that its JSON amount later emits unchanged.",
         "The fast path uses FILTER_VALIDATE_INT only as a predicate and stores the original amount string; Number fallback normalizes its parsed integer part. jsonSerialize returns stored text. Native integer input accepting plus/whitespace is not itself a Core violation, but exporting those spellings as portable amount conflicts with plain decimal lexical rules. Its amount is also native smallest-unit integer rather than automatically Core major-unit amount.",
         "In-range numeric string accepted by the pinned PHP filter with leading plus or surrounding whitespace, then use native JSON as portable Money JSON. Large-number fallback has different validation. No PHP execution or deployment filter configuration was observed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
-      ]
+      ],
+      "conformance": {
+        "passed": 0,
+        "total": 4,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37, BCMath/GMP. Primary profile declared_native_profile; native path: Money.jsonSerialize. Selected outcomes: 2 mismatched, 2 unsupported.",
+          "The actual MoneyPHP JSON emitter returns minor-unit amount text: the ordinary case differs from Core major-unit JSON. This is a wire/unit-policy contrast, not demonstrated arithmetic loss. The two finer source amounts cannot be prepared exactly in this integer-minor profile and remain unsupported. The former constructor leading-plus probe did not execute serialization."
+        ],
+        "test_ids": [
+          "money.serialize.roundtrip-001",
+          "money.serialize.locale-independent-001",
+          "money.serialize.nonzero-fraction-preservation-001",
+          "money.serialize.negative-nonzero-fraction-preservation-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0098",
@@ -376,7 +425,27 @@
         "Dinero transport examples drop scale in raw minor-unit payloads, and digit-only bigint reviver fails to restore negative coefficients.",
         "toSnapshot returns native toJSON including coefficient/context. Stripe example destructures amount/currency and sends raw amount without scale reconciliation. Reviver converts only strings matching unsigned digits, leaving negative bigint text a string. These are conditional example integration defects; native coefficient/scale snapshots are not automatically portable Money JSON.",
         "Use a custom snapshot scale incompatible with intended target minor units, or serialize a negative bigint coefficient with the matching documented replacer. Standard-scale nonnegative inputs may work; converting an already-inexact Number to BigInt cannot recover prior digits. No payment service/JSON example was executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
-      ]
+      ],
+      "conformance": {
+        "passed": 6,
+        "total": 10,
+        "description": [
+          "Assessed 2026-11-23 using Node 24.15.0, first-party Dinero calculators. Primary profile declared_native_profile; native path: toSnapshot, documented reviver, bigint dinero and add-zero reuse. Selected outcomes: 6 matched, 4 mismatched.",
+          "Native JSON emits coefficient/currency/scale snapshots rather than Core Money objects. The documented unsigned-digit reviver leaves negative coefficients as strings: reading the amount can appear correct, but subsequent native add-zero changed -10.559 to -105.59. No coefficient or sign was repaired."
+        ],
+        "test_ids": [
+          "money.serialize.roundtrip-001",
+          "money.serialize.locale-independent-001",
+          "money.serialize.nonzero-fraction-preservation-001",
+          "money.serialize.negative-nonzero-fraction-preservation-001",
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0135",
@@ -487,7 +556,42 @@
         "Django/DRF serializers distinguish amount-only Decimal from currency-bearing Money and may quantize or accept native JSON numbers.",
         "get_value wraps only truthy currency and present nonnull nonMoney amount; to_internal_value validates amount through parent and builds Money only for wrapped inputs. to_representation unwraps amount into DRF decimal settings. Django Deserializer uses default json.loads before constructing Money, allowing numeric tokens to narrow through floats; it can yield earlier objects before later failure. These are framework schemas, not automatically Core portable JSON.",
         "Omit/empty companion currency, configure coarser decimal_places, or use numeric JSON tokens with more precision than binary float. Exact amount strings and adequate representation scale can preserve value. Bare Decimal is deliberately tested framework behavior; no batch transaction or normalized portable errors follows. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
-      ]
+      ],
+      "conformance": {
+        "passed": 0,
+        "total": 25,
+        "description": [
+          "Assessed 2026-11-23 using Python 3.10.12, Django 5.2/DRF 3.16.0. Primary profile DRF_full_serializer; native path: DRF MoneyField.get_value/to_internal_value/to_representation. Selected outcomes: 4 mismatched, 21 unsupported.",
+          "The real DRF serializer reads amount-only Decimal or rejects a field under its own schema; those reads are unsupported as complete Money decoding. Its native amount/amount_currency output rounds 10.559 to 10.56 at two places. A separate genuine Django model Serializer/Deserializer control preserves that value at eight places but uses a model envelope. No companion-field required guard was added. Control profiles, excluded from the primary score: Django_Deserializer (same test_ids): 4 mismatched, 21 unsupported."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001",
+          "money.deserialize.missing-amount-001",
+          "money.deserialize.missing-currency-001",
+          "money.deserialize.numeric-amount-001",
+          "money.deserialize.exponent-001",
+          "money.deserialize.leading-plus-001",
+          "money.deserialize.lowercase-currency-001",
+          "money.deserialize.unknown-members-001",
+          "money.deserialize.null-amount-001",
+          "money.deserialize.boolean-amount-001",
+          "money.serialize.roundtrip-001",
+          "money.serialize.locale-independent-001",
+          "money.serialize.nonzero-fraction-preservation-001",
+          "money.serialize.negative-nonzero-fraction-preservation-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0162",
@@ -737,7 +841,23 @@
         "Clojure construction, major/minor projections and Monger storage expose distinct integer ranges.",
         "of-major/of-minor use primitive long arguments; their coercion can discard fractional Number input before Joda construction under the attributed Clojure contract. major-of delegates truncating major-long projection, minor-of returns BigInt, and Monger serialization requires getAmountMinorLong. A value may thus fit the Money representation and BigInt accessor but fail the narrower native storage profile. Finite backend range limits are not themselves a universal Core defect.",
         "Fractional Number passed to long constructor, or a Money whose minor count exceeds long while a major representation/accessor remains admissible. The exact long projection can reject rather than silently lose large values. No Clojure/BSON/database runtime was executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
-      ]
+      ],
+      "conformance": {
+        "passed": 1,
+        "total": 6,
+        "description": [
+          "Assessed 2026-11-23 using Java 21.0.12.1, Clojure/Joda 0.12, BigDecimal. Primary profile declared_native_profile; native path: amounts/of-major. Selected outcomes: 1 matched, 5 mismatched.",
+          "Actual of-major passes through the upstream major-unit construction path; fractional values are not preserved as exact decimal Money. The binding does not pre-truncate the amount or replace the native constructor."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0215",
@@ -1031,7 +1151,42 @@
         "Native number/currency JSON preserves numeric token text but permits a broader APD notation/value profile than Core.",
         "Unmarshal uses RawMessage, tries a string then parses raw token text directly, avoiding float64 narrowing; assignment occurs after parse/currency checks. Marshal writes number:string rather than amount and Number returns APD scientific-capable String. No finite Form guard appears, and empty-codezero is accepted. Exact token handling is a useful mechanism, but exponent/nonfinite allowance and member names require a separate portable boundary.",
         "Use native JSON directly as Core, or admit quoted nonfinite/exponent strings via the attributed APD parser contract. Exact finite numeric tokens can retain all digits despite being JSON numbers; they still do not satisfy Core amount-string schema. No APD/runtime encoding was executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
-      ]
+      ],
+      "conformance": {
+        "passed": 11,
+        "total": 25,
+        "description": [
+          "Assessed 2026-11-23 using Go 1.25.5. Primary profile declared_native_profile; native path: Amount.UnmarshalJSON/MarshalJSON. Selected outcomes: 11 matched, 14 mismatched.",
+          "The actual decoder receives the original JSON fields without renaming amount to number. The positive Core case fails; the two invalid cases reject because the native number field is absent, not because finiteness was validated. Separate unscored native-schema probes accept number:NaN and number:1e3, exposing NaN and1000 respectively. The full Core wire schema and native value admission are distinct observations."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001",
+          "money.deserialize.missing-amount-001",
+          "money.deserialize.missing-currency-001",
+          "money.deserialize.numeric-amount-001",
+          "money.deserialize.exponent-001",
+          "money.deserialize.leading-plus-001",
+          "money.deserialize.lowercase-currency-001",
+          "money.deserialize.unknown-members-001",
+          "money.deserialize.null-amount-001",
+          "money.deserialize.boolean-amount-001",
+          "money.serialize.roundtrip-001",
+          "money.serialize.locale-independent-001",
+          "money.serialize.nonzero-fraction-preservation-001",
+          "money.serialize.negative-nonzero-fraction-preservation-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0256",
@@ -1075,7 +1230,42 @@
         "Money2 JSON preserves coefficient text and explicit decimals; README numeric minorUnits conflicts with the decoder, while registry metadata replacement alone does not prove numeric Core roundtrip loss.",
         "fromJson casts minorUnits to String and toJson emits String, but README supplies numeric1050. Reconstruction retains explicit decimals with the BigInt coefficient and resolves currency by code. Currency display/flags may differ after registry replacement, yet numeric amount and code remain preserved under that explicit-scale path; the original context warning must not be promoted into a Core value-loss claim without an amount/currency change.",
         "Use the numeric README example for the cast mismatch; for valid roundtrip use string coefficient and existing registered code. External registry changes may alter display metadata or make lookup fail, but do not automatically rescale the stored amount because decimals is explicit. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
-      ]
+      ],
+      "conformance": {
+        "passed": 0,
+        "total": 25,
+        "description": [
+          "Assessed 2026-11-23 using Dart 3.14.1, Fixed 6.0.0/Decimal 3.0.2/Rational 2.0.0. Primary profile declared_native_profile; native path: Money.fromJson/toJson. Selected outcomes: 4 mismatched, 21 unsupported.",
+          "Original Money.fromJson raises a native type error because it requires minorUnits/decimals/isoCode, which the Core object does not supply. Those 21 observed format rejections are diagnosed unsupported schema comparisons, not unknown field-error categories. Native writer shape differs independently of monetary value loss."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001",
+          "money.deserialize.missing-amount-001",
+          "money.deserialize.missing-currency-001",
+          "money.deserialize.numeric-amount-001",
+          "money.deserialize.exponent-001",
+          "money.deserialize.leading-plus-001",
+          "money.deserialize.lowercase-currency-001",
+          "money.deserialize.unknown-members-001",
+          "money.deserialize.null-amount-001",
+          "money.deserialize.boolean-amount-001",
+          "money.serialize.roundtrip-001",
+          "money.serialize.locale-independent-001",
+          "money.serialize.nonzero-fraction-preservation-001",
+          "money.serialize.negative-nonzero-fraction-preservation-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0265",
@@ -1156,7 +1346,21 @@
         "Formatted array/normalizer output can discard stored nonzero fractional digits while raw XML metadata targets stored strings.",
         "getAmount exposes raw text, whereas array and normalizer invoke formatAmount. For positive fraction with no grouping, formatAmount substr truncates excess digits; atnonpositivefraction it uses number_format. If used as serialization, stored1.239EUR becomes formatted1.23 without an explicit prior rounding operation, conflicting with Core numeric preservation. XML declares raw amount/currency but engine execution is unverified.",
         "Stored amount with nonzero digits beyond selected/default currency fraction and use formatted normalizer/array as persistence or portable serialization. Only removing trailingzero digits preserves amount. Native PHP reconstruction/wakeup and external XML engine were not executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
-      ]
+      ],
+      "conformance": {
+        "passed": 2,
+        "total": 4,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37, Maba monetary 0.10.0/math 1.0.1. Primary profile declared_native_profile; native path: Money.getArrayRepresentation. Selected outcomes: 2 matched, 2 mismatched.",
+          "The full array serialization path discards nonzero fractional digits: positive/negative10.559 becomes positive/negative10.55. The ordinary roundtrip control passes by exact numeric equality. The external XML engine remains outside this execution profile."
+        ],
+        "test_ids": [
+          "money.serialize.roundtrip-001",
+          "money.serialize.locale-independent-001",
+          "money.serialize.nonzero-fraction-preservation-001",
+          "money.serialize.negative-nonzero-fraction-preservation-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0273",
@@ -1186,7 +1390,42 @@
         "JSON integer token path is exact within int64; decimal fallback rounds through a default64-bit binary significand before its tie-away rule.",
         "Decoder first ParseInts original json.Number text, preserving integers beyond2^53. On parse failure it creates unconfigured big.Float, whose pinned scanner selects64bits, then truncates/computes fractional distance to0.5 and tie-away integer; range check follows. Near int64 boundary a decimal can cross a half threshold before wrapper rounding. This is narrower than claiming all numeric tokens lose precision.",
         "Decimal/exponent token not handled by ParseInt and close enough to a rounding boundary for64-bit binary approximation to matter. Plain in-range integer tokens avoid the float fallback. Specific9223372036854775807.49 overflow is a static derived counterexample, not an executed result. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
-      ]
+      ],
+      "conformance": {
+        "passed": 8,
+        "total": 25,
+        "description": [
+          "Assessed 2026-11-23 using Go 1.25.5. Primary profile declared_native_profile; native path: JSON.Unmarshal/Money.MarshalJSON. Selected outcomes: 8 matched, 15 mismatched, 2 unsupported.",
+          "The native JSONRawData decoder now identifies actual amount-token/number-literal rejections before provider lookup; normalization follows the observed rejection. Integer-minor wire semantics and admitted magnitude changes remain native, without renaming fields or repairing tokens."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001",
+          "money.deserialize.missing-amount-001",
+          "money.deserialize.missing-currency-001",
+          "money.deserialize.numeric-amount-001",
+          "money.deserialize.exponent-001",
+          "money.deserialize.leading-plus-001",
+          "money.deserialize.lowercase-currency-001",
+          "money.deserialize.unknown-members-001",
+          "money.deserialize.null-amount-001",
+          "money.deserialize.boolean-amount-001",
+          "money.serialize.roundtrip-001",
+          "money.serialize.locale-independent-001",
+          "money.serialize.nonzero-fraction-preservation-001",
+          "money.serialize.negative-nonzero-fraction-preservation-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0274",
@@ -1230,7 +1469,38 @@
         "JSON decoder invokes the default-currency callback even for explicit codes and accepts a nil callback setter.",
         "Default decoder calls currencyFn before choosing explicit/default currency, so callback failure blocks explicit code parsing. SetCurrency stores nil without checking, and decoder later invokes it. Money.UnmarshalJSON creates NewJson rather than using an independently configured object. Default assignment is at the end, preserving prior receiver on normal validation errors; custom callbacks have separate effects. Native missing-fieldzero/default and minor rounding policies differ from Core required fields.",
         "Call SetCurrency(nil) on a nonnil JSON codec then defaultUnmarshal, or install an erroring default callback while input supplies a valid explicit code. No callback/panic was executed; configured JSON instances do work when explicitly used. Default error atomicity cannot be generalized to custom unmarshal callbacks. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
-      ]
+      ],
+      "conformance": {
+        "passed": 7,
+        "total": 21,
+        "description": [
+          "Assessed 2026-11-23 using Go 1.25.5. Primary profile error_callback; native path: JSON.Unmarshal with configured currency callback. Selected outcomes: 7 matched, 14 unmapped native outcomes.",
+          "Native amount-token rejection is now identified before provider lookup. The other cases encounter the deliberately failing or nil configured native provider; no Core provider-error code is invented. Resolving those context failures requires a changed native provider profile, not a favorable reclassification of the original requests. Control profiles, excluded from the primary score: nil_callback (same test_ids): 7 matched, 14 unmapped native outcomes."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001",
+          "money.deserialize.missing-amount-001",
+          "money.deserialize.missing-currency-001",
+          "money.deserialize.numeric-amount-001",
+          "money.deserialize.exponent-001",
+          "money.deserialize.leading-plus-001",
+          "money.deserialize.lowercase-currency-001",
+          "money.deserialize.unknown-members-001",
+          "money.deserialize.null-amount-001",
+          "money.deserialize.boolean-amount-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0276",
@@ -1677,7 +1947,43 @@
         "Optional fixed-separator serializers use default formatting while their readers delegate to fixed-separator parsing.",
         "Nonoptional comma/dot writers call format_with_separator. Optional counterparts call format_code/format_symbol; visit_some delegates to the fixed base reader, whose visit_str selects literal comma/dot separators. When currency defaults differ, an emitted value can be rejected or reinterpreted by its own reader. Numeric static profiles separately derive currency from type and JSON Number preserves text until bounded decimal conversion; f64 visitors cannot recover previously lost digits.",
         "An optional Some value using a currency default separator set different from the named fixed profile and an amount exposing decimal/group separators. None paths and nonoptional fixed writers are separate and need not fail. Exact failure outcome depends on parser/admitted text; no Rust/Serde execution was performed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
-      ]
+      ],
+      "conformance": {
+        "passed": 0,
+        "total": 26,
+        "description": [
+          "Assessed 2026-11-23 using Rust 1.88, rust_decimal 1.40.0, raw_money/serde. Primary profile optional_fixed_comma; native path: option_comma_str_code Serde reader/writer and native readback. Selected outcomes: 2 mismatched, 24 unsupported.",
+          "Core objects cannot be read by the native string schema; whole-map rejection earns no component-validation pass. Optional comma output \"EUR -15,50\" is rejected by its own reader; the optional dot control reads it back, and the nonoptional comma control emits \"EUR -15.50\" and succeeds. Fine inputs quantized before writing remain unsupported, distinct from wire mismatch. Control profiles, excluded from the primary score: optional_fixed_dot, nonoptional_fixed_control (same test_ids): each 2 mismatched, 24 unsupported."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001",
+          "money.deserialize.missing-amount-001",
+          "money.deserialize.missing-currency-001",
+          "money.deserialize.numeric-amount-001",
+          "money.deserialize.exponent-001",
+          "money.deserialize.leading-plus-001",
+          "money.deserialize.lowercase-currency-001",
+          "money.deserialize.unknown-members-001",
+          "money.deserialize.null-amount-001",
+          "money.deserialize.boolean-amount-001",
+          "money.serialize.roundtrip-001",
+          "money.serialize.locale-independent-001",
+          "money.serialize.nonzero-fraction-preservation-001",
+          "money.serialize.negative-nonzero-fraction-preservation-001",
+          "money.deserialize.long-fraction-invalid-suffix-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0296",
@@ -1735,7 +2041,42 @@
         "NodaMoney reconstruction applies converter/ambient rounding, so default roundtrip can reduce an originally finer exact amount.",
         "JSON writer emits code plus invariant amount string. Reader accepts that string or legacy numeric/permissive object and constructs new Money with converter context; binary/XML/type-converter paths also reconstruct. Money constructor applies contextual rounding, including standardtwo-decimal fast path. If source retained123.456EUR under NoRounding but reader uses standard context, numeric amount can change. Unknown-property rejection is permitted by Core and not a defect.",
         "Serialize a finer amount retained under a no-rounding context, then reconstruct with a coarser default rather than matching no-rounding context. Matching NoRounding preserves the finer value; exponent/plus acceptance belongs to this native schema, not automatically Core JSON grammar. No .NET roundtrip was executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
-      ]
+      ],
+      "conformance": {
+        "passed": 15,
+        "total": 25,
+        "description": [
+          "Assessed 2026-11-23 using .NET runtime 10.0.15, SDK 10.0.404. Primary profile default_context_read; native path: MoneyJsonConverter.Write/Read. Selected outcomes: 15 matched, 9 mismatched, 1 conditional not-applicable case.",
+          "The original converter rejects a Boolean amount at GetString in ParseMoneyFromJsonObject:147; its wrapped native cause now identifies invalid amount. Default reconstruction still changes 10.559 to 10.56 while NoRounding preserves it. Permitted unknown-member rejection remains conditional, and native string wire differs from Core objects. Control profiles, excluded from the primary score: NoRounding_context_read (same test_ids): 17 matched, 7 mismatched, 1 conditional not-applicable case."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001",
+          "money.deserialize.missing-amount-001",
+          "money.deserialize.missing-currency-001",
+          "money.deserialize.numeric-amount-001",
+          "money.deserialize.exponent-001",
+          "money.deserialize.leading-plus-001",
+          "money.deserialize.lowercase-currency-001",
+          "money.deserialize.unknown-members-001",
+          "money.deserialize.null-amount-001",
+          "money.deserialize.boolean-amount-001",
+          "money.serialize.roundtrip-001",
+          "money.serialize.locale-independent-001",
+          "money.serialize.nonzero-fraction-preservation-001",
+          "money.serialize.negative-nonzero-fraction-preservation-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0304",

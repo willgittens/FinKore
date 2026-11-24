@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.0.0",
+  "schema_version": "2.1.0",
   "id": "CE-RULE-0032",
   "title": "Exchange conversion declares rate orientation, identity and source snapshot",
   "scope": "candidate_rule",
@@ -377,8 +377,21 @@
       "explanation": [
         "XMoney implicitly converts the right Money operand into the left currency before arithmetic, using target/base divided by origin/base from a mutable global backend.",
         "The operand direction and quote lookup are source-visible. This is an explicit upstream convenience policy, not evidence that Core Money arithmetic permits implicit FX.",
-        "A right operand recognized as Money and an installed backend returning usable directed factors; same-currency to() returns the original object. Reversing operand order can change result currency and quote direction. Zero rates are treated as absent by truthiness, while negative rates are not locally rejected. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
-      ]
+        "A right operand recognized as Money and an installed backend returning usable directed factors; same-currency to() returns the original object. Reversing operand order can change result currency and quote direction. Zero rates are treated as absent by truthiness, while negative rates are not locally rejected. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. Standalone FX quotation/conversion behavior is not currently defined by FinKore Core; implicit conversion during Money addition/subtraction is separately comparable to Core currency-compatibility requirements."
+      ],
+      "conformance": {
+        "passed": 1,
+        "total": 3,
+        "description": [
+          "Assessed 2026-11-23 using Python 3.10.12, Decimal. Primary profile declared_native_profile; native path: XMoney add/subtract with SimpleBackend. Selected outcomes: 1 matched, 2 mismatched.",
+          "Actual XMoney arithmetic used the library SimpleBackend with explicit EUR-base/USD=1.25 facts. Native implicit conversion permits cross-currency addition/subtraction, while Core requires a mismatch error; the binding performs no conversion itself."
+        ],
+        "test_ids": [
+          "money.add.same-currency.basic-001",
+          "money.add.currency-mismatch-001",
+          "money.subtract.currency-mismatch-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0146",

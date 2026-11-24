@@ -290,10 +290,10 @@ prose, including inline scope wording. It reads text and paths without financial
 execution, mutation, or network access.
 
 The publication checker exports the deliberately selected target
-`TARGET_CORE_VERSION`, currently `2.0.4`; maintainers must review and update that
+`TARGET_CORE_VERSION`, currently `2.0.5`; maintainers must review and update that
 value for a later Core release. README, CoreDoc, each specification document,
 conformance and Agentic READMEs, and any retained Learn index must explicitly
-declare `FinKore Core 2.0.4 stable` (or `FinKore Core 2.0.4 is stable`). CoreDoc's
+declare `FinKore Core 2.0.5 stable` (or `FinKore Core 2.0.5 is stable`). CoreDoc's
 version and status fields must agree. Matching every document to an arbitrary
 different version does not satisfy the selected release target.
 For a patch target, unqualified major-minor wording may still describe the
@@ -320,7 +320,7 @@ or unregistered archives fail. Historical staging directories are not required,
 and source snapshots are never rewritten to satisfy this gate.
 
 During preparation, current declarations use
-`FinKore Core 2.0.4 release preparation (unpublished)`. CoreDoc's version and
+`FinKore Core 2.0.5 release preparation (unpublished)`. CoreDoc's version and
 document date identify the prepared document, while its status remains
 unpublished. Keep release notes under Unreleased and describe maintainer
 acceptance and pending specialist consultation accurately. The stable gate
@@ -331,7 +331,7 @@ For the disposable rehearsal, copy every intended tracked file from the actual
 working tree, including modified content, plus any intended new files. Do not
 use an archive of HEAD alone. Exclude temporary plans and references while
 preserving their original files locally. In that copy only, replace the exact
-preparation declaration above with `FinKore Core 2.0.4 stable`, regenerate Learn,
+preparation declaration above with `FinKore Core 2.0.5 stable`, regenerate Learn,
 and run locked installation, ordinary verification, and the stable gate. A
 temporary Git repository with the original HEAD as its comparison baseline
 allows the ordinary whitespace check to inspect the proposed edits too.
@@ -600,7 +600,7 @@ selection fingerprint; a fresh index is not editorial approval. New comparisons
 are never selected by discovery. Rebuild the optional Experts index with
 `npm run experts:build` when its inputs change, then review affected selections.
 
-The snapshot format is `1.3.0` (the reader also accepts `1.0.0`, `1.1.0` and `1.2.0`). It
+The snapshot format is `1.4.0` (the reader also accepts `1.0.0` through `1.3.0`). It
 links published Research notes, approved Legacy interviews, specialist reports
 and pinned Code Evidence analyses. Its sources and bindings are generated; edit
 the selection and collection curation instead. Export rejects changed comparisons,
@@ -638,7 +638,36 @@ The reader resolves its function IDs
 against the same rule's source locations. Earlier Markdown source profiles remain
 readable for compatibility, but are no longer stored in the collection. Its reading extent is
 `selected_code_and_tests`, execution status is `not_executed`, and validation
-remains pending. This format does not represent later runtime execution evidence.
+remains pending. This selected historical publication profile does not represent later runtime
+execution evidence. Code Evidence may retain compact execution summaries in
+its rule JSON independently; repository tools validate that metadata without
+executing financial behavior, and publication selection remains separate.
+
+Execution observations use the separate `conformance_selections` array: comparison
+key, explicitly selected target IDs and `reviewed_result_sha256`. Its fingerprint
+covers the exact score, descriptions, selected cases, pinned functions, reading
+identity and target clauses. This selection publishes observations only; it does
+not make an ineligible comparison eligible for interpretation cards. Changed
+results require renewed selection review, never automatic fingerprint refresh.
+The generated `conformance_results` entries retain X/Y scores, English result
+paragraphs, selected case IDs and pinned source links. The reader adds a compact,
+closed “Conformance assessment: X/Y selected cases matched” disclosure inside an
+already selected finding card. The source repository, version, commit, record,
+selected function locations and current target clause must agree. Expanding it
+shows the result paragraphs and scope. The finding-level selection may assess
+several properties; its score is not a rule-level pass rate. Execution observations
+do not create additional cards, groups or sections. Results without a selected
+finding card or current CoreDoc binding remain in the snapshot and source records.
+Unsupported, unmapped, resource-bound and conditional cases, along with
+infrastructure errors, remain in selected accounting. Zero matches do not by
+themselves mean a native comparison ran or observed financial failures. Stale
+source records or clauses suppress scores. Specialist validation and publication
+authorization remain unchanged. If the same finding has a current result
+under another rule, the card says “No conformance result linked to this rule”
+instead of asserting that the finding was never executed. A stale result says
+“Recorded conformance result needs review”; an absent selection says “No selected
+conformance result”. Historical reading metadata and contextual native probes
+do not establish the current execution status of a complete Core operation.
 
 Code bindings currently target CoreDoc rules only. The “Who does it this way?”
 cards group the explicit `implementation_relationship`: `same_approach`,

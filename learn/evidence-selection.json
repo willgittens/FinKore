@@ -1616,6 +1616,727 @@
       "target_ids": [
         "CORE-005.3"
       ]
+    },
+    {
+      "comparison_key": "code-evidence/CE-FINDING-0016",
+      "reviewed_comparison_sha256": "037ed2e22ce31f1fba43010feffce36f8e6787e091dbf111197cf62ff4da5e21",
+      "publication": {
+        "id": "CE-FINDING-0016",
+        "kind": "code",
+        "publication_format": "code-evidence-v2",
+        "title": "java-payment-core — Bounded unguarded transition observations",
+        "project": "java-payment-core",
+        "repository": "lmoraesdev/java-payment-core",
+        "owner": "lmoraesdev",
+        "version": "main",
+        "commit_sha": "6892c754006515a0900a22ba4b45ac9b1de194fe",
+        "functions": [
+          {
+            "name": "com.lmoraesdev.payment.domain.model.Charge.transitionTo(ChargeStatus)",
+            "href": "https://github.com/lmoraesdev/java-payment-core/blob/6892c754006515a0900a22ba4b45ac9b1de194fe/src/main/java/com/lmoraesdev/payment/domain/model/Charge.java#L71-L77"
+          }
+        ],
+        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/rules/CE-RULE-0010.json",
+        "publication_path": "experts/code-evidence/rules/CE-RULE-0010.json",
+        "publication_sha256": "e7e88e186fc82624df63faf81a42c222b9d382303a32daef25763b7349ffe452",
+        "reading_extent": "selected_code_and_tests",
+        "execution_status": "not_executed",
+        "limits": "Only the represented unguarded ACTIVE-to-PAID path was compared to executable vectors. Four selected cases were unsupported, not observed financial rejections. Native probes of the complete four-state graph are separate observations. No general Workflow implementation, expiry eligibility, transaction rollback or concurrency guarantee is established.",
+        "status": "pending_validation"
+      },
+      "target_ids": [
+        "CORE-002.1"
+      ]
+    },
+    {
+      "comparison_key": "code-evidence/CE-FINDING-0402",
+      "reviewed_comparison_sha256": "ee1efd99c77383fd733bff681f1f32fd162d8db4cc65c63e081f54c02d80cc3c",
+      "publication": {
+        "id": "CE-FINDING-0402",
+        "kind": "code",
+        "publication_format": "code-evidence-v2",
+        "title": "java-payment-core — Outbox payload transport and Audit applicability",
+        "project": "java-payment-core",
+        "repository": "lmoraesdev/java-payment-core",
+        "owner": "lmoraesdev",
+        "version": "main",
+        "commit_sha": "6892c754006515a0900a22ba4b45ac9b1de194fe",
+        "functions": [
+          {
+            "name": "OutboxEventAdapter.record(String,String,String,Object)",
+            "href": "https://github.com/lmoraesdev/java-payment-core/blob/6892c754006515a0900a22ba4b45ac9b1de194fe/src/main/java/com/lmoraesdev/payment/adapter/out/persistence/outbox/OutboxEventAdapter.java#L21-L26"
+          },
+          {
+            "name": "OutboxEventAdapter.toJson(Object)",
+            "href": "https://github.com/lmoraesdev/java-payment-core/blob/6892c754006515a0900a22ba4b45ac9b1de194fe/src/main/java/com/lmoraesdev/payment/adapter/out/persistence/outbox/OutboxEventAdapter.java#L28-L34"
+          },
+          {
+            "name": "OutboxEventEntity.pending(String,String,String,String,String)",
+            "href": "https://github.com/lmoraesdev/java-payment-core/blob/6892c754006515a0900a22ba4b45ac9b1de194fe/src/main/java/com/lmoraesdev/payment/adapter/out/persistence/outbox/OutboxEventEntity.java#L56-L72"
+          }
+        ],
+        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/rules/CE-RULE-0042.json",
+        "publication_path": "experts/code-evidence/rules/CE-RULE-0042.json",
+        "publication_sha256": "98aba600dc39621dcd3a26a00befca498217abf967ea9d8c0f3c47d16b29751d",
+        "reading_extent": "selected_code_and_tests",
+        "execution_status": "not_executed",
+        "limits": "Audit-shaped JSON is observed inside the native transport payload. Generated outbox IDs/times are technical metadata and are not substituted for producer event identity/occurrence time. Repository storage was a port double; persistence, SQL constraints, transaction atomicity and controls in other layers are outside this evaluation.",
+        "status": "pending_validation"
+      },
+      "target_ids": [
+        "CORE-003.1"
+      ]
+    },
+    {
+      "comparison_key": "code-evidence/CE-FINDING-0403",
+      "reviewed_comparison_sha256": "037c54260fb27c396e0d7146420ae5d7a460b80ca0f72dac4a40deca045ced99",
+      "publication": {
+        "id": "CE-FINDING-0403",
+        "kind": "code",
+        "publication_format": "code-evidence-v2",
+        "title": "ERPNext — Approver configuration checks",
+        "project": "ERPNext",
+        "repository": "frappe/erpnext",
+        "owner": "frappe",
+        "version": "v16.60.0",
+        "commit_sha": "886ab6ae187244e7f1b852393384ab6019d56264",
+        "functions": [
+          {
+            "name": "AuthorizationRule.validate_rule",
+            "href": "https://github.com/frappe/erpnext/blob/886ab6ae187244e7f1b852393384ab6019d56264/erpnext/setup/doctype/authorization_rule/authorization_rule.py#L77-L108"
+          }
+        ],
+        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/rules/CE-RULE-0043.json",
+        "publication_path": "experts/code-evidence/rules/CE-RULE-0043.json",
+        "publication_sha256": "c33f1f31bd88552e79c292494d8fd3c6a922d5551bbf99d0d0675b6cfaee6abf",
+        "reading_extent": "selected_code_and_tests",
+        "execution_status": "not_executed",
+        "limits": "Exact-method isolation with framework translation/throw doubles and explicitly unset unrelated product-policy fields. The native method is not a complete Requirement evaluator. No Frappe lifecycle/database behavior, eligible-role expansion, committed Decisions, expiration, withdrawal, supersession or approval-chain evaluation is established.",
+        "status": "pending_validation"
+      },
+      "target_ids": [
+        "CORE-004.1"
+      ]
+    },
+    {
+      "comparison_key": "code-evidence/CE-FINDING-0056",
+      "reviewed_comparison_sha256": "dfb3235e071c74ec0fa460f715610885c7cabe94b8bf94df8b5ebb249954a42d",
+      "publication": {
+        "id": "CE-FINDING-0056",
+        "kind": "code",
+        "publication_format": "code-evidence-v2",
+        "title": "java-payment-core — Native identity and Entity applicability limits",
+        "project": "java-payment-core",
+        "repository": "lmoraesdev/java-payment-core",
+        "owner": "lmoraesdev",
+        "version": "main",
+        "commit_sha": "6892c754006515a0900a22ba4b45ac9b1de194fe",
+        "functions": [
+          {
+            "name": "Charge.restore(UUID,Money,ChargeStatus,Instant,Instant,Long)",
+            "href": "https://github.com/lmoraesdev/java-payment-core/blob/6892c754006515a0900a22ba4b45ac9b1de194fe/src/main/java/com/lmoraesdev/payment/domain/model/Charge.java#L55-L69"
+          },
+          {
+            "name": "Charge.equals(Object)",
+            "href": "https://github.com/lmoraesdev/java-payment-core/blob/6892c754006515a0900a22ba4b45ac9b1de194fe/src/main/java/com/lmoraesdev/payment/domain/model/Charge.java#L104-L112"
+          },
+          {
+            "name": "Charge.hashCode()",
+            "href": "https://github.com/lmoraesdev/java-payment-core/blob/6892c754006515a0900a22ba4b45ac9b1de194fe/src/main/java/com/lmoraesdev/payment/domain/model/Charge.java#L115-L117"
+          }
+        ],
+        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/rules/CE-RULE-0031.json",
+        "publication_path": "experts/code-evidence/rules/CE-RULE-0031.json",
+        "publication_sha256": "e8924189441c947caf5705290881f24c3b09a139a5bf2dbcf322e954848a9b91",
+        "reading_extent": "selected_code_and_tests",
+        "execution_status": "not_executed",
+        "limits": "All four selected Entity cases are unsupported and no native Entity create/import/evolution operation was invoked for them. Native UUID representability was checked without rewriting supplied opaque identifiers. Earlier Charge identity and transition probes remain separate; they do not provide caller-defined Entity schemas, revision/mapping history or atomic Audit-correlated evolution.",
+        "status": "pending_validation"
+      },
+      "target_ids": [
+        "CORE-005.1"
+      ]
+    }
+  ],
+  "conformance_selections": [
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0001",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "148745473b1b24e44a48deac4f92261d433468982659db339734800e3a307074"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0002",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "b7314d2812f33b2d75d09ee766ce5b04d8d165aefaecf4660e4586155235b555"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0003",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "1a65bcf1f0835814508867062087a4cf95b315b5f514a6d9c2cfcd4ee281ed7e"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0004",
+      "target_ids": [
+        "CORE-001.3"
+      ],
+      "reviewed_result_sha256": "699514e87cb6cb3d6590cea71df8c3a8237a931392e72158a4ab32c972cca011"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0005",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "5f51414eead437c9edbdf4b5c353d06451773aa227e0fac84b2d71c653fbace9"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0006",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "cb4ee6a59022061f516b097792e03375c3c379507248aa832f5430fe8025da01"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0007",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "659eed55615fcd34cc033cc2442935d0d89eb87d4b262ccbc009548e451deb92"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0008",
+      "target_ids": [
+        "CORE-001.2",
+        "CORE-001.3"
+      ],
+      "reviewed_result_sha256": "1b862467df72b1b37e94460bf9dafc063470ef8bc580a5ab572086b475fff3d5"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0020",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "c4997ec70f2550c1e1b6d6d9d012f1ac1512e351a611738cc6a624b18a062987"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0021",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "d975a7f2aea9566bdbcfdd3f0cbe4437af4012fe454fd86d02ceb67f55cc2de1"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0022",
+      "target_ids": [
+        "CORE-001.3"
+      ],
+      "reviewed_result_sha256": "7f882d4eca655d85fc1ff5bdbca02db5bb083945791271dbf59490202de837dc"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0076",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "fcf84a61d3f4d2d33acc0ff568a3fb97830386aa9efd0888142ab52936a14001"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0077",
+      "target_ids": [],
+      "reviewed_result_sha256": "9244ee27a5fb4ce1ef6b01241e5071defe410d0c982ef0f73055a62f2c26138b"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0078",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "131a85f994eb5fe12825f246c815ab893e75c8abf88aa4f5fe5abd7599ae93e4"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0081",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "66f424a47e42dd4346afee6d2ab870fcf3ec0b9999789bcae5fef0bd067ac290"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0082",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "bcaf6868d9435a8639a11b0d5db0fd1a98a8456ba7c6ab3feb8e87cac58ba910"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0083",
+      "target_ids": [
+        "CORE-001.3"
+      ],
+      "reviewed_result_sha256": "90409cb7903538e3d58a436cfa895969f2a26db797a80943bd7bae9a7274da67"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0084",
+      "target_ids": [
+        "CORE-001.1",
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "a35a6724144ab81d69a5aa5ad3993f4e4b8d61c8c1fc8fe2a8c3a2b925c17be6"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0088",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "8585231e98a7197c4aa8b50a76eb9571079bb62e6d4b8175d956ec69d77b887d"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0091",
+      "target_ids": [],
+      "reviewed_result_sha256": "764896e6be67b384f3fee188a78c177c3bfdfd917f6daec6236d51bc01f8e76f"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0092",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "56738b5daf59fa78a7319311e36e6510dae85c08051c9a932586fbfb7f9e2d20"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0093",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "7b94ef136f59235d14b29d3e82de2d20e2942cb55b0f4f7baae3b8caf0fc1d30"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0094",
+      "target_ids": [
+        "CORE-001.3"
+      ],
+      "reviewed_result_sha256": "17ef8d035ce2c567efd24a32058ab61fa683fb1ddd9d4037699f0e304815b39b"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0101",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "871a7f06ec5cccf4cbbc6eecada7cc2976761ffb0d825bfc02d5ae3088d6fd60"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0102",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "465e24deed87b3426acaabdb04884e9494405fa35ae9fdb74ae77e9660ccd270"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0103",
+      "target_ids": [
+        "CORE-001.1"
+      ],
+      "reviewed_result_sha256": "e2fa8b055fdd13e98ecb6a668a501baa24d967b45c821d057c8e4c6cceaae866"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0113",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "12f5f1af88256193b90afbc88741947fae03fd03daf0258d1b92042dc24e3e05"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0115",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "8bb357861ef55fb500b26c4380a20835e1f7ade487a0b4e0958f5dbd6f2fcbae"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0116",
+      "target_ids": [],
+      "reviewed_result_sha256": "e30d107147f69acabf6936f6d7b938e4630000de2bf673c32109b379f36a9163"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0117",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "75b7a70a475f0277516b12b49d3aee3158c403dc2099426153f670dde98b1493"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0118",
+      "target_ids": [
+        "CORE-001.3"
+      ],
+      "reviewed_result_sha256": "c1bf42c9e70a3a6d44cb9a0c6a6a4f7b326c9b09d96791d3d7f914d1683dc4a0"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0121",
+      "target_ids": [
+        "CORE-001.2",
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "b16c6db501e821d628e8bd0e756a21dd673081e6b351b56d3a3fed549abd18bc"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0131",
+      "target_ids": [],
+      "reviewed_result_sha256": "771afcaa25415b0e05d9196bfc8d05f19559f6fdad6718c521d8b080c2f29aa9"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0132",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "4bbd8f4dd3c74ade4ff9c2ccfac3af98d59a2ebaaef5f488dba6e4742676d404"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0137",
+      "target_ids": [],
+      "reviewed_result_sha256": "326114f3397702420b7405a9c211fc8de6d9b386c1da53740867f48856b426ad"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0138",
+      "target_ids": [],
+      "reviewed_result_sha256": "e995933e73d27bcd3c02ca3debceba7d3b94c2c9c3a5ae291c277129854c632f"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0143",
+      "target_ids": [],
+      "reviewed_result_sha256": "58770c8e9fa54b3e5942025104d5827e36425970880c3e450fb57f2e9f2b69a4"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0144",
+      "target_ids": [],
+      "reviewed_result_sha256": "762117ef18eddb74672f734880e891fbba87742764efbf1e37dc0c8f3437c699"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0166",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "a91065f98f90d506a21c9cb85d5014182f0752b3980780b65ba28f18e73ab298"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0176",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "f8eacbf9a71a5685f3e7d697f09522a4b6be3ff1d8b6b3f8438da11142074a8f"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0181",
+      "target_ids": [],
+      "reviewed_result_sha256": "f1093d7ff7a53e72cfa20b1962bc4a7f73ac677db5b8690339c6962951ffae44"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0196",
+      "target_ids": [
+        "CORE-001.2",
+        "CORE-001.3"
+      ],
+      "reviewed_result_sha256": "e43e872756ddcde2d90a389b03762717e37b3fabe3dd96e5d59f89e0b3a4eb66"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0197",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "489750f1e79bc4118dc1ac747a5843d4afc8248c8707878c9eeb0fc3543e46ff"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0198",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "4832073da1ef501193c93a80bea45c899af8bae858638f54074fbbfcd7383050"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0199",
+      "target_ids": [
+        "CORE-001.3"
+      ],
+      "reviewed_result_sha256": "c48c0e99360ca6b6d82897df9a27a7010759c9ac7ec5ef93d0917d3ddaeb1843"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0211",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "9fa2e69de4c4f2d6d9e0c752881a32f85004b155bb64f17415b35eb8f1fa2052"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0212",
+      "target_ids": [
+        "CORE-001.2",
+        "CORE-005.3"
+      ],
+      "reviewed_result_sha256": "58ae2c2826c8e756a649a2cb72dad3862215ac5f3ddd528c4533585ca972a17e"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0224",
+      "target_ids": [],
+      "reviewed_result_sha256": "1f74d48ab8834acf89d10b549ab49a0d5fe7bbf25df2bc56d7fb2185b3258e3d"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0228",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "1a26006e75fea2315ea2a6af36cdfd649ef594b3b6538e46414871b263c9d7fa"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0229",
+      "target_ids": [],
+      "reviewed_result_sha256": "fb29ada875baa3abddc42aa68843a1454243e19a16bb83edab1a6b259f4d2d53"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0232",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "44df16da0e1c547b3902f185467084cecacc63b046b1fd00fd1db98ba9230c41"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0233",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "131032f934123499b4e97b8ff1f7e95473e8ec8d901d27e5a4aaa1e7cf71d8db"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0235",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "56abbaff5487da02e3ddd6cd63330143cdc1479355273147842c390521e418c0"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0238",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "5fa9da4f4e5091c0124646aae2e422361f47e4470284018bdf6471218fe1df18"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0239",
+      "target_ids": [
+        "CORE-001.1",
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "eeeb6fb03856eeab3e4f1b0519608e2324b3dd6ef19fd1e45aa5fbffb353cb53"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0240",
+      "target_ids": [],
+      "reviewed_result_sha256": "3ff73707f20dad34e0103b1657e2ab0703aa83d078928ec38f44ccd8898a8cfb"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0241",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "173e5ff08056bbf4095c473a26f4e24aba692936cedcbec5099da766fe65bca4"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0242",
+      "target_ids": [
+        "CORE-001.1",
+        "CORE-001.3"
+      ],
+      "reviewed_result_sha256": "4da4f0fcfe872c605ff35f83d46c41418942426eac0ccbe886c8f4a70256b341"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0244",
+      "target_ids": [],
+      "reviewed_result_sha256": "818c744c516f32bd2cb091b2228c6089991a63bb9fad902d7284424931077043"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0248",
+      "target_ids": [],
+      "reviewed_result_sha256": "84b2187f8ce13346a1f417eae90121db1cb767b392bf981b7698705945798526"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0249",
+      "target_ids": [
+        "CORE-001.1"
+      ],
+      "reviewed_result_sha256": "f16013e9d2e3fc600688ade069495b0489db5284ef4976def86c35aacce27c91"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0250",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "79287195afbb5eb6b8039844efcc1a7e8e9f4db2a62df8c9c75e4ad9a75de41d"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0252",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "64801088965171954108bfc7af62375380cef3f31be996963bab582b20556527"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0259",
+      "target_ids": [
+        "CORE-001.2",
+        "CORE-001.3"
+      ],
+      "reviewed_result_sha256": "7b50831ae9ad23a92b73b419f30afd75034359efb2f09e5a6211a0921bef8ec1"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0260",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "18a48fa07fb7a5fbc8aaee823bd2230d915d54c6635e18505d570ce990bc77e8"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0261",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "cbdac15c0fce36e9e7c7e8527a17bf15260075587a169a1168929cd5b2e193b7"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0267",
+      "target_ids": [],
+      "reviewed_result_sha256": "7efbde9655fbe3e20a32efca3f16223f405ec43aaa2f1d961a97e2d3d9f396fd"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0268",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "007de3581b5f715bb94f0bdfb5daad2eac9b7dc6071d70f0fcf488a96ca18aa5"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0269",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "96a97cdf4fcd1f9e795e1356d1d152b464465ca8e918807dcb4ffcd40440b360"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0270",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "50b1bfcc6ceefc3c9054be28e1ad6bf1893385e5eb8b38499530cd1c2f479850"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0280",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "048fdf6a61f9068c05262f1333cebd8530483f092ded0caef02e7b735b3b4bdc"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0281",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "4ded31ea412dbc4e693d3a8ca49d7ed1ce65a10f19524c7ea2d58624f0ec3564"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0282",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "2c8516546716610efaf4a1e1c477751a7f08a7a9de91787f1411b63f3436c536"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0286",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "ec8dd20ec652887570eb04960af007dd79d2466dc2aa4da91a851c474fce9568"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0292",
+      "target_ids": [
+        "CORE-001.3"
+      ],
+      "reviewed_result_sha256": "1162b4d41563f14fab5b44ad392b54568649117adb25da3c306a0d9d64b53ceb"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0293",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "3fb4aff52f6a9664c16f5ff23b843a84d7e74a5d337f5b92232c927af294fdf4"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0294",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "fc03fded2644602c8e66741ac88094b613b6a470a3291c6e61ee5dc7155f4f89"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0296",
+      "target_ids": [],
+      "reviewed_result_sha256": "771dfdbb6be65d83a7fc817880b7f73fbe36bd7d2bba6c73ebcbfb94d59851cf"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0301",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "d84f4c10fa6da14bfe60f6c5c4adaee5faa26ab38e9b0b99db97a2061108ec33"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0302",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "c88b071961ae4d709d3f7e728edb2d8530abbbb9f423f0d7f6ab642abfa8f5ac"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0303",
+      "target_ids": [],
+      "reviewed_result_sha256": "3dc7109650ea2c5546f78b20b436308aa43ef6adffb5ae0cb1f89b4e4790ac46"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0329",
+      "target_ids": [],
+      "reviewed_result_sha256": "f33e449a7cb63349f538881a4d48e2d8aaee0bb3bb08aa5a9591047c0c6fce0f"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0330",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "b8dc39d0038e6ba13a20dacfae683746065ddf5243625f318f0da4fb74b15eb9"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0331",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "8cdc8eb385d4355249d826594a6f5922f07dfd3777fd0f5a19a199495526179d"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0332",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "440cf380243bbef9318260820f87cfb58c42fd094d647a0e686f342b980c3046"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0333",
+      "target_ids": [],
+      "reviewed_result_sha256": "3677ffac0ea61071a2033fcac20005656421033c58241addb1e14b5737caf6f2"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0402",
+      "reviewed_result_sha256": "57838f97008a85fea8f36c8816cf90e09eb4c955c3cb31b15e8ae2c5f1f8245b",
+      "target_ids": [
+        "CORE-002.1"
+      ]
     }
   ]
 }

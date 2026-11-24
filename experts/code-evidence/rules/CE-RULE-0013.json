@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.0.0",
+  "schema_version": "2.1.0",
   "id": "CE-RULE-0013",
   "title": "Display or cash-step rounding is separate from stored value",
   "scope": "candidate_rule",
@@ -98,7 +98,35 @@
         "Brick Money declares a context step, validates its compatibility with a selected scale and applies the caller rounding mode while fitting a cash amount. Split delegates to explicit allocation modes.",
         "CashContext.applyTo derives currency digits, verifies the step, divides by step, fits scale and multiplies back. StepValidation accepts a divisor or multiple of 10^scale. CustomContext checks positive step/nonnegative scale. This shows an explicit context policy, not a universal cash denomination.",
         "A valid fixed context, positive step and a supported rounding mode; Separate split produces an extra residual output rather than the Core result shape. CashContext(step=5) at currency scale2 operates in .05 quanta; rounding to scale2 alone does not express that quantum. A named context may declare a scale derivation, so currency-derived scale is not automatically an undeclared-policy defect. No upstream operation was executed. The conclusion is a bounded static source trace; deployment/runtime-dependent outputs are not certified. This behavior is not currently defined by FinKore Core."
-      ]
+      ],
+      "conformance": {
+        "passed": 15,
+        "total": 18,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37, brick/math 0.15.0. Primary profile declared_native_profile; native path: Money.toContext (CashContext). Selected outcomes: 15 matched, 1 mismatched, 2 unsupported.",
+          "CashContext was matched to the requested quantum through native toContext, with explicit native modes. HALF_DOWN is admitted natively but outside Core; finer or invalid target scales have no equivalent quantum in this profile."
+        ],
+        "test_ids": [
+          "money.round.half-up.tie-positive-001",
+          "money.round.half-up.tie-negative-001",
+          "money.round.half-even.tie-even-down-001",
+          "money.round.half-even.tie-odd-up-001",
+          "money.round.half-even.tie-negative-even-001",
+          "money.round.down.positive-001",
+          "money.round.down.negative-001",
+          "money.round.up.positive-001",
+          "money.round.up.negative-001",
+          "money.round.floor.positive-001",
+          "money.round.floor.negative-001",
+          "money.round.ceiling.positive-001",
+          "money.round.ceiling.negative-001",
+          "money.round.explicit-scale-001",
+          "money.round.no-discard-001",
+          "money.round.invalid-mode-001",
+          "money.round.invalid-scale-001",
+          "money.round.near-half-no-double-round-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0100",
@@ -574,7 +602,21 @@
         "Paysera formatAmount uses text truncation for positive fractional counts without grouping, but uses native number_format at zero/nonpositive counts and grouped paths; serialized array/normalizer profiles inherit that selection.",
         "For an input with a decimal point, the ungrouped positive-fraction branch uses substr and padding. The grouped branch truncates first and then calls number_format; zero fraction calls number_format directly. mapFromEntity/getArrayRepresentation expose these rendered values as amount fields.",
         "A Money accepted with meaningful digits beyond the requested/default currency fraction, such as EUR10.559; native float/PHP formatting details remain bounded to the selected runtime contract. The ungrouped two-place string path yields10.55 from10.559 without an explicit rounding request. If used as portable Money serialization, that changes numeric value; grouping can add binary narrowing and is not a general exact alternative. No upstream operation was executed. The conclusion is a bounded static source trace; deployment/runtime-dependent outputs are not certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 2,
+        "total": 4,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37, Maba monetary 0.10.0/math 1.0.1. Primary profile declared_native_profile; native path: Money.getArrayRepresentation. Selected outcomes: 2 matched, 2 mismatched.",
+          "The real full array serializer preserves the ordinary numeric value, including harmless trailing zeros. Stored positive/negative10.559 is emitted as positive/negative10.55 without prior rounding. Raw JSON and native source amounts are retained; no display or wire-output repair is applied."
+        ],
+        "test_ids": [
+          "money.serialize.roundtrip-001",
+          "money.serialize.locale-independent-001",
+          "money.serialize.nonzero-fraction-preservation-001",
+          "money.serialize.negative-nonzero-fraction-preservation-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0279",

@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.0.0",
+  "schema_version": "2.1.0",
   "id": "CE-RULE-0001",
   "title": "Allocation conserves a source while declaring residual ownership",
   "scope": "existing_core_subject",
@@ -82,7 +82,29 @@
         "MoneyPHP allocates signed integer-minor base shares and corrects their remainder by largest fractional loss, using source order only to break equal rankings. This is not Core declared-order allocation.",
         "The actual loop selects max(fractions), while the base BCMath helper floors the signed quotient. Constructor and new-result paths retain currency; neither property makes recipient selection equivalent to absolute-floor then declared order.",
         "Integer-minor Money, nonnegative admitted weights with positive sum, the selected calculator, and values whose intermediate/float ranking remains meaningful. For 1000 minor units and weights [3,2,1], the largest fractional share receives the last unit rather than Core earliest position. Binary ranking and fixed-14 intermediates prevent a general conservation/exactness proof. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 8,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37, BCMath/GMP. Primary profile declared_native_profile; native path: Money.allocate/allocateTo. Selected outcomes: 8 matched, 3 mismatched, 1 unsupported.",
+          "For money.allocate.equal.remainder-negative-001, native observation [{\"amount\":\"-3.33\",\"currency\":\"USD\"},{\"amount\":\"-3.33\",\"currency\":\"USD\"},{\"amount\":\"-3.34\",\"currency\":\"USD\"}] differs from expected [{\"amount\":\"-3.34\",\"currency\":\"USD\"},{\"amount\":\"-3.33\",\"currency\":\"USD\"},{\"amount\":\"-3.33\",\"currency\":\"USD\"}]."
+        ],
+        "test_ids": [
+          "money.allocate.equal.remainder-positive-001",
+          "money.allocate.equal.remainder-negative-001",
+          "money.allocate.ratio.remainder-positive-001",
+          "money.allocate.ratio.declared-order-001",
+          "money.allocate.ratio.zero-source-001",
+          "money.allocate.ratio.equal-weights-remainder-001",
+          "money.allocate.equal.invalid-zero-parts-001",
+          "money.allocate.equal.invalid-negative-parts-001",
+          "money.allocate.ratio.invalid-zero-ratio-001",
+          "money.allocate.ratio.invalid-negative-ratio-001",
+          "money.allocate.ratio.invalid-empty-ratios-001",
+          "money.allocate.unrepresentable-source-scale-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0002",
@@ -133,7 +155,29 @@
         "Brick FloorToFirst reproduces the magnitude-floor, earliest-position remainder and sign-restoration mechanism when the fixed context has the same explicit scale and a unit step.",
         "The strategy floors nonnegative step counts, increments array_keys order, then Money reconstructs step-scaled values and negates results for a negative source. normalizeRatios nevertheless admits zeros and rational weights.",
         "Positive integer ratios, fixed matched scale, step1, exact source-unit representation, and supported BigInteger/BigRational operations. Changing to a cash step, supplying zero/rational ratios, or leaving scale implicit changes the request domain. This bounded algorithm match does not establish Core scale/count/range validation. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 10,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37, brick/math 0.15.0. Primary profile declared_native_profile; native path: Money.split (EQUAL) / allocate (RATIO). Selected outcomes: 10 matched, 1 mismatched, 1 unsupported.",
+          "EQUAL requests now use the genuine Money.split guard in src/Money.php:602-622, followed by native allocate; RATIO still calls allocate directly. Invalid counts are rejected by split, not by a binding check or the ratios-only entry. CustomContext 2 and FloorToFirst remain unchanged; the finer source is still unrepresentable."
+        ],
+        "test_ids": [
+          "money.allocate.equal.remainder-positive-001",
+          "money.allocate.equal.remainder-negative-001",
+          "money.allocate.ratio.remainder-positive-001",
+          "money.allocate.ratio.declared-order-001",
+          "money.allocate.ratio.zero-source-001",
+          "money.allocate.ratio.equal-weights-remainder-001",
+          "money.allocate.equal.invalid-zero-parts-001",
+          "money.allocate.equal.invalid-negative-parts-001",
+          "money.allocate.ratio.invalid-zero-ratio-001",
+          "money.allocate.ratio.invalid-negative-ratio-001",
+          "money.allocate.ratio.invalid-empty-ratios-001",
+          "money.allocate.unrepresentable-source-scale-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0003",
@@ -163,7 +207,29 @@
         "RubyMoney allocation is reverse successive allocation against the remaining amount/weight. Its conservation reading is restricted to admissible positive weights and a precision cutoff that does not discard source value.",
         "The helper pops the last weight, truncates or rounds its current share, reduces remaining totals and prepends results. Empty weights are rejected, all-zero weights become equal weights, and Rational conversion passes through Float.",
         "A bounded numeric helper with positive weights, compatible native number types and a suitable decimal_cutoff; currency preservation belongs to the Money wrapper. The global Core floor/remainder pass is different. Negative weights [-1,2] with amount10 can return[0,20], and an integer cutoff can lose a nonzero decimal remainder even with one recipient. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 8,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using Ruby 3.1.2, BigDecimal 3.1.1. Primary profile infinite_precision_off; native path: Money#allocate. Selected outcomes: 8 matched, 3 mismatched, 1 unsupported.",
+          "For money.allocate.equal.remainder-negative-001, native observation [{\"amount\":\"-3.33\",\"currency\":\"USD\"},{\"amount\":\"-3.33\",\"currency\":\"USD\"},{\"amount\":\"-3.34\",\"currency\":\"USD\"}] differs from expected [{\"amount\":\"-3.34\",\"currency\":\"USD\"},{\"amount\":\"-3.33\",\"currency\":\"USD\"},{\"amount\":\"-3.33\",\"currency\":\"USD\"}]. Control profiles, excluded from the primary score: infinite_precision_on (same test_ids): 4 matched, 8 mismatched."
+        ],
+        "test_ids": [
+          "money.allocate.equal.remainder-positive-001",
+          "money.allocate.equal.remainder-negative-001",
+          "money.allocate.ratio.remainder-positive-001",
+          "money.allocate.ratio.declared-order-001",
+          "money.allocate.ratio.zero-source-001",
+          "money.allocate.ratio.equal-weights-remainder-001",
+          "money.allocate.equal.invalid-zero-parts-001",
+          "money.allocate.equal.invalid-negative-parts-001",
+          "money.allocate.ratio.invalid-zero-ratio-001",
+          "money.allocate.ratio.invalid-negative-ratio-001",
+          "money.allocate.ratio.invalid-empty-ratios-001",
+          "money.allocate.unrepresentable-source-scale-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0005",
@@ -200,7 +266,29 @@
         "Dinero safe allocation admits normalized nonnegative weights and distributes signed residuals by descending nonzero weight, with a number-backend no-progress break.",
         "The utility filters zero weights and sorts by ratio before repeated corrections; safeAllocate also derives a promoted source scale from ratio scales. A break can stop correction without demonstrating conservation.",
         "The selected calculator, admitted normalized ratios, meaningful backend coefficients, and the specifically chosen scale transformation. Weights[1,2] on an indivisible source unit prioritize the second recipient, unlike Core declared order. Number values beyond safe precision can trigger no-progress termination rather than exact residual accounting. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 7,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using Node 24.15.0, first-party Dinero calculators. Primary profile declared_native_profile; native path: dinero.allocate (Number calculator). Selected outcomes: 7 matched, 3 mismatched, 2 unsupported.",
+          "Ascending weights expose native priority: USD10.00 with [1,2,3] returns [1.66,3.33,5.01], versus Core [1.67,3.33,5.00]. Equal weights are a passing control. The former descending-only case did not discriminate this policy."
+        ],
+        "test_ids": [
+          "money.allocate.equal.remainder-positive-001",
+          "money.allocate.equal.remainder-negative-001",
+          "money.allocate.ratio.remainder-positive-001",
+          "money.allocate.ratio.declared-order-001",
+          "money.allocate.ratio.zero-source-001",
+          "money.allocate.ratio.equal-weights-remainder-001",
+          "money.allocate.equal.invalid-zero-parts-001",
+          "money.allocate.equal.invalid-negative-parts-001",
+          "money.allocate.ratio.invalid-zero-ratio-001",
+          "money.allocate.ratio.invalid-negative-ratio-001",
+          "money.allocate.ratio.invalid-empty-ratios-001",
+          "money.allocate.unrepresentable-source-scale-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0006",
@@ -237,7 +325,29 @@
         "GoMoney equal Split gives signed remainder units to earliest recipients within its supported integer domain; weighted Allocate additionally admits an all-zero fallback that returns zero shares.",
         "Split uses quotient/remainder and signed unit corrections. Allocate returns constructed shares immediately when sum==0, and calculator.allocate returns0 for that denominator.",
         "Positive part count and representable int64 amounts for the equal path; successful weighted paths additionally need safe products and a positive ratio sum. Equal -100 minor units split3 gives[-34,-33,-33]. For nonzero source and all-zero weights, the weighted path returns zeros, which is an upstream fallback outside Core admitted ratios. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 10,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using Go 1.25.5. Primary profile declared_native_profile; native path: Money.Split/Allocate. Selected outcomes: 10 matched, 1 mismatched, 1 unsupported.",
+          "For money.allocate.ratio.invalid-zero-ratio-001, native observation [{\"amount\":\"3.34\",\"currency\":\"USD\"},{\"amount\":\"0.00\",\"currency\":\"USD\"},{\"amount\":\"6.66\",\"currency\":\"USD\"}] differs from expected {\"code\":\"FINKORE_MONEY_INVALID_ALLOCATION\"}."
+        ],
+        "test_ids": [
+          "money.allocate.equal.remainder-positive-001",
+          "money.allocate.equal.remainder-negative-001",
+          "money.allocate.ratio.remainder-positive-001",
+          "money.allocate.ratio.declared-order-001",
+          "money.allocate.ratio.zero-source-001",
+          "money.allocate.ratio.equal-weights-remainder-001",
+          "money.allocate.equal.invalid-zero-parts-001",
+          "money.allocate.equal.invalid-negative-parts-001",
+          "money.allocate.ratio.invalid-zero-ratio-001",
+          "money.allocate.ratio.invalid-negative-ratio-001",
+          "money.allocate.ratio.invalid-empty-ratios-001",
+          "money.allocate.unrepresentable-source-scale-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0020",
@@ -295,7 +405,29 @@
         "Dintero allocates by rounded weighted shares, then corrects signed residue in source order while skipping zero weights and candidates that would reverse sign.",
         "multiply reconstructs through constructor rounding before residual computation. The correction therefore starts from a different base than Core absolute integer floors.",
         "Selected Money decimal scale/Big.js policy, nonnegative weights with positive total and a nonzero representable correction unit. The source67 JPY/four-weight scenario has[16,17,17,17], whereas Core at scale0 has[17,17,17,16]. This static policy distinction does not prove termination for all scales. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 9,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using Node 24.15.0, Big.js. Primary profile declared_native_profile; native path: Money.distribute/distributeBy. Selected outcomes: 9 matched, 2 mismatched, 1 unsupported.",
+          "Native distribute/weights errors now identify invalid allocation after the original call; no count or ratio guard was supplied by the binding. Residual-order and exact-input representation differences remain separate."
+        ],
+        "test_ids": [
+          "money.allocate.equal.remainder-positive-001",
+          "money.allocate.equal.remainder-negative-001",
+          "money.allocate.ratio.remainder-positive-001",
+          "money.allocate.ratio.declared-order-001",
+          "money.allocate.ratio.zero-source-001",
+          "money.allocate.ratio.equal-weights-remainder-001",
+          "money.allocate.equal.invalid-zero-parts-001",
+          "money.allocate.equal.invalid-negative-parts-001",
+          "money.allocate.ratio.invalid-zero-ratio-001",
+          "money.allocate.ratio.invalid-negative-ratio-001",
+          "money.allocate.ratio.invalid-empty-ratios-001",
+          "money.allocate.unrepresentable-source-scale-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0026",
@@ -390,7 +522,25 @@
         "GoMoney checks the sum of ratios but not the int64 amount-times-ratio product; overflow can invalidate both the share and the residual-loop index bound.",
         "calculator.allocate multiplies before dividing. Allocate assumes the residual needs at most one pass through recipients and does not bound p before indexing.",
         "Accepted int64 amount2^62 and native positive ratio[2], with the Go signed-overflow contract reused from R1-M1. The product wraps to MinInt64, produces a negative share, and the signed residual loop can advance beyond the sole output. The trace is static; no process panic was observed. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 7,
+        "total": 8,
+        "description": [
+          "Assessed 2026-11-23 using Go 1.25.5. Primary profile declared_native_profile; native path: Money.Allocate/Split. Selected outcomes: 7 matched, 1 unmapped native outcome.",
+          "The one-ratio control below the intermediate boundary succeeds. At 2^62 source minor units, Allocate panics with an index-out-of-range error although the source and final share fit int64. The recovered native operand remains unchanged; this is a target exception, not infrastructure failure."
+        ],
+        "test_ids": [
+          "money.allocate.ratio.product-safe-boundary-001",
+          "money.allocate.ratio.intermediate-product-growth-001",
+          "money.allocate.equal.remainder-positive-001",
+          "money.allocate.equal.remainder-negative-001",
+          "money.allocate.ratio.remainder-positive-001",
+          "money.allocate.ratio.declared-order-001",
+          "money.allocate.ratio.zero-source-001",
+          "money.allocate.ratio.equal-weights-remainder-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0081",
@@ -413,7 +563,29 @@
         "GoMoney weighted residual assignment can give a leftover unit to an earlier zero-weight entry.",
         "The correction loop indexes the output list sequentially and does not consult the original ratio when applying the leftover signed unit.",
         "Native ratio allocation with zero and positive weights and safe intermediate arithmetic. For1 minor unit and weights[0,1,1], the first zero-weight output can receive the unit. This is outside Core positive-ratio admission and does not refute Core declared-order behavior on valid ratios. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 10,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using Go 1.25.5. Primary profile declared_native_profile; native path: Money.Split/Allocate. Selected outcomes: 10 matched, 1 mismatched, 1 unsupported.",
+          "For money.allocate.ratio.invalid-zero-ratio-001, native observation [{\"amount\":\"3.34\",\"currency\":\"USD\"},{\"amount\":\"0.00\",\"currency\":\"USD\"},{\"amount\":\"6.66\",\"currency\":\"USD\"}] differs from expected {\"code\":\"FINKORE_MONEY_INVALID_ALLOCATION\"}."
+        ],
+        "test_ids": [
+          "money.allocate.equal.remainder-positive-001",
+          "money.allocate.equal.remainder-negative-001",
+          "money.allocate.ratio.remainder-positive-001",
+          "money.allocate.ratio.declared-order-001",
+          "money.allocate.ratio.zero-source-001",
+          "money.allocate.ratio.equal-weights-remainder-001",
+          "money.allocate.equal.invalid-zero-parts-001",
+          "money.allocate.equal.invalid-negative-parts-001",
+          "money.allocate.ratio.invalid-zero-ratio-001",
+          "money.allocate.ratio.invalid-negative-ratio-001",
+          "money.allocate.ratio.invalid-empty-ratios-001",
+          "money.allocate.unrepresentable-source-scale-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0093",
@@ -471,7 +643,29 @@
         "Brick allocation modes explicitly choose source order, ratio order, largest remainder, or a separate residual output; these modes are not interchangeable allocation confirmations.",
         "The inspected sort keys differ by strategy, while separate strategies append the residual as an additional output. normalizeRatios also expands rational weights to integer ratios.",
         "A fixed representable step context and the specifically selected AllocationMode; Core comparison is restricted to positive integer weights and one output per input weight. FloorSeparate/BlockSeparate return an extra residual slot, while largest-ratio/remainder ordering can differ from FloorToFirst for the same amount. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 9,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37, brick/math 0.15.0. Primary profile FloorToLargestRemainder; native path: Money.split (EQUAL) / allocate (RATIO). Selected outcomes: 9 matched, 2 mismatched, 1 unsupported.",
+          "EQUAL now calls native Money.split in src/Money.php:602-622, using its documented ToFirst/Separate equivalence to the declared allocation strategies. Its actual count guard closes the zero/negative-count comparisons; allocate itself still takes ratios. Native strategy differences and the unrepresentable finer source remain explicit. Control profiles, excluded from the primary score: FloorToLargestRatio (same test_ids): 9 matched, 2 mismatched, 1 unsupported; FloorSeparate, BlockSeparate (same test_ids): each 4 matched, 7 mismatched, 1 unsupported."
+        ],
+        "test_ids": [
+          "money.allocate.equal.remainder-positive-001",
+          "money.allocate.equal.remainder-negative-001",
+          "money.allocate.ratio.remainder-positive-001",
+          "money.allocate.ratio.declared-order-001",
+          "money.allocate.ratio.zero-source-001",
+          "money.allocate.ratio.equal-weights-remainder-001",
+          "money.allocate.equal.invalid-zero-parts-001",
+          "money.allocate.equal.invalid-negative-parts-001",
+          "money.allocate.ratio.invalid-zero-ratio-001",
+          "money.allocate.ratio.invalid-negative-ratio-001",
+          "money.allocate.ratio.invalid-empty-ratios-001",
+          "money.allocate.unrepresentable-source-scale-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0102",
@@ -508,7 +702,21 @@
         "govalues Split first computes a precision-fitted decimal quotient, truncates it to source scale, then assigns a signed residual; near the coefficient boundary this can reverse the first residual owner relative to Core integer-floor allocation.",
         "The actual sequence is Quo→Trunc→Mul→Sub, then CopySign(ULP) corrections. A quotient rounded upward can create a negative residual corrected at the first position.",
         "Supported amount90000000000000000.03 USD, two parts and the pinned19-digit decimal contract, with source-scale allocation units. The static first/second shares end in.01/.02, while Core at scale2 assigns.02/.01. Valid final shares can fit even though an intermediate exact quotient exceeds the dependency coefficient domain. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 3,
+        "total": 4,
+        "description": [
+          "Assessed 2026-11-23 using Go 1.25.5. Primary profile declared_native_profile; native path: Amount.Split. Selected outcomes: 3 matched, 1 mismatched.",
+          "Genuine Amount.Split passes ordinary positive and negative controls. At USD90000000000000000.03/2, its coefficient-boundary rounding assigns the residual differently from the exact Core recipient shares. The earlier ratio-only unsupported dispatch never exercised this available native method."
+        ],
+        "test_ids": [
+          "money.allocate.equal.remainder-positive-001",
+          "money.allocate.equal.remainder-negative-001",
+          "money.allocate.equal.invalid-zero-parts-001",
+          "money.allocate.equal.large-coefficient-residual-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0116",
@@ -531,7 +739,23 @@
         "Dinero equal-weight sorting returns1 rather than0, so source equality of weights does not itself establish stable residual ownership across engine contracts.",
         "The comparator expression has only greater-than? -1:1, including equality. This is a concrete non-reflexive comparator; the resulting engine-specific sort order was not observed.",
         "Two or more equal nonzero weights in distribute and a backend for which ratio equality is meaningful. Comparing an equal weight with itself returns1. No specific reordered output, cross-engine divergence or hang is asserted without an actual engine observation. The equal-weight comparator was read, but sort behavior for an inconsistent comparison function was not executed on any engine. Retain only the source condition and do not claim an observed ordering failure."
-      ]
+      ],
+      "conformance": {
+        "passed": 5,
+        "total": 6,
+        "description": [
+          "Assessed 2026-11-23 using Node 24.15.0, first-party Dinero calculators. Primary profile declared_native_profile; native path: dinero.allocate (Number calculator). Selected outcomes: 5 matched, 1 mismatched.",
+          "Equal-weight allocation is a passing control on this Node/V8 engine. Ascending weights reveal the native descending-priority result. This is not a demonstrated cross-engine sorting failure; the comparator source condition remains separately qualified."
+        ],
+        "test_ids": [
+          "money.allocate.equal.remainder-positive-001",
+          "money.allocate.equal.remainder-negative-001",
+          "money.allocate.ratio.remainder-positive-001",
+          "money.allocate.ratio.declared-order-001",
+          "money.allocate.ratio.zero-source-001",
+          "money.allocate.ratio.equal-weights-remainder-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0117",
@@ -561,7 +785,29 @@
         "Dinero scales decimal ratios by powers of ten and promotes the Money source scale before allocating; the output scale is derived rather than a Core explicit request scale.",
         "safeAllocate computes highestRatioScale, normalizes ratio coefficients, adds that scale to source scale, then invokes unsafeAllocate on the transformed object.",
         "The chosen currency radix/calculator and supported scaled-ratio representation; admitted zeros and scaled ratios belong to the native API. Supplying scaled ratios changes the source/output scale even when the caller did not request a target scale. Core instead rejects non-integer/zero ratios and requires an explicit target scale. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 7,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using Node 24.15.0, first-party Dinero calculators. Primary profile declared_native_profile; native path: dinero.allocate (Number calculator). Selected outcomes: 7 matched, 3 mismatched, 2 unsupported.",
+          "For money.allocate.ratio.remainder-positive-001, native observation [{\"amount\":\"1.66\",\"currency\":\"USD\"},{\"amount\":\"3.33\",\"currency\":\"USD\"},{\"amount\":\"5.01\",\"currency\":\"USD\"}] differs from expected [{\"amount\":\"1.67\",\"currency\":\"USD\"},{\"amount\":\"3.33\",\"currency\":\"USD\"},{\"amount\":\"5.00\",\"currency\":\"USD\"}]."
+        ],
+        "test_ids": [
+          "money.allocate.equal.remainder-positive-001",
+          "money.allocate.equal.remainder-negative-001",
+          "money.allocate.ratio.remainder-positive-001",
+          "money.allocate.ratio.declared-order-001",
+          "money.allocate.ratio.zero-source-001",
+          "money.allocate.ratio.equal-weights-remainder-001",
+          "money.allocate.equal.invalid-zero-parts-001",
+          "money.allocate.equal.invalid-negative-parts-001",
+          "money.allocate.ratio.invalid-zero-ratio-001",
+          "money.allocate.ratio.invalid-negative-ratio-001",
+          "money.allocate.ratio.invalid-empty-ratios-001",
+          "money.allocate.unrepresentable-source-scale-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0161",
@@ -621,7 +867,20 @@
         "Dintero can enter an unchanged-residual loop when accepted Money scale exceeds Big.js division precision and the computed correction unit is zero.",
         "smallestUnit is formed by dividing1 by10**decimals through the same bounded Big.div path; the loop only protects sign reversals, so adding zero resets skips without reducing rest.",
         "Explicit decimals21, default Big.DP20/rounding contract from the locked dependency, a source1e-21 and two equal weights. Both rounded initial shares can become1e-21, rest=-1e-21, while1/1e21 becomes0. The loop then preserves rest and its condition. This is a static nonprogress derivation, not an observed hang. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 2,
+        "total": 3,
+        "description": [
+          "Assessed 2026-11-23 using Node 24.15.0, Big.js DP20/RM1. Primary profile declared_native_profile; native path: Money.distribute. Selected outcomes: 2 matched, 1 resource-bound outcome.",
+          "A debugger observed the unchanged DP20 loop repeating rest=-1e-21, correction unit=0 and parts=[1e-21,1e-21] as i cycled 0/1/0. No native result completed in that profile. A separate DP40/RM1 control terminates, but returns [0,1e-21] where Core requires [1e-21,0]; it does not replace the original profile. Control profiles, excluded from the primary score: Big_DP40_RM1 (same test_ids): 2 matched, 1 mismatched."
+        ],
+        "test_ids": [
+          "money.allocate.equal.remainder-positive-001",
+          "money.allocate.equal.tiny-unit-control-001",
+          "money.allocate.equal.tiny-unit-remainder-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0176",
@@ -658,7 +917,29 @@
         "RubyMoney allocation does not validate the positive-weight and representability conditions needed for conservation; accepted negative-weight or cutoff inputs can lose or create returned value.",
         "remaining_amount and parts_sum evolve independently after each popped weight, and nonpositive remaining sums skip calculation. An integer cutoff can round a final remainder rather than preserve it.",
         "The actual helper/native Money allocation inputs, including negative weights or direct helper decimal cutoff; no invented Core-validity assumption for zero/negative ratios. amount10, weights[-1,2] reaches[0,20]. Direct helper amount1.2345, one part, cutoff2 reaches1.23. These are static traces, not observed deployment outcomes. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 8,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using Ruby 3.1.2, BigDecimal 3.1.1. Primary profile declared_native_profile; native path: Money#allocate. Selected outcomes: 8 matched, 3 mismatched, 1 unsupported.",
+          "The actual allocator admits a negative ratio instead of the required rejection. The finer-source case cannot be supplied as an exact observable Money under the native default getter context, so it is unsupported before allocation. Constructor quantization is not blamed on the allocator."
+        ],
+        "test_ids": [
+          "money.allocate.equal.remainder-positive-001",
+          "money.allocate.equal.remainder-negative-001",
+          "money.allocate.ratio.remainder-positive-001",
+          "money.allocate.ratio.declared-order-001",
+          "money.allocate.ratio.zero-source-001",
+          "money.allocate.ratio.equal-weights-remainder-001",
+          "money.allocate.equal.invalid-zero-parts-001",
+          "money.allocate.equal.invalid-negative-parts-001",
+          "money.allocate.ratio.invalid-zero-ratio-001",
+          "money.allocate.ratio.invalid-negative-ratio-001",
+          "money.allocate.ratio.invalid-empty-ratios-001",
+          "money.allocate.unrepresentable-source-scale-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0228",
@@ -681,7 +962,29 @@
         "Akaunting allocation floors signed native proportional shares and corrects only a positive remainder in early positions; it admits fractional minor totals and negative ratios with nonzero sum.",
         "The guard checks empty ratios and total==0 only. Base floor applies directly to the signed amount, and increments can be fractional through min(1,remainder).",
         "The native floating representation, nonempty nonzero-sum ratios and supported result construction; exact Core comparison additionally needs valid positive integer weights and explicit unit scale. For-100 across three equal weights the signed-floor correction yields[-33,-33,-34], unlike Core[-34,-33,-33]. A fractional minor total can produce a fractional corrective unit. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 6,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37. Primary profile declared_native_profile; native path: Money.allocate. Selected outcomes: 6 matched, 3 mismatched, 3 unsupported.",
+          "For money.allocate.equal.remainder-negative-001, native observation [{\"amount\":\"-3.33\",\"currency\":\"USD\"},{\"amount\":\"-3.33\",\"currency\":\"USD\"},{\"amount\":\"-3.34\",\"currency\":\"USD\"}] differs from expected [{\"amount\":\"-3.34\",\"currency\":\"USD\"},{\"amount\":\"-3.33\",\"currency\":\"USD\"},{\"amount\":\"-3.33\",\"currency\":\"USD\"}]."
+        ],
+        "test_ids": [
+          "money.allocate.equal.remainder-positive-001",
+          "money.allocate.equal.remainder-negative-001",
+          "money.allocate.ratio.remainder-positive-001",
+          "money.allocate.ratio.declared-order-001",
+          "money.allocate.ratio.zero-source-001",
+          "money.allocate.ratio.equal-weights-remainder-001",
+          "money.allocate.equal.invalid-zero-parts-001",
+          "money.allocate.equal.invalid-negative-parts-001",
+          "money.allocate.ratio.invalid-zero-ratio-001",
+          "money.allocate.ratio.invalid-negative-ratio-001",
+          "money.allocate.ratio.invalid-empty-ratios-001",
+          "money.allocate.unrepresentable-source-scale-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0233",
@@ -711,7 +1014,29 @@
         "Sebastian Money signed allocation can return the wrong number of recipients or a sum different from the accepted source.",
         "allocateToTargets uses signed remainder as the second loop start; allocateByRatios truncates signed shares and only corrects positive remainder. Neither implements magnitude-first signed restoration.",
         "Accepted negative integer Money, positive target count or positive ratio list, and ordinary safe native arithmetic. -99 allocated to10 targets reaches19 copies of-9; -5 with ratios[3,7] yields[-1,-3] and ignores residual-1. These are bounded static traces, not execution results. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 5,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using PHP 7.4.33, Intl. Primary profile declared_native_profile; native path: Money.allocateByRatios/allocateToTargets. Selected outcomes: 5 matched, 5 mismatched, 1 unsupported, 1 unmapped native outcome.",
+          "For money.allocate.equal.remainder-negative-001, native observation [{\"amount\":\"-3.33\",\"currency\":\"USD\"},{\"amount\":\"-3.33\",\"currency\":\"USD\"},{\"amount\":\"-3.33\",\"currency\":\"USD\"},{\"amount\":\"-3.33\",\"currency\":\"USD\"}] differs from expected [{\"amount\":\"-3.34\",\"currency\":\"USD\"},{\"amount\":\"-3.33\",\"currency\":\"USD\"},{\"amount\":\"-3.33\",\"currency\":\"USD\"}]."
+        ],
+        "test_ids": [
+          "money.allocate.equal.remainder-positive-001",
+          "money.allocate.equal.remainder-negative-001",
+          "money.allocate.ratio.remainder-positive-001",
+          "money.allocate.ratio.declared-order-001",
+          "money.allocate.ratio.zero-source-001",
+          "money.allocate.ratio.equal-weights-remainder-001",
+          "money.allocate.equal.invalid-zero-parts-001",
+          "money.allocate.equal.invalid-negative-parts-001",
+          "money.allocate.ratio.invalid-zero-ratio-001",
+          "money.allocate.ratio.invalid-negative-ratio-001",
+          "money.allocate.ratio.invalid-empty-ratios-001",
+          "money.allocate.unrepresentable-source-scale-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0241",
@@ -741,7 +1066,29 @@
         "Bojanz allocation uses exact BigInt magnitude floors, corrects earliest eligible positions and restores source sign, while selecting a source/currency-derived unit and permitting zero weights.",
         "The implementation copies the absolute coefficient, rescales to its finer exponent, computes integer quotients and then applies sign. No rounded decimal Add is needed for the allocation itself.",
         "Finite amount, nonnegative native ratios with positive sum, matched explicit Core target units and positive weights for equivalence. Subminor10.005 can remain allocated at its finer source scale rather than being rejected for a coarser Core request. Zero-weight skipping and native ratio ranges remain a different admission profile. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 10,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using Go 1.25.5. Primary profile declared_native_profile; native path: Amount.Split/Allocate. Selected outcomes: 10 matched, 2 mismatched.",
+          "For money.allocate.ratio.invalid-zero-ratio-001, native observation [{\"amount\":\"3.34\",\"currency\":\"USD\"},{\"amount\":\"0.00\",\"currency\":\"USD\"},{\"amount\":\"6.66\",\"currency\":\"USD\"}] differs from expected {\"code\":\"FINKORE_MONEY_INVALID_ALLOCATION\"}."
+        ],
+        "test_ids": [
+          "money.allocate.equal.remainder-positive-001",
+          "money.allocate.equal.remainder-negative-001",
+          "money.allocate.ratio.remainder-positive-001",
+          "money.allocate.ratio.declared-order-001",
+          "money.allocate.ratio.zero-source-001",
+          "money.allocate.ratio.equal-weights-remainder-001",
+          "money.allocate.equal.invalid-zero-parts-001",
+          "money.allocate.equal.invalid-negative-parts-001",
+          "money.allocate.ratio.invalid-zero-ratio-001",
+          "money.allocate.ratio.invalid-negative-ratio-001",
+          "money.allocate.ratio.invalid-empty-ratios-001",
+          "money.allocate.unrepresentable-source-scale-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0252",
@@ -771,7 +1118,29 @@
         "Money2 delegates allocation to Fixed6.0.0 exact BigInt magnitude floors and first-positive-weight corrections, then restores source sign at the stored Fixed scale.",
         "The wrapper maps returned Fixed shares back through _withAmount; the dependency validates empty/negative ratios and positive total, performs integer products/quotients and sign restoration.",
         "Finite represented coefficients, the selected compatible Fixed version, positive weights and matching explicit target units for direct Core comparison. Zero weights are admitted and skipped, while the target scale is the existing Money scale rather than a required portable request. The wrapper and dependency are one numerical lineage. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 10,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using Dart 3.14.1, Fixed 6.0.0/Decimal 3.0.2/Rational 2.0.0. Primary profile declared_native_profile; native path: Money.allocationTo/allocationAccordingTo. Selected outcomes: 10 matched, 2 mismatched.",
+          "The native wrapper with Fixed6.0.0 preserves the signed equal split, but accepts a zero ratio instead of rejecting it. This is one dependency-backed mechanism, not independent corroboration from Money2 and Fixed."
+        ],
+        "test_ids": [
+          "money.allocate.equal.remainder-positive-001",
+          "money.allocate.equal.remainder-negative-001",
+          "money.allocate.ratio.remainder-positive-001",
+          "money.allocate.ratio.declared-order-001",
+          "money.allocate.ratio.zero-source-001",
+          "money.allocate.ratio.equal-weights-remainder-001",
+          "money.allocate.equal.invalid-zero-parts-001",
+          "money.allocate.equal.invalid-negative-parts-001",
+          "money.allocate.ratio.invalid-zero-ratio-001",
+          "money.allocate.ratio.invalid-negative-ratio-001",
+          "money.allocate.ratio.invalid-empty-ratios-001",
+          "money.allocate.unrepresentable-source-scale-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0269",
@@ -808,7 +1177,25 @@
         "The weighted allocator can lose the source amount when a positive-weight intermediate overflows: Ration returns zero and the manager performs only one correction pass.",
         "Ration checks amount*ratio but uses zero as its overflow observation. Allocate consumes that zero as a share; its bounded residual loop need not exhaust the remaining magnitude. Zero ratios and all-zero sums are separately admitted native policies.",
         "Positive ratios and accepted int64 source with product overflow, or the distinct native zero-weight domain; these paths are not numerical execution evidence. For MaxInt64 and [2,1], the overflowing first product is converted to zero; a single pass adding at most one unit per part cannot recover the resulting large residue. Core rejects zero weights, so zero-weight examples are not needed to establish this concern. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 7,
+        "total": 8,
+        "description": [
+          "Assessed 2026-11-23 using Go 1.25.5. Primary profile declared_native_profile; native path: Manager.Allocate/Split. Selected outcomes: 7 matched, 1 mismatched.",
+          "The product-safe boundary control succeeds. At a representable source coefficient2^62 with ratio[2], native intermediate overflow produces a zero share although the final mathematical share fits. The native result is kept unchanged."
+        ],
+        "test_ids": [
+          "money.allocate.ratio.product-safe-boundary-001",
+          "money.allocate.ratio.intermediate-product-growth-001",
+          "money.allocate.equal.remainder-positive-001",
+          "money.allocate.equal.remainder-negative-001",
+          "money.allocate.ratio.remainder-positive-001",
+          "money.allocate.ratio.declared-order-001",
+          "money.allocate.ratio.zero-source-001",
+          "money.allocate.ratio.equal-weights-remainder-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0280",
@@ -845,7 +1232,29 @@
         "Manager Split divides signed minor units and assigns the signed remainder to earliest positions, preserving source order and sign for admitted positive counts.",
         "The source checks n>0, computes quotient/remainder, constructs n shares and adds signed one-unit corrections in increasing index order.",
         "Represented int64 source, positive count, native minor-unit scale matched to an explicit Core target and supported allocation size. The implicit currency/minor scale and native count domain do not establish Core explicit target-scale validation or its maximum100 recipients. A matching negative remainder mechanism alone does not certify the complete request contract. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 10,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using Go 1.25.5. Primary profile declared_native_profile; native path: Manager.Split/Allocate. Selected outcomes: 10 matched, 1 mismatched, 1 unsupported.",
+          "For money.allocate.ratio.invalid-zero-ratio-001, native observation [{\"amount\":\"3.34\",\"currency\":\"USD\"},{\"amount\":\"0.00\",\"currency\":\"USD\"},{\"amount\":\"6.66\",\"currency\":\"USD\"}] differs from expected {\"code\":\"FINKORE_MONEY_INVALID_ALLOCATION\"}."
+        ],
+        "test_ids": [
+          "money.allocate.equal.remainder-positive-001",
+          "money.allocate.equal.remainder-negative-001",
+          "money.allocate.ratio.remainder-positive-001",
+          "money.allocate.ratio.declared-order-001",
+          "money.allocate.ratio.zero-source-001",
+          "money.allocate.ratio.equal-weights-remainder-001",
+          "money.allocate.equal.invalid-zero-parts-001",
+          "money.allocate.equal.invalid-negative-parts-001",
+          "money.allocate.ratio.invalid-zero-ratio-001",
+          "money.allocate.ratio.invalid-negative-ratio-001",
+          "money.allocate.ratio.invalid-empty-ratios-001",
+          "money.allocate.unrepresentable-source-scale-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0286",
@@ -910,7 +1319,30 @@
         "Rust split/allocate correct decimal-computed shares using representation-derived ULPs and sometimes sorted largest shares; they are not the explicit-target absolute-integer-floor Core allocator.",
         "get_equal_part may truncate long mantissas. split can sort adjusted shares and return one common quotient plus residual; split_dist spreads ULPs. allocate computes rounded receiver-policy products/divisions, then subtracts from largest shares on overshoot or cycles source order on undershoot.",
         "Selected Money/RawMoney implementation, bounded Decimal arithmetic, representable positive total and admitted ratios; invalid or negative ratios are not claimed to be Core inputs. USD0.05 at a two-digit Money scale with ratios[1,1,1] can initially round each share to0.02 and remove0.01 from the largest/tied early share, reversing the Core[0.02,0.02,0.01] priority. That trace assumes the pinned midpoint/backend and stable sort contract, without execution. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 7,
+        "total": 13,
+        "description": [
+          "Assessed 2026-11-23 using Rust 1.88, rust_decimal 1.40.0, raw_money/serde. Primary profile declared_native_profile; native path: Money.split (Vec shares). Selected outcomes: 7 matched, 4 mismatched, 2 unsupported.",
+          "Actual None at the explicit native zero-count/empty-ratio-list guard is normalized after split/allocate returns. Other None/capacity and unsigned negative-count limits are retained; all returned Vec shares are compared without reconstruction."
+        ],
+        "test_ids": [
+          "money.allocate.equal.remainder-positive-001",
+          "money.allocate.equal.remainder-negative-001",
+          "money.allocate.ratio.remainder-positive-001",
+          "money.allocate.ratio.declared-order-001",
+          "money.allocate.ratio.zero-source-001",
+          "money.allocate.ratio.equal-weights-remainder-001",
+          "money.allocate.equal.invalid-zero-parts-001",
+          "money.allocate.equal.invalid-negative-parts-001",
+          "money.allocate.ratio.invalid-zero-ratio-001",
+          "money.allocate.ratio.invalid-negative-ratio-001",
+          "money.allocate.ratio.invalid-empty-ratios-001",
+          "money.allocate.unrepresentable-source-scale-001",
+          "money.allocate.ratio.small-equal-weights-remainder-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0294",
@@ -954,7 +1386,29 @@
         "Noda Split rounds preceding shares and leaves the final residual, with lazy ratio evaluation and an empty-ratio path that returns the full source as one output.",
         "The equal method rejects shares<=1. The ratio guard Any(ratio<1) is false for an empty array; both iterators derive decimals from context/currency, construct preceding shares and finally emit remainder.",
         "The selected context and output constructor policy, positive ordinary inputs, and caller-owned ratio array unchanged until enumeration. 10.00 split3 can place the indivisible cent in the final share rather than the Core earliest position. Empty ratios yield one output; one equal part is rejected despite Core accepting it. Custom reconstruction can reround returned parts. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 6,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using .NET runtime 10.0.15, SDK 10.0.404. Primary profile declared_native_profile; native path: Money.Split (fully enumerated). Selected outcomes: 6 matched, 6 mismatched.",
+          "For money.allocate.equal.remainder-positive-001, native observation [{\"amount\":\"3.33\",\"currency\":\"USD\"},{\"amount\":\"3.33\",\"currency\":\"USD\"},{\"amount\":\"3.34\",\"currency\":\"USD\"}] differs from expected [{\"amount\":\"3.34\",\"currency\":\"USD\"},{\"amount\":\"3.33\",\"currency\":\"USD\"},{\"amount\":\"3.33\",\"currency\":\"USD\"}]."
+        ],
+        "test_ids": [
+          "money.allocate.equal.remainder-positive-001",
+          "money.allocate.equal.remainder-negative-001",
+          "money.allocate.ratio.remainder-positive-001",
+          "money.allocate.ratio.declared-order-001",
+          "money.allocate.ratio.zero-source-001",
+          "money.allocate.ratio.equal-weights-remainder-001",
+          "money.allocate.equal.invalid-zero-parts-001",
+          "money.allocate.equal.invalid-negative-parts-001",
+          "money.allocate.ratio.invalid-zero-ratio-001",
+          "money.allocate.ratio.invalid-negative-ratio-001",
+          "money.allocate.ratio.invalid-empty-ratios-001",
+          "money.allocate.unrepresentable-source-scale-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0302",
@@ -1068,7 +1522,29 @@
         "Ex-money split returns a rounded common share plus residual, while spread pre-rounds the total and unwinds a tail-first cumulative calculation.",
         "split_with_rounding divides, rounds and computes residual; split retries :down only for a negative remainder. spread rounds amount with defaults before recurse_spread, and numeric portions use native / while Money portions use Decimal.div.",
         "The named native operation, currency metadata/options and ambient Decimal context; positive weights and representable source are needed for comparison. A source having extra fractional digits can be rounded before spread even when shares sum to that rounded source. Quotient/residual output does not have Core one-share-per-recipient cardinality or its explicit-scale admission semantics. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 2,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using Elixir 1.17.3/OTP 25, Decimal 3.2.0, precision 34. Primary profile declared_native_profile; native path: Money.spread. Selected outcomes: 2 matched, 10 mismatched.",
+          "Genuine Money.spread is available and returns recipient Money values. It pre-rounds the finer source instead of rejecting its target-scale incompatibility, and its positive/negative residual order differs from Core. The former tuple-only unsupported dispatch did not assess this native entry point."
+        ],
+        "test_ids": [
+          "money.allocate.equal.remainder-positive-001",
+          "money.allocate.equal.remainder-negative-001",
+          "money.allocate.ratio.remainder-positive-001",
+          "money.allocate.ratio.declared-order-001",
+          "money.allocate.ratio.zero-source-001",
+          "money.allocate.ratio.equal-weights-remainder-001",
+          "money.allocate.equal.invalid-zero-parts-001",
+          "money.allocate.equal.invalid-negative-parts-001",
+          "money.allocate.ratio.invalid-zero-ratio-001",
+          "money.allocate.ratio.invalid-negative-ratio-001",
+          "money.allocate.ratio.invalid-empty-ratios-001",
+          "money.allocate.unrepresentable-source-scale-001"
+        ]
+      }
     }
   ],
   "historical_publications": [

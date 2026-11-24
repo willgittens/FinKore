@@ -589,6 +589,95 @@
         "decimal-context-precision-loss",
         "implicit-rounding-policy"
       ]
+    },
+    {
+      "id": "money.rate.tiny-percentage-control-001",
+      "spec": "money/rates",
+      "requirements": [
+        "MONEY-RATE-002",
+        "MONEY-RATE-003",
+        "MONEY-RATE-005",
+        "MONEY-RATE-009"
+      ],
+      "description": "Exact percentage division by 100 must preserve a tiny scalar before multiplication by a large Money amount.",
+      "operation": "finkore.money.applyrate",
+      "input": {
+        "value": {
+          "amount": "1000000000000000000000000",
+          "currency": "EUR"
+        },
+        "rate": {
+          "kind": "PERCENTAGE",
+          "value": "0.000000000000000001"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "10000",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "1000000000000000000000000",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "percentage-scalar-underflow-before-product"
+      ]
+    },
+    {
+      "id": "money.rate.tiny-percentage-significant-product-001",
+      "spec": "money/rates",
+      "requirements": [
+        "MONEY-RATE-002",
+        "MONEY-RATE-003",
+        "MONEY-RATE-005",
+        "MONEY-RATE-009"
+      ],
+      "description": "Exact percentage division by 100 must preserve a tiny scalar before multiplication by a large Money amount.",
+      "operation": "finkore.money.applyrate",
+      "input": {
+        "value": {
+          "amount": "1000000000000000000000000",
+          "currency": "EUR"
+        },
+        "rate": {
+          "kind": "PERCENTAGE",
+          "value": "0.0000000000000000001"
+        }
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "1000",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "1000000000000000000000000",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "percentage-scalar-underflow-before-product"
+      ],
+      "pairedControl": "money.rate.tiny-percentage-control-001"
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.0.0",
+  "schema_version": "2.1.0",
   "id": "CE-RULE-0012",
   "title": "Financial context is not silently changed through exposed aliases",
   "scope": "existing_core_subject",
@@ -392,7 +392,24 @@
         "RubyMoney keeps finer raw fractional digits but rounds the fractional observation using the current precision/mode policy; hash and subsequent operations that read fractional therefore depend on that context.",
         "fractional calls return_value each time, and return_value branches on class default_infinite_precision before rounding. The source does not overwrite raw digits there. Core permits internal representations but requires an exact Money amount and explicit reduction; a changing observation policy must not be mistaken for stable immutable value semantics.",
         "Store sub-minor fractional digits, then change the selected rounding/infinite-precision context before another observation; ordinary integral source amounts may be unaffected. Reading raw fractional1.5 under different rounding modes can yield different integer observations even though @fractional is unchanged. An explicit round reads raw digits, so a previously rounded getter value is not the entire stored state. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
-      ]
+      ],
+      "conformance": {
+        "passed": 4,
+        "total": 7,
+        "description": [
+          "Assessed 2026-11-23 using Ruby 3.1.2, BigDecimal 3.1.1. Primary profile finite_half_even; native path: Money.from_amount and fractional observation; finite add-zero blocked by input quantization. Selected outcomes: 4 matched, 2 mismatched, 1 unsupported.",
+          "Finite fractional observations quantize fine inputs; the add-zero target is therefore unavailable in that primary profile. Infinite precision preserves the selected values. Fixed-context controls do not execute a mid-lifetime context switch on one shared instance. Construction probes cover shared value obligations, not a complete Core JSON decoder. Control profiles, excluded from the primary score: finite_half_up (same test_ids): 4 matched, 2 mismatched, 1 unsupported; infinite_precision (same test_ids): 7 matched."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.add.finer-stored-value-zero-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0178",
@@ -739,7 +756,31 @@
         "Akaunting mutable mode assigns a successful add/divide result to the receiver, whereas immutable mode creates a new Money; immutable() itself also changes the original mutable flag before returning a copy.",
         "Ordinary currency/divisor guards and calculation precede amount assignment in the inspected branches. A mutable arithmetic API differs from MONEY-ARITHMETIC-009 if exposed as canonical FinKore arithmetic, but mode selection and clone-helper identity are not universal upstream defects.",
         "The receiver is in mutable mode for arithmetic mutation; otherwise add/divide construct a new result. No arbitrary user callback rollback is established. After mutable(), add can change the receiver amount. Calling immutable() changes its future mode even though it returns another object. These branches do not prove all exceptional paths are failure-atomic. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
-      ]
+      ],
+      "conformance": {
+        "passed": 4,
+        "total": 14,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37. Primary profile mutable; native path: Money.add/subtract/divide in mutable mode. Selected outcomes: 4 matched, 9 mismatched, 1 unsupported.",
+          "In mutable mode, 10.20 + 5.30 returns the correct 15.50 EUR but also changes the left operand from 10.20 to 15.50, violating the required unchanged-input observation. The immutable control preserves it. Harmless trailing zeros are not the mismatch. Other selected currency, division and capacity limits remain separate. Control profiles, excluded from the primary score: immutable (same test_ids): 8 matched, 5 mismatched, 1 unsupported."
+        ],
+        "test_ids": [
+          "money.add.same-currency.basic-001",
+          "money.add.exact-decimal-001",
+          "money.add.negative-001",
+          "money.add.zero-001",
+          "money.add.currency-mismatch-001",
+          "money.subtract.currency-mismatch-001",
+          "money.divide.exact-001",
+          "money.divide.zero-001",
+          "money.divide.rounding-required-001",
+          "money.divide.rounded-third-half-up-001",
+          "money.divide.negative-down-001",
+          "money.divide.negative-floor-001",
+          "money.divide.exact-finer-than-policy-001",
+          "money.divide.zero-before-invalid-rounding-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0234",
@@ -1054,7 +1095,25 @@
         "gocanto currency Resolve substitutes the configured default on an unknown code, while map keys can be normalized independently of retained mutable Currency.Code and first-write singleton data remains aliased.",
         "Resolve has an explicit default branch and Create wraps its result without reporting an unknown code. Core valid Money must retain an unambiguous currency, but registry/provider selection and custom namespace support are not specified by Core. Same-code metadata equality alone is not a compatibility defect.",
         "Use a nonnil manager, an unrecognized code or a retained custom registry map/Currency pointer; later map writes are not protected merely by factory-initialization locking. An unrecognized requested code can create Money in the default denomination; lowercased retained Currency.Code can differ from the uppercased storage key. No concurrent map outcome was reproduced. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
-      ]
+      ],
+      "conformance": {
+        "passed": 4,
+        "total": 8,
+        "description": [
+          "Assessed 2026-11-23 using Go 1.25.5. Primary profile declared_native_profile; native path: Manager.Create/Currency.Resolve. Selected outcomes: 4 matched, 1 mismatched, 3 unsupported.",
+          "Actual Manager.Create/Currency.Resolve was evaluated at representable integer-minor inputs. Currency fallback and input-capacity limits remain native observations; the binding does not invent a missing currency error or admit finer amounts by rounding. Construction probes cover shared value obligations, not a complete Core JSON decoder."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.empty-currency-001",
+          "money.deserialize.missing-currency-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0289",
@@ -1191,7 +1250,20 @@
         "NodaMoney context creation retains caller-owned options while caching rounding kind/mode; context relabeling only changes an index, and the options-instance DI overload fails to copy EnforceZeroCurrencyMatching.",
         "The retained reference and cached fields can diverge after later mutation. The DI copy body names four properties and omits the zero-currency flag. Those are bounded configuration-copy concerns; Core does not mandate persistent context objects or DI APIs, and no schedule of callbacks was run.",
         "Mutate retained options after context creation, or register through the options-instance overload with a nondefault zero-currency flag and later resolve the registered factory. A strict zero-currency option can be lost in the action-created options. Merely relabeling Money.Context does not reround existing amount bits or recover precision already discarded. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
-      ]
+      ],
+      "conformance": {
+        "passed": 1,
+        "total": 3,
+        "description": [
+          "Assessed 2026-11-23 using .NET runtime 10.0.15, SDK 10.0.404. Primary profile declared_native_profile; native path: AddMoneyContext/GetRequiredService; Money addition/CompareTo. Selected outcomes: 1 matched, 2 mismatched.",
+          "The real options-instance AddMoneyContext overload omits the requested zero-currency guard when resolving the service; zero addition/ordering bypass mismatch, while the nonzero control rejects it. These cases do not execute retained-options mutation or context relabeling."
+        ],
+        "test_ids": [
+          "money.add.same-currency.basic-001",
+          "money.add.zero-currency-mismatch-001",
+          "money.compare.zero-order-currency-mismatch-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0311",
@@ -1444,7 +1516,20 @@
         "Money.negate can reconstruct under a narrower default context and alter magnitude; other factory/context paths need separate lifecycle rules.",
         "negate passes negated BigDecimal and currency to the constructor without receiver context; that constructor selects DEFAULT_MONETARY_CONTEXT and MoneyUtils applies its precision/scale. If an admitted receiver amount exceeds default precision, negation may round its magnitude, conditionally conflicting with exact sign reversal. A mere zero-context change is not an amount defect. RoundedMoney stripping omits custom operator/context; factory-query reconstructs only precision/mode and appends a fresh factory after configuring earlier ones. Those policy lifecycle concerns do not independently define Core factory operations.",
         "Construct a receiver retaining an exact amount under an explicit context broader than default, then negate; an amount requiring default precision reduction is decisive. If the amount is exactly representable in the default context, changing context metadata alone does not violate Money negation. Factory/provider runtime and concrete rounded result were not executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
-      ]
+      ],
+      "conformance": {
+        "passed": 2,
+        "total": 3,
+        "description": [
+          "Assessed 2026-11-23 using Java 21.0.12.1, pinned Moneta source. Primary profile declared_native_profile; native path: Money.negate (input precision 128; default precision 16). Selected outcomes: 2 matched, 1 mismatched.",
+          "The admitted input uses native precision 128; native negate reconstructs under explicit default precision 16 and loses significant digits. This bounded context counterexample does not claim every configured negate loses precision."
+        ],
+        "test_ids": [
+          "money.negate.positive-001",
+          "money.negate.negative-001",
+          "money.negate.high-precision-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0342",

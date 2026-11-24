@@ -1,0 +1,62 @@
+{
+  "schema_version": "2.1.0",
+  "id": "CE-RULE-0042",
+  "title": "Event payload transport does not establish validated audit history",
+  "scope": "existing_core_subject",
+  "question": "Compare exact producer payload preservation with required Audit Event fields, actor validity and duplicate-event rejection at the actual recording boundary.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0402",
+      "title": "Outbox recording preserves payload but does not validate Audit Event meaning",
+      "library_id": "CE-REPO-0016",
+      "edition_id": "CE-EDITION-0016",
+      "collected_on": "2026-11-23",
+      "relationship": "counterpoint",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn31",
+          "path": "src/main/java/com/lmoraesdev/payment/adapter/out/persistence/outbox/OutboxEventAdapter.java",
+          "name": "OutboxEventAdapter.record(String,String,String,Object)",
+          "start_line": 21,
+          "end_line": 26
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn32",
+          "path": "src/main/java/com/lmoraesdev/payment/adapter/out/persistence/outbox/OutboxEventAdapter.java",
+          "name": "OutboxEventAdapter.toJson(Object)",
+          "start_line": 28,
+          "end_line": 34
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn33",
+          "path": "src/main/java/com/lmoraesdev/payment/adapter/out/persistence/outbox/OutboxEventEntity.java",
+          "name": "OutboxEventEntity.pending(String,String,String,String,String)",
+          "start_line": 56,
+          "end_line": 72
+        }
+      ],
+      "explanation": [
+        "OutboxEventAdapter serializes the supplied producer payload with ObjectMapper, creates a pending OutboxEventEntity and saves it. The payload is separate from the generated transport UUID and creation time; transporting an Audit-shaped JSON object does not itself validate its financial event fields.",
+        "At this isolated recording boundary, a valid complete event and an event with unknown actor omitted survive the payload round trip. The method has no Audit-specific timestamp or actor validation and does not look up an existing producer eventId before save. Its technical row UUID is not a uniqueness check on payload event identity.",
+        "On 2026-11-23, the unchanged pinned adapter/entity/repository interface were compiled and invoked with JDK 21.0.12.1, Jackson 2.19.1, Spring 6.2.8 and Spring Data JPA 3.5.1. A repository port double stored the actual entities emitted by record without adding validation; observations decoded getPayload rather than copying expected results. No SQL, transaction rollback, relay, actor authorization or deployment-level audit policy was executed. Required control may exist outside this function; the result is not a general defect or a full Audit implementation claim."
+      ]
+    }
+  ],
+  "historical_publications": [
+    {
+      "id": "CE-FINDING-0402",
+      "title": "java-payment-core — Outbox payload transport and Audit applicability",
+      "collected_on": "2026-11-23",
+      "function_ids": [
+        "CE-REPO-0016:CE-EDITION-0016:fn31",
+        "CE-REPO-0016:CE-EDITION-0016:fn32",
+        "CE-REPO-0016:CE-EDITION-0016:fn33"
+      ],
+      "explanation": [
+        "A bounded native outbox probe retained producer fields through serialization and a repository port double. This provides transport context for Audit attribution; it did not evaluate committed Audit Event validity, identity uniqueness or append history. No comparable Audit conformance score is published.",
+        "Audit-shaped JSON is observed inside the native transport payload. Generated outbox IDs/times are technical metadata and are not substituted for producer event identity/occurrence time. Repository storage was a port double; persistence, SQL constraints, transaction atomicity and controls in other layers are outside this evaluation."
+      ]
+    }
+  ]
+}

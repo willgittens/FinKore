@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.0.0",
+  "schema_version": "2.1.0",
   "id": "CE-RULE-0002",
   "title": "Arithmetic and comparison require an explicit currency relationship",
   "scope": "existing_core_subject",
@@ -40,7 +40,23 @@
         "Joda Money addition delegates to BigMoney currency validation before numerical addition, rejecting a mismatched provider value.",
         "Money.plus calls BigMoney.plus, whose checkCurrencyEqual converts the provider and compares currencies before passing the amount onward.",
         "Valid Money/BigMoneyProvider values, same ISO currency for success, and the inspected addition overload. The guard supports the mismatch condition but a Joda CurrencyMismatchException is not a FinKore portable error; it does not establish all equality, ordering or provider failure behavior. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 5,
+        "total": 6,
+        "description": [
+          "Assessed 2026-11-23 using Java 21.0.12.1, pinned Joda source. Primary profile declared_native_profile; native path: Money.plus/minus. Selected outcomes: 5 matched, 1 unsupported.",
+          "Unavailable input capacity, native policy or faithful operation correspondence remains unsupported in the selected denominator; no missing guard or financial algorithm was supplied."
+        ],
+        "test_ids": [
+          "money.add.same-currency.basic-001",
+          "money.add.exact-decimal-001",
+          "money.add.negative-001",
+          "money.add.zero-001",
+          "money.add.currency-mismatch-001",
+          "money.subtract.currency-mismatch-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0008",
@@ -77,7 +93,32 @@
         "py-moneyed addition checks equal currencies before Decimal addition and preserves receiver currency; its native numeric-zero convenience and Decimal context remain separate boundaries.",
         "__add__ returns self for native zero, checks Money type/currency and reconstructs a result. __sub__ negates its operand before invoking that path; __eq__ combines amount and currency as a Boolean.",
         "Valid Money operands with compatible currencies and a Decimal context that preserves the relevant exact result; native scalar zero is a convenience outside the portable operand model. Currency mismatch raises a native TypeError in addition, while Boolean equality can return false. Decimal storage alone does not establish exactness under a low ambient precision. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 12,
+        "total": 15,
+        "description": [
+          "Assessed 2026-11-23 using Python 3.10.12, Decimal. Primary profile decimal_precision28; native path: Money add/subtract and numeric comparison. Selected outcomes: 12 matched, 3 mismatched.",
+          "For money.compare.equality-currency-mismatch-001, native observation false differs from expected {\"code\":\"FINKORE_MONEY_CURRENCY_MISMATCH\"}. Control profiles, excluded from the primary score: decimal_precision6 (same test_ids): 11 matched, 4 mismatched."
+        ],
+        "test_ids": [
+          "money.add.same-currency.basic-001",
+          "money.add.exact-decimal-001",
+          "money.add.negative-001",
+          "money.add.zero-001",
+          "money.add.currency-mismatch-001",
+          "money.subtract.currency-mismatch-001",
+          "money.compare.equal-trailing-zeros-001",
+          "money.compare.less-001",
+          "money.compare.greater-negative-001",
+          "money.compare.equal-zero-scale-001",
+          "money.compare.equality-currency-mismatch-001",
+          "money.compare.order-currency-mismatch-001",
+          "money.add.large-significant-digits-001",
+          "money.add.finer-stored-value-zero-001",
+          "money.subtract.high-precision-right-operand-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0022",
@@ -142,7 +183,29 @@
         "Dintero guards currency string equality for add/subtract and ordering, but equals returns false across differing strings.",
         "assertSameCurrency throws before guarded numeric operations; equals short-circuits the currency conjunction. Explicit decimal configuration can bypass the currency metadata lookup at construction.",
         "Valid ISO identifiers and supported exact-enough backend values are needed for direct Core comparison; equal arbitrary strings alone do not establish valid currency. Two equal numeric amounts in EUR/USD are false under equals rather than a canonical mismatch error. String guard support does not establish constructor or portable error validation. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 11,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using Node 24.15.0, Big.js. Primary profile declared_native_profile; native path: Money.add/subtract/equals/lessThan/greaterThan. Selected outcomes: 11 matched, 1 mismatched.",
+          "For money.compare.equality-currency-mismatch-001, native observation false differs from expected {\"code\":\"FINKORE_MONEY_CURRENCY_MISMATCH\"}."
+        ],
+        "test_ids": [
+          "money.add.same-currency.basic-001",
+          "money.add.exact-decimal-001",
+          "money.add.negative-001",
+          "money.add.zero-001",
+          "money.add.currency-mismatch-001",
+          "money.subtract.currency-mismatch-001",
+          "money.compare.equal-trailing-zeros-001",
+          "money.compare.less-001",
+          "money.compare.greater-negative-001",
+          "money.compare.equal-zero-scale-001",
+          "money.compare.equality-currency-mismatch-001",
+          "money.compare.order-currency-mismatch-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0030",
@@ -306,7 +369,23 @@
         "MoneyPHP equals returns false for differing Currency objects before comparing amounts; compare rejects that mismatch. Equality and ordering have distinct mismatch outcomes.",
         "The explicit equals guard returns false, while compare throws. Same-currency amount shortcuts do not repair the unequal-currency outcome.",
         "Comparisons of two valid ISO-currency Money values, without explicit conversion. EUR10 versus USD10 returns false at equals instead of the Core comparison error; the ordering guard does not establish equality conformance. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 5,
+        "total": 6,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37, BCMath/GMP. Primary profile declared_native_profile; native path: Money.equals/compare. Selected outcomes: 5 matched, 1 mismatched.",
+          "For money.compare.equality-currency-mismatch-001, native observation false differs from expected {\"code\":\"FINKORE_MONEY_CURRENCY_MISMATCH\"}."
+        ],
+        "test_ids": [
+          "money.compare.equal-trailing-zeros-001",
+          "money.compare.less-001",
+          "money.compare.greater-negative-001",
+          "money.compare.equal-zero-scale-001",
+          "money.compare.equality-currency-mismatch-001",
+          "money.compare.order-currency-mismatch-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0094",
@@ -364,7 +443,29 @@
         "Brick Money requires matching contexts in direct Money addition/subtraction, beyond currency compatibility. Its numeric predicate checks currencies via getAmountOf, while isSameValueAs uses a combined Boolean value predicate.",
         "plus/minus and sum reject context inequality after obtaining amounts. isEqualTo calls getAmountOf, which checks AbstractMoney currency; isSameValueAs directly combines amount and currency equality.",
         "Two AbstractMoney values with valid ISO currency identifiers and declared native context; scalar overloads have a different operand shape. Two same-code amounts with different contexts can be rejected by arithmetic even though the Core compatibility condition is met. isSameValueAs can return false for cross-currency inputs and must not be substituted for Core numeric comparison. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 12,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37, brick/math 0.15.0. Primary profile isEqualTo; native path: Money.plus/minus/isEqualTo/compareTo. Selected outcomes: 12 matched.",
+          "Numeric comparison and arithmetic controls match in the primary isEqualTo profile. The isSameValueAs control returns false for currency mismatch instead of the Core error; it does not change the primary result. Control profiles, excluded from the primary score: isSameValueAs (same test_ids): 11 matched, 1 mismatched."
+        ],
+        "test_ids": [
+          "money.add.same-currency.basic-001",
+          "money.add.exact-decimal-001",
+          "money.add.negative-001",
+          "money.add.zero-001",
+          "money.add.currency-mismatch-001",
+          "money.subtract.currency-mismatch-001",
+          "money.compare.equal-trailing-zeros-001",
+          "money.compare.less-001",
+          "money.compare.greater-negative-001",
+          "money.compare.equal-zero-scale-001",
+          "money.compare.equality-currency-mismatch-001",
+          "money.compare.order-currency-mismatch-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0118",
@@ -401,7 +502,23 @@
         "Dinero equal returns a Boolean amount/currency conjunction, whereas safe ordering asserts compatible currency before normalization; currency comparison additionally includes base and exponent.",
         "The equality conjunction evaluates haveSameAmount before haveSameCurrency. The ordering path guards first. Same-code metadata objects can also be considered incompatible when their base/exponent differ.",
         "Two admitted Dinero values using the selected backend and normalized scales; ISO identifiers are required for direct Core comparison. USD/EUR equality is false rather than the Core mismatch error, while ordering rejects. Same-code but differing exponent/base is a stricter native identity model. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 5,
+        "total": 6,
+        "description": [
+          "Assessed 2026-11-23 using Node 24.15.0, first-party Dinero calculators. Primary profile declared_native_profile; native path: dinero.equal/compare. Selected outcomes: 5 matched, 1 mismatched.",
+          "For money.compare.equality-currency-mismatch-001, native observation false differs from expected {\"code\":\"FINKORE_MONEY_CURRENCY_MISMATCH\"}."
+        ],
+        "test_ids": [
+          "money.compare.equal-trailing-zeros-001",
+          "money.compare.less-001",
+          "money.compare.greater-negative-001",
+          "money.compare.equal-zero-scale-001",
+          "money.compare.equality-currency-mismatch-001",
+          "money.compare.order-currency-mismatch-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0138",
@@ -445,7 +562,37 @@
         "poswald Money allows unitless scalar add/subtract, checks currency for Money operands, rejects Money/Money division, and uses ambient Decimal policy for scalar division.",
         "The source branches are type-sensitive: scalars are converted for addition, Money division is explicitly rejected, and equality can identify monetary zero with scalar0.",
         "Supported native operands and active Decimal context; direct Core comparison requires two Money operands or an exact decimal scalar on the proper operation. Cross-currency Money equality returns false, scalar0 can equal monetary zero, and a nonterminating scalar division is not an explicit Core rounding-required request. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified. This behavior is not currently defined by FinKore Core."
-      ]
+      ],
+      "conformance": {
+        "passed": 15,
+        "total": 20,
+        "description": [
+          "Assessed 2026-11-23 using Python 3.10.12, Decimal. Primary profile declared_native_profile; native path: Money add/subtract/compare/divide. Selected outcomes: 15 matched, 5 mismatched.",
+          "For money.compare.equality-currency-mismatch-001, native observation false differs from expected {\"code\":\"FINKORE_MONEY_CURRENCY_MISMATCH\"}."
+        ],
+        "test_ids": [
+          "money.add.same-currency.basic-001",
+          "money.add.exact-decimal-001",
+          "money.add.negative-001",
+          "money.add.zero-001",
+          "money.add.currency-mismatch-001",
+          "money.subtract.currency-mismatch-001",
+          "money.compare.equal-trailing-zeros-001",
+          "money.compare.less-001",
+          "money.compare.greater-negative-001",
+          "money.compare.equal-zero-scale-001",
+          "money.compare.equality-currency-mismatch-001",
+          "money.compare.order-currency-mismatch-001",
+          "money.divide.exact-001",
+          "money.divide.zero-001",
+          "money.divide.rounding-required-001",
+          "money.divide.rounded-third-half-up-001",
+          "money.divide.negative-down-001",
+          "money.divide.negative-floor-001",
+          "money.divide.exact-finer-than-policy-001",
+          "money.divide.zero-before-invalid-rounding-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0140",
@@ -593,7 +740,26 @@
         "The inspected Joda BigMoney exact decimal arithmetic keeps currency checking separate from add/subtract/multiply; retain-scale operations are separate paths.",
         "Provider addition first checks currency, and decimal multiplication calls BigDecimal.multiply without MathContext before constructing BigMoney. A multiplier1 shortcut returns the unchanged value.",
         "Supported finite BigDecimal operands and the BigMoney overloads, with compatible currencies and no explicitly retain-scale operation. This is a bounded exact-operation mechanism, not all-overload conformance; provider conversion and native exceptions still need the canonical observation boundary. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 9,
+        "total": 9,
+        "description": [
+          "Assessed 2026-11-23 using Java 21.0.12.1, pinned Joda source. Primary profile declared_native_profile; native path: BigMoney.plus/minus/multipliedBy(BigDecimal). Selected outcomes: 9 matched.",
+          "The selected complete observations matched at the declared context."
+        ],
+        "test_ids": [
+          "money.add.same-currency.basic-001",
+          "money.add.exact-decimal-001",
+          "money.add.negative-001",
+          "money.add.zero-001",
+          "money.add.currency-mismatch-001",
+          "money.subtract.currency-mismatch-001",
+          "money.multiply.decimal-001",
+          "money.multiply.negative-scalar-001",
+          "money.multiply.zero-scalar-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0218",
@@ -681,7 +847,32 @@
         "Bojanz allows a currency-less zero sentinel through zero-value/JSON paths and uses it as an additive identity; this is distinct from allowing a valid currency-bearing zero to bypass compatibility.",
         "Add/Sub test equality with Amount{} only after differing codes. JSON specifically permits empty code when the parsed number is zero; Equal returns false for differing codes.",
         "Native zero-sentinel or valid explicitly currency-bearing Amount values as separate cases; Core Money always requires currency. Amount{} can be added as a seed without matching a currency, but explicitly labelled EUR0 and USD0 do not take that sentinel path. Cross-code Equal remains false rather than the Core mismatch observation. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 13,
+        "total": 15,
+        "description": [
+          "Assessed 2026-11-23 using Go 1.25.5. Primary profile declared_native_profile; native path: Amount.Add/Sub/Cmp/Equal. Selected outcomes: 13 matched, 2 mismatched.",
+          "For money.compare.equality-currency-mismatch-001, native observation false differs from expected {\"code\":\"FINKORE_MONEY_CURRENCY_MISMATCH\"}."
+        ],
+        "test_ids": [
+          "money.add.same-currency.basic-001",
+          "money.add.exact-decimal-001",
+          "money.add.negative-001",
+          "money.add.zero-001",
+          "money.add.currency-mismatch-001",
+          "money.subtract.currency-mismatch-001",
+          "money.compare.equal-trailing-zeros-001",
+          "money.compare.less-001",
+          "money.compare.greater-negative-001",
+          "money.compare.equal-zero-scale-001",
+          "money.compare.equality-currency-mismatch-001",
+          "money.compare.order-currency-mismatch-001",
+          "money.add.zero-currency-mismatch-001",
+          "money.compare.zero-equality-currency-mismatch-001",
+          "money.compare.zero-order-currency-mismatch-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0258",
@@ -776,7 +967,32 @@
         "Noda relaxed zero handling permits otherwise incompatible currencies in arithmetic/order unless either context enforces matching; Equals still returns false on currency difference.",
         "ThrowIfCurrencyIncompatible rejects two nonzero magnitudes, otherwise consults EnforceZeroCurrencyMatching. Add/Subtract return through zero shortcuts before context matching, and CompareTo can return0 for two zeros.",
         "Valid ISO-currency operands and the actual context enforcement flags, with no explicit exchange conversion. EUR0 and USD0 can compare equal in relaxed ordering while Equals is false. Enforced contexts remove that zero exception but do not change the separate Equals mismatch policy. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified."
-      ]
+      ],
+      "conformance": {
+        "passed": 11,
+        "total": 15,
+        "description": [
+          "Assessed 2026-11-23 using .NET runtime 10.0.15, SDK 10.0.404. Primary profile relaxed_context; native path: Money add/subtract/Equals/CompareTo with NoRounding inputs. Selected outcomes: 11 matched, 4 mismatched.",
+          "Relaxed currency guard context is primary, with enforced context as control and exact NoRounding input construction. Observed zero shortcuts and Boolean cross-currency equality differ from Core error semantics independently of constructor precision. Control profiles, excluded from the primary score: enforced_context (same test_ids): 13 matched, 2 mismatched."
+        ],
+        "test_ids": [
+          "money.add.same-currency.basic-001",
+          "money.add.exact-decimal-001",
+          "money.add.negative-001",
+          "money.add.zero-001",
+          "money.add.currency-mismatch-001",
+          "money.subtract.currency-mismatch-001",
+          "money.compare.equal-trailing-zeros-001",
+          "money.compare.less-001",
+          "money.compare.greater-negative-001",
+          "money.compare.equal-zero-scale-001",
+          "money.compare.equality-currency-mismatch-001",
+          "money.compare.order-currency-mismatch-001",
+          "money.add.zero-currency-mismatch-001",
+          "money.compare.zero-equality-currency-mismatch-001",
+          "money.compare.zero-order-currency-mismatch-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0323",
@@ -920,7 +1136,29 @@
         "Moneta Money add/subtract check currency codes before zero shortcuts, while compareTo deliberately orders currency codes and ExchangeCurrencyOperator changes currency without calculating a rate.",
         "MoneyUtils.checkAmountParameter throws on differing code before add/subtract read isZero. compareTo returns the code comparison when codes differ. The exchange operator sets the factory currency only.",
         "The specifically inspected Money bodies and valid ISO currency codes; no newly read claim is made for every FastMoney/RoundedMoney numeric predicate. EUR0 is rejected when adding to USD Money; cross-currency compareTo instead returns code order, so it cannot represent Core numeric comparison. The relabel operator is not verified as a financial conversion. Static source/branch review only; no upstream build or numerical execution. Previously attributed R1-M1 dependency contracts are reused within their recorded version/context limits; no installed deployment is certified. This behavior is not currently defined by FinKore Core."
-      ]
+      ],
+      "conformance": {
+        "passed": 11,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using Java 21.0.12.1, pinned Moneta source. Primary profile declared_native_profile; native path: Money.add/subtract/isEqualTo/compareTo. Selected outcomes: 11 matched, 1 mismatched.",
+          "For money.compare.order-currency-mismatch-001, native observation \"LESS\" differs from expected {\"code\":\"FINKORE_MONEY_CURRENCY_MISMATCH\"}."
+        ],
+        "test_ids": [
+          "money.add.same-currency.basic-001",
+          "money.add.exact-decimal-001",
+          "money.add.negative-001",
+          "money.add.zero-001",
+          "money.add.currency-mismatch-001",
+          "money.subtract.currency-mismatch-001",
+          "money.compare.equal-trailing-zeros-001",
+          "money.compare.less-001",
+          "money.compare.greater-negative-001",
+          "money.compare.equal-zero-scale-001",
+          "money.compare.equality-currency-mismatch-001",
+          "money.compare.order-currency-mismatch-001"
+        ]
+      }
     }
   ],
   "historical_publications": [

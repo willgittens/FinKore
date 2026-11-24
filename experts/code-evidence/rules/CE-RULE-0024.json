@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.0.0",
+  "schema_version": "2.1.0",
   "id": "CE-RULE-0024",
   "title": "Composed financial actions preserve their selected policy",
   "scope": "existing_core_subject",
@@ -189,7 +189,32 @@
         "MoneyPHP convenience parsers quantize text to metadata subunits before Teller applies its configured arithmetic rounding, and ratioOf formats a dimensionless quotient through the monetary parser.",
         "Decimal parsing explicitly returns zero for trimmed-empty text and calls roundMoneyValue before truncation; Teller multiply first converts the amount. This is a native text pipeline, not evidence that the canonical FinKore JSON parser follows these semantics.",
         "Use DecimalMoneyParser or a Teller bound to it; currency metadata supplies a subunit count. Intl paths additionally depend on formatter/native numeric conversion. Empty text takes the zero branch and9.999 with two subunits is pre-rounded before a later caller mode can act. Exact ICU lexemes and backend outcomes remain environment-qualified. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
-      ]
+      ],
+      "conformance": {
+        "passed": 10,
+        "total": 15,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37, BCMath/GMP. Primary profile declared_native_profile; native path: DecimalMoneyParser.parse; Teller.multiply/convertToMoney. Selected outcomes: 10 matched, 5 mismatched.",
+          "Malformed and empty amount text now reach the actual DecimalMoneyParser rather than a binding exclusion. The native parser and Teller pipeline still round fine inputs/products to minor units. These component checks do not certify complete Core JSON grammar."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001",
+          "money.multiply.decimal-001",
+          "money.multiply.negative-scalar-001",
+          "money.multiply.zero-scalar-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0127",
@@ -279,7 +304,29 @@
         "The historical Django descriptor tries Decimal(str(value)) and catches TypeError rather than the ordinary decimal InvalidOperation, so its documented formatted-string fallback is not reached on that usual parse failure.",
         "Assignments occur after conversion inside the try block, preserving the old dictionary pair on the normal failing branch. Default/disabled Decimal traps change whether parsing raises or yields NaN; that runtime policy must remain explicit rather than claiming universal partial mutation.",
         "Assign formatted monetary text rather than Money/Decimal/None; use the documented Decimal context behavior reused from the prior dependency review. USD123-style text reaches Decimal first. With the normal trap it raises outside the TypeError handler; with a disabled trap a nonfinite Decimal may reach _set_values. No database rollback or deployed trap setting was tested. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
-      ]
+      ],
+      "conformance": {
+        "passed": 8,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using Python 3.10.12, Decimal. Primary profile InvalidOperation_trap_true; native path: MoneyFieldProxy.__set__/__get__. Selected outcomes: 8 matched, 4 mismatched.",
+          "Malformed/empty strings now reach the original descriptor under both Decimal trap policies. With traps enabled its native conversion rejects; with traps disabled nonfinite values can survive. Empty currency still becomes XXX. No framework lifecycle, database rollback or complete JSON decoder is inferred. Control profiles, excluded from the primary score: InvalidOperation_trap_false (same test_ids): 6 matched, 6 mismatched."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0148",
@@ -316,7 +363,21 @@
         "The currency-preset EUR subclass shown by carlospalol/money narrows __init__ to amount only, while inherited arithmetic and round construct self.__class__(amount,currency). The documented combination therefore has incompatible call shapes.",
         "The README example and result constructors disagree in positional arity. Core prescribes neither subclassing nor constructor design; this is a bounded documentation/API composition issue, not proof that ordinary base Money arithmetic fails.",
         "Use exactly the documented narrowing subclass and an inherited result-producing operator; a subclass retaining the inherited constructor is not the same control. EUR(\"9.99\") may be a valid construction while inherited addition passes an extra currency positional argument. The source call mismatch was traced without executing the subclass. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
-      ]
+      ],
+      "conformance": {
+        "passed": 0,
+        "total": 4,
+        "description": [
+          "Assessed 2026-11-23 using Python 3.10.12, Decimal. Primary profile declared_native_profile; native path: EUR subclass inherited add/multiply. Selected outcomes: 4 unmapped native outcomes.",
+          "All four admitted subclass operations reach native reconstruction and raise the documented constructor-signature TypeError. Source diagnosis is complete, but no Money result or portable error exists for these valid requests. Fixing that behavior requires changing the pinned implementation or the subclass profile."
+        ],
+        "test_ids": [
+          "money.add.same-currency.basic-001",
+          "money.multiply.decimal-001",
+          "money.multiply.negative-scalar-001",
+          "money.multiply.zero-scalar-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0149",
@@ -485,7 +546,43 @@
         "Dintero applies a supplied round mode to that Big.round call but merges only the computed amount; future Money reconstruction retains the original stored mode and scale policy.",
         "The body uses the supplied mode correctly for its local rounding operation, then merge reconstructs from original data. Core requires the current rounding operation to follow its explicit policy; it does not require a one-off request to become a persistent future policy.",
         "A Money has an existing stored roundingMode; a subsequent operation performs another rounding or uses Big.div with ambient Big settings. A valid immediate rounded value does not prove the result now stores the one-off mode. Conversely, retained old mode is not proof that the immediate requested round was ignored. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
-      ]
+      ],
+      "conformance": {
+        "passed": 17,
+        "total": 26,
+        "description": [
+          "Assessed 2026-11-23 using Node 24.15.0, Big.js. Primary profile immediate_round; native path: Money.round/divide. Selected outcomes: 17 matched, 4 mismatched, 5 unsupported.",
+          "Native round and divide were exercised directly. Currency-place rounding can change exact finite quotients, and missing policy is not a Core rounding-required failure. FLOOR/CEILING remain unsupported where no genuine signed selector exists."
+        ],
+        "test_ids": [
+          "money.round.half-up.tie-positive-001",
+          "money.round.half-up.tie-negative-001",
+          "money.round.half-even.tie-even-down-001",
+          "money.round.half-even.tie-odd-up-001",
+          "money.round.half-even.tie-negative-even-001",
+          "money.round.down.positive-001",
+          "money.round.down.negative-001",
+          "money.round.up.positive-001",
+          "money.round.up.negative-001",
+          "money.round.floor.positive-001",
+          "money.round.floor.negative-001",
+          "money.round.ceiling.positive-001",
+          "money.round.ceiling.negative-001",
+          "money.round.explicit-scale-001",
+          "money.round.no-discard-001",
+          "money.round.invalid-mode-001",
+          "money.round.invalid-scale-001",
+          "money.round.near-half-no-double-round-001",
+          "money.divide.exact-001",
+          "money.divide.zero-001",
+          "money.divide.rounding-required-001",
+          "money.divide.rounded-third-half-up-001",
+          "money.divide.negative-down-001",
+          "money.divide.negative-floor-001",
+          "money.divide.exact-finer-than-policy-001",
+          "money.divide.zero-before-invalid-rounding-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0171",
@@ -603,7 +700,29 @@
         "Monetize parses a scalar or multiplied suffix amount and then delegates to RubyMoney.from_amount, so its observed precision/rounding is inherited policy rather than independent corroboration.",
         "parse! returns existing Money immediately, otherwise reconstructs through the same RubyMoney mechanism used in many expected values. Agreement with an expected value built by that dependency is not an independent arithmetic oracle.",
         "Use the pinned compatible RubyMoney7.x dependency and the matching native input path; stored/current RubyMoney precision context still matters. Money input bypasses currency/options overrides, while parsed text and Numeric values pass through from_amount. A parameterized fixture using that same constructor cannot independently establish exactness. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
-      ]
+      ],
+      "conformance": {
+        "passed": 8,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using Ruby 3.1.2, BigDecimal 3.1.1. Primary profile declared_native_profile; native path: Monetize.from_numeric. Selected outcomes: 8 matched, 2 mismatched, 2 unsupported.",
+          "Monetize.from_numeric passes genuine BigDecimal amounts through the native Money pipeline. Finite native currency precision changes fine values; parsing of human strings and a complete Core JSON grammar are outside these component tests."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0208",
@@ -735,7 +854,25 @@
         "ClojureWerkz inherits Joda0.12 currency-scale Money division and preserves scalar protocol dispatch, so its rounding/default/type boundary differs from Core exact-finite division.",
         "The wrapper sends nil policy through UNNECESSARY and dispatches Long/Double/BigDecimal differently; Joda currency-scale division is reused, not independently validated here. Core requires an exactly finite quotient to remain exact even when finer than currency minor digits.",
         "Use fixed-scale Joda Money, such as two-place USD, rather than BigMoney; the selected transitive source edition and actual scalar class matter. USD1 divided by8 has finite0.125 but cannot fit the inherited two-place UNNECESSARY path; supplying a mode permits a currency-scale reduction rather than the generic Core exact result. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
-      ]
+      ],
+      "conformance": {
+        "passed": 7,
+        "total": 8,
+        "description": [
+          "Assessed 2026-11-23 using Java 21.0.12.1, Clojure/Joda 0.12, BigDecimal. Primary profile declared_native_profile; native path: amounts/divide. Selected outcomes: 7 matched, 1 mismatched.",
+          "Actual amounts/divide was invoked with exact BigDecimal input and native policy conversion. Exact finite and missing-policy cases were compared without implementing division or repairing the public API in the binding."
+        ],
+        "test_ids": [
+          "money.divide.exact-001",
+          "money.divide.zero-001",
+          "money.divide.rounding-required-001",
+          "money.divide.rounded-third-half-up-001",
+          "money.divide.negative-down-001",
+          "money.divide.negative-floor-001",
+          "money.divide.exact-finer-than-policy-001",
+          "money.divide.zero-before-invalid-rounding-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0264",
@@ -779,7 +916,32 @@
         "Paysera base construction permits incomplete values, while its injected factory adds validation and a separate fractional-cents conversion policy; zero-without-currency admission depends on the selected Maba numeric comparison scale.",
         "The concrete factory accepts injected Math/validator objects. The examined compatible Maba validator exempts isZero with null currency, and the test composition uses BcMath scale6; other injected scales/implementations need not classify the same tiny amount as zero. Core valid Money always requires amount and currency.",
         "Use the examined compatible Maba0.10/math1.0.1 composition, with its selected comparison scale; distinguish base constructors, local integer-cents entry point and injected factory cents. Factory cents12.5 passes its decimal grammar and is divided by100, unlike local integer-only cents. Tiny nonzero zero-classification is conditional on scale6, not a universal factory fact. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
-      ]
+      ],
+      "conformance": {
+        "passed": 11,
+        "total": 15,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37, Maba monetary 0.10.0/math 1.0.1. Primary profile base_constructor; native path: Money constructor (base); genuine Maba MoneyFactory.create control. Selected outcomes: 11 matched, 4 mismatched.",
+          "Both constructors now receive malformed/empty text and the ordinary missing-currency component request directly. The real Maba factory supplies its own validation; the base constructor remains distinct. Both still expose currency=null for 0 and 0.0000001, with the factory zero comparison at six-place BCMath. Control profiles, excluded from the primary score: real_Maba_factory (same test_ids): 13 matched, 2 mismatched."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001",
+          "money.deserialize.missing-currency-001",
+          "money.deserialize.zero-missing-currency-001",
+          "money.deserialize.tiny-nonzero-missing-currency-001"
+        ]
+      }
     },
     {
       "id": "CE-FINDING-0277",

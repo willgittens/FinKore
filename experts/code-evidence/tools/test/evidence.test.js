@@ -5,7 +5,7 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import test from 'node:test'
-import { validateEvidence, run, renderEvidence, evidenceFingerprint } from '../evidence.js'
+import { agenticOperationIds, validateEvidence, run, renderEvidence, evidenceFingerprint } from '../evidence.js'
 
 function fixture() {
   const fn = {id:'CE-REPO-0001:CE-EDITION-0001:fn01',path:'src/money.js',name:'Money.allocate',start_line:1,end_line:8}
@@ -114,4 +114,50 @@ test('a later source reading does not require changing the format migration date
   f.record.record_sha256=evidenceFingerprint(f.evidence,f.catalog.libraries[0],f.catalog.libraries[0].editions[0])
   assert.equal(f.check().records[0].assessment.freshness,'current')
   assert.equal(f.trace.format_migrated_on,'2026-11-22')
+})
+
+test('execution summaries do not renew a static reading or independent validation',()=>{
+  const f=fixture(), before=structuredClone(f.record), original=evidenceFingerprint(f.evidence,f.catalog.libraries[0],f.catalog.libraries[0].editions[0])
+  f.evidence.conformance={passed:1,total:1,description:['A bounded external evaluation matched the selected case.']}
+  const row=f.check().records[0]
+  assert.equal(evidenceFingerprint(f.evidence,f.catalog.libraries[0],f.catalog.libraries[0].editions[0]),original)
+  assert.deepEqual(f.record,before)
+  assert.equal(row.source.details.execution_status,'see_conformance_result')
+  assert.deepEqual(row.source.details.conformance,f.evidence.conformance)
+  assert.equal(row.assessment.independent_validation,'pending_validation')
+  assert.equal(row.assessment.publication_authorization,'not_recorded')
+  assert.equal(row.assessment.editorial_eligible,false)
+  f.evidence.explanation[0]='Changed interpretation after execution.'
+  assert.equal(f.check().records[0].assessment.freshness,'needs_recheck')
+})
+for(const [label,summary] of [
+  ['more passes than cases',{passed:2,total:1,description:['A claim.']}],
+  ['fractional counts',{passed:0.5,total:1,description:['A claim.']}],
+  ['a changed denominator without case IDs',{passed:1,total:2,description:['A claim.']}],
+  ['too many result paragraphs',{passed:0,total:1,description:['One','Two','Three']}],
+  ['hidden result paragraphs',{passed:0,total:1,description:['One\n\nTwo']}],
+  ['an unknown executed vector',{passed:0,total:1,test_ids:['invented.case'],description:['A claim.']}],
+  ['duplicate executed vectors',{passed:0,total:2,test_ids:['money.allocate.case','money.allocate.case'],description:['A claim.']}],
+])test('rejects conformance summary with '+label,()=>{const f=fixture();f.evidence.conformance=summary;assert.throws(f.check,/Invalid conformance result/)})
+test('different selected cases can be stated explicitly without replacing earlier review context',()=>{
+  const f=fixture();f.options.references.vectors.add('money.allocate.another-case')
+  f.evidence.conformance={passed:1,total:2,test_ids:['money.allocate.case','money.allocate.another-case'],description:['One case passed; the other did not.']}
+  assert.equal(f.check().records[0].source.details.conformance.total,2)
+  assert.deepEqual(f.record.vector_ids,['money.allocate.case'])
+})
+test('result fields require rule format 2.1 and never permit stored executable bodies',async()=>{
+  const {default:Ajv}=await import('ajv/dist/2020.js'),schema=JSON.parse(readFileSync(new URL('../../schemas/rule.schema.json',import.meta.url)))
+  const check=new Ajv({strict:true}).compile(schema),f=fixture()
+  f.evidence.conformance={passed:0,total:1,description:['Unsupported native operation; no approval recorded.']}
+  assert.equal(check(f.rule),false)
+  f.rule.schema_version='2.1.0';assert.equal(check(f.rule),true)
+  f.evidence.conformance.code_body='do not store source';assert.equal(check(f.rule),false)
+})
+
+test('Agentic discovery retains full evolution IDs and rejects prose aliases or truncated prefixes', () => {
+  const markdown = '## `finkore.entity.evolution.correct`\n\nA reference to `finkore.entity.evolution` and `finkore.entity.fake`.\n\n## `finkore.money.allocate`\n\n### `finkore.entity.other`\n'
+  const ids = agenticOperationIds(markdown)
+  assert.deepEqual([...ids], ['finkore.entity.evolution.correct', 'finkore.money.allocate'])
+  assert.equal(ids.has('finkore.entity.evolution'), false)
+  assert.equal(ids.has('finkore.entity.fake'), false)
 })

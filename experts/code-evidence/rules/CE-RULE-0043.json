@@ -1,0 +1,46 @@
+{
+  "schema_version": "2.1.0",
+  "id": "CE-RULE-0043",
+  "title": "Approval rule configuration identifies its eligible decision-maker",
+  "scope": "existing_core_subject",
+  "question": "Compare the isolated eligibility declaration check with the complete Requirement identity, subject and current-outcome obligations; do not infer a Decision-history evaluator from configuration validation.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0403",
+      "title": "Approver configuration validation does not establish a complete Approval Requirement",
+      "library_id": "CE-REPO-0015",
+      "edition_id": "CE-EDITION-0015",
+      "collected_on": "2026-11-23",
+      "relationship": "counterpoint",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0015:CE-EDITION-0015:fn03",
+          "path": "erpnext/setup/doctype/authorization_rule/authorization_rule.py",
+          "name": "AuthorizationRule.validate_rule",
+          "start_line": 77,
+          "end_line": 108
+        }
+      ],
+      "explanation": [
+        "AuthorizationRule.validate_rule rejects a configuration without an approving user or role and rejects selected maker/checker identity overlap and unsupported product-discount configurations. The method checks a bounded approval-rule configuration, not committed Approval Decisions or their current effectiveness.",
+        "The selected declaration-rejection cases map one eligible actor to approving_user and absent/null eligibility to an absent native approver. Other native policy fields are explicitly unset; the method itself does not check a FinKore Requirement identifier or subject association. Returning normally is a successful validation call, not an inferred PENDING or APPROVED result.",
+        "On 2026-11-23, the exact pinned validate_rule AST was executed in isolation with Python 3.10.12. Translation and framework throw were dependency doubles; the throw facade raised a validation exception, and any unexpected numeric helper call failed rather than providing a financial substitute. Frappe Document lifecycle, database validation, permissions, role resolution, discount arithmetic and Decision history were not executed. Checks in surrounding layers may differ; no whole-ERPNext or full Approval implementation claim follows."
+      ]
+    }
+  ],
+  "historical_publications": [
+    {
+      "id": "CE-FINDING-0403",
+      "title": "ERPNext — Approver configuration checks",
+      "collected_on": "2026-11-23",
+      "function_ids": [
+        "CE-REPO-0015:CE-EDITION-0015:fn03"
+      ],
+      "explanation": [
+        "The isolated native validator rejected a missing approving user or role. This configuration observation provides context for explicit eligibility; it did not evaluate a Requirement state, Decision history or the complete Core Requirement contract. No comparable Approvals conformance score is published.",
+        "Exact-method isolation with framework translation/throw doubles and explicitly unset unrelated product-policy fields. The native method is not a complete Requirement evaluator. No Frappe lifecycle/database behavior, eligible-role expansion, committed Decisions, expiration, withdrawal, supersession or approval-chain evaluation is established."
+      ]
+    }
+  ]
+}
