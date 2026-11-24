@@ -2,7 +2,7 @@
 /** Tests repository license notices and scholarly metadata without financial execution. */
 import assert from 'node:assert/strict'
 import { spawnSync } from 'node:child_process'
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import test from 'node:test'
@@ -48,4 +48,26 @@ test('license checking still rejects incorrect package metadata, source headers 
   rmSync(join(root, 'source.js'))
   writeFileSync(join(root, 'LICENSE'), 'An incompatible replacement.\n')
   assert.match(run(root).stderr, /LICENSE must contain the official/)
+})
+
+test('upstream inventory filename metadata does not hide incompatible notices or license fields', t => {
+  const root = fixture(t)
+  const folder = join(root, 'experts/code-evidence/inventories/CE-REPO-9001')
+  mkdirSync(folder, { recursive: true })
+  const path = join(folder, 'CE-EDITION-9001.json')
+  const data = { source_files: [], other_files: [[samples.upstreamLicenseFilename, 'regular', 100]] }
+  writeFileSync(path, JSON.stringify(data))
+  assert.equal(run(root).status, 0)
+  for (const extra of [{ classification: samples.invalid[0] }, { license: samples.incompatibleLicenseIdentifier },
+    { notice: samples.upstreamLicenseFilename }]) {
+    writeFileSync(path, JSON.stringify({ ...data, ...extra }))
+    const result = run(root)
+    assert.equal(result.status, 1)
+    assert.match(result.stderr, /unexpected.*license declaration/)
+  }
+  writeFileSync(path, samples.invalid[0])
+  assert.equal(run(root).status, 1, 'Malformed inventory text is not exempt from notice checks')
+  writeFileSync(path, JSON.stringify(data))
+  writeFileSync(join(root, 'unrelated-metadata.json'), JSON.stringify(data))
+  assert.equal(run(root).status, 1, 'Unrelated JSON does not acquire the inventory filename rule')
 })

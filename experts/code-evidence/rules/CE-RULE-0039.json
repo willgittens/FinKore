@@ -1,0 +1,32 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0039",
+  "title": "Period-state accumulation declares initial and terminal observation inclusion",
+  "scope": "candidate_rule",
+  "question": "Compare beginning-of-period survival states, complete prefix paths, storage type, empty inputs and the effect of the last observation; do not equate generic scans with cash-flow valuation.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0357",
+      "title": "Offset accumulation keeps initial state but drops final observation effect",
+      "library_id": "CE-REPO-0027",
+      "edition_id": "CE-EDITION-0027",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0027:CE-EDITION-0027:fn003",
+          "path": "src/utilities.jl",
+          "name": "ActuaryUtilities.Utilities.accum_offset",
+          "start_line": 126,
+          "end_line": 133
+        }
+      ],
+      "explanation": [
+        "accum_offset produces same-length output: firstinit and subsequentprefixes ending at x[n-1]. This fits a beginning-of-period survival-state convention, not an n+1path including final survival. Storage inherits input element type and empty input lacks a guard.",
+        "Injected op can mean multiplication/addition/custom behavior; no probability range enforced. Static counterexamples, not executed, and no mortality model acceptance."
+      ],
+      "context_requirement_ids": []
+    }
+  ]
+}

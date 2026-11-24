@@ -1,0 +1,1862 @@
+{
+  "schema_version": "2.1.0",
+  "id": "CE-RULE-0012",
+  "title": "Financial context is not silently changed through exposed aliases",
+  "scope": "existing_core_subject",
+  "question": "Outer freezing and an immutable-looking API do not establish ownership of nested amount/context data.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0024",
+      "title": "Outer freezing does not establish immutable financial context",
+      "library_id": "CE-REPO-0017",
+      "edition_id": "CE-EDITION-0017",
+      "collected_on": "2026-11-20",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn05",
+          "path": "src/index.ts",
+          "name": "Money.constructor",
+          "start_line": 67,
+          "end_line": 93
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn16",
+          "path": "src/index.ts",
+          "name": "Money.getTags",
+          "start_line": 276,
+          "end_line": 278
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn17",
+          "path": "src/index.ts",
+          "name": "Money.getTag",
+          "start_line": 280,
+          "end_line": 285
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn18",
+          "path": "src/index.ts",
+          "name": "Money.setTag",
+          "start_line": 288,
+          "end_line": 293
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn21",
+          "path": "src/index.ts",
+          "name": "Money.amount",
+          "start_line": 317,
+          "end_line": 319
+        }
+      ],
+      "explanation": [
+        "Dintero freezes only the outer Money/data containers, while amount() returns its retained Big object and getTags() returns its tag object. This demonstrates exposed aliases, not that every arithmetic operation mutates its operands.",
+        "The constructor copies input amount through new Big, then shallow-freezes two containers; accessors expose nested state. MONEY-ARITHMETIC-009 governs observed arithmetic operand preservation, so the alias mechanism is related ownership evidence rather than by itself a complete conformance failure.",
+        "A caller must mutate an exposed nested Big coefficient/tag value, or shared Big configuration must affect a later operation; ordinary reconstruction normally returns a new Money. Initial Big input copying is a positive control: retaining a caller input is different from exposing the internally created Big. Mere tag mutation is not automatically a monetary amount change. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0079",
+      "title": "Shared currency pointers and registry replacement can change later Money observations",
+      "library_id": "CE-REPO-0006",
+      "edition_id": "CE-EDITION-0006",
+      "collected_on": "2026-11-20",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0006:CE-EDITION-0006:fn08",
+          "path": "money.go",
+          "name": "money.(*Money).Currency",
+          "start_line": 98,
+          "end_line": 100
+        },
+        {
+          "id": "CE-REPO-0006:CE-EDITION-0006:fn06",
+          "path": "money.go",
+          "name": "money.New",
+          "start_line": 83,
+          "end_line": 88
+        },
+        {
+          "id": "CE-REPO-0006:CE-EDITION-0006:fn43",
+          "path": "currency.go",
+          "name": "money.AddCurrency",
+          "start_line": 229,
+          "end_line": 240
+        },
+        {
+          "id": "CE-REPO-0006:CE-EDITION-0006:fn42",
+          "path": "currency.go",
+          "name": "money.(Currencies).Add",
+          "start_line": 42,
+          "end_line": 45
+        },
+        {
+          "id": "CE-REPO-0006:CE-EDITION-0006:fn27",
+          "path": "money.go",
+          "name": "money.(*Money).Display",
+          "start_line": 344,
+          "end_line": 347
+        },
+        {
+          "id": "CE-REPO-0006:CE-EDITION-0006:fn28",
+          "path": "money.go",
+          "name": "money.(*Money).AsMajorUnits",
+          "start_line": 350,
+          "end_line": 353
+        },
+        {
+          "id": "CE-REPO-0006:CE-EDITION-0006:fn40",
+          "path": "currency.go",
+          "name": "money.(Currencies).CurrencyByNumericCode",
+          "start_line": 21,
+          "end_line": 29
+        }
+      ],
+      "explanation": [
+        "GoMoney exposes registered Currency pointers and resolves display/major-unit metadata again by code, allowing pointer mutation and registry replacement to affect later observations differently.",
+        "Currency() returns the pointer; Add stores it under Code; Display and AsMajorUnits call currency.get again. This is concrete ownership/context evidence. No distributed registry or concurrency semantics are supplied by Core, and a formatting change alone is not amount mutation.",
+        "The caller changes returned Currency fields or replaces a matching global registry entry; the distinction between held pointer and current lookup matters. Changing Code on an exposed pointer can change compatibility without rekeying its original registry slot; replacing Fraction can change major-unit interpretation. No race schedule or current ISO table correctness was validated. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0087",
+      "title": "Unchanged Money amounts do not freeze ambient calculator and metadata context",
+      "library_id": "CE-REPO-0001",
+      "edition_id": "CE-EDITION-0001",
+      "collected_on": "2026-11-20",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn37",
+          "path": "src/Money.php",
+          "name": "Money\\Money::registerCalculator",
+          "start_line": 551,
+          "end_line": 554
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn38",
+          "path": "src/Money.php",
+          "name": "Money\\Money::getCalculator",
+          "start_line": 557,
+          "end_line": 560
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn63",
+          "path": "src/Calculator/BcMathCalculator.php",
+          "name": "Money\\Calculator\\BcMathCalculator::mod",
+          "start_line": 219,
+          "end_line": 226
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn95",
+          "path": "src/Currencies/AggregateCurrencies.php",
+          "name": "Money\\Currencies\\AggregateCurrencies::subunitFor",
+          "start_line": 37,
+          "end_line": 46
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn102",
+          "path": "src/Currencies/CachedCurrencies.php",
+          "name": "Money\\Currencies\\CachedCurrencies::subunitFor",
+          "start_line": 43,
+          "end_line": 58
+        }
+      ],
+      "explanation": [
+        "MoneyPHP retains mutable global calculator selection and provider/cache context independently of the stored integer amount; this can select different later evaluation policies without demonstrating deployed cache contamination.",
+        "registerCalculator assigns a static class; AggregateCurrencies selects the first containing provider; CachedCurrencies keys by code. These are concrete context mechanisms, while Core exact arithmetic and deterministic rounding apply to observed Money operations rather than every infrastructure cache.",
+        "Subsequent operations use the current registered backend or metadata wrapper; a shared cache pool and differing provider policies are needed for the cross-provider scenario. No concurrent provider collision was reproduced. Immutable amount fields alone do not pin calculator class, bcscale or metadata provider order. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0114",
+      "title": "Snapshots expose mutable currency and calculator context",
+      "library_id": "CE-REPO-0005",
+      "edition_id": "CE-EDITION-0005",
+      "collected_on": "2026-11-21",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn439",
+          "path": "packages/dinero.js/src/core/helpers/createDinero.ts",
+          "name": "packages/dinero.js/src/core/helpers/createDinero.ts::createDinero@16",
+          "start_line": 16,
+          "end_line": 49
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn441",
+          "path": "packages/dinero.js/src/core/helpers/createDinero.ts",
+          "name": "packages/dinero.js/src/core/helpers/createDinero.ts::createDinero.dinero.toJSON@40",
+          "start_line": 40,
+          "end_line": 46
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn420",
+          "path": "packages/dinero.js/src/core/api/toSnapshot.ts",
+          "name": "packages/dinero.js/src/core/api/toSnapshot.ts::toSnapshot@3",
+          "start_line": 3,
+          "end_line": 7
+        }
+      ],
+      "explanation": [
+        "Dinero snapshots expose the captured currency object and base array, while calculator/formatter objects and onCreate callbacks remain consumer-owned context; the factory is a shallow projection rather than a deep immutable snapshot.",
+        "createDinero copies code/base/exponent into a new currency container but retains base by reference and toJSON returns that container. Core requires Money operand observations to survive arithmetic/allocation failures; it does not imply arbitrary user callback effects are reversible or every snapshot must deep-freeze metadata.",
+        "A caller mutates an exposed currency/base/calculator object or onCreate changes its supplied context; ordinary number/bigint arithmetic still creates fresh results. A toSnapshot result can retain a base-array alias even though the original currency container was projected. This does not by itself demonstrate mutation by an allocation operation. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0133",
+      "title": "Cached currency zero and Final fields remain shared mutable financial context",
+      "library_id": "CE-REPO-0008",
+      "edition_id": "CE-EDITION-0008",
+      "collected_on": "2026-11-21",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0008:CE-EDITION-0008:fn014",
+          "path": "src/moneyed/classes.py",
+          "name": "moneyed.classes.Currency.zero",
+          "start_line": 91,
+          "end_line": 92
+        },
+        {
+          "id": "CE-REPO-0008:CE-EDITION-0008:fn024",
+          "path": "src/moneyed/classes.py",
+          "name": "moneyed.classes.Money.__hash__",
+          "start_line": 205,
+          "end_line": 206
+        },
+        {
+          "id": "CE-REPO-0008:CE-EDITION-0008:fn006",
+          "path": "src/moneyed/classes.py",
+          "name": "moneyed.classes.Currency.__hash__",
+          "start_line": 49,
+          "end_line": 50
+        },
+        {
+          "id": "CE-REPO-0008:CE-EDITION-0008:fn041",
+          "path": "src/moneyed/classes.py",
+          "name": "moneyed.classes.add_currency",
+          "start_line": 369,
+          "end_line": 383
+        }
+      ],
+      "explanation": [
+        "py-moneyed cached zero is a shared Money object and Final annotations do not implement a runtime ownership barrier for Money/Currency fields; changing fields used by hashing can invalidate collection-key assumptions.",
+        "The cached_property creates one Money(0,self), hashes read current amount/currency/code, and registration overwrites shared objects. Core operand-preservation rules concern actual operation effects; caller mutation of an exposed object and hash-container design are related ownership risks, not automatically an arithmetic failure.",
+        "A caller mutates public runtime attributes or a shared cached value after it has been observed or inserted into a hash collection. Currency.zero.amount changed by a caller is reused by a later zero access. No transition, real container corruption or upstream runtime execution was observed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0136",
+      "title": "Currency registration order and exact numeric-code spelling affect lookup",
+      "library_id": "CE-REPO-0008",
+      "edition_id": "CE-EDITION-0008",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0008:CE-EDITION-0008:fn041",
+          "path": "src/moneyed/classes.py",
+          "name": "moneyed.classes.add_currency",
+          "start_line": 369,
+          "end_line": 383
+        },
+        {
+          "id": "CE-REPO-0008:CE-EDITION-0008:fn042",
+          "path": "src/moneyed/classes.py",
+          "name": "moneyed.classes.get_currency",
+          "start_line": 396,
+          "end_line": 402
+        }
+      ],
+      "explanation": [
+        "py-moneyed registration and numeric lookup use exact registry strings and source order; numeric integer20 does not normalize to a stored020 key, and falsey iso inputs use the code branch.",
+        "The source intentionally overwrites numeric aliases during registration and applies str(iso) only after a truthiness test. Core specifies alphabetic ISO Money identifiers, not numeric-code lookup spelling, current table authority or alias precedence.",
+        "Use get_currency with the numeric iso argument or overwrite a registration sharing a numeric string. iso=\"020\" and iso=20 choose different dictionary keys; iso=0 selects the code lookup. These are explicit source API choices rather than newly required Core normalization. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0139",
+      "title": "Default and registry Currency objects can disagree while comparing equal",
+      "library_id": "CE-REPO-0040",
+      "edition_id": "CE-EDITION-0040",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0040:CE-EDITION-0040:fn044",
+          "path": "money/money.py",
+          "name": "money.money.Currency.__eq__",
+          "start_line": 29,
+          "end_line": 34
+        },
+        {
+          "id": "CE-REPO-0040:CE-EDITION-0040:fn049",
+          "path": "money/money.py",
+          "name": "money.money.Money.__init__",
+          "start_line": 116,
+          "end_line": 144
+        }
+      ],
+      "explanation": [
+        "poswald/python-money retains an initial default XXX Currency with decimals2 while the later registry row uses decimals0; their code-only equality is consistent with same-identifier compatibility but their display/calculation metadata differs.",
+        "The constructor holds DEFAULT_CURRENCY when no currency is supplied and Currency equality ignores decimals. Core does not make metadata-object identity or customary digit count a second compatibility check, so equal code alone is not a defect. The original context warning must not imply the Decimal amount itself changed.",
+        "Construct one Money with the captured default and another through the later XXX registry entry; compare metadata-dependent behavior separately from stored amount/currency. Both objects can compare currency-equal while exposing different decimals fields. This does not by itself change the exact stored Decimal or prove a Core numeric-equality conflict. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0163",
+      "title": "Formatting callback and writable fields can change a source value",
+      "library_id": "CE-REPO-0018",
+      "edition_id": "CE-EDITION-0018",
+      "collected_on": "2026-11-21",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn04",
+          "path": "src/currency.js",
+          "name": "currency",
+          "start_line": 25,
+          "end_line": 53
+        },
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn14",
+          "path": "src/currency.js",
+          "name": "currency.prototype.format",
+          "start_line": 196,
+          "end_line": 204
+        },
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn16",
+          "path": "src/currency.js",
+          "name": "currency.prototype.toJSON",
+          "start_line": 219,
+          "end_line": 221
+        }
+      ],
+      "explanation": [
+        "currency.js exposes mutable value/intValue/settings fields and gives a function formatter the original instance/settings, so a caller can create disagreement between JSON value and the integer field used by arithmetic.",
+        "The constructor assigns public fields, format passes references, and toJSON returns value. Ordinary add need not mutate its operand; callback ownership and the absence of a currency identity are separate limitations from Core arithmetic non-mutation.",
+        "An application mutates a public numeric field or supplied formatter context; ordinary unmodified formatter calls do not necessarily change state. Changing value alone can change toJSON while intValue-based arithmetic still observes the old coefficient. No arbitrary callback was executed, and this symbol-only API is not assumed to be the canonical Money interchange boundary. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0173",
+      "title": "Observed Money amount and hash depend on mutable rounding context",
+      "library_id": "CE-REPO-0003",
+      "edition_id": "CE-EDITION-0003",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn153",
+          "path": "lib/money/money.rb",
+          "name": "Money::fractional",
+          "start_line": 54,
+          "end_line": 60
+        },
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn192",
+          "path": "lib/money/money.rb",
+          "name": "Money::return_value",
+          "start_line": 648,
+          "end_line": 654
+        },
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn171",
+          "path": "lib/money/money.rb",
+          "name": "Money::hash",
+          "start_line": 404,
+          "end_line": 406
+        },
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn186",
+          "path": "lib/money/money.rb",
+          "name": "Money::round",
+          "start_line": 597,
+          "end_line": 600
+        }
+      ],
+      "explanation": [
+        "RubyMoney keeps finer raw fractional digits but rounds the fractional observation using the current precision/mode policy; hash and subsequent operations that read fractional therefore depend on that context.",
+        "fractional calls return_value each time, and return_value branches on class default_infinite_precision before rounding. The source does not overwrite raw digits there. Core permits internal representations but requires an exact Money amount and explicit reduction; a changing observation policy must not be mistaken for stable immutable value semantics.",
+        "Store sub-minor fractional digits, then change the selected rounding/infinite-precision context before another observation; ordinary integral source amounts may be unaffected. Reading raw fractional1.5 under different rounding modes can yield different integer observations even though @fractional is unchanged. An explicit round reads raw digits, so a previously rounded getter value is not the entire stored state. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ],
+      "conformance": {
+        "passed": 4,
+        "total": 7,
+        "description": [
+          "Assessed 2026-11-23 using Ruby 3.1.2, BigDecimal 3.1.1. Primary profile finite_half_even; native path: Money.from_amount and fractional observation; finite add-zero blocked by input quantization. Selected outcomes: 4 matched, 2 mismatched, 1 unsupported.",
+          "Finite fractional observations quantize fine inputs; the add-zero target is therefore unavailable in that primary profile. Infinite precision preserves the selected values. Fixed-context controls do not execute a mid-lifetime context switch on one shared instance. Construction probes cover shared value obligations, not a complete Core JSON decoder. Control profiles, excluded from the primary score: finite_half_up (same test_ids): 4 matched, 2 mismatched, 1 unsupported; infinite_precision (same test_ids): 7 matched."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.add.finer-stored-value-zero-001"
+        ]
+      }
+    },
+    {
+      "id": "CE-FINDING-0178",
+      "title": "Currency cache reset and aliased metadata prevent stable registry snapshots",
+      "library_id": "CE-REPO-0003",
+      "edition_id": "CE-EDITION-0003",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn054",
+          "path": "lib/money/currency.rb",
+          "name": "Money::Currency::new",
+          "start_line": 39,
+          "end_line": 46
+        },
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn064",
+          "path": "lib/money/currency.rb",
+          "name": "Money::Currency::register",
+          "start_line": 174,
+          "end_line": 180
+        },
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn069",
+          "path": "lib/money/currency.rb",
+          "name": "Money::Currency::reset!",
+          "start_line": 217,
+          "end_line": 221
+        },
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn090",
+          "path": "lib/money/currency.rb",
+          "name": "Money::Currency::initialize_data!",
+          "start_line": 479,
+          "end_line": 496
+        }
+      ],
+      "explanation": [
+        "RubyMoney register invalidates the cached string key set, but reset! reloads the table and numeric cache without invalidating that key set; a removed custom key can pass cached membership then fail row initialization.",
+        "Currency.new checks stringified_keys before instance construction, and initialize_data! dereferences the current table row. The absent reset invalidation is a concrete cache-consistency gap. Current Core does not define registry reset or private-currency namespaces.",
+        "Populate stringified_keys with a registered custom key, then reset to the built-in table and request that removed key; the stale-key cache must remain initialized. The preliminary UnknownCurrency guard can be bypassed by the stale key, leaving nil row access later. Exact runtime exception text is not claimed. Caller metadata hashes are also retained by reference. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0188",
+      "title": "Rejected currency assignment can leave changed backing amount",
+      "library_id": "CE-REPO-0034",
+      "edition_id": "CE-EDITION-0034",
+      "collected_on": "2026-11-21",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0034:CE-EDITION-0034:fn066",
+          "path": "lib/money-rails/active_record/monetizable.rb",
+          "name": "MoneyRails::ActiveRecord::Monetizable::write_monetized",
+          "start_line": 248,
+          "end_line": 299
+        }
+      ],
+      "explanation": [
+        "MoneyRails writes the backing cents and raw input before its read-only currency mismatch check; a later mismatch return or configured exception has no local restoration of those writes.",
+        "The code order is unambiguous, but it is a Rails-model setter rather than a canonical Money operation or Financial Entity by declaration. MONEY-ERROR-007 is a conditional non-mutation comparison context, not authority to impose Core Money semantics on every ActiveRecord setter.",
+        "Assignment supplies Money with a different currency, there is no usable currency writer, and the backing amount write succeeds before the mismatch branch. New cents can coexist with old currency/cache after the nil return or ReadOnlyCurrencyException branch. No database save, transaction rollback or custom-writer effects were executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0189",
+      "title": "Reading a changed currency can rewrite cents according to prior cache",
+      "library_id": "CE-REPO-0034",
+      "edition_id": "CE-EDITION-0034",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0034:CE-EDITION-0034:fn063",
+          "path": "lib/money-rails/active_record/monetizable.rb",
+          "name": "MoneyRails::ActiveRecord::Monetizable::read_monetized",
+          "start_line": 196,
+          "end_line": 246
+        }
+      ],
+      "explanation": [
+        "MoneyRails read_monetized has different cached/uncached currency-change paths: the cached branch reparses the cached major amount and may write cents, while the uncached branch wraps the current minor count.",
+        "A getter is therefore state/history dependent under this integration policy. Neither Core FX conversion nor a Rails persistence contract defines this behavior; no exchange quote is used.",
+        "Backing cents still equal the memoized Money cents but the current attribute currency differs; has_attribute? determines whether the cached conversion is written. With USD100 minor units, a cached major amount of1 reparsed as JPY can differ from the uncached JPY100-minor interpretation. This is an explicit conditional source trace, not an observed database history. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0193",
+      "title": "Presentation getters can mutate shared rules and cached Money",
+      "library_id": "CE-REPO-0034",
+      "edition_id": "CE-EDITION-0034",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0034:CE-EDITION-0034:fn085",
+          "path": "lib/money-rails/money.rb",
+          "name": "Money::default_formatting_rules",
+          "start_line": 10,
+          "end_line": 24
+        },
+        {
+          "id": "CE-REPO-0034:CE-EDITION-0034:fn063",
+          "path": "lib/money-rails/active_record/monetizable.rb",
+          "name": "MoneyRails::ActiveRecord::Monetizable::read_monetized",
+          "start_line": 196,
+          "end_line": 246
+        }
+      ],
+      "explanation": [
+        "MoneyRails presentation getters can mutate a shared formatting-rules hash and attach singleton formatting methods to cached Money when preserving invalid user input.",
+        "reverse_merge! updates an existing rules object; read_monetized does not remove the attached overrides in its later successful-cache branch. These are presentation/cache effects, not proof of canonical Money serialization or amount mutation.",
+        "Original formatting rules are nonnil, or preserve_user_input is enabled with a field validation error and the same cached object survives. Inserted defaults can remain after configuration changes; an attached to_s/format override may return captured raw text until the Money is replaced. No UI/HTML rendering or storage mutation was observed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0194",
+      "title": "Configuring a lazy currency can evaluate it while updating migration defaults",
+      "library_id": "CE-REPO-0034",
+      "edition_id": "CE-EDITION-0034",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0034:CE-EDITION-0034:fn070",
+          "path": "lib/money-rails/configuration.rb",
+          "name": "MoneyRails::Configuration::default_currency=",
+          "start_line": 28,
+          "end_line": 31
+        },
+        {
+          "id": "CE-REPO-0034:CE-EDITION-0034:fn069",
+          "path": "lib/money-rails/configuration.rb",
+          "name": "MoneyRails::Configuration::default_currency",
+          "start_line": 23,
+          "end_line": 25
+        },
+        {
+          "id": "CE-REPO-0034:CE-EDITION-0034:fn072",
+          "path": "lib/money-rails/configuration.rb",
+          "name": "MoneyRails::Configuration::set_currency_column_for_default_currency!",
+          "start_line": 38,
+          "end_line": 41
+        }
+      ],
+      "explanation": [
+        "MoneyRails default_currency= assigns the RubyMoney default and immediately refreshes migration defaults, which can evaluate a callable during configuration and multiple times through repeated getter calls.",
+        "The inspected RubyMoney getter calls a supplied callable on access. The wrapper getter and refresh contain repeated accesses without a retained local result. This narrows any purely deferred tenant-default interpretation; arbitrary supplier effects are not independently validated.",
+        "A callable default is configured and the supported RubyMoney getter evaluates it on access; supplier results/errors are application-owned. A supplier can be invoked during setup rather than only at later Money construction, and a failure after the first assignment has no local policy restoration. Exact call counts may depend on truthy results and nested getters. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0203",
+      "title": "Registry overrides can retain equal-code objects with differing metadata",
+      "library_id": "CE-REPO-0004",
+      "edition_id": "CE-EDITION-0004",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn094",
+          "path": "src/main/java/org/joda/money/CurrencyUnit.java",
+          "name": "org.joda.money.CurrencyUnit.registerCurrency",
+          "start_line": 199,
+          "end_line": 246
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn096",
+          "path": "src/main/java/org/joda/money/CurrencyUnit.java",
+          "name": "org.joda.money.CurrencyUnit.registerCountry",
+          "start_line": 299,
+          "end_line": 301
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn118",
+          "path": "src/main/java/org/joda/money/CurrencyUnit.java",
+          "name": "org.joda.money.CurrencyUnit.equals",
+          "start_line": 644,
+          "end_line": 653
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn075",
+          "path": "src/main/java/org/joda/money/BigMoney.java",
+          "name": "org.joda.money.BigMoney.convertedTo",
+          "start_line": 1516,
+          "end_line": 1530
+        }
+      ],
+      "explanation": [
+        "Forced registry replacement and conversion object-identity shortcuts require separate metadata and FX lifecycle policies.",
+        "registerCurrency removes previous indexes and then inserts supplied mappings; it is not one indivisible rollback operation. CurrencyUnit.equals compares codes, whereas convertedTo uses reference identity for its same-instance shortcut before multiplying by a supplied rate. Same-code identity differences alone do not contradict Core currency compatibility: this is an FX conversion/registry API with different observable preconditions.",
+        "Replace registry entries or pass distinct CurrencyUnit instances with the same code into conversion; a later failing registration write requires an invalid/null mapping or concurrent/application condition. No runtime race, actual damaged registry, or Core Money equality failure was observed. Supplied-rate conversion and registry transactions have no own Core operation. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0214",
+      "title": "Formatting arity selects different dynamic configuration roots",
+      "library_id": "CE-REPO-0024",
+      "edition_id": "CE-EDITION-0024",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn087",
+          "path": "src/clojure/clojurewerkz/money/format.clj",
+          "name": "clojurewerkz.money.format/format[arity1]",
+          "start_line": 99,
+          "end_line": 100
+        },
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn088",
+          "path": "src/clojure/clojurewerkz/money/format.clj",
+          "name": "clojurewerkz.money.format/format[arity2]",
+          "start_line": 101,
+          "end_line": 103
+        },
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn089",
+          "path": "src/clojure/clojurewerkz/money/format.clj",
+          "name": "clojurewerkz.money.format/format[arity3]",
+          "start_line": 104,
+          "end_line": 106
+        },
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn084",
+          "path": "src/clojure/clojurewerkz/money/format.clj",
+          "name": "clojurewerkz.money.format/to-formatter[arity1]",
+          "start_line": 69,
+          "end_line": 70
+        }
+      ],
+      "explanation": [
+        "ClojureWerkz formatting arities consult different dynamic configuration roots: the one-argument call uses a formatter snapshot, the locale arity rebuilds from a builder, and the explicit-formatter arity applies withLocale.",
+        "The default formatter and builder are initialized separately, and rebindings do not automatically synchronize them. Locale display and dynamic builder ownership are outside Core portable Money serialization; no stable JDK symbol string is guaranteed.",
+        "Rebind or mutate one dynamic formatting root or rely on the default locale captured during formatter construction. Changing *default-builder* need not change the one-argument formatter snapshot; changing *default-formatter* need not alter the locale overload. The source does not mutate a Money amount here. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0222",
+      "title": "Global caches and macros affect wrapper policy and result metadata",
+      "library_id": "CE-REPO-0019",
+      "edition_id": "CE-EDITION-0019",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0019:CE-EDITION-0019:fn027",
+          "path": "src/Currencies/ISOCurrencies.php",
+          "name": "ISOCurrencies::getCurrencies",
+          "start_line": 64,
+          "end_line": 71
+        },
+        {
+          "id": "CE-REPO-0019:CE-EDITION-0019:fn034",
+          "path": "src/CurrenciesTrait.php",
+          "name": "CurrenciesTrait::getCurrencies",
+          "start_line": 90,
+          "end_line": 97
+        },
+        {
+          "id": "CE-REPO-0019:CE-EDITION-0019:fn040",
+          "path": "src/LocaleTrait.php",
+          "name": "LocaleTrait::getLocale",
+          "start_line": 17,
+          "end_line": 24
+        },
+        {
+          "id": "CE-REPO-0019:CE-EDITION-0019:fn053",
+          "path": "src/Money.php",
+          "name": "Money::__call",
+          "start_line": 196,
+          "end_line": 224
+        },
+        {
+          "id": "CE-REPO-0019:CE-EDITION-0019:fn057",
+          "path": "src/Money.php",
+          "name": "Money::convertResult",
+          "start_line": 279,
+          "end_line": 292
+        }
+      ],
+      "explanation": [
+        "The cknow wrapper lazily caches currency and locale configuration, gives application macros precedence over MoneyPHP delegation, and rewraps selected results without copying extra wrapper attributes.",
+        "The bodies demonstrate cached configuration and explicit override/delegation order. MoneyPHP arithmetic remains one shared implementation; arbitrary injected macros and wrapper attributes have no dedicated Core contract and cannot be counted as independent financial support.",
+        "Configuration is changed after lazy initialization, a macro shadows an arithmetic name, or a selected result is converted back into a base wrapper. getCurrencies/getLocale reuse initialized static state; __call returns a macro before checking the delegated method. Attribute loss is a wrapper result-policy issue, not evidence that the underlying amount/currency arithmetic was altered. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0229",
+      "title": "Mutable mode and immutable conversion expose receiver effects",
+      "library_id": "CE-REPO-0020",
+      "edition_id": "CE-EDITION-0020",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn053",
+          "path": "src/Money.php",
+          "name": "Money::add",
+          "start_line": 463,
+          "end_line": 480
+        },
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn056",
+          "path": "src/Money.php",
+          "name": "Money::divide",
+          "start_line": 514,
+          "end_line": 527
+        },
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn052",
+          "path": "src/Money.php",
+          "name": "Money::convert",
+          "start_line": 447,
+          "end_line": 461
+        },
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn071",
+          "path": "src/Money.php",
+          "name": "Money::immutable",
+          "start_line": 707,
+          "end_line": 712
+        },
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn072",
+          "path": "src/Money.php",
+          "name": "Money::mutable",
+          "start_line": 714,
+          "end_line": 719
+        }
+      ],
+      "explanation": [
+        "Akaunting mutable mode assigns a successful add/divide result to the receiver, whereas immutable mode creates a new Money; immutable() itself also changes the original mutable flag before returning a copy.",
+        "Ordinary currency/divisor guards and calculation precede amount assignment in the inspected branches. A mutable arithmetic API differs from MONEY-ARITHMETIC-009 if exposed as canonical FinKore arithmetic, but mode selection and clone-helper identity are not universal upstream defects.",
+        "The receiver is in mutable mode for arithmetic mutation; otherwise add/divide construct a new result. No arbitrary user callback rollback is established. After mutable(), add can change the receiver amount. Calling immutable() changes its future mode even though it returns another object. These branches do not prove all exceptional paths are failure-atomic. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ],
+      "conformance": {
+        "passed": 4,
+        "total": 14,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37. Primary profile mutable; native path: Money.add/subtract/divide in mutable mode. Selected outcomes: 4 matched, 9 mismatched, 1 unsupported.",
+          "In mutable mode, 10.20 + 5.30 returns the correct 15.50 EUR but also changes the left operand from 10.20 to 15.50, violating the required unchanged-input observation. The immutable control preserves it. Harmless trailing zeros are not the mismatch. Other selected currency, division and capacity limits remain separate. Control profiles, excluded from the primary score: immutable (same test_ids): 8 matched, 5 mismatched, 1 unsupported."
+        ],
+        "test_ids": [
+          "money.add.same-currency.basic-001",
+          "money.add.exact-decimal-001",
+          "money.add.negative-001",
+          "money.add.zero-001",
+          "money.add.currency-mismatch-001",
+          "money.subtract.currency-mismatch-001",
+          "money.divide.exact-001",
+          "money.divide.zero-001",
+          "money.divide.rounding-required-001",
+          "money.divide.rounded-third-half-up-001",
+          "money.divide.negative-down-001",
+          "money.divide.negative-floor-001",
+          "money.divide.exact-finer-than-policy-001",
+          "money.divide.zero-before-invalid-rounding-001"
+        ]
+      }
+    },
+    {
+      "id": "CE-FINDING-0234",
+      "title": "Currency metadata is live mutable context despite immutable Money amount",
+      "library_id": "CE-REPO-0021",
+      "edition_id": "CE-EDITION-0021",
+      "collected_on": "2026-11-21",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0021:CE-EDITION-0021:fn002",
+          "path": "src/Currency.php",
+          "name": "Currency::addCurrency",
+          "start_line": 1157,
+          "end_line": 1165
+        },
+        {
+          "id": "CE-REPO-0021:CE-EDITION-0021:fn016",
+          "path": "src/Money.php",
+          "name": "Money::getConvertedAmount",
+          "start_line": 131,
+          "end_line": 134
+        },
+        {
+          "id": "CE-REPO-0021:CE-EDITION-0021:fn031",
+          "path": "src/Money.php",
+          "name": "Money::assertSameCurrency",
+          "start_line": 400,
+          "end_line": 405
+        }
+      ],
+      "explanation": [
+        "sebastianbergmann Currency stores only its code and reads replaceable global metadata, so an existing integer-minor Money can expose a different converted/display value after addCurrency replaces subunit/fraction data.",
+        "getConvertedAmount divides and rounds through live metadata while assertSameCurrency compares code-bearing Currency values. Core allows different internal representation, but observable amount meaning must be preserved; merely differing metadata is not itself a compatibility error.",
+        "Replace the row for an already referenced code before a metadata-dependent observation; distinguish raw integer amount from converted major-unit output. Changing sub_unit for a held code changes getConvertedAmount without assigning the raw amount field. No current ISO data correctness or private-currency rule was validated. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0246",
+      "title": "Mutable registry and generated source policies are explicit context",
+      "library_id": "CE-REPO-0022",
+      "edition_id": "CE-EDITION-0022",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn042",
+          "path": "currency.go",
+          "name": "Register",
+          "start_line": 153,
+          "end_line": 172
+        },
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn035",
+          "path": "currency.go",
+          "name": "GetCurrencyCodes",
+          "start_line": 20,
+          "end_line": 22
+        },
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn063",
+          "path": "gen.go",
+          "name": "generateSymbols",
+          "start_line": 430,
+          "end_line": 530
+        },
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn062",
+          "path": "gen.go",
+          "name": "generateCountryCurrencies",
+          "start_line": 376,
+          "end_line": 425
+        }
+      ],
+      "explanation": [
+        "bojanz currency registration replaces live digits/metadata and exposes the currency-code slice; generator country/symbol policy is a pinned selection algorithm rather than proof of present authoritative currency facts.",
+        "Register overwrites shared info, while generators choose active/tender rows by lexical From and deliberately merge symbol fallbacks. Core does not specify a minor-unit registry, generation clock or CLDR/ISO authority policy.",
+        "Runtime metadata is replaced before a metadata-dependent Amount operation, or the generator is considered as a source of country/symbol data. A future-dated open-ended row can win the latest-From selection without a current-date check; GetCurrencyCodes returns the backing slice. No generator/network refresh or current currency validity was observed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0254",
+      "title": "Currency detection depends on registry mutation and code-length heuristic",
+      "library_id": "CE-REPO-0032",
+      "edition_id": "CE-EDITION-0032",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn013",
+          "path": "lib/src/currencies.dart",
+          "name": "Currencies::findByCode",
+          "start_line": 206,
+          "end_line": 220
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn017",
+          "path": "lib/src/currencies.dart",
+          "name": "Currencies::_extractIsoCode",
+          "start_line": 255,
+          "end_line": 270
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn011",
+          "path": "lib/src/currencies.dart",
+          "name": "Currencies::[]=",
+          "start_line": 186,
+          "end_line": 186
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn090",
+          "path": "lib/src/money.dart",
+          "name": "Money::isInCurrency",
+          "start_line": 612,
+          "end_line": 612
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn021",
+          "path": "lib/src/currency.dart",
+          "name": "Currency::copyWith",
+          "start_line": 131,
+          "end_line": 150
+        }
+      ],
+      "explanation": [
+        "Money.dart currency inference sorts registered codes by increasing length and matches substrings, while explicit pattern extraction, registry writes and Currency.copyWith follow different contracts.",
+        "findByCode has no token boundaries; []= ignores the supplied key and registers the value code; isInCurrency consults the current registry. These APIs do not define Core portable ISO parsing or private-currency namespace semantics.",
+        "Register overlapping/short codes or replace metadata before inference/current-registry predicates; equal-length sorting order is not asserted. A registered short substring can be selected before an embedded longer code. copyWith omits name/unit/country and cannot explicitly clear a nonnull replacedBy through its null-coalescing argument. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0257",
+      "title": "Generation policy maps unknown ISO units to zero and preserves older display fields",
+      "library_id": "CE-REPO-0032",
+      "edition_id": "CE-EDITION-0032",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn243",
+          "path": "tool/src/iso_source.dart",
+          "name": "_parseMinorUnits",
+          "start_line": 75,
+          "end_line": 85
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn207",
+          "path": "tool/src/currency_merge.dart",
+          "name": "_buildEntryFromExtra",
+          "start_line": 124,
+          "end_line": 146
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn176",
+          "path": "tool/src/cldr_source.dart",
+          "name": "_currencyToRegion",
+          "start_line": 209,
+          "end_line": 236
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn192",
+          "path": "tool/src/currency_formatting.dart",
+          "name": "_applyFormatting",
+          "start_line": 69,
+          "end_line": 114
+        }
+      ],
+      "explanation": [
+        "Money.dart generator helpers replace missing/unparseable minor units with0, choose the first sorted region without date/tender filtering, and preserve already populated formatting fields rather than always replacing them with extra-source values.",
+        "The source shows fallback and merge precedence explicitly. Missing metadata converted to0 is a generator policy, not a current Core currency rule or a certification of authoritative ISO/CLDR facts.",
+        "Consider the pinned generator and retained source data; actual regenerated output depends on supplied files and existing fields. Unknown/N.A. minor-unit text follows the0 branch; a nonmissing older pattern survives _applyFormatting. No remote CLDR refresh or generator run established the current authoritative pattern. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0263",
+      "title": "Mutable Money and exposed aggregate references weaken value-object guarantees",
+      "library_id": "CE-REPO-0048",
+      "edition_id": "CE-EDITION-0048",
+      "collected_on": "2026-11-21",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn019",
+          "path": "src/Money.php",
+          "name": "Money::setAmount",
+          "start_line": 248,
+          "end_line": 270
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn026",
+          "path": "src/Money.php",
+          "name": "Money::setCurrency",
+          "start_line": 422,
+          "end_line": 432
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn001",
+          "path": "src/AggregatedMoney.php",
+          "name": "AggregatedMoney::addAll",
+          "start_line": 17,
+          "end_line": 24
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn002",
+          "path": "src/AggregatedMoney.php",
+          "name": "AggregatedMoney::add",
+          "start_line": 32,
+          "end_line": 43
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn003",
+          "path": "src/AggregatedMoney.php",
+          "name": "AggregatedMoney::get",
+          "start_line": 50,
+          "end_line": 53
+        }
+      ],
+      "explanation": [
+        "Paysera public setters and aggregate getters expose mutable Money references; aggregate batch addition retains prior writes and can install a zero bucket before a later arithmetic failure.",
+        "The setters are public despite internal-use comments, get returns a stored reference, and addAll/add have no restoration branch. Ordinary binary arithmetic usually constructs new objects, so existence of setters alone is not proof that all Core-like arithmetic mutates operands.",
+        "A caller uses public setters on an aggregate member or a later batch/addition step fails after earlier successful writes. Changing the currency of a returned bucket Money can desynchronize the aggregate key; a later addAll failure does not undo earlier successful additions. Aggregate transaction semantics are not standardized by Core. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0266",
+      "title": "Numeric currency-code lookup and Money support use different metadata sets",
+      "library_id": "CE-REPO-0048",
+      "edition_id": "CE-EDITION-0048",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn016",
+          "path": "src/CurrencyIsoNumber.php",
+          "name": "CurrencyIsoNumber::getCurrencyCode",
+          "start_line": 203,
+          "end_line": 209
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn017",
+          "path": "src/CurrencyIsoNumber.php",
+          "name": "CurrencyIsoNumber::getCurrencyNumber",
+          "start_line": 218,
+          "end_line": 226
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn050",
+          "path": "src/Money.php",
+          "name": "Money::getFraction",
+          "start_line": 819,
+          "end_line": 826
+        }
+      ],
+      "explanation": [
+        "Paysera numeric-code lookup and Money-supported fraction lookup use separate tables and different normalization/type conventions, so success in one lookup does not establish support in the other.",
+        "getCurrencyCode uses the numeric-key table; reverse lookup compares alpha strings strictly; Money fraction lookup uppercases and checks its own table. Core does not define numeric-code conversion or require a universal minor-unit metadata table.",
+        "Use a code present in only one snapshot table, leading-zero numeric key or lowercase reverse alpha-code input. CLF/CUC/XDR numeric entries do not by themselves make a local Money currency supported; reverse numeric results can retain string versus native-int key forms under PHP array semantics. No live ISO authority was checked. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0272",
+      "title": "Unknown currencies and mutable registry metadata alter existing financial context",
+      "library_id": "CE-REPO-0098",
+      "edition_id": "CE-EDITION-0098",
+      "collected_on": "2026-11-21",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn039",
+          "path": "currency/manager.go",
+          "name": "(cm *Manager)::Resolve",
+          "start_line": 150,
+          "end_line": 160
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn035",
+          "path": "currency/manager.go",
+          "name": "(cm *Manager)::Add",
+          "start_line": 94,
+          "end_line": 110
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn275",
+          "path": "money/manager.go",
+          "name": "(mm *Manager)::Create",
+          "start_line": 44,
+          "end_line": 49
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn017",
+          "path": "currency/currency.go",
+          "name": "(c *Currency)::Equals",
+          "start_line": 41,
+          "end_line": 47
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn043",
+          "path": "currency/map.go",
+          "name": "createCurrenciesMapFromFactory",
+          "start_line": 60,
+          "end_line": 84
+        }
+      ],
+      "explanation": [
+        "gocanto currency Resolve substitutes the configured default on an unknown code, while map keys can be normalized independently of retained mutable Currency.Code and first-write singleton data remains aliased.",
+        "Resolve has an explicit default branch and Create wraps its result without reporting an unknown code. Core valid Money must retain an unambiguous currency, but registry/provider selection and custom namespace support are not specified by Core. Same-code metadata equality alone is not a compatibility defect.",
+        "Use a nonnil manager, an unrecognized code or a retained custom registry map/Currency pointer; later map writes are not protected merely by factory-initialization locking. An unrecognized requested code can create Money in the default denomination; lowercased retained Currency.Code can differ from the uppercased storage key. No concurrent map outcome was reproduced. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ],
+      "conformance": {
+        "passed": 4,
+        "total": 8,
+        "description": [
+          "Assessed 2026-11-23 using Go 1.25.5. Primary profile declared_native_profile; native path: Manager.Create/Currency.Resolve. Selected outcomes: 4 matched, 1 mismatched, 3 unsupported.",
+          "Actual Manager.Create/Currency.Resolve was evaluated at representable integer-minor inputs. Currency fallback and input-capacity limits remain native observations; the binding does not invent a missing currency error or admit finer amounts by rounding. Construction probes cover shared value obligations, not a complete Core JSON decoder."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.empty-currency-001",
+          "money.deserialize.missing-currency-001"
+        ]
+      }
+    },
+    {
+      "id": "CE-FINDING-0289",
+      "title": "Static currency types and dynamic code-only equality have different identity boundaries",
+      "library_id": "CE-REPO-0097",
+      "edition_id": "CE-EDITION-0097",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn138",
+          "path": "src/obj_money/obj_money.rs",
+          "name": "src/obj_money/obj_money.rs::currencies",
+          "start_line": 71,
+          "end_line": 91
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn140",
+          "path": "src/obj_money/obj_money.rs",
+          "name": "src/obj_money/obj_money.rs::register_currency",
+          "start_line": 98,
+          "end_line": 139
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn146",
+          "path": "src/obj_money/obj_money.rs",
+          "name": "src/obj_money/obj_money.rs::ObjCurrency::try_new",
+          "start_line": 162,
+          "end_line": 210
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn153",
+          "path": "src/obj_money/obj_money.rs",
+          "name": "src/obj_money/obj_money.rs::ObjMoney<IS_RAW>::try_new",
+          "start_line": 231,
+          "end_line": 252
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn171",
+          "path": "src/obj_money/obj_money.rs",
+          "name": "src/obj_money/obj_money.rs::ObjMoney<IS_RAW>::checked_add",
+          "start_line": 369,
+          "end_line": 388
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn172",
+          "path": "src/obj_money/obj_money.rs",
+          "name": "src/obj_money/obj_money.rs::ObjMoney<IS_RAW>::checked_sub",
+          "start_line": 394,
+          "end_line": 413
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn190",
+          "path": "src/obj_money/obj_money.rs",
+          "name": "src/obj_money/obj_money.rs::PartialEq<ObjMoney<IS_RAW_RHS>> for ObjMoney<IS_RAW_LHS>::eq",
+          "start_line": 696,
+          "end_line": 698
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn191",
+          "path": "src/obj_money/obj_money.rs",
+          "name": "src/obj_money/obj_money.rs::PartialOrd<ObjMoney<IS_RAW_RHS>> for ObjMoney<IS_RAW_LHS>::partial_cmp",
+          "start_line": 704,
+          "end_line": 709
+        }
+      ],
+      "explanation": [
+        "moneylib distinguishes compile-time Currency types from dynamic ObjMoney code checks and copied metadata snapshots; the dynamic register validates bounded strings and duplicates but not a general ISO or minor-unit-range policy.",
+        "The dynamic arithmetic/equality bodies compare codes, while registration validates fields before insertion under a write lock. Same ISO identifier compatibility is consistent with Core currency identity; different custom metadata snapshots do not themselves require a second Core compatibility check. Private namespace reconciliation is outside Core.",
+        "Use custom ObjCurrency definitions or registered dynamic codes; dynamic arithmetic reconstructs using receiver metadata, while typed Money requires its Currency type constraints. Two locally constructed same-code definitions can retain different minor-unit policies yet compare exact stored amounts equal. Duplicate registration is rejected before insert, and ObjMoney copies its chosen snapshot rather than holding a mutable registry reference. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0295",
+      "title": "Context relabeling and retained mutable options can change later policy",
+      "library_id": "CE-REPO-0007",
+      "edition_id": "CE-EDITION-0007",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn018",
+          "path": "src/NodaMoney/Context/MoneyContext.cs",
+          "name": "NodaMoney.Context.MoneyContext::private MoneyContext(MoneyContextOptions options)",
+          "start_line": 131,
+          "end_line": 153
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn019",
+          "path": "src/NodaMoney/Context/MoneyContext.cs",
+          "name": "NodaMoney.Context.MoneyContext::public static MoneyContext Create(MoneyContextOptions options, string? name = null)",
+          "start_line": 155,
+          "end_line": 195
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn030",
+          "path": "src/NodaMoney/Context/MoneyContext.cs",
+          "name": "NodaMoney.Context.MoneyContext::public static IDisposable CreateScope(MoneyContext context)",
+          "start_line": 319,
+          "end_line": 324
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn403",
+          "path": "src/NodaMoney/Money.cs",
+          "name": "NodaMoney.Money::public decimal Amount",
+          "start_line": 104,
+          "end_line": 135
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn407",
+          "path": "src/NodaMoney/Money.cs",
+          "name": "NodaMoney.Money::public MoneyContext Context",
+          "start_line": 159,
+          "end_line": 163
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn450",
+          "path": "src/NodaMoney.DependencyInjection/MoneyContextExtensions.cs",
+          "name": "NodaMoney.DependencyInjection.MoneyContextExtensions::public static IServiceCollection AddMoneyContext(this IServiceCollection services, MoneyContextOptions options, string? name = null)",
+          "start_line": 25,
+          "end_line": 37
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn454",
+          "path": "src/NodaMoney.DependencyInjection/MoneyContextExtensions.cs",
+          "name": "NodaMoney.DependencyInjection.MoneyContextExtensions::private static void RegisterMoneyContextFactory(IServiceCollection services, string? name)",
+          "start_line": 152,
+          "end_line": 173
+        }
+      ],
+      "explanation": [
+        "NodaMoney context creation retains caller-owned options while caching rounding kind/mode; context relabeling only changes an index, and the options-instance DI overload fails to copy EnforceZeroCurrencyMatching.",
+        "The retained reference and cached fields can diverge after later mutation. The DI copy body names four properties and omits the zero-currency flag. Those are bounded configuration-copy concerns; Core does not mandate persistent context objects or DI APIs, and no schedule of callbacks was run.",
+        "Mutate retained options after context creation, or register through the options-instance overload with a nondefault zero-currency flag and later resolve the registered factory. A strict zero-currency option can be lost in the action-created options. Merely relabeling Money.Context does not reround existing amount bits or recover precision already discarded. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ],
+      "conformance": {
+        "passed": 1,
+        "total": 3,
+        "description": [
+          "Assessed 2026-11-23 using .NET runtime 10.0.15, SDK 10.0.404. Primary profile declared_native_profile; native path: AddMoneyContext/GetRequiredService; Money addition/CompareTo. Selected outcomes: 1 matched, 2 mismatched.",
+          "The real options-instance AddMoneyContext overload omits the requested zero-currency guard when resolving the service; zero addition/ordering bypass mismatch, while the nonzero control rejects it. These cases do not execute retained-options mutation or context relabeling."
+        ],
+        "test_ids": [
+          "money.add.same-currency.basic-001",
+          "money.add.zero-currency-mismatch-001",
+          "money.compare.zero-order-currency-mismatch-001"
+        ]
+      }
+    },
+    {
+      "id": "CE-FINDING-0311",
+      "title": "JSR354 API: shallow context copies retain mutable policy containers",
+      "library_id": "CE-REPO-0109",
+      "edition_id": "CE-EDITION-0109",
+      "collected_on": "2026-11-21",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn001",
+          "path": "src/main/java/javax/money/AbstractContext.java",
+          "name": "javax.money.AbstractContext.AbstractContext",
+          "start_line": 53,
+          "end_line": 55
+        },
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn004",
+          "path": "src/main/java/javax/money/AbstractContext.java",
+          "name": "javax.money.AbstractContext.get",
+          "start_line": 87,
+          "end_line": 93
+        },
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn005",
+          "path": "src/main/java/javax/money/AbstractContext.java",
+          "name": "javax.money.AbstractContext.get",
+          "start_line": 101,
+          "end_line": 103
+        },
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn014",
+          "path": "src/main/java/javax/money/AbstractContext.java",
+          "name": "javax.money.AbstractContext.hashCode",
+          "start_line": 192,
+          "end_line": 194
+        },
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn015",
+          "path": "src/main/java/javax/money/AbstractContext.java",
+          "name": "javax.money.AbstractContext.equals",
+          "start_line": 202,
+          "end_line": 211
+        },
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn035",
+          "path": "src/main/java/javax/money/AbstractQueryBuilder.java",
+          "name": "javax.money.AbstractQueryBuilder.setProviderNames",
+          "start_line": 50,
+          "end_line": 52
+        },
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn036",
+          "path": "src/main/java/javax/money/AbstractQueryBuilder.java",
+          "name": "javax.money.AbstractQueryBuilder.setProviderNames",
+          "start_line": 61,
+          "end_line": 64
+        },
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn032",
+          "path": "src/main/java/javax/money/AbstractQuery.java",
+          "name": "javax.money.AbstractQuery.getProviderNames",
+          "start_line": 65,
+          "end_line": 72
+        },
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn200",
+          "path": "src/main/java/javax/money/convert/ConversionQueryBuilder.java",
+          "name": "javax.money.convert.ConversionQueryBuilder.setRateTypes",
+          "start_line": 46,
+          "end_line": 48
+        },
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn201",
+          "path": "src/main/java/javax/money/convert/ConversionQueryBuilder.java",
+          "name": "javax.money.convert.ConversionQueryBuilder.setRateTypes",
+          "start_line": 57,
+          "end_line": 59
+        },
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn195",
+          "path": "src/main/java/javax/money/convert/ConversionQuery.java",
+          "name": "javax.money.convert.ConversionQuery.getRateTypes",
+          "start_line": 68,
+          "end_line": 74
+        }
+      ],
+      "explanation": [
+        "Context construction copies the map but can retain mutable nested provider lists and rate-type sets.",
+        "AbstractContext.putAll is shallow; typed get returns the stored value. List setProviderNames and set-based setRateTypes retain containers, while provider getters return those values; varargs rate types explicitly copy to a new HashSet. Equality/hashCode read map contents and may consequently change after caller container mutation. These metadata objects are not automatically Core Money or FinancialEntity values.",
+        "Build a context/query using one of the alias-retaining overloads, then mutate the retained caller collection or raw returned collection. Top-level map membership is copied, empty defaults are immutable, and rate-type varargs copy. No amount/currency mutation or concurrent execution follows merely from aliasing. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0312",
+      "title": "JSR354 API: setAmount factory template is sequential and non-atomic",
+      "library_id": "CE-REPO-0109",
+      "edition_id": "CE-EDITION-0109",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn113",
+          "path": "src/main/java/javax/money/MonetaryAmountFactory.java",
+          "name": "javax.money.MonetaryAmountFactory.setAmount",
+          "start_line": 157,
+          "end_line": 162
+        }
+      ],
+      "explanation": [
+        "Default factory setAmount applies currency, number and context setters sequentially without rollback.",
+        "The default body invokes setters in that exact order. If a provider mutates in an earlier setter and a later setter fails, partial builder state can remain. It does not establish that any given provider setter fails or that a built immutable Money operand was changed; factory mutation has no own Core financial operation.",
+        "A concrete factory with mutating setters, and a later number/context setter that fails after an earlier successful write. An all-valid call completes normally; provider transactional setters could avoid partial state. No arbitrary provider behavior was executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0321",
+      "title": "JavaMoney calculations: mutable global precision and mixed numeric paths",
+      "library_id": "CE-REPO-0111",
+      "edition_id": "CE-EDITION-0111",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn006",
+          "path": "calc/src/main/java/org/javamoney/calc/CalculationContext.java",
+          "name": "org.javamoney.calc.CalculationContext.bigDecimal",
+          "start_line": 82,
+          "end_line": 84
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn007",
+          "path": "calc/src/main/java/org/javamoney/calc/CalculationContext.java",
+          "name": "org.javamoney.calc.CalculationContext.bigDecimal",
+          "start_line": 92,
+          "end_line": 94
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn008",
+          "path": "calc/src/main/java/org/javamoney/calc/CalculationContext.java",
+          "name": "org.javamoney.calc.CalculationContext.bigDecimal",
+          "start_line": 102,
+          "end_line": 104
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn009",
+          "path": "calc/src/main/java/org/javamoney/calc/CalculationContext.java",
+          "name": "org.javamoney.calc.CalculationContext.setMathContext",
+          "start_line": 113,
+          "end_line": 115
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn010",
+          "path": "calc/src/main/java/org/javamoney/calc/CalculationContext.java",
+          "name": "org.javamoney.calc.CalculationContext.init",
+          "start_line": 117,
+          "end_line": 122
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn128",
+          "path": "calc/src/main/java/org/javamoney/calc/common/FutureValue.java",
+          "name": "org.javamoney.calc.common.FutureValue.calculate",
+          "start_line": 76,
+          "end_line": 79
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn132",
+          "path": "calc/src/main/java/org/javamoney/calc/common/FutureValueFactor.java",
+          "name": "org.javamoney.calc.common.FutureValueFactor.calculate",
+          "start_line": 50,
+          "end_line": 55
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn160",
+          "path": "calc/src/main/java/org/javamoney/calc/common/FutureValueOfAnnuityWithContCompounding.java",
+          "name": "org.javamoney.calc.common.FutureValueOfAnnuityWithContCompounding.calculate",
+          "start_line": 82,
+          "end_line": 92
+        }
+      ],
+      "explanation": [
+        "Calculation helpers use a mutable global MathContext and heterogeneous exact-decimal and binary transcendental paths.",
+        "setMathContext replaces context and cached constants through init without a calculation-wide snapshot. FutureValue uses exact BigDecimal.pow before delegated amount multiplication; FutureValueFactor uses contextual pow; continuous compounding uses Math.pow doubles and a RoundingMode-only divide. These different calculation policies require explicit domain/precision choices; this does not establish a universal defect in Money arithmetic.",
+        "Call the respective helper, optionally changing global context between calculations; binary continuous compounding has its own admitted rate/period assumptions. No concurrency schedule or concrete final amount was executed. FinKore does not currently specify annuities, rate factors or transcendental precision. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0332",
+      "title": "Moneta: rebuilding amounts and selecting factories can replace requested numeric context",
+      "library_id": "CE-REPO-0110",
+      "edition_id": "CE-EDITION-0110",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn252",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/Money.java",
+          "name": "org.javamoney.moneta.Money.negate",
+          "start_line": 517,
+          "end_line": 519
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn255",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/Money.java",
+          "name": "org.javamoney.moneta.Money.stripTrailingZeros",
+          "start_line": 553,
+          "end_line": 558
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn365",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/RoundedMoney.java",
+          "name": "org.javamoney.moneta.RoundedMoney.stripTrailingZeros",
+          "start_line": 929,
+          "end_line": 934
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn653",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/DefaultMonetaryAmountsSingletonQuerySpi.java",
+          "name": "org.javamoney.moneta.spi.DefaultMonetaryAmountsSingletonQuerySpi.getAmountFactories",
+          "start_line": 76,
+          "end_line": 128
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn654",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/DefaultMonetaryAmountsSingletonQuerySpi.java",
+          "name": "org.javamoney.moneta.spi.DefaultMonetaryAmountsSingletonQuerySpi.createContext",
+          "start_line": 130,
+          "end_line": 140
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn577",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/AbstractAmountFactory.java",
+          "name": "org.javamoney.moneta.spi.AbstractAmountFactory.setContext",
+          "start_line": 132,
+          "end_line": 146
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn580",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/AbstractAmountFactory.java",
+          "name": "org.javamoney.moneta.spi.AbstractAmountFactory.setAmount",
+          "start_line": 177,
+          "end_line": 183
+        }
+      ],
+      "explanation": [
+        "Money.negate can reconstruct under a narrower default context and alter magnitude; other factory/context paths need separate lifecycle rules.",
+        "negate passes negated BigDecimal and currency to the constructor without receiver context; that constructor selects DEFAULT_MONETARY_CONTEXT and MoneyUtils applies its precision/scale. If an admitted receiver amount exceeds default precision, negation may round its magnitude, conditionally conflicting with exact sign reversal. A mere zero-context change is not an amount defect. RoundedMoney stripping omits custom operator/context; factory-query reconstructs only precision/mode and appends a fresh factory after configuring earlier ones. Those policy lifecycle concerns do not independently define Core factory operations.",
+        "Construct a receiver retaining an exact amount under an explicit context broader than default, then negate; an amount requiring default precision reduction is decisive. If the amount is exactly representable in the default context, changing context metadata alone does not violate Money negation. Factory/provider runtime and concrete rounded result were not executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ],
+      "conformance": {
+        "passed": 2,
+        "total": 3,
+        "description": [
+          "Assessed 2026-11-23 using Java 21.0.12.1, pinned Moneta source. Primary profile declared_native_profile; native path: Money.negate (input precision 128; default precision 16). Selected outcomes: 2 matched, 1 mismatched.",
+          "The admitted input uses native precision 128; native negate reconstructs under explicit default precision 16 and loses significant digits. This bounded context counterexample does not claim every configured negate loses precision."
+        ],
+        "test_ids": [
+          "money.negate.positive-001",
+          "money.negate.negative-001",
+          "money.negate.high-precision-001"
+        ]
+      }
+    },
+    {
+      "id": "CE-FINDING-0342",
+      "title": "Moneta global registries and configuration expose mutable policy and ordering state",
+      "library_id": "CE-REPO-0110",
+      "edition_id": "CE-EDITION-0110",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn604",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/ConfigurableCurrencyUnitProvider.java",
+          "name": "org.javamoney.moneta.spi.ConfigurableCurrencyUnitProvider.registerCurrencyUnit",
+          "start_line": 102,
+          "end_line": 110
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn605",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/ConfigurableCurrencyUnitProvider.java",
+          "name": "org.javamoney.moneta.spi.ConfigurableCurrencyUnitProvider.registerCurrencyUnit",
+          "start_line": 119,
+          "end_line": 123
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn606",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/ConfigurableCurrencyUnitProvider.java",
+          "name": "org.javamoney.moneta.spi.ConfigurableCurrencyUnitProvider.removeCurrencyUnit",
+          "start_line": 131,
+          "end_line": 141
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn607",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/ConfigurableCurrencyUnitProvider.java",
+          "name": "org.javamoney.moneta.spi.ConfigurableCurrencyUnitProvider.removeCurrencyUnit",
+          "start_line": 149,
+          "end_line": 152
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn759",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/PriorityAwareServiceProvider.java",
+          "name": "org.javamoney.moneta.spi.PriorityAwareServiceProvider.getServices",
+          "start_line": 60,
+          "end_line": 68
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn761",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/PriorityAwareServiceProvider.java",
+          "name": "org.javamoney.moneta.spi.PriorityAwareServiceProvider.loadServices",
+          "start_line": 97,
+          "end_line": 113
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn650",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/DefaultConfigProvider.java",
+          "name": "org.javamoney.moneta.spi.DefaultConfigProvider.getProperty",
+          "start_line": 62,
+          "end_line": 68
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn651",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/DefaultConfigProvider.java",
+          "name": "org.javamoney.moneta.spi.DefaultConfigProvider.getProperties",
+          "start_line": 71,
+          "end_line": 73
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn652",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/DefaultConfigProvider.java",
+          "name": "org.javamoney.moneta.spi.DefaultConfigProvider.updateConfig",
+          "start_line": 75,
+          "end_line": 106
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn024",
+          "path": "moneta-convert/moneta-convert-base/src/main/java/org/javamoney/moneta/convert/DefaultMonetaryConversionsSingletonSpi.java",
+          "name": "org.javamoney.moneta.convert.DefaultMonetaryConversionsSingletonSpi.getProviderNames",
+          "start_line": 148,
+          "end_line": 150
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn025",
+          "path": "moneta-convert/moneta-convert-base/src/main/java/org/javamoney/moneta/convert/DefaultMonetaryConversionsSingletonSpi.java",
+          "name": "org.javamoney.moneta.convert.DefaultMonetaryConversionsSingletonSpi.getDefaultProviderChain",
+          "start_line": 153,
+          "end_line": 172
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn064",
+          "path": "moneta-convert/moneta-convert-base/src/main/java/org/javamoney/moneta/spi/convert/DefaultMonetaryConversionsSingletonSpi.java",
+          "name": "org.javamoney.moneta.spi.convert.DefaultMonetaryConversionsSingletonSpi.getProviderNames",
+          "start_line": 148,
+          "end_line": 150
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn065",
+          "path": "moneta-convert/moneta-convert-base/src/main/java/org/javamoney/moneta/spi/convert/DefaultMonetaryConversionsSingletonSpi.java",
+          "name": "org.javamoney.moneta.spi.convert.DefaultMonetaryConversionsSingletonSpi.getDefaultProviderChain",
+          "start_line": 153,
+          "end_line": 172
+        }
+      ],
+      "explanation": [
+        "Global currency/service/configuration registries expose live and separately updated policy state.",
+        "Currency code/numeric/locale maps are changed separately and code replacement does not clean old numeric/locale aliases. Service cache hits return stored mutable lists; configuration getProperty reads live system overrides while getProperties returns the mutable stored map. Equal priority logs rather than throws. Provider names are live key sets, and default-chain validation trims names while storing the untrimmed item. These are related implementation variants, including duplicated lineage, rather than independent financial requirements.",
+        "Replace currency registration numeric/locale metadata, mutate returned cache/key/map views, change system properties, or configure whitespace/equal priority. No concurrent corruption or amount/currency mutation in existing Money was demonstrated. Arbitrary mutable service metadata does not establish a Core Money or Workflow violation. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0345",
+      "title": "ICMA convention retains caller-owned mutable schedule",
+      "library_id": "CE-REPO-0026",
+      "edition_id": "CE-EDITION-0026",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0026:CE-EDITION-0026:fn005",
+          "path": "src/DayCounts.jl",
+          "name": "DayCounts.yearfrac(::Date,::Date,::ActualActualICMA)",
+          "start_line": 129,
+          "end_line": 151
+        },
+        {
+          "id": "CE-REPO-0026:CE-EDITION-0026:fn004",
+          "path": "src/DayCounts.jl",
+          "name": "DayCounts.ActualActualICMA(schedule::StepRange{Date,Month})",
+          "start_line": 125,
+          "end_line": 125
+        }
+      ],
+      "explanation": [
+        "ActualActualICMA can retain a mutable caller schedule, so future accrual uses the current schedule rather than a frozen snapshot.",
+        "The struct stores an AbstractVector and yearfrac reads schedule directly for first/last bounds, searches and denominator periods. The month StepRange convenience form is immutable, whereas a direct mutable-vector construction can change the subsequently read dates or introduce invalid ordering/zero periods. Core explicit-context principles motivate review but do not specify an ICMA schedule snapshot contract.",
+        "Construct with a mutable vector, retain its alias and change entries before a later yearfrac call. No mutation occurs inside yearfrac; callers that keep schedules stable avoid this issue. No correct replacement accrual formula or executed Julia outcome is asserted. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0348",
+      "title": "Holiday-fact mutation and cache rebuild can change observable results",
+      "library_id": "CE-REPO-0025",
+      "edition_id": "CE-EDITION-0025",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0025:CE-EDITION-0025:fn165",
+          "path": "src/generic.jl",
+          "name": "BusinessDays.GenericHolidayCalendar(holidays::Set{Dates.Date}, dtmin::Dates.Date=min(holidays...), dtmax::Dates.Date=max(holidays...), _initcache_::Bool=true) [L28]",
+          "start_line": 28,
+          "end_line": 36
+        },
+        {
+          "id": "CE-REPO-0025:CE-EDITION-0025:fn157",
+          "path": "src/composite.jl",
+          "name": "BusinessDays.isholiday(hc::CompositeHolidayCalendar, dt::Dates.Date) [L9]",
+          "start_line": 9,
+          "end_line": 17
+        },
+        {
+          "id": "CE-REPO-0025:CE-EDITION-0025:fn083",
+          "path": "src/bdayscache.jl",
+          "name": "BusinessDays.initcache(hc::HolidayCalendar, d0::Dates.Date=DEFAULT_CACHE_D0, d1::Dates.Date=DEFAULT_CACHE_D1) [L97]",
+          "start_line": 97,
+          "end_line": 107
+        },
+        {
+          "id": "CE-REPO-0025:CE-EDITION-0025:fn087",
+          "path": "src/bdayscache.jl",
+          "name": "BusinessDays.initcache!(cache::HolidayCalendarCache, hc::HolidayCalendar, d0::Dates.Date=DEFAULT_CACHE_D0, d1::Dates.Date=DEFAULT_CACHE_D1) [L118]",
+          "start_line": 118,
+          "end_line": 131
+        },
+        {
+          "id": "CE-REPO-0025:CE-EDITION-0025:fn084",
+          "path": "src/bdayscache.jl",
+          "name": "BusinessDays.initcache(hc_vec::Vector{HolidayCalendar}, d0::Dates.Date=DEFAULT_CACHE_D0, d1::Dates.Date=DEFAULT_CACHE_D1) [L109]",
+          "start_line": 109,
+          "end_line": 113
+        }
+      ],
+      "explanation": [
+        "Holiday fact aliases can stale caches, and initcache! publishes changed bounds before rebuilt arrays.",
+        "GenericHolidayCalendar retains the Set; composite holiday checks traverse retained calendar references. needs_cache_update skips identical initialized bounds without fact versions. initcache! changes dtmin/dtmax before constructing arrays and does not replace hc; construction failure can leave new bounds with old arrays. Global initcache builds before replacing one dictionary entry but uses active calendar lookup; batch publication is sequential. Calendar caching has no own Core contract.",
+        "Mutate retained holiday facts then request identical bounds, or trigger rebuild failure after initcache! writes new bounds. No actual failed allocation, corrupt index or race was executed. Stable facts and successful fresh construction can behave normally. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0372",
+      "title": "Chart helpers alter warning context for subsequent financial calls",
+      "library_id": "CE-REPO-0099",
+      "edition_id": "CE-EDITION-0099",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn07",
+          "path": "R/candlestickChart.R",
+          "name": "FinCal::candlestickChart",
+          "start_line": 15,
+          "end_line": 42
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn39",
+          "path": "R/lineChart.R",
+          "name": "FinCal::lineChart",
+          "start_line": 14,
+          "end_line": 33
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn40",
+          "path": "R/lineChartMult.R",
+          "name": "FinCal::lineChartMult",
+          "start_line": 18,
+          "end_line": 44
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn60",
+          "path": "R/volumeChart.R",
+          "name": "FinCal::volumeChart",
+          "start_line": 15,
+          "end_line": 21
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn62",
+          "path": "R/wpr.R",
+          "name": "FinCal::wpr",
+          "start_line": 8,
+          "end_line": 15
+        }
+      ],
+      "explanation": [
+        "Chart wrappers set global R warning policy and leave it changed for subsequent financial calls.",
+        "All four wrappers call options(warn=-1) without restoring the prior value on success or failure. wpr calls warning for weights not summing to one before computing the return. In the same R session the chart call can therefore suppress that later diagnostic. This is an ambient diagnostic side effect, not evidence that the computed Money value changed.",
+        "Call a chart wrapper in an R session then invoke a warning-producing financial helper without resetting options. No R session was executed; error conditions and numerical return are not transformed merely because warnings are suppressed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0392",
+      "title": "Mortality table caching exposes path identity and mutable table aliases",
+      "library_id": "CE-REPO-0029",
+      "edition_id": "CE-EDITION-0029",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn183",
+          "path": "src/XTbML.jl",
+          "name": "readXTbML",
+          "start_line": 102,
+          "end_line": 106
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn185",
+          "path": "src/XTbML.jl",
+          "name": "read_tables",
+          "start_line": 120,
+          "end_line": 125
+        }
+      ],
+      "explanation": [
+        "Mortality table cache is keyed by path and returns shared table objects; table collection keys can overwrite duplicate names.",
+        "readXTbML locks get! by the supplied path and reuses the cached object without content/mtime invalidation. Mortality vector wrappers can retain mutable arrays. read_tables constructs Dict pairs keyed by metadata.name without duplicate rejection. This motivates provenance/version and alias policies for actuarial tables, not a Core Money/cache requirement.",
+        "Reuse a path after external content change, mutate retained cached table rates, or load tables with duplicate metadata names. No file/table was mutated, and unchanged immutable usage is stable. Duplicate overwrite order depends on actual path enumeration. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0399",
+      "title": "Revaluation retains established premium while textbook reserve reprices",
+      "library_id": "CE-REPO-0028",
+      "edition_id": "CE-EDITION-0028",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn188",
+          "path": "src/policies.jl",
+          "name": "LifeContingencies.PricedPolicy [policies.jl:14]",
+          "start_line": 14,
+          "end_line": 19
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn196",
+          "path": "src/policies.jl",
+          "name": "LifeContingencies.check_common_basis [policies.jl:33]",
+          "start_line": 33,
+          "end_line": 37
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn209",
+          "path": "src/policies.jl",
+          "name": "LifeContingencies.policy_basis [policies.jl:118]",
+          "start_line": 118,
+          "end_line": 124
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn210",
+          "path": "src/policies.jl",
+          "name": "LifeContingencies.policy_value_column [policies.jl:126]",
+          "start_line": 126,
+          "end_line": 141
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn214",
+          "path": "src/policies.jl",
+          "name": "LifeContingencies.reserve_premium_net [policies.jl:189]",
+          "start_line": 189,
+          "end_line": 190
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn276",
+          "path": "src/textbook.jl",
+          "name": "LifeContingencies.equivalence_premium [textbook.jl:230]",
+          "start_line": 230,
+          "end_line": 233
+        }
+      ],
+      "explanation": [
+        "PricedPolicy establishes equivalence premium once or accepts a finite supplied Real premium. Alternate valuation basis must keep original issue age/status/life order/contingency, while mortality and curve can change; rebase preserves product term/frequency/guarantee and policy_value subtracts the stored annualized premium. reserve_premium_net constructs a new equivalence premium on the supplied basis instead.",
+        "Source tests explicitly distinguish the APIs. Immutable wrapper does not freeze caller-owned mortality arrays or curves. No regulatory reserve method or independent actuarial correctness accepted."
+      ],
+      "context_requirement_ids": []
+    }
+  ]
+}

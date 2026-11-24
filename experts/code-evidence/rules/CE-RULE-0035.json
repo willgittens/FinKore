@@ -1,0 +1,141 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0035",
+  "title": "Return aggregation declares period, weighting and normalization",
+  "scope": "candidate_rule",
+  "question": "Separate whole-period chained growth from geometric mean per observation, contributions and weighted arithmetic return.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0065",
+      "title": "A chained return and its geometric mean are different observations",
+      "library_id": "CE-REPO-0099",
+      "edition_id": "CE-EDITION-0099",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn32",
+          "path": "R/hpr.R",
+          "name": "FinCal::hpr",
+          "start_line": 12,
+          "end_line": 14
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn59",
+          "path": "R/twrr.R",
+          "name": "FinCal::twrr",
+          "start_line": 10,
+          "end_line": 23
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn25",
+          "path": "R/geometric.mean.R",
+          "name": "FinCal::geometric.mean",
+          "start_line": 7,
+          "end_line": 10
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn62",
+          "path": "R/wpr.R",
+          "name": "FinCal::wpr",
+          "start_line": 8,
+          "end_line": 15
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn31",
+          "path": "R/harmonic.mean.R",
+          "name": "FinCal::harmonic.mean",
+          "start_line": 6,
+          "end_line": 8
+        }
+      ],
+      "explanation": [
+        "twrr returns the geometric mean of subperiod growth factors rather than their whole-interval chained return; wpr warns about nonunit weights but returns the same unnormalized weighted sum.",
+        "The root1/r after multiplying factors changes the output subject, while the warning branch performs no normalization.",
+        "Aligned equal-length subperiod inputs for twrr; positive real growth factors for ordinary real geometric interpretation; economically meaningful weights for wpr. Two growth factors1.1 give a mean return0.1 versus chained total0.21 as an algebraic distinction, not an executed runtime outcome. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0125",
+      "title": "Localized display parsing changes portfolio weights and returns",
+      "library_id": "CE-REPO-0005",
+      "edition_id": "CE-EDITION-0005",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn236",
+          "path": "examples/portfolio-tracker/src/hooks/use-portfolio.ts",
+          "name": "examples/portfolio-tracker/src/hooks/use-portfolio.ts::usePortfolio@65",
+          "start_line": 65,
+          "end_line": 226
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn281",
+          "path": "examples/portfolio-tracker/src/lib/money.ts",
+          "name": "examples/portfolio-tracker/src/lib/money.ts::formatMoney@186",
+          "start_line": 186,
+          "end_line": 198
+        }
+      ],
+      "explanation": [
+        "The portfolio hook derives exposure/return weights by stripping locale-formatted currency text to digits/dot/minus and parseFloating the remainder, while monetary totals separately sum Dinero values.",
+        "The text-to-number path is distinct from exact amount extraction and is vulnerable to the chosen locale separators; random change percentages are illustrative state.",
+        "A locale formatter that emits grouping or decimal punctuation not matching the stripping grammar; ordinary browser native number parsing. If text is1.234,56, stripping the comma yields1.23456 instead of1234.56. Actual ICU/browser output and resulting portfolio measures were not executed. No browser/ICU execution. The punctuation example is conditional on that emitted text; parseFloat semantics and the source sanitizer were statically inspected. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0322",
+      "title": "JavaMoney weighted average rounds normalized weights before summing products",
+      "library_id": "CE-REPO-0111",
+      "edition_id": "CE-EDITION-0111",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn289",
+          "path": "calc/src/main/java/org/javamoney/calc/securities/GeometricMeanReturn.java",
+          "name": "org.javamoney.calc.securities.GeometricMeanReturn.calculate",
+          "start_line": 46,
+          "end_line": 55
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn291",
+          "path": "calc/src/main/java/org/javamoney/calc/securities/HoldingPeriodReturn.java",
+          "name": "org.javamoney.calc.securities.HoldingPeriodReturn.calculate",
+          "start_line": 46,
+          "end_line": 55
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn251",
+          "path": "calc/src/main/java/org/javamoney/calc/common/WeightedAverage.java",
+          "name": "org.javamoney.calc.common.WeightedAverage.calculateWeightedAverage",
+          "start_line": 131,
+          "end_line": 133
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn252",
+          "path": "calc/src/main/java/org/javamoney/calc/common/WeightedAverage.java",
+          "name": "org.javamoney.calc.common.WeightedAverage.calculateWeightedAverage",
+          "start_line": 141,
+          "end_line": 152
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn292",
+          "path": "calc/src/main/java/org/javamoney/calc/securities/HoldingPeriodReturn.java",
+          "name": "org.javamoney.calc.securities.HoldingPeriodReturn.calculateForSameReturn",
+          "start_line": 64,
+          "end_line": 78
+        }
+      ],
+      "explanation": [
+        "WeightedAverage rounds weight normalization under mutable calculation context before summing products, while geometric mean uses a final native double root and holding-period return preserves its product subject.",
+        "The aggregate algorithms have different units, admission and precision. Their shared Rate container or related helper tests do not certify equivalent economic meaning.",
+        "A collection with meaningful total weight and declared context, or a nonempty real-domain periodic return list for the geometric root. Nonempty zero-total weights divide byzero; negative weights are accepted; empty weighted input returns source zero without normalization. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "schema_version": "2.1.0",
+  "id": "CE-RULE-0010",
+  "title": "Lifecycle changes follow a declared current-state transition",
+  "scope": "existing_core_subject",
+  "question": "Compare directed transition declarations, pre-mutation guards and rejected-state preservation; payment expiry and concurrency remain separate.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0016",
+      "title": "Closing a charge requires a declared current-state transition",
+      "library_id": "CE-REPO-0016",
+      "edition_id": "CE-EDITION-0016",
+      "collected_on": "2026-11-20",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn01",
+          "path": "src/main/java/com/lmoraesdev/payment/domain/model/Charge.java",
+          "name": "com.lmoraesdev.payment.domain.model.Charge.create(Money)",
+          "start_line": 42,
+          "end_line": 53
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn02",
+          "path": "src/main/java/com/lmoraesdev/payment/domain/model/Charge.java",
+          "name": "com.lmoraesdev.payment.domain.model.Charge.transitionTo(ChargeStatus)",
+          "start_line": 71,
+          "end_line": 77
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn03",
+          "path": "src/main/java/com/lmoraesdev/payment/domain/model/Money.java",
+          "name": "com.lmoraesdev.payment.domain.model.Money",
+          "start_line": 7,
+          "end_line": 20
+        }
+      ],
+      "explanation": [
+        "Charge.transitionTo looks up the current status in VALID_TRANSITIONS, accepts only ACTIVE to PAID, EXPIRED or CANCELLED, and rejects an absent target before assigning the new status.",
+        "The current-state guard supports explicit workflow transition eligibility and prevents the selected status mutation on rejection. A closing status has no declared outgoing or self-transition; the method itself does no repository write, event emission or clock comparison.",
+        "On 2026-11-22, the unchanged pinned domain classes were compiled with Temurin JDK 21.0.12.1 and exercised outside the repository. Sixteen native transition calls covered every pair of ACTIVE, PAID, EXPIRED and CANCELLED: the three declared ACTIVE-to-closing transitions succeeded and thirteen other requests were rejected with the native INVALID_STATE_TRANSITION code. Rejected calls preserved the complete observed Charge snapshot (identity, amount, status, timestamps and version). Restored inputs used fixed identity, time and revision values; Charge.create was not invoked. These are native model observations, not executions of FinKore conformance vectors: the evaluated graph is fixed and these calls did not exercise the published vectors’ declared graphs, guards or version/conflict scenarios. Null targets, external effects, persistence rollback and concurrency remain untested; independent financial validation remains pending."
+      ],
+      "context_requirement_ids": [
+        "WORKFLOW-TERMINAL-001",
+        "WORKFLOW-TRANSITION-002",
+        "WORKFLOW-TRANSITION-003",
+        "WORKFLOW-TRANSITION-006"
+      ],
+      "conformance": {
+        "passed": 2,
+        "total": 6,
+        "description": [
+          "On 2026-11-23, the R1-C4 audit repeated all six manifest-listed Workflow cases using the pinned Charge classes, Temurin JDK 21.0.12.1 and Jackson 2.18.2. Result: 2/6 passed; four unsupported cases and no observed mismatches or infrastructure errors. Two genuine transitionTo calls used the existing compatible ACTIVE-to-PAID projection and explicit restored context.",
+          "workflow.transition.unguarded-ignores-facts-001 and workflow.terminal.entry-allowed-001 matched the complete selected observations. The reverse-transition, version-mismatch, typed-guard and multiple-current-state cases could not be represented by this bounded projection without adding financial behavior to the binding. They remain unsupported. Extra native closing states, general graph/guard support, failure atomicity outside the earlier native probe and persistence effects are not certified."
+        ]
+      }
+    },
+    {
+      "id": "CE-FINDING-0401",
+      "title": "Claim qualification and benefit use survive recovery in the LTC example",
+      "library_id": "CE-REPO-0028",
+      "edition_id": "CE-EDITION-0028",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn334",
+          "path": "examples/ltc_model.jl",
+          "name": "examples/ltc_model.jl exits L44",
+          "start_line": 44,
+          "end_line": 48
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn335",
+          "path": "examples/ltc_model.jl",
+          "name": "examples/ltc_model.jl care_payable L50",
+          "start_line": 50,
+          "end_line": 51
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn336",
+          "path": "examples/ltc_model.jl",
+          "name": "examples/ltc_model.jl claim_months_counted L55",
+          "start_line": 55,
+          "end_line": 55
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn337",
+          "path": "examples/ltc_model.jl",
+          "name": "examples/ltc_model.jl on_claim L59",
+          "start_line": 59,
+          "end_line": 60
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn338",
+          "path": "examples/ltc_model.jl",
+          "name": "examples/ltc_model.jl LifeContingencies.Experimental.transitions L63",
+          "start_line": 63,
+          "end_line": 81
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn339",
+          "path": "examples/ltc_model.jl",
+          "name": "examples/ltc_model.jl care_payment L85",
+          "start_line": 85,
+          "end_line": 90
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn340",
+          "path": "examples/ltc_model.jl",
+          "name": "examples/ltc_model.jl ltc_contract L95",
+          "start_line": 95,
+          "end_line": 102
+        }
+      ],
+      "explanation": [
+        "The illustrative monthly LTC state retains claim duration, lifetime qualification and full benefit months already paid. Recovery keeps qualification/usage; a subsequent claim need not repeat elimination period and cannot reset maximum benefit entitlement. A continuing payable claim month increments usage; recovery/death ending a month pays half and does not increment fullmonth count. Premiums are waived on claim; premium and benefit end dates use distinct state/transition predicates.",
+        "Academicexample withillustrativeuncalibrated forces, no native parameter-admissibility guarantee and no statutory/policy acceptance. Own tests include seededMonteCarlo and pathenumeration source assertions, but neitherwasexecuted. Engine state is not a FinKore Workflow operation."
+      ],
+      "context_requirement_ids": []
+    }
+  ],
+  "historical_publications": [
+    {
+      "id": "CE-FINDING-0016",
+      "title": "java-payment-core — Bounded unguarded transition observations",
+      "collected_on": "2026-11-20",
+      "function_ids": [
+        "CE-REPO-0016:CE-EDITION-0016:fn02"
+      ],
+      "explanation": [
+        "The selected two-state unguarded entry cases map their source and target names one-to-one to native ACTIVE and PAID and call Charge.transitionTo directly. Both observed states match the selected cases. The fixed native graph also admits other closing states; this projection does not provide arbitrary declared graphs, guards, malformed-instance validation or version/conflict controls.",
+        "Only the represented unguarded ACTIVE-to-PAID path was compared to executable vectors. Four selected cases were unsupported, not observed financial rejections. Native probes of the complete four-state graph are separate observations. No general Workflow implementation, expiry eligibility, transaction rollback or concurrency guarantee is established."
+      ]
+    }
+  ]
+}

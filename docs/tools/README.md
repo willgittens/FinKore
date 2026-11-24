@@ -62,6 +62,10 @@ preserving institution names and historical diagnostics in academic records.
 The designated license-negative fixture supplies adversarial notices for tests;
 it is not a project license declaration. Package licenses, the MPL source headers
 and the canonical license text remain independently checked.
+Upstream license-file names in the path tuples of source inventories are filename
+metadata; their descriptions, license fields and other text remain subject to
+notice checks. The collection's own source-inventory validator checks those paths
+and does not grant repository licensing exceptions.
 
 Run the network-backed dependency review separately when required:
 
@@ -100,6 +104,11 @@ accepted. External URLs are not fetched. These checks inspect the filesystem
 observed during validation; they are repository-maintenance checks, not a general
 filesystem sandbox. The separate stable-publication gate still rejects every
 symlink in a proposed release tree, including internal links.
+
+Link checks ignore literal examples in code blocks and matched code spans, so
+signatures such as `def [](key)` are not mistaken for local links. Real links
+around those examples, including links with code in their labels, remain checked.
+This does not change the specification-ID checks on inline code.
 
 Operation/error association metadata lives in the existing
 [operation contracts](../../conformance/operations.md#error-association-checks).
@@ -143,8 +152,8 @@ a mandatory obligation, or promote coverage from consumer execution evidence.
 
 ### Optional Code Evidence maintenance
 
-The non-normative [Code Evidence catalog](../../experts/code-evidence/README.md) has
-separate commands: `npm run code-evidence:build` renders its listing,
+The non-normative [Code Evidence collection](../../experts/code-evidence/README.md) has
+separate commands: `npm run code-evidence:build` renders its traceability navigation,
 `npm run code-evidence:check` validates local metadata and synchronization, and
 `npm run code-evidence:test` exercises metadata safeguards. These commands make
 no network calls and execute no financial behavior. They are independent of
@@ -281,10 +290,10 @@ prose, including inline scope wording. It reads text and paths without financial
 execution, mutation, or network access.
 
 The publication checker exports the deliberately selected target
-`TARGET_CORE_VERSION`, currently `2.0.4`; maintainers must review and update that
+`TARGET_CORE_VERSION`, currently `2.0.5`; maintainers must review and update that
 value for a later Core release. README, CoreDoc, each specification document,
 conformance and Agentic READMEs, and any retained Learn index must explicitly
-declare `FinKore Core 2.0.4 stable` (or `FinKore Core 2.0.4 is stable`). CoreDoc's
+declare `FinKore Core 2.0.5 stable` (or `FinKore Core 2.0.5 is stable`). CoreDoc's
 version and status fields must agree. Matching every document to an arbitrary
 different version does not satisfy the selected release target.
 For a patch target, unqualified major-minor wording may still describe the
@@ -294,6 +303,15 @@ schema syntax, maintenance-package versions, and stable vector IDs are not Core
 status. The only removed-rule exceptions are one concise retirement paragraph
 in release history and the designated adversarial JSON fixture under tool tests.
 Test and validator source files themselves are scanned.
+Attributed Code Evidence may name an upstream proposal directory. The gate
+distinguishes it from a local working plan only in a catalog-pinned edition's
+inventory path tuples, matching evaluation path/location metadata, or registered
+reading with the exact inventoried GitHub commit/line citation. It does not
+rewrite those artifacts or approve the proposal. Relative links, unknown paths,
+moved commits, free-text metadata, copied milestone content and actual local plan
+files/directories remain forbidden. Source-specific Code Evidence validation is
+still required separately; this exception establishes attribution, not reading
+completion or financial correctness.
 Optional research snapshots are inspected only when their exact paths, SHA-256
 digests and byte lengths are registered in the research catalog state. The gate
 decompresses them with a 64 MiB bound, checks integrity and UTF-8 text, and scans
@@ -302,7 +320,7 @@ or unregistered archives fail. Historical staging directories are not required,
 and source snapshots are never rewritten to satisfy this gate.
 
 During preparation, current declarations use
-`FinKore Core 2.0.4 release preparation (unpublished)`. CoreDoc's version and
+`FinKore Core 2.0.5 release preparation (unpublished)`. CoreDoc's version and
 document date identify the prepared document, while its status remains
 unpublished. Keep release notes under Unreleased and describe maintainer
 acceptance and pending specialist consultation accurately. The stable gate
@@ -313,10 +331,12 @@ For the disposable rehearsal, copy every intended tracked file from the actual
 working tree, including modified content, plus any intended new files. Do not
 use an archive of HEAD alone. Exclude temporary plans and references while
 preserving their original files locally. In that copy only, replace the exact
-preparation declaration above with `FinKore Core 2.0.4 stable`, regenerate Learn,
+preparation declaration above with `FinKore Core 2.0.5 stable`, regenerate Learn,
 and run locked installation, ordinary verification, and the stable gate. A
 temporary Git repository with the original HEAD as its comparison baseline
 allows the ordinary whitespace check to inspect the proposed edits too.
+Mark intended new files with `git add --intent-to-add` in that disposable tree
+before verification; the ordinary Git diff does not inspect untracked files.
 Review the full copied-file inventory; do not omit intended content to pass.
 This rehearsal tests prospective publication metadata; it establishes neither
 maintainer acceptance nor specialist sign-off. Keep a concise outcome in the
@@ -580,7 +600,7 @@ selection fingerprint; a fresh index is not editorial approval. New comparisons
 are never selected by discovery. Rebuild the optional Experts index with
 `npm run experts:build` when its inputs change, then review affected selections.
 
-The snapshot format is `1.2.0` (the reader also accepts `1.0.0` and `1.1.0`). It
+The snapshot format is `1.4.0` (the reader also accepts `1.0.0` through `1.3.0`). It
 links published Research notes, approved Legacy interviews, specialist reports
 and pinned Code Evidence analyses. Its sources and bindings are generated; edit
 the selection and collection curation instead. Export rejects changed comparisons,
@@ -609,10 +629,45 @@ Publication selection does not change `not_recorded` authorization into consent.
 The `code` source kind additionally preserves the `CE-FINDING-*` ID, project,
 repository, GitHub owner (not an inferred author), selected version, full commit
 SHA and function names with commit-pinned file/line links. Its publication is the
-existing `experts/code-evidence/analyses/CE-REPO-*/CE-EDITION-*.md` record, linked through
-GitHub; the source hash covers that record. Its reading extent is
+selected historical record in `experts/code-evidence/rules/CE-RULE-*.json`, linked
+through GitHub. Compact sources use `publication_format: code-evidence-v2`; the
+source hash covers the canonical selected historical publication object, rather
+than unrelated findings in the same family: SHA-256 of UTF-8 JSON, recursively
+sorted object keys, preserved array order, with no indentation or final newline.
+The reader resolves its function IDs
+against the same rule's source locations. Earlier Markdown source profiles remain
+readable for compatibility, but are no longer stored in the collection. Its reading extent is
 `selected_code_and_tests`, execution status is `not_executed`, and validation
-remains pending. This format does not represent later runtime execution evidence.
+remains pending. This selected historical publication profile does not represent later runtime
+execution evidence. Code Evidence may retain compact execution summaries in
+its rule JSON independently; repository tools validate that metadata without
+executing financial behavior, and publication selection remains separate.
+
+Execution observations use the separate `conformance_selections` array: comparison
+key, explicitly selected target IDs and `reviewed_result_sha256`. Its fingerprint
+covers the exact score, descriptions, selected cases, pinned functions, reading
+identity and target clauses. This selection publishes observations only; it does
+not make an ineligible comparison eligible for interpretation cards. Changed
+results require renewed selection review, never automatic fingerprint refresh.
+The generated `conformance_results` entries retain X/Y scores, English result
+paragraphs, selected case IDs and pinned source links. The reader adds a compact,
+closed “Conformance assessment: X/Y selected cases matched” disclosure inside an
+already selected finding card. The source repository, version, commit, record,
+selected function locations and current target clause must agree. Expanding it
+shows the result paragraphs and scope. The finding-level selection may assess
+several properties; its score is not a rule-level pass rate. Execution observations
+do not create additional cards, groups or sections. Results without a selected
+finding card or current CoreDoc binding remain in the snapshot and source records.
+Unsupported, unmapped, resource-bound and conditional cases, along with
+infrastructure errors, remain in selected accounting. Zero matches do not by
+themselves mean a native comparison ran or observed financial failures. Stale
+source records or clauses suppress scores. Specialist validation and publication
+authorization remain unchanged. If the same finding has a current result
+under another rule, the card says “No conformance result linked to this rule”
+instead of asserting that the finding was never executed. A stale result says
+“Recorded conformance result needs review”; an absent selection says “No selected
+conformance result”. Historical reading metadata and contextual native probes
+do not establish the current execution status of a complete Core operation.
 
 Code bindings currently target CoreDoc rules only. The “Who does it this way?”
 cards group the explicit `implementation_relationship`: `same_approach`,
@@ -621,12 +676,12 @@ its stated path, inputs and policy; it requires a supporting rationale and
 `already_addressed` relationship, never whole-library conformance. Other groups
 preserve disagreements and future-domain questions instead of presenting them as
 endorsements. A finding without a justified current-rule comparison stays in the
-analysis catalog. Shared design ancestry is not independent confirmation.
+rule library. Shared design ancestry is not independent confirmation.
 
 Only registered, current code sources permit their exact upstream function URLs
 on the CoreDoc reader. The publication gate still rejects unregistered destinations,
 unpinned branches, unsafe new-tab attributes and upstream links on other pages.
-Function names and URLs must also occur in the fingerprinted analysis. This guards
+Function names and URLs must match the selected historical record and its pinned locations. This guards
 publication consistency; it is not independent verification of upstream behavior.
 
 The “Evidence & context” disclosures show whether a source supports the rationale,

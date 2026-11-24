@@ -335,6 +335,34 @@ test('accepts valid CoreDoc IDs, ranges, local links, and Markdown fragments', (
   assert.match(result.stdout, /Documentation references passed/)
 })
 
+test('literal code signatures are not links while surrounding prose links stay checked', (t) => {
+  const { root, source } = linkFixture(t)
+  const literal = [
+    '# Signature examples',
+    '`def [](key)` and ``text ` [example](missing-inline.md)``.',
+    '```ruby',
+    'def [](key)',
+    '[example](missing-fenced.md)',
+    '```',
+    '[`real label`](docs/coreDoc/core-doc.md)',
+  ].join('\n')
+  writeFileSync(source, literal)
+  assert.equal(run(root).status, 0)
+  for (const prose of [
+    '[broken](missing-real.md)',
+    '[`real label`](missing-real.md)',
+    '`unclosed [broken](missing-real.md)',
+    '``unclosed ` [broken](missing-real.md)',
+    '`unclosed\n\n[broken](missing-real.md)\n\n`',
+    '`unclosed\n# Heading\n[broken](missing-real.md)\n`',
+  ]) {
+    writeFileSync(source, `${literal}\n${prose}\n`)
+    const result = run(root)
+    assert.equal(result.status, 1, prose)
+    assert.match(result.stderr, /missing-real\.md/)
+  }
+})
+
 test('CLI rejects unknown CoreDoc prefixes and missing IDs under known prefixes', () => {
   const prefixRoot = fixture()
   const prefixPath = join(prefixRoot, 'docs/coreDoc/core-doc.md')

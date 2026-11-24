@@ -813,61 +813,62 @@
     },
     {
       "comparison_key": "code-evidence/CE-FINDING-0001",
-      "reviewed_comparison_sha256": "20a99f384f1f597750d31d78be7263e540f5d397c3ad48d7c76a20205e184141",
+      "reviewed_comparison_sha256": "9fe9a5dea9362ff1b48873379b6d70e11160d085f93553788769463a3254f1ca",
       "publication": {
-        "id": "CE-FINDING-0001",
-        "kind": "code",
-        "title": "Money PHP — Allocation rules",
-        "project": "Money PHP",
-        "repository": "moneyphp/money",
-        "owner": "moneyphp",
-        "version": "v4.9.0",
         "commit_sha": "d49ee625c6ba79b9d7a228ce153b02fc1032152b",
-        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0001/CE-EDITION-0001.md#ce-finding-0001",
+        "execution_status": "not_executed",
         "functions": [
           {
-            "name": "Money\\Money::allocate",
-            "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Money.php#L319-L358"
+            "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Money.php#L319-L358",
+            "name": "Money\\Money::allocate"
           },
           {
-            "name": "Unnamed closure",
-            "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Money.php#L344-L348"
+            "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Money.php#L344-L348",
+            "name": "Unnamed closure"
           },
           {
-            "name": "Money\\Money::allocateTo",
-            "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Money.php#L370-L373"
+            "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Money.php#L370-L373",
+            "name": "Money\\Money::allocateTo"
           },
           {
-            "name": "Money\\Calculator\\BcMathCalculator::share",
-            "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Calculator/BcMathCalculator.php#L211-L214"
+            "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Calculator/BcMathCalculator.php#L211-L214",
+            "name": "Money\\Calculator\\BcMathCalculator::share"
           },
           {
-            "name": "Money\\Calculator\\BcMathCalculator::floor",
-            "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Calculator/BcMathCalculator.php#L83-L96"
+            "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Calculator/BcMathCalculator.php#L83-L96",
+            "name": "Money\\Calculator\\BcMathCalculator::floor"
           },
           {
-            "name": "Money\\Money::__construct",
-            "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Money.php#L74-L88"
+            "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Money.php#L74-L88",
+            "name": "Money\\Money::__construct"
           },
           {
-            "name": "Money\\Calculator\\BcMathCalculator::subtract",
-            "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Calculator/BcMathCalculator.php#L41-L46"
+            "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Calculator/BcMathCalculator.php#L41-L46",
+            "name": "Money\\Calculator\\BcMathCalculator::subtract"
           },
           {
-            "name": "Money\\Calculator\\BcMathCalculator::add",
-            "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Calculator/BcMathCalculator.php#L33-L38"
+            "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Calculator/BcMathCalculator.php#L33-L38",
+            "name": "Money\\Calculator\\BcMathCalculator::add"
           },
           {
-            "name": "Money\\Calculator\\BcMathCalculator::compare",
-            "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Calculator/BcMathCalculator.php#L27-L30"
+            "href": "https://github.com/moneyphp/money/blob/d49ee625c6ba79b9d7a228ce153b02fc1032152b/src/Calculator/BcMathCalculator.php#L27-L30",
+            "name": "Money\\Calculator\\BcMathCalculator::compare"
           }
         ],
-        "reading_extent": "selected_code_and_tests",
-        "execution_status": "not_executed",
+        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/rules/CE-RULE-0001.json",
+        "id": "CE-FINDING-0001",
+        "kind": "code",
         "limits": "Allocation path only. Amount and currency are retained, but largest-fraction recipient selection differs from Core declared-order distribution. BCMath intermediates and float ranking were not executed or exhaustively verified.",
+        "owner": "moneyphp",
+        "project": "Money PHP",
+        "publication_path": "experts/code-evidence/rules/CE-RULE-0001.json",
+        "publication_sha256": "1b53012d8a0af1c4ad9fd51ba2f11fea65d721ec346e883dc718a8dc70b111dc",
+        "reading_extent": "selected_code_and_tests",
+        "repository": "moneyphp/money",
         "status": "pending_validation",
-        "publication_path": "experts/code-evidence/analyses/CE-REPO-0001/CE-EDITION-0001.md",
-        "publication_sha256": "48d63b872dd78691ea4553b876ac1453cacd3ae1e07683dc22b67513a8825413"
+        "title": "Money PHP — Allocation rules",
+        "version": "v4.9.0",
+        "publication_format": "code-evidence-v2"
       },
       "target_ids": [
         "CORE-001.4",
@@ -876,45 +877,46 @@
     },
     {
       "comparison_key": "code-evidence/CE-FINDING-0002",
-      "reviewed_comparison_sha256": "ae2040e89c8e723bf9fa2b5358a0bb5b1dc1560c4f87da9f8992c40d6af2ca4c",
+      "reviewed_comparison_sha256": "ac4b6838f692cf3f898537a04168a1458bde9d5e14c825bbdbb2ff0a599aaf29",
       "publication": {
-        "id": "CE-FINDING-0002",
-        "kind": "code",
-        "title": "Brick Money — Ordered allocation in explicit integer steps",
-        "project": "Brick Money",
-        "repository": "brick/money",
-        "owner": "brick",
-        "version": "0.15.2",
         "commit_sha": "d025eb4a105071028764859d93537d394a147c31",
-        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0002/CE-EDITION-0002.md#ce-finding-0002",
+        "execution_status": "not_executed",
         "functions": [
           {
-            "name": "Brick\\Money\\Money::allocate",
-            "href": "https://github.com/brick/money/blob/d025eb4a105071028764859d93537d394a147c31/src/Money.php#L544-L573"
+            "href": "https://github.com/brick/money/blob/d025eb4a105071028764859d93537d394a147c31/src/Money.php#L544-L573",
+            "name": "Brick\\Money\\Money::allocate"
           },
           {
-            "name": "Brick\\Money\\Money::normalizeRatios",
-            "href": "https://github.com/brick/money/blob/d025eb4a105071028764859d93537d394a147c31/src/Money.php#L769-L801"
+            "href": "https://github.com/brick/money/blob/d025eb4a105071028764859d93537d394a147c31/src/Money.php#L769-L801",
+            "name": "Brick\\Money\\Money::normalizeRatios"
           },
           {
-            "name": "Brick\\Money\\Allocation\\AbstractFloorStrategy::computeFloors",
-            "href": "https://github.com/brick/money/blob/d025eb4a105071028764859d93537d394a147c31/src/Allocation/AbstractFloorStrategy.php#L25-L37"
+            "href": "https://github.com/brick/money/blob/d025eb4a105071028764859d93537d394a147c31/src/Allocation/AbstractFloorStrategy.php#L25-L37",
+            "name": "Brick\\Money\\Allocation\\AbstractFloorStrategy::computeFloors"
           },
           {
-            "name": "Brick\\Money\\Allocation\\AbstractFloorAbsorbStrategy::allocate",
-            "href": "https://github.com/brick/money/blob/d025eb4a105071028764859d93537d394a147c31/src/Allocation/AbstractFloorAbsorbStrategy.php#L16-L27"
+            "href": "https://github.com/brick/money/blob/d025eb4a105071028764859d93537d394a147c31/src/Allocation/AbstractFloorAbsorbStrategy.php#L16-L27",
+            "name": "Brick\\Money\\Allocation\\AbstractFloorAbsorbStrategy::allocate"
           },
           {
-            "name": "Brick\\Money\\Allocation\\FloorToFirstStrategy::prioritizeIndices",
-            "href": "https://github.com/brick/money/blob/d025eb4a105071028764859d93537d394a147c31/src/Allocation/FloorToFirstStrategy.php#L16-L19"
+            "href": "https://github.com/brick/money/blob/d025eb4a105071028764859d93537d394a147c31/src/Allocation/FloorToFirstStrategy.php#L16-L19",
+            "name": "Brick\\Money\\Allocation\\FloorToFirstStrategy::prioritizeIndices"
           }
         ],
-        "reading_extent": "selected_code_and_tests",
-        "execution_status": "not_executed",
+        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/rules/CE-RULE-0001.json",
+        "id": "CE-FINDING-0002",
+        "kind": "code",
         "limits": "FloorToFirst strategy, positive integer weights and a fixed context with explicitly matched scale/step. Other strategies, rational/zero-weight inputs and Brick Math internals are not claimed equivalent to Core.",
+        "owner": "brick",
+        "project": "Brick Money",
+        "publication_path": "experts/code-evidence/rules/CE-RULE-0001.json",
+        "publication_sha256": "61f2c1281e13357b9cf330de88f1aad06ae40c3786ec20d6826d64769ab54f20",
+        "reading_extent": "selected_code_and_tests",
+        "repository": "brick/money",
         "status": "pending_validation",
-        "publication_path": "experts/code-evidence/analyses/CE-REPO-0002/CE-EDITION-0002.md",
-        "publication_sha256": "eb2b002832356a0cf82e839a9a55cdfe2d92f34eacaa2a2f0fe278c91fad1c3e"
+        "title": "Brick Money — Ordered allocation in explicit integer steps",
+        "version": "0.15.2",
+        "publication_format": "code-evidence-v2"
       },
       "target_ids": [
         "CORE-001.4"
@@ -922,33 +924,34 @@
     },
     {
       "comparison_key": "code-evidence/CE-FINDING-0003",
-      "reviewed_comparison_sha256": "f86fa905ff6442b36b64070a13ffbdbf2c542b9b0da645197f21ac4d84314cf4",
+      "reviewed_comparison_sha256": "c3a4410fa7a4adec2bede15ca3b4dab589866880f36eca2e247801e3a415fca3",
       "publication": {
-        "id": "CE-FINDING-0003",
-        "kind": "code",
-        "title": "RubyMoney — Allocation carries residual value through successive splits",
-        "project": "RubyMoney",
-        "repository": "RubyMoney/money",
-        "owner": "RubyMoney",
-        "version": "v7.1.1",
         "commit_sha": "26e2829c34f165847040a5a40d4d2daa5eb72927",
-        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0003/CE-EDITION-0003.md#ce-finding-0003",
+        "execution_status": "not_executed",
         "functions": [
           {
-            "name": "Money::Allocation.generate",
-            "href": "https://github.com/RubyMoney/money/blob/26e2829c34f165847040a5a40d4d2daa5eb72927/lib/money/money/allocation.rb#L24-L70"
+            "href": "https://github.com/RubyMoney/money/blob/26e2829c34f165847040a5a40d4d2daa5eb72927/lib/money/money/allocation.rb#L24-L70",
+            "name": "Money::Allocation.generate"
           },
           {
-            "name": "Money::Allocation.convert_to_big_decimal",
-            "href": "https://github.com/RubyMoney/money/blob/26e2829c34f165847040a5a40d4d2daa5eb72927/lib/money/money/allocation.rb#L78-L86"
+            "href": "https://github.com/RubyMoney/money/blob/26e2829c34f165847040a5a40d4d2daa5eb72927/lib/money/money/allocation.rb#L78-L86",
+            "name": "Money::Allocation.convert_to_big_decimal"
           }
         ],
-        "reading_extent": "selected_code_and_tests",
-        "execution_status": "not_executed",
+        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/rules/CE-RULE-0001.json",
+        "id": "CE-FINDING-0003",
+        "kind": "code",
         "limits": "A numeric helper, not a complete Money operation: currency construction is outside the reading. Successive division, numeric types and decimal cutoff affect the result; all-zero weights are replaced with equal weights.",
+        "owner": "RubyMoney",
+        "project": "RubyMoney",
+        "publication_path": "experts/code-evidence/rules/CE-RULE-0001.json",
+        "publication_sha256": "37d88be727e2d65361043c2a6d5c8c3e2c14dd35edfbcee66783b21be6025db3",
+        "reading_extent": "selected_code_and_tests",
+        "repository": "RubyMoney/money",
         "status": "pending_validation",
-        "publication_path": "experts/code-evidence/analyses/CE-REPO-0003/CE-EDITION-0003.md",
-        "publication_sha256": "864c3fa60a0f52f920b9a29d1e673f281e1fb3be53c04e64b0b69de44346b43a"
+        "title": "RubyMoney — Allocation carries residual value through successive splits",
+        "version": "v7.1.1",
+        "publication_format": "code-evidence-v2"
       },
       "target_ids": [
         "CORE-001.4"
@@ -956,37 +959,38 @@
     },
     {
       "comparison_key": "code-evidence/CE-FINDING-0004",
-      "reviewed_comparison_sha256": "83960276473a1b5a33d3a26e599b9f69623f5d45ace1c1d955895ddf5054abab",
+      "reviewed_comparison_sha256": "8385afe1f50fa34f0b1a5975949b7a4b99c6a51df44791430bbb28bd1d8ec9e6",
       "publication": {
-        "id": "CE-FINDING-0004",
-        "kind": "code",
-        "title": "Joda-Money — Money addition checks currency before combining amounts",
-        "project": "Joda-Money",
-        "repository": "JodaOrg/joda-money",
-        "owner": "JodaOrg",
-        "version": "v2.0.3",
         "commit_sha": "2e8a1fd4263de2ce6fcc9c2ae703d559dd86c61e",
-        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0004/CE-EDITION-0004.md#ce-finding-0004",
+        "execution_status": "not_executed",
         "functions": [
           {
-            "name": "org.joda.money.Money.plus",
-            "href": "https://github.com/JodaOrg/joda-money/blob/2e8a1fd4263de2ce6fcc9c2ae703d559dd86c61e/src/main/java/org/joda/money/Money.java#L742-L744"
+            "href": "https://github.com/JodaOrg/joda-money/blob/2e8a1fd4263de2ce6fcc9c2ae703d559dd86c61e/src/main/java/org/joda/money/Money.java#L742-L744",
+            "name": "org.joda.money.Money.plus"
           },
           {
-            "name": "org.joda.money.BigMoney.plus",
-            "href": "https://github.com/JodaOrg/joda-money/blob/2e8a1fd4263de2ce6fcc9c2ae703d559dd86c61e/src/main/java/org/joda/money/BigMoney.java#L856-L859"
+            "href": "https://github.com/JodaOrg/joda-money/blob/2e8a1fd4263de2ce6fcc9c2ae703d559dd86c61e/src/main/java/org/joda/money/BigMoney.java#L856-L859",
+            "name": "org.joda.money.BigMoney.plus"
           },
           {
-            "name": "org.joda.money.BigMoney.checkCurrencyEqual",
-            "href": "https://github.com/JodaOrg/joda-money/blob/2e8a1fd4263de2ce6fcc9c2ae703d559dd86c61e/src/main/java/org/joda/money/BigMoney.java#L808-L814"
+            "href": "https://github.com/JodaOrg/joda-money/blob/2e8a1fd4263de2ce6fcc9c2ae703d559dd86c61e/src/main/java/org/joda/money/BigMoney.java#L808-L814",
+            "name": "org.joda.money.BigMoney.checkCurrencyEqual"
           }
         ],
-        "reading_extent": "selected_code_and_tests",
-        "execution_status": "not_executed",
+        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/rules/CE-RULE-0002.json",
+        "id": "CE-FINDING-0004",
+        "kind": "code",
         "limits": "The inspected Money/BigMoney addition path checks currencies. Full ordering, equality, conversion and provider semantics were not assessed. Native exceptions are not portable FinKore error codes.",
+        "owner": "JodaOrg",
+        "project": "Joda-Money",
+        "publication_path": "experts/code-evidence/rules/CE-RULE-0002.json",
+        "publication_sha256": "337fe3d8486dd0693504806943eb22da0daafd3cf9c91fe069b535c435b25c0b",
+        "reading_extent": "selected_code_and_tests",
+        "repository": "JodaOrg/joda-money",
         "status": "pending_validation",
-        "publication_path": "experts/code-evidence/analyses/CE-REPO-0004/CE-EDITION-0004.md",
-        "publication_sha256": "98dcac1cabfd5a1d920f7a4d23d97eafa424e2cbc588ec3958d655cffe940a2e"
+        "title": "Joda-Money — Money addition checks currency before combining amounts",
+        "version": "v2.0.3",
+        "publication_format": "code-evidence-v2"
       },
       "target_ids": [
         "CORE-001.3"
@@ -994,37 +998,38 @@
     },
     {
       "comparison_key": "code-evidence/CE-FINDING-0005",
-      "reviewed_comparison_sha256": "f83fe27b4279a7c59ac49dba98471b3676e5efe07c5d7e63c7ea0765fe702ed5",
+      "reviewed_comparison_sha256": "85e1679fd49e1b5484ea0f93501bd92ebda53f659f690bc57f84f71e71bcaa7d",
       "publication": {
-        "id": "CE-FINDING-0005",
-        "kind": "code",
-        "title": "Dinero.js — Allocation prioritizes larger weights for residual units",
-        "project": "Dinero.js",
-        "repository": "dinerojs/dinero.js",
-        "owner": "dinerojs",
-        "version": "v2.0.2",
         "commit_sha": "cc7df3e6d986445eab42dffc33f8c2d14e4d588a",
-        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0005/CE-EDITION-0005.md#ce-finding-0005",
+        "execution_status": "not_executed",
         "functions": [
           {
-            "name": "safeAllocate<TAmount> / returned allocate",
-            "href": "https://github.com/dinerojs/dinero.js/blob/cc7df3e6d986445eab42dffc33f8c2d14e4d588a/packages/dinero.js/src/core/api/allocate.ts#L54-L95"
+            "href": "https://github.com/dinerojs/dinero.js/blob/cc7df3e6d986445eab42dffc33f8c2d14e4d588a/packages/dinero.js/src/core/api/allocate.ts#L54-L95",
+            "name": "safeAllocate<TAmount> / returned allocate"
           },
           {
-            "name": "distribute<TAmount> / returned unnamed closure",
-            "href": "https://github.com/dinerojs/dinero.js/blob/cc7df3e6d986445eab42dffc33f8c2d14e4d588a/packages/dinero.js/src/core/utils/distribute.ts#L17-L78"
+            "href": "https://github.com/dinerojs/dinero.js/blob/cc7df3e6d986445eab42dffc33f8c2d14e4d588a/packages/dinero.js/src/core/utils/distribute.ts#L17-L78",
+            "name": "distribute<TAmount> / returned unnamed closure"
           },
           {
-            "name": "number calculator integerDivide",
-            "href": "https://github.com/dinerojs/dinero.js/blob/cc7df3e6d986445eab42dffc33f8c2d14e4d588a/packages/dinero.js/src/calculator/number/api/integerDivide.ts#L11-L16"
+            "href": "https://github.com/dinerojs/dinero.js/blob/cc7df3e6d986445eab42dffc33f8c2d14e4d588a/packages/dinero.js/src/calculator/number/api/integerDivide.ts#L11-L16",
+            "name": "number calculator integerDivide"
           }
         ],
-        "reading_extent": "selected_code_and_tests",
-        "execution_status": "not_executed",
+        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/rules/CE-RULE-0001.json",
+        "id": "CE-FINDING-0005",
+        "kind": "code",
         "limits": "The safe API and selected number-backend utility were read. Remainder goes to larger weights; zero ratios and scale derivation differ from Core. The no-progress guard is not proof of exact conservation beyond safe number precision.",
+        "owner": "dinerojs",
+        "project": "Dinero.js",
+        "publication_path": "experts/code-evidence/rules/CE-RULE-0001.json",
+        "publication_sha256": "3d8f82f0f78e9cadc3ee0daa991714e9ee8daca1edf9b88506e9f3e3ef267bb5",
+        "reading_extent": "selected_code_and_tests",
+        "repository": "dinerojs/dinero.js",
         "status": "pending_validation",
-        "publication_path": "experts/code-evidence/analyses/CE-REPO-0005/CE-EDITION-0005.md",
-        "publication_sha256": "ccb8bb7f8a9647b82e9bdee832723ced6a2241bc9ae6d5ca94328efc3b8fbbbc"
+        "title": "Dinero.js — Allocation prioritizes larger weights for residual units",
+        "version": "v2.0.2",
+        "publication_format": "code-evidence-v2"
       },
       "target_ids": [
         "CORE-001.2",
@@ -1033,37 +1038,38 @@
     },
     {
       "comparison_key": "code-evidence/CE-FINDING-0006",
-      "reviewed_comparison_sha256": "fb3303a08c0d7ea879dd1961def56a5dfa2a291b5b173b625756f30aa0876b38",
+      "reviewed_comparison_sha256": "5b60354d32cef805c0a7956fccbcabc18fa0ed4707c46d7aef0f21e18113a3e4",
       "publication": {
-        "id": "CE-FINDING-0006",
-        "kind": "code",
-        "title": "GoMoney — Signed splitting preserves residual units, except the zero-weight fallback",
-        "project": "GoMoney",
-        "repository": "Rhymond/go-money",
-        "owner": "Rhymond",
-        "version": "v1.0.15",
         "commit_sha": "b43ce49343a684c955ffb1a4e4165b81db8989b7",
-        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0006/CE-EDITION-0006.md#ce-finding-0006",
+        "execution_status": "not_executed",
         "functions": [
           {
-            "name": "money.(*Money).Split",
-            "href": "https://github.com/Rhymond/go-money/blob/b43ce49343a684c955ffb1a4e4165b81db8989b7/money.go#L262-L288"
+            "href": "https://github.com/Rhymond/go-money/blob/b43ce49343a684c955ffb1a4e4165b81db8989b7/money.go#L262-L288",
+            "name": "money.(*Money).Split"
           },
           {
-            "name": "money.(*Money).Allocate",
-            "href": "https://github.com/Rhymond/go-money/blob/b43ce49343a684c955ffb1a4e4165b81db8989b7/money.go#L293-L341"
+            "href": "https://github.com/Rhymond/go-money/blob/b43ce49343a684c955ffb1a4e4165b81db8989b7/money.go#L293-L341",
+            "name": "money.(*Money).Allocate"
           },
           {
-            "name": "money.(*calculator).allocate",
-            "href": "https://github.com/Rhymond/go-money/blob/b43ce49343a684c955ffb1a4e4165b81db8989b7/calculator.go#L27-L33"
+            "href": "https://github.com/Rhymond/go-money/blob/b43ce49343a684c955ffb1a4e4165b81db8989b7/calculator.go#L27-L33",
+            "name": "money.(*calculator).allocate"
           }
         ],
-        "reading_extent": "selected_code_and_tests",
-        "execution_status": "not_executed",
+        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/rules/CE-RULE-0001.json",
+        "id": "CE-FINDING-0006",
+        "kind": "code",
         "limits": "Signed equal splitting and ratio allocation were read. Equal splitting preserves signed residuals in the selected cases; an all-zero ratio list can return zero amounts for a nonzero source. Fixed-width overflow limits remain unverified.",
+        "owner": "Rhymond",
+        "project": "GoMoney",
+        "publication_path": "experts/code-evidence/rules/CE-RULE-0001.json",
+        "publication_sha256": "fb4a3f370b3503d97bc22148539481e4bde7bacb664fbbf7f047748054b09dbe",
+        "reading_extent": "selected_code_and_tests",
+        "repository": "Rhymond/go-money",
         "status": "pending_validation",
-        "publication_path": "experts/code-evidence/analyses/CE-REPO-0006/CE-EDITION-0006.md",
-        "publication_sha256": "1d01b3a989305e29cc098e13f7608985344d7b4ec8acde7be44ab65a22173254"
+        "title": "GoMoney — Signed splitting preserves residual units, except the zero-weight fallback",
+        "version": "v1.0.15",
+        "publication_format": "code-evidence-v2"
       },
       "target_ids": [
         "CORE-001.4"
@@ -1071,41 +1077,42 @@
     },
     {
       "comparison_key": "code-evidence/CE-FINDING-0007",
-      "reviewed_comparison_sha256": "8ba60e1239a261f4157425fa12a36c1fab4af3b610dac3abcae37105187b5700",
+      "reviewed_comparison_sha256": "e6536f781fc6b8bd924f90ed04fb7ef17656af7e1dc812472aa85dc2bcdf65b3",
       "publication": {
-        "id": "CE-FINDING-0007",
-        "kind": "code",
-        "title": "NodaMoney — Context-selected rounding can change a value at construction",
-        "project": "NodaMoney",
-        "repository": "RemyDuijkeren/NodaMoney",
-        "owner": "RemyDuijkeren",
-        "version": "2.10.0",
         "commit_sha": "1844718cc007b0699ab8aefbbdbcd3f532103708",
-        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0007/CE-EDITION-0007.md#ce-finding-0007",
+        "execution_status": "not_executed",
         "functions": [
           {
-            "name": "NodaMoney.Money.Money",
-            "href": "https://github.com/RemyDuijkeren/NodaMoney/blob/1844718cc007b0699ab8aefbbdbcd3f532103708/src/NodaMoney/Money.cs#L38-L75"
+            "href": "https://github.com/RemyDuijkeren/NodaMoney/blob/1844718cc007b0699ab8aefbbdbcd3f532103708/src/NodaMoney/Money.cs#L38-L75",
+            "name": "NodaMoney.Money.Money"
           },
           {
-            "name": "NodaMoney.Context.StandardRounding.Round (Currency overload)",
-            "href": "https://github.com/RemyDuijkeren/NodaMoney/blob/1844718cc007b0699ab8aefbbdbcd3f532103708/src/NodaMoney/Context/StandardRounding.cs#L13-L31"
+            "href": "https://github.com/RemyDuijkeren/NodaMoney/blob/1844718cc007b0699ab8aefbbdbcd3f532103708/src/NodaMoney/Context/StandardRounding.cs#L13-L31",
+            "name": "NodaMoney.Context.StandardRounding.Round (Currency overload)"
           },
           {
-            "name": "NodaMoney.Context.StandardRounding.Round (CurrencyInfo overload)",
-            "href": "https://github.com/RemyDuijkeren/NodaMoney/blob/1844718cc007b0699ab8aefbbdbcd3f532103708/src/NodaMoney/Context/StandardRounding.cs#L36-L70"
+            "href": "https://github.com/RemyDuijkeren/NodaMoney/blob/1844718cc007b0699ab8aefbbdbcd3f532103708/src/NodaMoney/Context/StandardRounding.cs#L36-L70",
+            "name": "NodaMoney.Context.StandardRounding.Round (CurrencyInfo overload)"
           },
           {
-            "name": "NodaMoney.Context.MoneyContext.Round",
-            "href": "https://github.com/RemyDuijkeren/NodaMoney/blob/1844718cc007b0699ab8aefbbdbcd3f532103708/src/NodaMoney/Context/MoneyContext.cs#L121-L129"
+            "href": "https://github.com/RemyDuijkeren/NodaMoney/blob/1844718cc007b0699ab8aefbbdbcd3f532103708/src/NodaMoney/Context/MoneyContext.cs#L121-L129",
+            "name": "NodaMoney.Context.MoneyContext.Round"
           }
         ],
-        "reading_extent": "selected_code_and_tests",
-        "execution_status": "not_executed",
+        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/rules/CE-RULE-0003.json",
+        "id": "CE-FINDING-0007",
+        "kind": "code",
         "limits": "Constructor and rounding/context paths only. A missing context can select an ambient policy; standard rounding normally derives scale from currency. An expressly declared composing-domain policy is a separate assessment.",
+        "owner": "RemyDuijkeren",
+        "project": "NodaMoney",
+        "publication_path": "experts/code-evidence/rules/CE-RULE-0003.json",
+        "publication_sha256": "6ef07f671be8f4c7932916270745b4beec2939dcdd1a739153c66348d21726ef",
+        "reading_extent": "selected_code_and_tests",
+        "repository": "RemyDuijkeren/NodaMoney",
         "status": "pending_validation",
-        "publication_path": "experts/code-evidence/analyses/CE-REPO-0007/CE-EDITION-0007.md",
-        "publication_sha256": "27bbf9e0349c699df8004fcfa01082604da9bfa5561dcc35b719c250a35796f5"
+        "title": "NodaMoney — Context-selected rounding can change a value at construction",
+        "version": "2.10.0",
+        "publication_format": "code-evidence-v2"
       },
       "target_ids": [
         "CORE-001.2",
@@ -1114,37 +1121,38 @@
     },
     {
       "comparison_key": "code-evidence/CE-FINDING-0008",
-      "reviewed_comparison_sha256": "64d448933e8278c9012f48da4fe3db68cc8cc0a92dc1f41253c7b582db84ed8d",
+      "reviewed_comparison_sha256": "6cfec3fd813773186f847cbe32a33de10b79fdcfb0e727090bba89d084b868ed",
       "publication": {
-        "id": "CE-FINDING-0008",
-        "kind": "code",
-        "title": "py-moneyed — Addition is currency-checked, but numeric context remains observable",
-        "project": "py-moneyed",
-        "repository": "py-moneyed/py-moneyed",
-        "owner": "py-moneyed",
-        "version": "v3.0",
         "commit_sha": "f45c0078b5ca2af098d5d75f2c54295e7196388e",
-        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0008/CE-EDITION-0008.md#ce-finding-0008",
+        "execution_status": "not_executed",
         "functions": [
           {
-            "name": "moneyed.classes.Money.__add__",
-            "href": "https://github.com/py-moneyed/py-moneyed/blob/f45c0078b5ca2af098d5d75f2c54295e7196388e/src/moneyed/classes.py#L220-L235"
+            "href": "https://github.com/py-moneyed/py-moneyed/blob/f45c0078b5ca2af098d5d75f2c54295e7196388e/src/moneyed/classes.py#L220-L235",
+            "name": "moneyed.classes.Money.__add__"
           },
           {
-            "name": "moneyed.classes.Money.__sub__",
-            "href": "https://github.com/py-moneyed/py-moneyed/blob/f45c0078b5ca2af098d5d75f2c54295e7196388e/src/moneyed/classes.py#L237-L241"
+            "href": "https://github.com/py-moneyed/py-moneyed/blob/f45c0078b5ca2af098d5d75f2c54295e7196388e/src/moneyed/classes.py#L237-L241",
+            "name": "moneyed.classes.Money.__sub__"
           },
           {
-            "name": "moneyed.classes.Money.__eq__",
-            "href": "https://github.com/py-moneyed/py-moneyed/blob/f45c0078b5ca2af098d5d75f2c54295e7196388e/src/moneyed/classes.py#L319-L329"
+            "href": "https://github.com/py-moneyed/py-moneyed/blob/f45c0078b5ca2af098d5d75f2c54295e7196388e/src/moneyed/classes.py#L319-L329",
+            "name": "moneyed.classes.Money.__eq__"
           }
         ],
-        "reading_extent": "selected_code_and_tests",
-        "execution_status": "not_executed",
+        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/rules/CE-RULE-0002.json",
+        "id": "CE-FINDING-0008",
+        "kind": "code",
         "limits": "Addition/subtraction and selected equality/context observations only. Decimal representation alone does not establish unrestricted exactness; native numeric-zero conveniences and equality semantics differ from the portable boundary.",
+        "owner": "py-moneyed",
+        "project": "py-moneyed",
+        "publication_path": "experts/code-evidence/rules/CE-RULE-0002.json",
+        "publication_sha256": "d9c3cdf2060c430c99c5182b941c3288e1340b9e0d74e9ba4f2a3fd7de8d9cd6",
+        "reading_extent": "selected_code_and_tests",
+        "repository": "py-moneyed/py-moneyed",
         "status": "pending_validation",
-        "publication_path": "experts/code-evidence/analyses/CE-REPO-0008/CE-EDITION-0008.md",
-        "publication_sha256": "b844e8a1404e4766bb2c278082604d70c075ad04eb144848138de2ebca366071"
+        "title": "py-moneyed — Addition is currency-checked, but numeric context remains observable",
+        "version": "v3.0",
+        "publication_format": "code-evidence-v2"
       },
       "target_ids": [
         "CORE-001.3",
@@ -1153,33 +1161,34 @@
     },
     {
       "comparison_key": "code-evidence/CE-FINDING-0009",
-      "reviewed_comparison_sha256": "46b422924081e37519d4f51788161ac11fd558427e83612c3b844f18da4c3a6e",
+      "reviewed_comparison_sha256": "873c567c4acfb1b7a7501db19403336c711546a84cbb1d857a0960c930e268be",
       "publication": {
-        "id": "CE-FINDING-0009",
-        "kind": "code",
-        "title": "Beancount — Balance assertions use a separate decimal tolerance policy",
-        "project": "Beancount",
-        "repository": "beancount/beancount",
-        "owner": "beancount",
-        "version": "3.2.3",
         "commit_sha": "eeda2aa2a3204ffb980dab11220b2abde5e80b38",
-        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0009/CE-EDITION-0009.md#ce-finding-0009",
+        "execution_status": "not_executed",
         "functions": [
           {
-            "name": "beancount.ops.balance.get_balance_tolerance",
-            "href": "https://github.com/beancount/beancount/blob/eeda2aa2a3204ffb980dab11220b2abde5e80b38/beancount/ops/balance.py#L20-L45"
+            "href": "https://github.com/beancount/beancount/blob/eeda2aa2a3204ffb980dab11220b2abde5e80b38/beancount/ops/balance.py#L20-L45",
+            "name": "beancount.ops.balance.get_balance_tolerance"
           },
           {
-            "name": "beancount.ops.balance.check",
-            "href": "https://github.com/beancount/beancount/blob/eeda2aa2a3204ffb980dab11220b2abde5e80b38/beancount/ops/balance.py#L48-L185"
+            "href": "https://github.com/beancount/beancount/blob/eeda2aa2a3204ffb980dab11220b2abde5e80b38/beancount/ops/balance.py#L48-L185",
+            "name": "beancount.ops.balance.check"
           }
         ],
-        "reading_extent": "selected_code_and_tests",
-        "execution_status": "not_executed",
+        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/rules/CE-RULE-0006.json",
+        "id": "CE-FINDING-0009",
+        "kind": "code",
         "limits": "A ledger balance-assertion policy, outside current Core ledger/reconciliation scope. Its decimal tolerance does not redefine exact Money equality or authorize approximate monetary conformance checks.",
+        "owner": "beancount",
+        "project": "Beancount",
+        "publication_path": "experts/code-evidence/rules/CE-RULE-0006.json",
+        "publication_sha256": "5c6558ed590e03d939f333e9cceb4678fea4ad8326d1c1e991e136752138450f",
+        "reading_extent": "selected_code_and_tests",
+        "repository": "beancount/beancount",
         "status": "pending_validation",
-        "publication_path": "experts/code-evidence/analyses/CE-REPO-0009/CE-EDITION-0009.md",
-        "publication_sha256": "2c9df1b1e2068f68fb25afbcb33ee17b6f275c94011247fb2c092ab25fcf76c1"
+        "title": "Beancount — Balance assertions use a separate decimal tolerance policy",
+        "version": "3.2.3",
+        "publication_format": "code-evidence-v2"
       },
       "target_ids": [
         "CORE-005.3"
@@ -1187,37 +1196,38 @@
     },
     {
       "comparison_key": "code-evidence/CE-FINDING-0010",
-      "reviewed_comparison_sha256": "dfa6624a6ecaed1b29eeb82c9073e03773e4f55e56cfc108f8e76ed4b337d202",
+      "reviewed_comparison_sha256": "cf5dfead75403c34009838bfce2bf81797dfb9cc35e9f6f3b669e2590f5606f5",
       "publication": {
-        "id": "CE-FINDING-0010",
-        "kind": "code",
-        "title": "QuantLib — Interest year fractions depend on day-count and endpoint policy",
-        "project": "QuantLib",
-        "repository": "lballabio/QuantLib",
-        "owner": "lballabio",
-        "version": "v1.44",
         "commit_sha": "ab4cb476d35f7275834bc05b47d1324403d1823b",
-        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0010/CE-EDITION-0010.md#ce-finding-0010",
+        "execution_status": "not_executed",
         "functions": [
           {
-            "name": "QuantLib::Actual360::Impl::dayCount",
-            "href": "https://github.com/lballabio/QuantLib/blob/ab4cb476d35f7275834bc05b47d1324403d1823b/ql/time/daycounters/actual360.hpp#L50-L52"
+            "href": "https://github.com/lballabio/QuantLib/blob/ab4cb476d35f7275834bc05b47d1324403d1823b/ql/time/daycounters/actual360.hpp#L50-L52",
+            "name": "QuantLib::Actual360::Impl::dayCount"
           },
           {
-            "name": "QuantLib::Actual360::Impl::yearFraction",
-            "href": "https://github.com/lballabio/QuantLib/blob/ab4cb476d35f7275834bc05b47d1324403d1823b/ql/time/daycounters/actual360.hpp#L53-L57"
+            "href": "https://github.com/lballabio/QuantLib/blob/ab4cb476d35f7275834bc05b47d1324403d1823b/ql/time/daycounters/actual360.hpp#L53-L57",
+            "name": "QuantLib::Actual360::Impl::yearFraction"
           },
           {
-            "name": "QuantLib::Actual360::Actual360",
-            "href": "https://github.com/lballabio/QuantLib/blob/ab4cb476d35f7275834bc05b47d1324403d1823b/ql/time/daycounters/actual360.hpp#L60-L61"
+            "href": "https://github.com/lballabio/QuantLib/blob/ab4cb476d35f7275834bc05b47d1324403d1823b/ql/time/daycounters/actual360.hpp#L60-L61",
+            "name": "QuantLib::Actual360::Actual360"
           }
         ],
-        "reading_extent": "selected_code_and_tests",
-        "execution_status": "not_executed",
+        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/rules/CE-RULE-0004.json",
+        "id": "CE-FINDING-0010",
+        "kind": "code",
         "limits": "Actual/360 time fractions and endpoint inclusion only. Interest accrual is outside current Core; Time test tolerances are not exact Money comparison rules. Date internals and a complete interest calculation were not verified.",
+        "owner": "lballabio",
+        "project": "QuantLib",
+        "publication_path": "experts/code-evidence/rules/CE-RULE-0004.json",
+        "publication_sha256": "a72c6706cd9b8cb1f331d2f189737ffd61d7a9b481244d9a24c75d33e934c6dc",
+        "reading_extent": "selected_code_and_tests",
+        "repository": "lballabio/QuantLib",
         "status": "pending_validation",
-        "publication_path": "experts/code-evidence/analyses/CE-REPO-0010/CE-EDITION-0010.md",
-        "publication_sha256": "89c26561fb9a72c51af0440b9b6456552ca6122b4d46cf27b8d01e5063ce60a4"
+        "title": "QuantLib — Interest year fractions depend on day-count and endpoint policy",
+        "version": "v1.44",
+        "publication_format": "code-evidence-v2"
       },
       "target_ids": [
         "CORE-005.3"
@@ -1225,41 +1235,42 @@
     },
     {
       "comparison_key": "code-evidence/CE-FINDING-0011",
-      "reviewed_comparison_sha256": "b434b654afa507d05c273577847b6559248b256061790d1dfc67c0724b9d939a",
+      "reviewed_comparison_sha256": "22a79ef283f59b7b4db4335adc6f19d4493166b68c369ac7d83120948a126e68",
       "publication": {
-        "id": "CE-FINDING-0011",
-        "kind": "code",
-        "title": "Moov ACH — Payment control totals are checked at file and batch levels",
-        "project": "Moov ACH",
-        "repository": "moov-io/ach",
-        "owner": "moov-io",
-        "version": "v1.69.0",
         "commit_sha": "314f990cf2809d6f9848d0b8df5767eb19b0cf17",
-        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0011/CE-EDITION-0011.md#ce-finding-0011",
+        "execution_status": "not_executed",
         "functions": [
           {
-            "name": "ach.(*File).ValidateTotals",
-            "href": "https://github.com/moov-io/ach/blob/314f990cf2809d6f9848d0b8df5767eb19b0cf17/file.go#L1170-L1192"
+            "href": "https://github.com/moov-io/ach/blob/314f990cf2809d6f9848d0b8df5767eb19b0cf17/file.go#L1170-L1192",
+            "name": "ach.(*File).ValidateTotals"
           },
           {
-            "name": "ach.(*File).isFileAmount",
-            "href": "https://github.com/moov-io/ach/blob/314f990cf2809d6f9848d0b8df5767eb19b0cf17/file.go#L1249-L1289"
+            "href": "https://github.com/moov-io/ach/blob/314f990cf2809d6f9848d0b8df5767eb19b0cf17/file.go#L1249-L1289",
+            "name": "ach.(*File).isFileAmount"
           },
           {
-            "name": "ach.(*Batch).isBatchAmount",
-            "href": "https://github.com/moov-io/ach/blob/314f990cf2809d6f9848d0b8df5767eb19b0cf17/batch.go#L738-L770"
+            "href": "https://github.com/moov-io/ach/blob/314f990cf2809d6f9848d0b8df5767eb19b0cf17/batch.go#L738-L770",
+            "name": "ach.(*Batch).isBatchAmount"
           },
           {
-            "name": "ach.(*Batch).calculateBatchAmounts",
-            "href": "https://github.com/moov-io/ach/blob/314f990cf2809d6f9848d0b8df5767eb19b0cf17/batch.go#L772-L787"
+            "href": "https://github.com/moov-io/ach/blob/314f990cf2809d6f9848d0b8df5767eb19b0cf17/batch.go#L772-L787",
+            "name": "ach.(*Batch).calculateBatchAmounts"
           }
         ],
-        "reading_extent": "selected_code_and_tests",
-        "execution_status": "not_executed",
+        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/rules/CE-RULE-0007.json",
+        "id": "CE-FINDING-0011",
+        "kind": "code",
         "limits": "ACH file/batch control validation, not current Core payment semantics or a certification against a Nacha edition. Selected totals checks and assertions do not prove all variants, bounds or settlement behavior.",
+        "owner": "moov-io",
+        "project": "Moov ACH",
+        "publication_path": "experts/code-evidence/rules/CE-RULE-0007.json",
+        "publication_sha256": "942e022e936e7034a19eb5d5f38837b04f8febe947e3742d2d0e14caec323770",
+        "reading_extent": "selected_code_and_tests",
+        "repository": "moov-io/ach",
         "status": "pending_validation",
-        "publication_path": "experts/code-evidence/analyses/CE-REPO-0011/CE-EDITION-0011.md",
-        "publication_sha256": "ba3b6edecf248f781afc801b78a9b8f65e33324720537b00c9678c7c44a58e27"
+        "title": "Moov ACH — Payment control totals are checked at file and batch levels",
+        "version": "v1.69.0",
+        "publication_format": "code-evidence-v2"
       },
       "target_ids": [
         "CORE-002.2"
@@ -1267,37 +1278,38 @@
     },
     {
       "comparison_key": "code-evidence/CE-FINDING-0013",
-      "reviewed_comparison_sha256": "bd688317460c8896a80c819f216a3b18c5d2c1ada3314b320a632ee827e3b61d",
+      "reviewed_comparison_sha256": "cc24d7bd8ba85bfcd8b545ede0268b885a5c2d4afe5b263a561db2560c403aed",
       "publication": {
-        "id": "CE-FINDING-0013",
-        "kind": "code",
-        "title": "Formance Ledger — Reversal swaps posting direction and reverses posting order",
-        "project": "Formance Ledger",
-        "repository": "formancehq/ledger",
-        "owner": "formancehq",
-        "version": "v2.4.18",
         "commit_sha": "83cd8dc7a66ba02a0418a36ec45663b19e26dcb3",
-        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0013/CE-EDITION-0013.md#ce-finding-0013",
+        "execution_status": "not_executed",
         "functions": [
           {
-            "name": "ledger.Transaction.Reverse",
-            "href": "https://github.com/formancehq/ledger/blob/83cd8dc7a66ba02a0418a36ec45663b19e26dcb3/internal/transaction.go#L64-L67"
+            "href": "https://github.com/formancehq/ledger/blob/83cd8dc7a66ba02a0418a36ec45663b19e26dcb3/internal/transaction.go#L64-L67",
+            "name": "ledger.Transaction.Reverse"
           },
           {
-            "name": "ledger.Postings.Reverse",
-            "href": "https://github.com/formancehq/ledger/blob/83cd8dc7a66ba02a0418a36ec45663b19e26dcb3/internal/posting.go#L37-L50"
+            "href": "https://github.com/formancehq/ledger/blob/83cd8dc7a66ba02a0418a36ec45663b19e26dcb3/internal/posting.go#L37-L50",
+            "name": "ledger.Postings.Reverse"
           },
           {
-            "name": "ledger.Postings.Validate",
-            "href": "https://github.com/formancehq/ledger/blob/83cd8dc7a66ba02a0418a36ec45663b19e26dcb3/internal/posting.go#L52-L72"
+            "href": "https://github.com/formancehq/ledger/blob/83cd8dc7a66ba02a0418a36ec45663b19e26dcb3/internal/posting.go#L52-L72",
+            "name": "ledger.Postings.Validate"
           }
         ],
-        "reading_extent": "selected_code_and_tests",
-        "execution_status": "not_executed",
+        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/rules/CE-RULE-0009.json",
+        "id": "CE-FINDING-0013",
+        "kind": "code",
         "limits": "Constructing inverse postings is not persisted reversal. Original-event linkage, one-time eligibility, authorization and committed history were not established. Amount pointers are shallow-copied, so deep ownership is not proven.",
+        "owner": "formancehq",
+        "project": "Formance Ledger",
+        "publication_path": "experts/code-evidence/rules/CE-RULE-0009.json",
+        "publication_sha256": "cbb283d73988a74635f4733a4a26fd0287505f0ff18ae09ac008b64fc528282e",
+        "reading_extent": "selected_code_and_tests",
+        "repository": "formancehq/ledger",
         "status": "pending_validation",
-        "publication_path": "experts/code-evidence/analyses/CE-REPO-0013/CE-EDITION-0013.md",
-        "publication_sha256": "3b51e4d38153a722c90db5b55cd845d6ddfb4f60fa7c2bb7597aefab9fc031ba"
+        "title": "Formance Ledger — Reversal swaps posting direction and reverses posting order",
+        "version": "v2.4.18",
+        "publication_format": "code-evidence-v2"
       },
       "target_ids": [
         "CORE-003.3"
@@ -1305,37 +1317,38 @@
     },
     {
       "comparison_key": "code-evidence/CE-FINDING-0014",
-      "reviewed_comparison_sha256": "4f03043a0413628ef5833b0f620d005d46f229b88c561efc5945c7e6ab4cb707",
+      "reviewed_comparison_sha256": "5b1ac1dd1a6d45f65f0de1893bdc05fd0c19f4e176d5b028facf5338e317764b",
       "publication": {
-        "id": "CE-FINDING-0014",
-        "kind": "code",
-        "title": "TigerBeetle — Pending debits consume a configured posted-credit budget",
-        "project": "TigerBeetle",
-        "repository": "tigerbeetle/tigerbeetle",
-        "owner": "tigerbeetle",
-        "version": "0.17.9",
         "commit_sha": "cc1c06a924e49b11089c521b2209d34c92caaf18",
-        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0014/CE-EDITION-0014.md#ce-finding-0014",
+        "execution_status": "not_executed",
         "functions": [
           {
-            "name": "tigerbeetle.Account.debits_exceed_credits",
-            "href": "https://github.com/tigerbeetle/tigerbeetle/blob/cc1c06a924e49b11089c521b2209d34c92caaf18/src/tigerbeetle.zig#L34-L37"
+            "href": "https://github.com/tigerbeetle/tigerbeetle/blob/cc1c06a924e49b11089c521b2209d34c92caaf18/src/tigerbeetle.zig#L34-L37",
+            "name": "tigerbeetle.Account.debits_exceed_credits"
           },
           {
-            "name": "tigerbeetle.Account.credits_exceed_debits",
-            "href": "https://github.com/tigerbeetle/tigerbeetle/blob/cc1c06a924e49b11089c521b2209d34c92caaf18/src/tigerbeetle.zig#L39-L42"
+            "href": "https://github.com/tigerbeetle/tigerbeetle/blob/cc1c06a924e49b11089c521b2209d34c92caaf18/src/tigerbeetle.zig#L39-L42",
+            "name": "tigerbeetle.Account.credits_exceed_debits"
           },
           {
-            "name": "state_machine.StateMachineType(Storage).create_transfer",
-            "href": "https://github.com/tigerbeetle/tigerbeetle/blob/cc1c06a924e49b11089c521b2209d34c92caaf18/src/state_machine.zig#L3719-L3986"
+            "href": "https://github.com/tigerbeetle/tigerbeetle/blob/cc1c06a924e49b11089c521b2209d34c92caaf18/src/state_machine.zig#L3719-L3986",
+            "name": "state_machine.StateMachineType(Storage).create_transfer"
           }
         ],
-        "reading_extent": "selected_code_and_tests",
-        "execution_status": "not_executed",
+        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/rules/CE-RULE-0008.json",
+        "id": "CE-FINDING-0014",
+        "kind": "code",
         "limits": "Configured account constraints on the normal new-transfer path. Pending/posted counters and pre-insertion guards were read; consensus, persistence atomicity and post/void paths were not audited. Ledger/reservation semantics remain outside Core.",
+        "owner": "tigerbeetle",
+        "project": "TigerBeetle",
+        "publication_path": "experts/code-evidence/rules/CE-RULE-0008.json",
+        "publication_sha256": "68d5c02d32cb4777a281cd0d30f70fcc8116b6d2717c283f37cafca601e25490",
+        "reading_extent": "selected_code_and_tests",
+        "repository": "tigerbeetle/tigerbeetle",
         "status": "pending_validation",
-        "publication_path": "experts/code-evidence/analyses/CE-REPO-0014/CE-EDITION-0014.md",
-        "publication_sha256": "471165b794a6fbb4d9cacf9f6734fa5567e6e5ba9956df1448ab860640ea3395"
+        "title": "TigerBeetle — Pending debits consume a configured posted-credit budget",
+        "version": "0.17.9",
+        "publication_format": "code-evidence-v2"
       },
       "target_ids": [
         "CORE-002.2"
@@ -1343,33 +1356,34 @@
     },
     {
       "comparison_key": "code-evidence/CE-FINDING-0015",
-      "reviewed_comparison_sha256": "9b488d0e8b1fda3760b93241110c9ceb7e10a18aad285f897c82e965de81775d",
+      "reviewed_comparison_sha256": "25f9d506578c10eec4623acba92432780692b154f5b7f6f7f4122137c03e6954",
       "publication": {
-        "id": "CE-FINDING-0015",
-        "kind": "code",
-        "title": "ERPNext — Payment allocation is checked against fresh aggregate outstanding amounts",
-        "project": "ERPNext",
-        "repository": "frappe/erpnext",
-        "owner": "frappe",
-        "version": "v16.60.0",
         "commit_sha": "886ab6ae187244e7f1b852393384ab6019d56264",
-        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/analyses/CE-REPO-0015/CE-EDITION-0015.md#ce-finding-0015",
+        "execution_status": "not_executed",
         "functions": [
           {
-            "name": "erpnext.accounts.doctype.payment_entry.payment_entry.PaymentEntry.validate_allocated_amount",
-            "href": "https://github.com/frappe/erpnext/blob/886ab6ae187244e7f1b852393384ab6019d56264/erpnext/accounts/doctype/payment_entry/payment_entry.py#L435-L456"
+            "href": "https://github.com/frappe/erpnext/blob/886ab6ae187244e7f1b852393384ab6019d56264/erpnext/accounts/doctype/payment_entry/payment_entry.py#L435-L456",
+            "name": "erpnext.accounts.doctype.payment_entry.payment_entry.PaymentEntry.validate_allocated_amount"
           },
           {
-            "name": "erpnext.accounts.doctype.payment_entry.payment_entry.PaymentEntry.validate_allocated_amount_with_latest_data",
-            "href": "https://github.com/frappe/erpnext/blob/886ab6ae187244e7f1b852393384ab6019d56264/erpnext/accounts/doctype/payment_entry/payment_entry.py#L493-L590"
+            "href": "https://github.com/frappe/erpnext/blob/886ab6ae187244e7f1b852393384ab6019d56264/erpnext/accounts/doctype/payment_entry/payment_entry.py#L493-L590",
+            "name": "erpnext.accounts.doctype.payment_entry.payment_entry.PaymentEntry.validate_allocated_amount_with_latest_data"
           }
         ],
-        "reading_extent": "selected_code_and_tests",
-        "execution_status": "not_executed",
+        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/rules/CE-RULE-0008.json",
+        "id": "CE-FINDING-0015",
+        "kind": "code",
         "limits": "Invoice/payment domain context, outside current Core. Selected tests assert aggregate rejection and unchanged invoice outstanding, but were not run. Fresh database reads alone do not establish a race-free validation/commit boundary.",
+        "owner": "frappe",
+        "project": "ERPNext",
+        "publication_path": "experts/code-evidence/rules/CE-RULE-0008.json",
+        "publication_sha256": "02eb9c5ebff9a3d5a1da13ae261c351ec7cabcf86687f2b97b2aac1035b60f42",
+        "reading_extent": "selected_code_and_tests",
+        "repository": "frappe/erpnext",
         "status": "pending_validation",
-        "publication_path": "experts/code-evidence/analyses/CE-REPO-0015/CE-EDITION-0015.md",
-        "publication_sha256": "4b7a1a540f00d7889bb8a52287288061dc6ee916c7a57a5ca264d1983861aded"
+        "title": "ERPNext — Payment allocation is checked against fresh aggregate outstanding amounts",
+        "version": "v16.60.0",
+        "publication_format": "code-evidence-v2"
       },
       "target_ids": [
         "CORE-002.2",
@@ -1601,6 +1615,727 @@
       },
       "target_ids": [
         "CORE-005.3"
+      ]
+    },
+    {
+      "comparison_key": "code-evidence/CE-FINDING-0016",
+      "reviewed_comparison_sha256": "037ed2e22ce31f1fba43010feffce36f8e6787e091dbf111197cf62ff4da5e21",
+      "publication": {
+        "id": "CE-FINDING-0016",
+        "kind": "code",
+        "publication_format": "code-evidence-v2",
+        "title": "java-payment-core — Bounded unguarded transition observations",
+        "project": "java-payment-core",
+        "repository": "lmoraesdev/java-payment-core",
+        "owner": "lmoraesdev",
+        "version": "main",
+        "commit_sha": "6892c754006515a0900a22ba4b45ac9b1de194fe",
+        "functions": [
+          {
+            "name": "com.lmoraesdev.payment.domain.model.Charge.transitionTo(ChargeStatus)",
+            "href": "https://github.com/lmoraesdev/java-payment-core/blob/6892c754006515a0900a22ba4b45ac9b1de194fe/src/main/java/com/lmoraesdev/payment/domain/model/Charge.java#L71-L77"
+          }
+        ],
+        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/rules/CE-RULE-0010.json",
+        "publication_path": "experts/code-evidence/rules/CE-RULE-0010.json",
+        "publication_sha256": "e7e88e186fc82624df63faf81a42c222b9d382303a32daef25763b7349ffe452",
+        "reading_extent": "selected_code_and_tests",
+        "execution_status": "not_executed",
+        "limits": "Only the represented unguarded ACTIVE-to-PAID path was compared to executable vectors. Four selected cases were unsupported, not observed financial rejections. Native probes of the complete four-state graph are separate observations. No general Workflow implementation, expiry eligibility, transaction rollback or concurrency guarantee is established.",
+        "status": "pending_validation"
+      },
+      "target_ids": [
+        "CORE-002.1"
+      ]
+    },
+    {
+      "comparison_key": "code-evidence/CE-FINDING-0402",
+      "reviewed_comparison_sha256": "ee1efd99c77383fd733bff681f1f32fd162d8db4cc65c63e081f54c02d80cc3c",
+      "publication": {
+        "id": "CE-FINDING-0402",
+        "kind": "code",
+        "publication_format": "code-evidence-v2",
+        "title": "java-payment-core — Outbox payload transport and Audit applicability",
+        "project": "java-payment-core",
+        "repository": "lmoraesdev/java-payment-core",
+        "owner": "lmoraesdev",
+        "version": "main",
+        "commit_sha": "6892c754006515a0900a22ba4b45ac9b1de194fe",
+        "functions": [
+          {
+            "name": "OutboxEventAdapter.record(String,String,String,Object)",
+            "href": "https://github.com/lmoraesdev/java-payment-core/blob/6892c754006515a0900a22ba4b45ac9b1de194fe/src/main/java/com/lmoraesdev/payment/adapter/out/persistence/outbox/OutboxEventAdapter.java#L21-L26"
+          },
+          {
+            "name": "OutboxEventAdapter.toJson(Object)",
+            "href": "https://github.com/lmoraesdev/java-payment-core/blob/6892c754006515a0900a22ba4b45ac9b1de194fe/src/main/java/com/lmoraesdev/payment/adapter/out/persistence/outbox/OutboxEventAdapter.java#L28-L34"
+          },
+          {
+            "name": "OutboxEventEntity.pending(String,String,String,String,String)",
+            "href": "https://github.com/lmoraesdev/java-payment-core/blob/6892c754006515a0900a22ba4b45ac9b1de194fe/src/main/java/com/lmoraesdev/payment/adapter/out/persistence/outbox/OutboxEventEntity.java#L56-L72"
+          }
+        ],
+        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/rules/CE-RULE-0042.json",
+        "publication_path": "experts/code-evidence/rules/CE-RULE-0042.json",
+        "publication_sha256": "98aba600dc39621dcd3a26a00befca498217abf967ea9d8c0f3c47d16b29751d",
+        "reading_extent": "selected_code_and_tests",
+        "execution_status": "not_executed",
+        "limits": "Audit-shaped JSON is observed inside the native transport payload. Generated outbox IDs/times are technical metadata and are not substituted for producer event identity/occurrence time. Repository storage was a port double; persistence, SQL constraints, transaction atomicity and controls in other layers are outside this evaluation.",
+        "status": "pending_validation"
+      },
+      "target_ids": [
+        "CORE-003.1"
+      ]
+    },
+    {
+      "comparison_key": "code-evidence/CE-FINDING-0403",
+      "reviewed_comparison_sha256": "037c54260fb27c396e0d7146420ae5d7a460b80ca0f72dac4a40deca045ced99",
+      "publication": {
+        "id": "CE-FINDING-0403",
+        "kind": "code",
+        "publication_format": "code-evidence-v2",
+        "title": "ERPNext — Approver configuration checks",
+        "project": "ERPNext",
+        "repository": "frappe/erpnext",
+        "owner": "frappe",
+        "version": "v16.60.0",
+        "commit_sha": "886ab6ae187244e7f1b852393384ab6019d56264",
+        "functions": [
+          {
+            "name": "AuthorizationRule.validate_rule",
+            "href": "https://github.com/frappe/erpnext/blob/886ab6ae187244e7f1b852393384ab6019d56264/erpnext/setup/doctype/authorization_rule/authorization_rule.py#L77-L108"
+          }
+        ],
+        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/rules/CE-RULE-0043.json",
+        "publication_path": "experts/code-evidence/rules/CE-RULE-0043.json",
+        "publication_sha256": "c33f1f31bd88552e79c292494d8fd3c6a922d5551bbf99d0d0675b6cfaee6abf",
+        "reading_extent": "selected_code_and_tests",
+        "execution_status": "not_executed",
+        "limits": "Exact-method isolation with framework translation/throw doubles and explicitly unset unrelated product-policy fields. The native method is not a complete Requirement evaluator. No Frappe lifecycle/database behavior, eligible-role expansion, committed Decisions, expiration, withdrawal, supersession or approval-chain evaluation is established.",
+        "status": "pending_validation"
+      },
+      "target_ids": [
+        "CORE-004.1"
+      ]
+    },
+    {
+      "comparison_key": "code-evidence/CE-FINDING-0056",
+      "reviewed_comparison_sha256": "dfb3235e071c74ec0fa460f715610885c7cabe94b8bf94df8b5ebb249954a42d",
+      "publication": {
+        "id": "CE-FINDING-0056",
+        "kind": "code",
+        "publication_format": "code-evidence-v2",
+        "title": "java-payment-core — Native identity and Entity applicability limits",
+        "project": "java-payment-core",
+        "repository": "lmoraesdev/java-payment-core",
+        "owner": "lmoraesdev",
+        "version": "main",
+        "commit_sha": "6892c754006515a0900a22ba4b45ac9b1de194fe",
+        "functions": [
+          {
+            "name": "Charge.restore(UUID,Money,ChargeStatus,Instant,Instant,Long)",
+            "href": "https://github.com/lmoraesdev/java-payment-core/blob/6892c754006515a0900a22ba4b45ac9b1de194fe/src/main/java/com/lmoraesdev/payment/domain/model/Charge.java#L55-L69"
+          },
+          {
+            "name": "Charge.equals(Object)",
+            "href": "https://github.com/lmoraesdev/java-payment-core/blob/6892c754006515a0900a22ba4b45ac9b1de194fe/src/main/java/com/lmoraesdev/payment/domain/model/Charge.java#L104-L112"
+          },
+          {
+            "name": "Charge.hashCode()",
+            "href": "https://github.com/lmoraesdev/java-payment-core/blob/6892c754006515a0900a22ba4b45ac9b1de194fe/src/main/java/com/lmoraesdev/payment/domain/model/Charge.java#L115-L117"
+          }
+        ],
+        "href": "https://github.com/willgittens/FinKore/blob/main/experts/code-evidence/rules/CE-RULE-0031.json",
+        "publication_path": "experts/code-evidence/rules/CE-RULE-0031.json",
+        "publication_sha256": "e8924189441c947caf5705290881f24c3b09a139a5bf2dbcf322e954848a9b91",
+        "reading_extent": "selected_code_and_tests",
+        "execution_status": "not_executed",
+        "limits": "All four selected Entity cases are unsupported and no native Entity create/import/evolution operation was invoked for them. Native UUID representability was checked without rewriting supplied opaque identifiers. Earlier Charge identity and transition probes remain separate; they do not provide caller-defined Entity schemas, revision/mapping history or atomic Audit-correlated evolution.",
+        "status": "pending_validation"
+      },
+      "target_ids": [
+        "CORE-005.1"
+      ]
+    }
+  ],
+  "conformance_selections": [
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0001",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "148745473b1b24e44a48deac4f92261d433468982659db339734800e3a307074"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0002",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "b7314d2812f33b2d75d09ee766ce5b04d8d165aefaecf4660e4586155235b555"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0003",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "1a65bcf1f0835814508867062087a4cf95b315b5f514a6d9c2cfcd4ee281ed7e"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0004",
+      "target_ids": [
+        "CORE-001.3"
+      ],
+      "reviewed_result_sha256": "699514e87cb6cb3d6590cea71df8c3a8237a931392e72158a4ab32c972cca011"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0005",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "5f51414eead437c9edbdf4b5c353d06451773aa227e0fac84b2d71c653fbace9"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0006",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "cb4ee6a59022061f516b097792e03375c3c379507248aa832f5430fe8025da01"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0007",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "659eed55615fcd34cc033cc2442935d0d89eb87d4b262ccbc009548e451deb92"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0008",
+      "target_ids": [
+        "CORE-001.2",
+        "CORE-001.3"
+      ],
+      "reviewed_result_sha256": "1b862467df72b1b37e94460bf9dafc063470ef8bc580a5ab572086b475fff3d5"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0020",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "c4997ec70f2550c1e1b6d6d9d012f1ac1512e351a611738cc6a624b18a062987"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0021",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "d975a7f2aea9566bdbcfdd3f0cbe4437af4012fe454fd86d02ceb67f55cc2de1"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0022",
+      "target_ids": [
+        "CORE-001.3"
+      ],
+      "reviewed_result_sha256": "7f882d4eca655d85fc1ff5bdbca02db5bb083945791271dbf59490202de837dc"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0076",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "fcf84a61d3f4d2d33acc0ff568a3fb97830386aa9efd0888142ab52936a14001"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0077",
+      "target_ids": [],
+      "reviewed_result_sha256": "9244ee27a5fb4ce1ef6b01241e5071defe410d0c982ef0f73055a62f2c26138b"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0078",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "131a85f994eb5fe12825f246c815ab893e75c8abf88aa4f5fe5abd7599ae93e4"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0081",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "66f424a47e42dd4346afee6d2ab870fcf3ec0b9999789bcae5fef0bd067ac290"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0082",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "bcaf6868d9435a8639a11b0d5db0fd1a98a8456ba7c6ab3feb8e87cac58ba910"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0083",
+      "target_ids": [
+        "CORE-001.3"
+      ],
+      "reviewed_result_sha256": "90409cb7903538e3d58a436cfa895969f2a26db797a80943bd7bae9a7274da67"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0084",
+      "target_ids": [
+        "CORE-001.1",
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "a35a6724144ab81d69a5aa5ad3993f4e4b8d61c8c1fc8fe2a8c3a2b925c17be6"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0088",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "8585231e98a7197c4aa8b50a76eb9571079bb62e6d4b8175d956ec69d77b887d"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0091",
+      "target_ids": [],
+      "reviewed_result_sha256": "764896e6be67b384f3fee188a78c177c3bfdfd917f6daec6236d51bc01f8e76f"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0092",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "56738b5daf59fa78a7319311e36e6510dae85c08051c9a932586fbfb7f9e2d20"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0093",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "7b94ef136f59235d14b29d3e82de2d20e2942cb55b0f4f7baae3b8caf0fc1d30"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0094",
+      "target_ids": [
+        "CORE-001.3"
+      ],
+      "reviewed_result_sha256": "17ef8d035ce2c567efd24a32058ab61fa683fb1ddd9d4037699f0e304815b39b"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0101",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "871a7f06ec5cccf4cbbc6eecada7cc2976761ffb0d825bfc02d5ae3088d6fd60"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0102",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "465e24deed87b3426acaabdb04884e9494405fa35ae9fdb74ae77e9660ccd270"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0103",
+      "target_ids": [
+        "CORE-001.1"
+      ],
+      "reviewed_result_sha256": "e2fa8b055fdd13e98ecb6a668a501baa24d967b45c821d057c8e4c6cceaae866"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0113",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "12f5f1af88256193b90afbc88741947fae03fd03daf0258d1b92042dc24e3e05"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0115",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "8bb357861ef55fb500b26c4380a20835e1f7ade487a0b4e0958f5dbd6f2fcbae"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0116",
+      "target_ids": [],
+      "reviewed_result_sha256": "e30d107147f69acabf6936f6d7b938e4630000de2bf673c32109b379f36a9163"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0117",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "75b7a70a475f0277516b12b49d3aee3158c403dc2099426153f670dde98b1493"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0118",
+      "target_ids": [
+        "CORE-001.3"
+      ],
+      "reviewed_result_sha256": "c1bf42c9e70a3a6d44cb9a0c6a6a4f7b326c9b09d96791d3d7f914d1683dc4a0"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0121",
+      "target_ids": [
+        "CORE-001.2",
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "b16c6db501e821d628e8bd0e756a21dd673081e6b351b56d3a3fed549abd18bc"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0131",
+      "target_ids": [],
+      "reviewed_result_sha256": "771afcaa25415b0e05d9196bfc8d05f19559f6fdad6718c521d8b080c2f29aa9"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0132",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "4bbd8f4dd3c74ade4ff9c2ccfac3af98d59a2ebaaef5f488dba6e4742676d404"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0137",
+      "target_ids": [],
+      "reviewed_result_sha256": "326114f3397702420b7405a9c211fc8de6d9b386c1da53740867f48856b426ad"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0138",
+      "target_ids": [],
+      "reviewed_result_sha256": "e995933e73d27bcd3c02ca3debceba7d3b94c2c9c3a5ae291c277129854c632f"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0143",
+      "target_ids": [],
+      "reviewed_result_sha256": "58770c8e9fa54b3e5942025104d5827e36425970880c3e450fb57f2e9f2b69a4"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0144",
+      "target_ids": [],
+      "reviewed_result_sha256": "762117ef18eddb74672f734880e891fbba87742764efbf1e37dc0c8f3437c699"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0166",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "a91065f98f90d506a21c9cb85d5014182f0752b3980780b65ba28f18e73ab298"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0176",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "f8eacbf9a71a5685f3e7d697f09522a4b6be3ff1d8b6b3f8438da11142074a8f"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0181",
+      "target_ids": [],
+      "reviewed_result_sha256": "f1093d7ff7a53e72cfa20b1962bc4a7f73ac677db5b8690339c6962951ffae44"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0196",
+      "target_ids": [
+        "CORE-001.2",
+        "CORE-001.3"
+      ],
+      "reviewed_result_sha256": "e43e872756ddcde2d90a389b03762717e37b3fabe3dd96e5d59f89e0b3a4eb66"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0197",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "489750f1e79bc4118dc1ac747a5843d4afc8248c8707878c9eeb0fc3543e46ff"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0198",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "4832073da1ef501193c93a80bea45c899af8bae858638f54074fbbfcd7383050"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0199",
+      "target_ids": [
+        "CORE-001.3"
+      ],
+      "reviewed_result_sha256": "c48c0e99360ca6b6d82897df9a27a7010759c9ac7ec5ef93d0917d3ddaeb1843"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0211",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "9fa2e69de4c4f2d6d9e0c752881a32f85004b155bb64f17415b35eb8f1fa2052"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0212",
+      "target_ids": [
+        "CORE-001.2",
+        "CORE-005.3"
+      ],
+      "reviewed_result_sha256": "58ae2c2826c8e756a649a2cb72dad3862215ac5f3ddd528c4533585ca972a17e"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0224",
+      "target_ids": [],
+      "reviewed_result_sha256": "1f74d48ab8834acf89d10b549ab49a0d5fe7bbf25df2bc56d7fb2185b3258e3d"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0228",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "1a26006e75fea2315ea2a6af36cdfd649ef594b3b6538e46414871b263c9d7fa"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0229",
+      "target_ids": [],
+      "reviewed_result_sha256": "fb29ada875baa3abddc42aa68843a1454243e19a16bb83edab1a6b259f4d2d53"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0232",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "44df16da0e1c547b3902f185467084cecacc63b046b1fd00fd1db98ba9230c41"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0233",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "131032f934123499b4e97b8ff1f7e95473e8ec8d901d27e5a4aaa1e7cf71d8db"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0235",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "56abbaff5487da02e3ddd6cd63330143cdc1479355273147842c390521e418c0"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0238",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "5fa9da4f4e5091c0124646aae2e422361f47e4470284018bdf6471218fe1df18"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0239",
+      "target_ids": [
+        "CORE-001.1",
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "eeeb6fb03856eeab3e4f1b0519608e2324b3dd6ef19fd1e45aa5fbffb353cb53"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0240",
+      "target_ids": [],
+      "reviewed_result_sha256": "3ff73707f20dad34e0103b1657e2ab0703aa83d078928ec38f44ccd8898a8cfb"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0241",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "173e5ff08056bbf4095c473a26f4e24aba692936cedcbec5099da766fe65bca4"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0242",
+      "target_ids": [
+        "CORE-001.1",
+        "CORE-001.3"
+      ],
+      "reviewed_result_sha256": "4da4f0fcfe872c605ff35f83d46c41418942426eac0ccbe886c8f4a70256b341"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0244",
+      "target_ids": [],
+      "reviewed_result_sha256": "818c744c516f32bd2cb091b2228c6089991a63bb9fad902d7284424931077043"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0248",
+      "target_ids": [],
+      "reviewed_result_sha256": "84b2187f8ce13346a1f417eae90121db1cb767b392bf981b7698705945798526"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0249",
+      "target_ids": [
+        "CORE-001.1"
+      ],
+      "reviewed_result_sha256": "f16013e9d2e3fc600688ade069495b0489db5284ef4976def86c35aacce27c91"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0250",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "79287195afbb5eb6b8039844efcc1a7e8e9f4db2a62df8c9c75e4ad9a75de41d"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0252",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "64801088965171954108bfc7af62375380cef3f31be996963bab582b20556527"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0259",
+      "target_ids": [
+        "CORE-001.2",
+        "CORE-001.3"
+      ],
+      "reviewed_result_sha256": "7b50831ae9ad23a92b73b419f30afd75034359efb2f09e5a6211a0921bef8ec1"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0260",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "18a48fa07fb7a5fbc8aaee823bd2230d915d54c6635e18505d570ce990bc77e8"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0261",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "cbdac15c0fce36e9e7c7e8527a17bf15260075587a169a1168929cd5b2e193b7"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0267",
+      "target_ids": [],
+      "reviewed_result_sha256": "7efbde9655fbe3e20a32efca3f16223f405ec43aaa2f1d961a97e2d3d9f396fd"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0268",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "007de3581b5f715bb94f0bdfb5daad2eac9b7dc6071d70f0fcf488a96ca18aa5"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0269",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "96a97cdf4fcd1f9e795e1356d1d152b464465ca8e918807dcb4ffcd40440b360"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0270",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "50b1bfcc6ceefc3c9054be28e1ad6bf1893385e5eb8b38499530cd1c2f479850"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0280",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "048fdf6a61f9068c05262f1333cebd8530483f092ded0caef02e7b735b3b4bdc"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0281",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "4ded31ea412dbc4e693d3a8ca49d7ed1ce65a10f19524c7ea2d58624f0ec3564"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0282",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "2c8516546716610efaf4a1e1c477751a7f08a7a9de91787f1411b63f3436c536"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0286",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "ec8dd20ec652887570eb04960af007dd79d2466dc2aa4da91a851c474fce9568"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0292",
+      "target_ids": [
+        "CORE-001.3"
+      ],
+      "reviewed_result_sha256": "1162b4d41563f14fab5b44ad392b54568649117adb25da3c306a0d9d64b53ceb"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0293",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "3fb4aff52f6a9664c16f5ff23b843a84d7e74a5d337f5b92232c927af294fdf4"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0294",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "fc03fded2644602c8e66741ac88094b613b6a470a3291c6e61ee5dc7155f4f89"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0296",
+      "target_ids": [],
+      "reviewed_result_sha256": "771dfdbb6be65d83a7fc817880b7f73fbe36bd7d2bba6c73ebcbfb94d59851cf"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0301",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "d84f4c10fa6da14bfe60f6c5c4adaee5faa26ab38e9b0b99db97a2061108ec33"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0302",
+      "target_ids": [
+        "CORE-001.4"
+      ],
+      "reviewed_result_sha256": "c88b071961ae4d709d3f7e728edb2d8530abbbb9f423f0d7f6ab642abfa8f5ac"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0303",
+      "target_ids": [],
+      "reviewed_result_sha256": "3dc7109650ea2c5546f78b20b436308aa43ef6adffb5ae0cb1f89b4e4790ac46"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0329",
+      "target_ids": [],
+      "reviewed_result_sha256": "f33e449a7cb63349f538881a4d48e2d8aaee0bb3bb08aa5a9591047c0c6fce0f"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0330",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "b8dc39d0038e6ba13a20dacfae683746065ddf5243625f318f0da4fb74b15eb9"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0331",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "8cdc8eb385d4355249d826594a6f5922f07dfd3777fd0f5a19a199495526179d"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0332",
+      "target_ids": [
+        "CORE-001.2"
+      ],
+      "reviewed_result_sha256": "440cf380243bbef9318260820f87cfb58c42fd094d647a0e686f342b980c3046"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0333",
+      "target_ids": [],
+      "reviewed_result_sha256": "3677ffac0ea61071a2033fcac20005656421033c58241addb1e14b5737caf6f2"
+    },
+    {
+      "comparison_key": "code-evidence/CE-COMPARISON-0402",
+      "reviewed_result_sha256": "57838f97008a85fea8f36c8816cf90e09eb4c955c3cb31b15e8ae2c5f1f8245b",
+      "target_ids": [
+        "CORE-002.1"
       ]
     }
   ]

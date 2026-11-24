@@ -9,6 +9,49 @@ artifacts, and their verification results. Those records are preserved as
 history and are not claims about the current repository's supported surface or
 current execution evidence.
 
+## FinKore Core 2.0.5 — 2026-11-24
+
+Compatible evidence, documentation and maintenance patch, with the bounded scope
+accepted by the maintainer on 2026-11-24. Financial behavior, 447 requirements,
+24 portable errors and 20 canonical operations are unchanged. Conformance formats
+remain `0.1`, and the private maintenance package remains `0.1.0`.
+
+Add 51 cases for existing Money component validity, exact arithmetic, rounding,
+percentage application, allocation and serialization requirements. The manifest
+discovers 1,874 vectors in the same 47 files; existing vector bodies are preserved.
+Consumers should include the additional cases and need no data migration.
+
+Experts brings Research, Legacy, specialist Reviews and compact Code Evidence
+under a shared, generated traceability index. The collection retains 403 findings
+in 43 families from 115 pinned library editions. The frozen 38-edition investigation
+reconciles 352 findings and 1,476 complete native comparisons across 1,826 selected
+applications, including separate controls. Its 348 definitive native limitations
+and two conditional outcomes remain in that denominator; this is not 100% native
+execution or library certification. Independent validation remains separate.
+
+Learn connects selected evidence to current CoreDoc clauses and displays bounded
+conformance results inside existing finding cards. Revised source, function,
+clause and result checks prevent unrelated or stale scores from appearing.
+Non-equivalent earlier scores are withdrawn; source readings, native execution,
+editorial selection and specialist approval retain distinct states. Vandeir
+Silva's attributed 22-answer report joins the specialist collection without
+implying specialist sign-off on this release or accepting a new financial rule.
+
+Responsive navigation, Open Graph descriptions, and publication checks include
+the intervening layout and deployment-maintenance changes since 2.0.4. Deployment
+validates committed Learn artifacts before uploading the verified tree. Completed
+investigation history and the unstarted next-round plan remain in ordinary Git
+history rather than the publication tree.
+
+Local preparation checks on Node 24.15.0 passed 128 maintenance-tool tests,
+48 Code Evidence tests and 78 Python evidence-tool tests. Learn's index and
+CoreDoc were inspected in Chrome at 320, 390, 768, 1280 and 1440 px, including
+keyboard navigation, visible focus, source links and collapsed result cards.
+A fresh npm registry advisory query on 2026-11-24 reported zero vulnerabilities
+across the five locked maintenance dependencies. Locked installation, artifact
+verification and the separate stable-publication gate passed on the final tree.
+These checks do not establish external conformance.
+
 ## FinKore Core 2.0.4 — 2026-11-18
 
 Compatible documentation and maintenance patch, approved by the maintainer on

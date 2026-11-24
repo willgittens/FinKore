@@ -1,0 +1,1306 @@
+{
+  "schema_version": "2.1.0",
+  "id": "CE-RULE-0032",
+  "title": "Exchange conversion declares rate orientation, identity and source snapshot",
+  "scope": "candidate_rule",
+  "question": "Compare per-base cross rates and pair quotes, identity shortcuts, provider timestamps and delegated precision.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0057",
+      "title": "A conversion requires rate orientation and an identifiable quote snapshot",
+      "library_id": "CE-REPO-0112",
+      "edition_id": "CE-EDITION-0112",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0112:CE-EDITION-0112:fn01",
+          "path": "exchange_rates.go",
+          "name": "finance.ExchangeRates() (map[string]float64,error)",
+          "start_line": 22,
+          "end_line": 59
+        },
+        {
+          "id": "CE-REPO-0112:CE-EDITION-0112:fn02",
+          "path": "exchange_rates.go",
+          "name": "finance.ConvertRate(float64,string,string) (float64,error)",
+          "start_line": 62,
+          "end_line": 83
+        }
+      ],
+      "explanation": [
+        "Fetched EUR-based float rates are flattened without dates and conversion computes value/fromRate*toRate. Each conversion fetches again, even when source and target labels match.",
+        "HTTP status, date freshness, positive/finite rates and schema completeness are not checked locally. A EUR identity request can depend on remote availability. Lowercase caller labels do not match uppercased map keys. Source tests assert nonzero/error properties, not an independently pinned exact conversion."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0060",
+      "title": "Same-currency exchange bypasses rate-provider validation",
+      "library_id": "CE-REPO-0061",
+      "edition_id": "CE-EDITION-0061",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0061:CE-EDITION-0061:fn01",
+          "path": "src/CurrencyService.php",
+          "name": "Bavix\\WalletSwap\\CurrencyService::rate(string $fromCurrency,string $toCurrency): string",
+          "start_line": 38,
+          "end_line": 63
+        }
+      ],
+      "explanation": [
+        "CurrencyService returns string 1 for exact equal currency labels before contacting the provider; unequal labels use the latest from/to quote.",
+        "No local ISO-code validity, quote freshness, quote identity or signed/zero rate check. Equal invalid strings also bypass lookup. No provider code or runtime behavior was validated."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0061",
+      "title": "Conversion delegates the product precision to wallet arithmetic",
+      "library_id": "CE-REPO-0061",
+      "edition_id": "CE-EDITION-0061",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0061:CE-EDITION-0061:fn01",
+          "path": "src/CurrencyService.php",
+          "name": "Bavix\\WalletSwap\\CurrencyService::rate(string $fromCurrency,string $toCurrency): string",
+          "start_line": 38,
+          "end_line": 63
+        },
+        {
+          "id": "CE-REPO-0061:CE-EDITION-0061:fn02",
+          "path": "src/SwapExchangeService.php",
+          "name": "Bavix\\WalletSwap\\SwapExchangeService::convertTo(string,string,float|int|string): string",
+          "start_line": 36,
+          "end_line": 39
+        }
+      ],
+      "explanation": [
+        "Conversion multiplies the externally obtained rate by the supplied amount through injected MathService and returns a string; the call contains no explicit scale or rounding mode.",
+        "Float inputs may already have host precision loss. A returned string does not prove exact decimal arithmetic or settle currency units. Reading a wrapper and its math provider must not count as independent formula support."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0089",
+      "title": "Quote composition has path, refetch and precision context beyond a supplied pair",
+      "library_id": "CE-REPO-0001",
+      "edition_id": "CE-EDITION-0001",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn92",
+          "path": "src/Converter.php",
+          "name": "Money\\Converter::convertAgainstCurrencyPair",
+          "start_line": 53,
+          "end_line": 77
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn91",
+          "path": "src/Converter.php",
+          "name": "Money\\Converter::convertAndReturnWithCurrencyPair",
+          "start_line": 40,
+          "end_line": 48
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn129",
+          "path": "src/Exchange/IndirectExchange.php",
+          "name": "Money\\Exchange\\IndirectExchange::getConversions",
+          "start_line": 56,
+          "end_line": 103
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn130",
+          "path": "src/Exchange/IndirectExchange.php",
+          "name": "Money\\Exchange\\IndirectExchange::reconstructConversionChain",
+          "start_line": 111,
+          "end_line": 123
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn124",
+          "path": "src/Exchange/ExchangerExchange.php",
+          "name": "Money\\Exchange\\ExchangerExchange::quote",
+          "start_line": 27,
+          "end_line": 41
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn135",
+          "path": "src/Exchange/SwapExchange.php",
+          "name": "Money\\Exchange\\SwapExchange::quote",
+          "start_line": 25,
+          "end_line": 36
+        }
+      ],
+      "explanation": [
+        "Supplied-pair conversion checks the base orientation and adjusts source/target subunit differences before multiplication; indirect graph reconstruction re-fetches quotes and external adapters format factors to14decimal places.",
+        "The pair-returning wrapper exposes the pair actually used, but breadth-first discovery and later edge reads do not form an atomic quote snapshot.",
+        "A supplied compatible base pair or an exchange provider with resolvable graph edges; decimal/backend and rounding policy remain source-specific. An edge can change between discovery and reconstruction. A shortest-hop chain is not necessarily a best-price or same-instant conversion, and the14-place wrapper is a separate precision boundary. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0096",
+      "title": "FX ordering requires rate-context consistency beyond a base currency name",
+      "library_id": "CE-REPO-0002",
+      "edition_id": "CE-EDITION-0002",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "open_question",
+      "functions": [
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn35",
+          "path": "src/ComparisonMode/PairwiseMode.php",
+          "name": "Brick\\Money\\ComparisonMode\\PairwiseMode::compare",
+          "start_line": 28,
+          "end_line": 35
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn34",
+          "path": "src/ComparisonMode/BaseCurrencyMode.php",
+          "name": "Brick\\Money\\ComparisonMode\\BaseCurrencyMode::compare",
+          "start_line": 35,
+          "end_line": 41
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn74",
+          "path": "src/CurrencyConverter.php",
+          "name": "Brick\\Money\\CurrencyConverter::convertToRational",
+          "start_line": 68,
+          "end_line": 115
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn117",
+          "path": "src/ExchangeRateProvider/BaseCurrencyProvider.php",
+          "name": "Brick\\Money\\ExchangeRateProvider\\BaseCurrencyProvider::getExchangeRate",
+          "start_line": 43,
+          "end_line": 84
+        }
+      ],
+      "explanation": [
+        "Pairwise comparison converts the first operand into the second operand currency, while base-currency comparison converts both sequentially into one named base. Neither path enforces a stable shared provider snapshot.",
+        "Directed rates can be asymmetric and a provider can change between reads. A common base can yield consistency only under additional provider/context conditions.",
+        "The concrete ComparisonMode and CurrencyConverter, positive supplied rates and the provider observations returned for each call. Swapping pairwise operands can select a different directed quote. Two sequential base conversions may observe different snapshots even when the base identifier is the same. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0097",
+      "title": "A rate cache key needs an explicit provider namespace when storage is shared",
+      "library_id": "CE-REPO-0002",
+      "edition_id": "CE-EDITION-0002",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn132",
+          "path": "src/ExchangeRateProvider/CachedProvider.php",
+          "name": "Brick\\Money\\ExchangeRateProvider\\CachedProvider::getExchangeRate",
+          "start_line": 57,
+          "end_line": 85
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn128",
+          "path": "src/ExchangeRateProvider/Cache/CacheKeyGenerator.php",
+          "name": "Brick\\Money\\ExchangeRateProvider\\Cache\\CacheKeyGenerator::generateCacheKey",
+          "start_line": 53,
+          "end_line": 76
+        },
+        {
+          "id": "CE-REPO-0002:CE-EDITION-0002:fn129",
+          "path": "src/ExchangeRateProvider/Cache/CacheKeyGenerator.php",
+          "name": "Brick\\Money\\ExchangeRateProvider\\Cache\\CacheKeyGenerator::normalizeValue",
+          "start_line": 83,
+          "end_line": 130
+        }
+      ],
+      "explanation": [
+        "CachedProvider keys pair and normalized dimensions without provider identity; two providers sharing the same cache namespace can read the first cached factor or cached absence.",
+        "The get/set calls reuse the same generated key and the key payload omits the wrapped provider. This is a conditional shared-cache isolation hazard, not a defect when caches are private or intentionally shared.",
+        "Two wrapper instances with the same cache storage/key generator, same pair/dimensions, distinct provider meanings and an unexpired cached entry. ProviderA caching null can prevent ProviderB lookup for the same key. A separate cache per provider avoids the counterexample. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0107",
+      "title": "A bidirectional supplied rate has explicit identity and representability guards",
+      "library_id": "CE-REPO-0023",
+      "edition_id": "CE-EDITION-0023",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn109",
+          "path": "exchange_rate.go",
+          "name": "govalues/money.newExchRateSafe",
+          "start_line": 30,
+          "end_line": 47
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn133",
+          "path": "exchange_rate.go",
+          "name": "govalues/money.ExchangeRate.CanConv",
+          "start_line": 557,
+          "end_line": 561
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn135",
+          "path": "exchange_rate.go",
+          "name": "govalues/money.ExchangeRate.conv",
+          "start_line": 582,
+          "end_line": 601
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn139",
+          "path": "exchange_rate.go",
+          "name": "govalues/money.ExchangeRate.inv",
+          "start_line": 638,
+          "end_line": 645
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn147",
+          "path": "exchange_rate.go",
+          "name": "govalues/money.ExchangeRate.rescale",
+          "start_line": 749,
+          "end_line": 753
+        }
+      ],
+      "explanation": [
+        "The supplied ExchangeRate constructor rejects nonpositive rates and nonunit identical-currency rates; conversion multiplies base-to-quote, divides in reverse, and rate transforms reapply constructor guards.",
+        "The guards precede conversion and CanConv excludes XXX. Precision/representability still follows the bounded decimal backend and target amount construction.",
+        "A constructed positive rate, base/quote match to the input amount, and representable reciprocal/product; zero-value struct bypass is not a valid constructed quote. A reciprocal or rescale that becomes zero is rejected, but no provider/date/snapshot policy has been established by these local guards. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0124",
+      "title": "Portfolio conversion quantizes rates to the target currency exponent",
+      "library_id": "CE-REPO-0005",
+      "edition_id": "CE-EDITION-0005",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn275",
+          "path": "examples/portfolio-tracker/src/lib/money.ts",
+          "name": "examples/portfolio-tracker/src/lib/money.ts::buildRates@116",
+          "start_line": 116,
+          "end_line": 134
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn276",
+          "path": "examples/portfolio-tracker/src/lib/money.ts",
+          "name": "examples/portfolio-tracker/src/lib/money.ts::convertToBase@139",
+          "start_line": 139,
+          "end_line": 148
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn280",
+          "path": "examples/portfolio-tracker/src/lib/money.ts",
+          "name": "examples/portfolio-tracker/src/lib/money.ts::getRateDisplay@176",
+          "start_line": 176,
+          "end_line": 181
+        }
+      ],
+      "explanation": [
+        "The portfolio example rounds each cross-rate coefficient to the target currency exponent before conversion, while its rate display formats the unquantized ratio separately.",
+        "Source construction assigns rate amount and scale using destination currency digits, conflating an FX factor scale with a monetary display/minor-unit convention.",
+        "The hard-coded illustrative USD rate table and currencies/scale table used by the example; no live market quote is asserted. A raw JPY-to-USD factor near0.006689 is quantized to a two-place factor0.01, while the separate display can show0.0067. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0145",
+      "title": "Implicit exchange makes arithmetic direction and mutable quote source observable",
+      "library_id": "CE-REPO-0041",
+      "edition_id": "CE-EDITION-0041",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn059",
+          "path": "money/money.py",
+          "name": "money.money.py::Money.to",
+          "start_line": 245,
+          "end_line": 254
+        },
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn007",
+          "path": "money/exchange.py",
+          "name": "money.exchange.py::BackendBase.quotation",
+          "start_line": 34,
+          "end_line": 40
+        },
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn062",
+          "path": "money/money.py",
+          "name": "money.money.py::XMoney.__add__",
+          "start_line": 308,
+          "end_line": 311
+        },
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn063",
+          "path": "money/money.py",
+          "name": "money.money.py::XMoney.__sub__",
+          "start_line": 313,
+          "end_line": 316
+        },
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn065",
+          "path": "money/money.py",
+          "name": "money.money.py::XMoney.__truediv__",
+          "start_line": 324,
+          "end_line": 327
+        },
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn066",
+          "path": "money/money.py",
+          "name": "money.money.py::XMoney.__floordiv__",
+          "start_line": 329,
+          "end_line": 332
+        },
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn067",
+          "path": "money/money.py",
+          "name": "money.money.py::XMoney.__divmod__",
+          "start_line": 334,
+          "end_line": 337
+        }
+      ],
+      "explanation": [
+        "XMoney implicitly converts the right Money operand into the left currency before arithmetic, using target/base divided by origin/base from a mutable global backend.",
+        "The operand direction and quote lookup are source-visible. This is an explicit upstream convenience policy, not evidence that Core Money arithmetic permits implicit FX.",
+        "A right operand recognized as Money and an installed backend returning usable directed factors; same-currency to() returns the original object. Reversing operand order can change result currency and quote direction. Zero rates are treated as absent by truthiness, while negative rates are not locally rejected. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. Standalone FX quotation/conversion behavior is not currently defined by FinKore Core; implicit conversion during Money addition/subtraction is separately comparable to Core currency-compatibility requirements."
+      ],
+      "conformance": {
+        "passed": 1,
+        "total": 3,
+        "description": [
+          "Assessed 2026-11-23 using Python 3.10.12, Decimal. Primary profile declared_native_profile; native path: XMoney add/subtract with SimpleBackend. Selected outcomes: 1 matched, 2 mismatched.",
+          "Actual XMoney arithmetic used the library SimpleBackend with explicit EUR-base/USD=1.25 facts. Native implicit conversion permits cross-currency addition/subtraction, while Core requires a mismatch error; the binding performs no conversion itself."
+        ],
+        "test_ids": [
+          "money.add.same-currency.basic-001",
+          "money.add.currency-mismatch-001",
+          "money.subtract.currency-mismatch-001"
+        ]
+      }
+    },
+    {
+      "id": "CE-FINDING-0146",
+      "title": "Changing exchange base preserves rates with their former units",
+      "library_id": "CE-REPO-0041",
+      "edition_id": "CE-EDITION-0041",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn009",
+          "path": "money/exchange.py",
+          "name": "money.exchange.py::SimpleBackend.base",
+          "start_line": 49,
+          "end_line": 50
+        },
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn010",
+          "path": "money/exchange.py",
+          "name": "money.exchange.py::SimpleBackend.base",
+          "start_line": 53,
+          "end_line": 54
+        },
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn011",
+          "path": "money/exchange.py",
+          "name": "money.exchange.py::SimpleBackend.setrate",
+          "start_line": 56,
+          "end_line": 59
+        },
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn012",
+          "path": "money/exchange.py",
+          "name": "money.exchange.py::SimpleBackend.rate",
+          "start_line": 61,
+          "end_line": 64
+        },
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn024",
+          "path": "money/exchange.py",
+          "name": "money.exchange.py::ExchangeRates.__setattr__",
+          "start_line": 130,
+          "end_line": 136
+        }
+      ],
+      "explanation": [
+        "Changing SimpleBackend.base changes only the base identifier, retaining all stored rates while the newly named base is returned as1.",
+        "The setter does not transform or clear quotes. A rate previously relative to one base may therefore be interpreted under another unless the caller separately replaces it.",
+        "An installed SimpleBackend with populated quotes, followed by base mutation without an accompanying full rebase/reload. Store AAA=2 underUSD then set baseEUR: AAA retains2 and EUR is returned as1. This is a local units/provenance trace, not a market-rate assertion. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0153",
+      "title": "Automatic conversion can access a scalar currency before the parent sum identity",
+      "library_id": "CE-REPO-0039",
+      "edition_id": "CE-EDITION-0039",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn111",
+          "path": "djmoney/money.py",
+          "name": "djmoney/money.py::maybe_convert",
+          "start_line": 159,
+          "end_line": 167
+        },
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn096",
+          "path": "djmoney/money.py",
+          "name": "djmoney/money.py::Money.__add__",
+          "start_line": 52,
+          "end_line": 58
+        },
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn097",
+          "path": "djmoney/money.py",
+          "name": "djmoney/money.py::Money.__sub__",
+          "start_line": 60,
+          "end_line": 66
+        }
+      ],
+      "explanation": [
+        "With AUTO_CONVERT_MONEY enabled, maybe_convert reads value.currency before verifying Money type, so a scalar zero can fail before the parent numeric identity path is reached.",
+        "The __add__/__sub__ helper call precedes super and only F expressions bypass it. The source precondition contradicts the helper docstring narrower Money-only description.",
+        "AUTO_CONVERT_MONEY true, ordinary scalar argument lacking currency and no F-expression path. A scalar0 used by a sum-style identity reaches attribute access before the parent compatibility logic. This is a native API integration issue, not a required Core scalar-add feature. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0154",
+      "title": "Rate upsert keeps omitted rows and cached quotations after source changes",
+      "library_id": "CE-REPO-0039",
+      "edition_id": "CE-EDITION-0039",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "open_question",
+      "functions": [
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn018",
+          "path": "djmoney/contrib/exchange/backends/base.py",
+          "name": "djmoney/contrib/exchange/backends/base.py::BaseExchangeBackend.update_rates",
+          "start_line": 63,
+          "end_line": 78
+        },
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn034",
+          "path": "djmoney/contrib/exchange/models.py",
+          "name": "djmoney/contrib/exchange/models.py::get_rate",
+          "start_line": 38,
+          "end_line": 54
+        },
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn032",
+          "path": "djmoney/contrib/exchange/models.py",
+          "name": "djmoney/contrib/exchange/models.py::ExchangeBackend.clear_rates",
+          "start_line": 20,
+          "end_line": 21
+        }
+      ],
+      "explanation": [
+        "Rate updates upsert returned currencies without deleting omitted rows, and get_rate keys cached observations by pair/backend rather than an update revision. Clearing rate rows does not explicitly invalidate that cache.",
+        "The source operations show a possible stale-context path, but actual persistence transactions, cache expiry and provider behavior were not executed.",
+        "A shared backend whose returned set/base changes and cached pair values surviving the update or clear operation. An omitted currency row can remain stored and a cached quote can continue until timeout; the atomic database decorator does not imply an atomic external cache snapshot. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0155",
+      "title": "Provider base parameters and response provenance can diverge from stored base",
+      "library_id": "CE-REPO-0039",
+      "edition_id": "CE-EDITION-0039",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn018",
+          "path": "djmoney/contrib/exchange/backends/base.py",
+          "name": "djmoney/contrib/exchange/backends/base.py::BaseExchangeBackend.update_rates",
+          "start_line": 63,
+          "end_line": 78
+        },
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn019",
+          "path": "djmoney/contrib/exchange/backends/base.py",
+          "name": "djmoney/contrib/exchange/backends/base.py::SimpleExchangeBackend.get_rates",
+          "start_line": 87,
+          "end_line": 89
+        },
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn023",
+          "path": "djmoney/contrib/exchange/backends/openexchangerates.py",
+          "name": "djmoney/contrib/exchange/backends/openexchangerates.py::OpenExchangeRatesBackend.get_params",
+          "start_line": 20,
+          "end_line": 21
+        },
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn025",
+          "path": "djmoney/contrib/exchange/backends/unirateapi.py",
+          "name": "djmoney/contrib/exchange/backends/unirateapi.py::UniRateBackend.get_params",
+          "start_line": 17,
+          "end_line": 18
+        }
+      ],
+      "explanation": [
+        "The update method stores its supplied base_currency, while provider parameter constructors use global BASE_CURRENCY for differently named base/from parameters; the simple response path extracts only rates.",
+        "Parameter construction and ignored response fields are visible, but the remote service interpretation of extra keys is outside this reading.",
+        "Caller-supplied base differs from global configuration and a provider response whose factors actually follow the provider base/from parameter. A storedUSD base with EUR-denominated response factors is possible under that condition; no live request/response mismatch was observed. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0156",
+      "title": "Exchange ratios declare orientation but persist six fractional digits",
+      "library_id": "CE-REPO-0039",
+      "edition_id": "CE-EDITION-0039",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn036",
+          "path": "djmoney/contrib/exchange/models.py",
+          "name": "djmoney/contrib/exchange/models.py::_try_to_get_rate_directly",
+          "start_line": 67,
+          "end_line": 78
+        },
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn037",
+          "path": "djmoney/contrib/exchange/models.py",
+          "name": "djmoney/contrib/exchange/models.py::_get_rate_via_base",
+          "start_line": 81,
+          "end_line": 101
+        },
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn038",
+          "path": "djmoney/contrib/exchange/models.py",
+          "name": "djmoney/contrib/exchange/models.py::convert_money",
+          "start_line": 104,
+          "end_line": 110
+        }
+      ],
+      "explanation": [
+        "The local direct, inverse and cross-rate helpers consistently select target/source orientation, but stored factors use a20-digit/6-fractional-place DecimalField and products follow ambient Decimal context.",
+        "The helper branches and model declaration distinguish orientation from storage/derivation precision. Neither proves market provenance or lossless rate round trips.",
+        "Rates from one intended base/backend, matched row identities, nonzero valid factors and the actual database/Decimal adaptation. A fine-grained factor may not survive six fractional storage places; division by a stored zero is not locally prevented by these helpers. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0169",
+      "title": "Exchange conversion keeps an explicit source scale on the target currency",
+      "library_id": "CE-REPO-0017",
+      "edition_id": "CE-EDITION-0017",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn31",
+          "path": "src/index.ts",
+          "name": "Money.toCurrency",
+          "start_line": 402,
+          "end_line": 410
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn28",
+          "path": "src/index.ts",
+          "name": "Money.getDecimals",
+          "start_line": 378,
+          "end_line": 380
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn05",
+          "path": "src/index.ts",
+          "name": "Money.constructor",
+          "start_line": 67,
+          "end_line": 93
+        }
+      ],
+      "explanation": [
+        "toCurrency changes currency and computes the supplied rate/unit ratio, while retaining any explicit source decimals override through the spread into the destination constructor.",
+        "The constructor chooses data.decimals before currency metadata, so explicit source precision survives; undefined overrides instead let the new currency provide digits.",
+        "Receiver constructed with or without an explicit decimals field; supplied rate and unit must be meaningful for the intended pair. Converting a custom-scale Price differs from the ordinary undefined-decimals NOK-to-JPY fixture. Currency minor digits are not an obligatory Core calculation scale. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0180",
+      "title": "Relabeling minor units differs from directed FX conversion",
+      "library_id": "CE-REPO-0003",
+      "edition_id": "CE-EDITION-0003",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn178",
+          "path": "lib/money/money.rb",
+          "name": "Money::with_currency",
+          "start_line": 477,
+          "end_line": 484
+        },
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn037",
+          "path": "lib/money/bank/variable_exchange.rb",
+          "name": "Money::Bank::VariableExchange::exchange_with",
+          "start_line": 110,
+          "end_line": 124
+        },
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn038",
+          "path": "lib/money/bank/variable_exchange.rb",
+          "name": "Money::Bank::VariableExchange::calculate_fractional",
+          "start_line": 126,
+          "end_line": 131
+        },
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn039",
+          "path": "lib/money/bank/variable_exchange.rb",
+          "name": "Money::Bank::VariableExchange::exchange",
+          "start_line": 133,
+          "end_line": 142
+        }
+      ],
+      "explanation": [
+        "with_currency relabels a copied Money under another currency while retaining its fractional count; exchange_with instead normalizes subunit ratios and multiplies a directed bank factor.",
+        "The two paths are observably different APIs. The explicit relabeling method is not automatically an attempted FX conversion, and identity conversion returns an alias.",
+        "Resolved Currency objects and a bank with the requested directional quote; its optional rounding callback is part of conversion context. Identical fractional counts can mean different major amounts when subunit ratios differ. A factor in the reverse direction is not automatically registered. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0226",
+      "title": "Code equality and currency replacement can hide unit metadata changes",
+      "library_id": "CE-REPO-0020",
+      "edition_id": "CE-EDITION-0020",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn005",
+          "path": "src/Currency.php",
+          "name": "Currency::__construct",
+          "start_line": 217,
+          "end_line": 237
+        },
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn008",
+          "path": "src/Currency.php",
+          "name": "Currency::setCurrencies",
+          "start_line": 259,
+          "end_line": 262
+        },
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn010",
+          "path": "src/Currency.php",
+          "name": "Currency::equals",
+          "start_line": 269,
+          "end_line": 272
+        },
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn028",
+          "path": "src/Money.php",
+          "name": "Money::__construct",
+          "start_line": 215,
+          "end_line": 219
+        }
+      ],
+      "explanation": [
+        "Currency snapshots can have the same code but different registered unit/display metadata, while Money construction from another Money can copy its raw numeric amount under the requested Currency.",
+        "Code-only equality is consistent with the Core same-identifier compatibility subject by itself; the separate concern is reinterpretation of a raw amount under different unit metadata.",
+        "A replaced registry definition or a Money-input constructor with a separately supplied currency; actual subunit meaning must be explicit. Two same-code snapshots with differing subunits compare equal upstream. That does not prove Core requires metadata equality, nor establish that the table values are current ISO authority. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0227",
+      "title": "FX method multiplies raw minor amounts without source-target unit factors",
+      "library_id": "CE-REPO-0020",
+      "edition_id": "CE-EDITION-0020",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn052",
+          "path": "src/Money.php",
+          "name": "Money::convert",
+          "start_line": 447,
+          "end_line": 461
+        },
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn032",
+          "path": "src/Money.php",
+          "name": "Money::convertAmount",
+          "start_line": 280,
+          "end_line": 287
+        }
+      ],
+      "explanation": [
+        "convert multiplies the stored raw amount by its supplied ratio and rounds using target precision, without applying source/target subunit factors. Its ratio is therefore a raw-unit factor unless callers compensate.",
+        "The method and convertAmount major-to-minor flag have distinct roles. A conventional major-unit FX interpretation cannot be inferred solely from the method name.",
+        "Caller knows whether the provided ratio relates raw units or major units; chosen mutability and rounding mode affect output effects. For currencies with different subunit factors, a conventional major-unit quote used directly changes units incorrectly; a correctly defined raw-unit quote can intentionally account for that difference. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0255",
+      "title": "Forward and inverse FX construction use asymmetric currency context",
+      "library_id": "CE-REPO-0032",
+      "edition_id": "CE-EDITION-0032",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn051",
+          "path": "lib/src/exchange_rates/exchange_rate.dart",
+          "name": "ExchangeRate::applyRate",
+          "start_line": 201,
+          "end_line": 213
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn052",
+          "path": "lib/src/exchange_rates/exchange_rate.dart",
+          "name": "ExchangeRate::applyInverseRate",
+          "start_line": 218,
+          "end_line": 237
+        },
+        {
+          "id": "CE-REPO-0032:CE-EDITION-0032:fn042",
+          "path": "lib/src/exchange_rates/exchange_rate.dart",
+          "name": "ExchangeRate::ExchangeRate.fromFixedWithCurrency",
+          "start_line": 63,
+          "end_line": 69
+        }
+      ],
+      "explanation": [
+        "Forward conversion reconstructs the target by registry ISO code, whereas inverse conversion retains the fromCurrency object but selects digits from the forward target context.",
+        "The two result constructors and targetDigits selection expose asymmetric metadata/precision dependencies independent of rate inversion arithmetic.",
+        "ExchangeRate constructed with explicit currency objects, registry changes or an unregistered target, and differing from/to digit contexts. A forward target object can exist while Money.fromFixed cannot resolve its code; inverse precision can follow the other side digits. No round-trip or provider outcome was executed. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0275",
+      "title": "FX scales raw units correctly but does not validate finite representable results",
+      "library_id": "CE-REPO-0098",
+      "edition_id": "CE-EDITION-0098",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "open_question",
+      "functions": [
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn062",
+          "path": "exchange/exchange.go",
+          "name": "(e *Exchange)::AddRate",
+          "start_line": 42,
+          "end_line": 57
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn063",
+          "path": "exchange/exchange.go",
+          "name": "(e *Exchange)::GetRate",
+          "start_line": 61,
+          "end_line": 87
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn064",
+          "path": "exchange/exchange.go",
+          "name": "(e *Exchange)::ConvertAmount",
+          "start_line": 90,
+          "end_line": 117
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn065",
+          "path": "exchange/exchange.go",
+          "name": "(e *Exchange)::ConvertAmountWithRate",
+          "start_line": 120,
+          "end_line": 137
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn081",
+          "path": "money/exchange.go",
+          "name": "(c *Converter)::ConvertWithRate",
+          "start_line": 76,
+          "end_line": 115
+        }
+      ],
+      "explanation": [
+        "The conversion path rescales source minor units to major units and then destination minor units, but uses float64 arithmetic and unchecked float-to-int64 conversion; rate<=0 alone does not validate NaN or positive infinity.",
+        "The explicit powers establish intended units, while the representability/finiteness guard is absent. The exact result of an unrepresentable native conversion is not portable.",
+        "A nonnil exchange, existing currency metadata and caller/registered factor; same-code conversion bypasses fraction conversion. If an input factor is NaN/+Inf or the scaled product exceeds int64, no source check proves a valid result. No fixed integer outcome is asserted for that path. No Go execution. R1-M1 Go contract is reused: an unrepresentable floating-to-integer result is implementation-dependent, so this review does not invent a numeric result. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0290",
+      "title": "Cross quotes fix the base but retain mutable and nonpositive caller data",
+      "library_id": "CE-REPO-0097",
+      "edition_id": "CE-EDITION-0097",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn059",
+          "path": "src/exchange.rs",
+          "name": "src/exchange.rs::Exchange<From> for M::convert",
+          "start_line": 137,
+          "end_line": 161
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn061",
+          "path": "src/exchange.rs",
+          "name": "src/exchange.rs::ExchangeRates<'a, Base>::new",
+          "start_line": 269,
+          "end_line": 274
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn063",
+          "path": "src/exchange.rs",
+          "name": "src/exchange.rs::ExchangeRates<'a, Base>::set",
+          "start_line": 312,
+          "end_line": 318
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn064",
+          "path": "src/exchange.rs",
+          "name": "src/exchange.rs::ExchangeRates<'a, Base>::set_pair",
+          "start_line": 361,
+          "end_line": 402
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn066",
+          "path": "src/exchange.rs",
+          "name": "src/exchange.rs::ExchangeRates<'a, Base>::get_pair",
+          "start_line": 455,
+          "end_line": 459
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn077",
+          "path": "src/exchange.rs",
+          "name": "src/exchange.rs::exchange_rates_display",
+          "start_line": 555,
+          "end_line": 571
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn182",
+          "path": "src/obj_money/obj_money.rs",
+          "name": "src/obj_money/obj_money.rs::ObjMoney<IS_RAW>::convert",
+          "start_line": 594,
+          "end_line": 609
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn183",
+          "path": "src/obj_money/obj_money.rs",
+          "name": "src/obj_money/obj_money.rs::ObjMoney<IS_RAW>::convert_multi",
+          "start_line": 617,
+          "end_line": 636
+        }
+      ],
+      "explanation": [
+        "The rate table fixes Base/Base at1 but admits caller nonpositive quotes, derives crosses as reciprocal(source) times target and updates its mutable map. Typed same-code conversion bypasses the rate, while ObjMoney conversion still invokes it.",
+        "Those are explicit local data/dispatch policies, not guarantees of FX economic validity, positive quotes, freshness or one provider snapshot.",
+        "Borrowed currency-code keys, checked Decimal representability and the chosen typed versus dynamic conversion interface. A zero source quote makes a cross reciprocal fail; a same-code typed conversion may succeed without ever consulting a provider that the dynamic path calls. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0297",
+      "title": "Oriented exchange conversion selects ambient destination rounding",
+      "library_id": "CE-REPO-0007",
+      "edition_id": "CE-EDITION-0007",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn135",
+          "path": "src/NodaMoney/Exchange/ExchangeRate.cs",
+          "name": "NodaMoney.Exchange.ExchangeRate::public ExchangeRate(Currency baseCurrency, Currency quoteCurrency, decimal rate)\n        : this()",
+          "start_line": 22,
+          "end_line": 33
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn150",
+          "path": "src/NodaMoney/Exchange/ExchangeRate.cs",
+          "name": "NodaMoney.Exchange.ExchangeRate::public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out ExchangeRate result)",
+          "start_line": 153,
+          "end_line": 185
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn151",
+          "path": "src/NodaMoney/Exchange/ExchangeRate.cs",
+          "name": "NodaMoney.Exchange.ExchangeRate::public Money Convert(Money money)",
+          "start_line": 191,
+          "end_line": 201
+        },
+        {
+          "id": "CE-REPO-0007:CE-EDITION-0007:fn152",
+          "path": "src/NodaMoney/Exchange/ExchangeRate.cs",
+          "name": "NodaMoney.Exchange.ExchangeRate::private static ReadOnlySpan<char> ParseNumericInput(ReadOnlySpan<char> s, out ReadOnlySpan<char> baseCurrencySpan, out ReadOnlySpan<char> quoteCurrencySpan)",
+          "start_line": 203,
+          "end_line": 220
+        }
+      ],
+      "explanation": [
+        "ExchangeRate uses base-to-quote multiplication and quote-to-base division, rejects unrelated currencies and negative factors but permits zero for distinct currencies; destination Money reconstruction uses its ambient context.",
+        "The guard is rate<0 rather than rate<=0, and each result constructor selects monetary rounding separately. The error message alone does not impose a stronger positive-rate guard.",
+        "A normally constructed rate and Money whose currency matches one side; default struct values can bypass constructor validation. A zero forward factor produces a zero product, while reverse conversion divides byzero. Arbitrary round-trip equality or rate freshness is not demonstrated. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0305",
+      "title": "ex-money: FX cross-rate orientation, alias collisions and hidden retrieval context",
+      "library_id": "CE-REPO-0031",
+      "edition_id": "CE-EDITION-0031",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn332",
+          "path": "lib/money.ex",
+          "name": "Money.sum [clause 1977]",
+          "start_line": 1977,
+          "end_line": 1979
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn333",
+          "path": "lib/money.ex",
+          "name": "Money.sum [clause 1981]",
+          "start_line": 1981,
+          "end_line": 1983
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn334",
+          "path": "lib/money.ex",
+          "name": "Money.sum [clause 1985]",
+          "start_line": 1985,
+          "end_line": 1994
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn335",
+          "path": "lib/money.ex",
+          "name": "Money.sum [clause 2001]",
+          "start_line": 2001,
+          "end_line": 2003
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn338",
+          "path": "lib/money.ex",
+          "name": "Money.default_rates [clause 2064]",
+          "start_line": 2064,
+          "end_line": 2073
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn370",
+          "path": "lib/money.ex",
+          "name": "Money.localize [clause 2631]",
+          "start_line": 2631,
+          "end_line": 2638
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn371",
+          "path": "lib/money.ex",
+          "name": "Money.to_currency [clause 2694]",
+          "start_line": 2694,
+          "end_line": 2696
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn372",
+          "path": "lib/money.ex",
+          "name": "Money.to_currency [clause 2698]",
+          "start_line": 2698,
+          "end_line": 2700
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn373",
+          "path": "lib/money.ex",
+          "name": "Money.to_currency [clause 2702]",
+          "start_line": 2702,
+          "end_line": 2704
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn375",
+          "path": "lib/money.ex",
+          "name": "Money.cross_rate [clause 2809]",
+          "start_line": 2809,
+          "end_line": 2811
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn376",
+          "path": "lib/money.ex",
+          "name": "Money.cross_rate [clause 2813]",
+          "start_line": 2813,
+          "end_line": 2815
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn377",
+          "path": "lib/money.ex",
+          "name": "Money.cross_rate [clause 2817]",
+          "start_line": 2817,
+          "end_line": 2824
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn434",
+          "path": "lib/money.ex",
+          "name": "Money.get_rate [clause 3472]",
+          "start_line": 3472,
+          "end_line": 3487
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn453",
+          "path": "lib/money.ex",
+          "name": "cross-currency sum reducer — lib/money.ex",
+          "start_line": 1988,
+          "end_line": 1993
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn454",
+          "path": "lib/money.ex",
+          "name": "same-currency sum predicate — lib/money.ex",
+          "start_line": 2065,
+          "end_line": 2065
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn456",
+          "path": "lib/money/exchange_rates/open_exchange_rates.ex",
+          "name": "decoded exchange-rate numeric conversion callback — lib/money/exchange_rates/open_exchange_rates.ex",
+          "start_line": 66,
+          "end_line": 69
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn494",
+          "path": "lib/money.ex",
+          "name": "lib/money.ex def to_currency(%Money{currency: from_currency, amount: amount} = money, to_currency, rates) guarded implementation",
+          "start_line": 2706,
+          "end_line": 2713
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn495",
+          "path": "lib/money.ex",
+          "name": "lib/money.ex def to_currency(%Money{} = money, to_currency, %{} = rates) guarded implementation",
+          "start_line": 2715,
+          "end_line": 2720
+        }
+      ],
+      "explanation": [
+        "Cross-rate division is target/source; explicit conversion retains the Money struct formatting fields. Omitted rates are fetched before clause dispatch, whereas homogeneous default sums can avoid retrieval; duplicate atom/string aliases fail lookup.",
+        "The default argument, get_rate cardinality test, sum reducer and conversion updates were all read. They expose local lookup/context policy without validating quote base, time or positivity.",
+        "Caller rate map or latest-rates provider response, unambiguous currency-key representation and compatible Decimal context. Even same-currency conversion with omitted rates evaluates latest_rates first; homogeneous sum supplies an empty map and takes a different external-fact path. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0313",
+      "title": "JSR354 API: conversion convenience path drops query policy on creation",
+      "library_id": "CE-REPO-0109",
+      "edition_id": "CE-EDITION-0109",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn337",
+          "path": "src/main/java/javax/money/spi/MonetaryConversionsSingletonSpi.java",
+          "name": "javax.money.spi.MonetaryConversionsSingletonSpi.getConversion",
+          "start_line": 191,
+          "end_line": 195
+        },
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn338",
+          "path": "src/main/java/javax/money/spi/MonetaryConversionsSingletonSpi.java",
+          "name": "javax.money.spi.MonetaryConversionsSingletonSpi.getConversion",
+          "start_line": 209,
+          "end_line": 211
+        },
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn219",
+          "path": "src/main/java/javax/money/convert/ExchangeRateProvider.java",
+          "name": "javax.money.convert.ExchangeRateProvider.getCurrencyConversion",
+          "start_line": 130,
+          "end_line": 132
+        },
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn224",
+          "path": "src/main/java/javax/money/convert/ExchangeRateProvider.java",
+          "name": "javax.money.convert.ExchangeRateProvider.getCurrencyConversion",
+          "start_line": 211,
+          "end_line": 213
+        }
+      ],
+      "explanation": [
+        "The default conversions singleton uses the full query to choose a provider, then creates conversion through the term-only overload, whose default rebuilds only a term-currency query.",
+        "The method chain drops other query attributes at conversion creation, although provider selection has already seen them and overrides can intentionally preserve policy another way.",
+        "The default singleton/default provider convenience path, a query with nonterm attributes and no overriding behavior that restores them. A selected provider may receive no requested date/rate type/base attributes in the newly built conversion query. No resulting financial quote was executed. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0326",
+      "title": "JavaMoney FRB and Yahoo derived-rate paths lose selected-date context",
+      "library_id": "CE-REPO-0111",
+      "edition_id": "CE-EDITION-0111",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "open_question",
+      "functions": [
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn355",
+          "path": "exchange/exchange-rate-frb/src/main/java/org/javamoney/moneta/convert/frb/USFederalReserveRateProvider.java",
+          "name": "org.javamoney.moneta.convert.frb.USFederalReserveRateProvider.getExchangeRate",
+          "start_line": 127,
+          "end_line": 146
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn356",
+          "path": "exchange/exchange-rate-frb/src/main/java/org/javamoney/moneta/convert/frb/USFederalReserveRateProvider.java",
+          "name": "org.javamoney.moneta.convert.frb.USFederalReserveRateProvider.getBuilder",
+          "start_line": 148,
+          "end_line": 153
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn357",
+          "path": "exchange/exchange-rate-frb/src/main/java/org/javamoney/moneta/convert/frb/USFederalReserveRateProvider.java",
+          "name": "org.javamoney.moneta.convert.frb.USFederalReserveRateProvider.newDataLoaded",
+          "start_line": 156,
+          "end_line": 180
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn364",
+          "path": "exchange/exchange-rate-frb/src/main/java/org/javamoney/moneta/convert/frb/USFederalReserveRateReadingHandler.java",
+          "name": "org.javamoney.moneta.convert.frb.USFederalReserveRateReadingHandler.startElement",
+          "start_line": 111,
+          "end_line": 131
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn366",
+          "path": "exchange/exchange-rate-frb/src/main/java/org/javamoney/moneta/convert/frb/USFederalReserveRateReadingHandler.java",
+          "name": "org.javamoney.moneta.convert.frb.USFederalReserveRateReadingHandler.characters",
+          "start_line": 142,
+          "end_line": 165
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn388",
+          "path": "exchange/exchange-rate-yahoo/src/main/java/org/javamoney/moneta/convert/yahoo/YahooAbstractRateProvider.java",
+          "name": "org.javamoney.moneta.convert.yahoo.YahooAbstractRateProvider.newDataLoaded",
+          "start_line": 87,
+          "end_line": 102
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn393",
+          "path": "exchange/exchange-rate-yahoo/src/main/java/org/javamoney/moneta/convert/yahoo/YahooAbstractRateProvider.java",
+          "name": "org.javamoney.moneta.convert.yahoo.YahooAbstractRateProvider.getBuilder",
+          "start_line": 194,
+          "end_line": 200
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn394",
+          "path": "exchange/exchange-rate-yahoo/src/main/java/org/javamoney/moneta/convert/yahoo/YahooAbstractRateProvider.java",
+          "name": "org.javamoney.moneta.convert.yahoo.YahooAbstractRateProvider.reverse",
+          "start_line": 202,
+          "end_line": 210
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn428",
+          "path": "exchange/exchange-rate-yahoo/src/main/java/org/javamoney/moneta/convert/yahoo/YahooQuoteItemInformation.java",
+          "name": "org.javamoney.moneta.convert.yahoo.YahooQuoteItemInformation.of",
+          "start_line": 81,
+          "end_line": 106
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn433",
+          "path": "exchange/exchange-rate-yahoo/src/main/java/org/javamoney/moneta/convert/yahoo/YahooRateReadingHandler.java",
+          "name": "org.javamoney.moneta.convert.yahoo.YahooRateReadingHandler.addRate",
+          "start_line": 68,
+          "end_line": 86
+        }
+      ],
+      "explanation": [
+        "FRB/Yahoo derived builders accept a selected date but do not attach that argument; Yahoo reversal replaces context, and direct Yahoo rate storage keys the date without placing it in the constructed rate context.",
+        "The source also decimalizes parsed doubles and has field/chunk parsing assumptions. This is provenance/context loss potential, not evidence that delivered historical prices are correct or currently available.",
+        "Successfully parsed provider fixtures, the selected-date derivation path and exact backend versions; actual remote data and SAX chunking are external. A date-keyed cached factor can lack that date in the returned derived context. Character chunks may replace instead of accumulate, but no fragmented live parse was executed. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0338",
+      "title": "Moneta FX: cross legs and query contexts do not guarantee one dated snapshot",
+      "library_id": "CE-REPO-0110",
+      "edition_id": "CE-EDITION-0110",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "open_question",
+      "functions": [
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn094",
+          "path": "moneta-convert/moneta-convert-imf/src/main/java/org/javamoney/moneta/convert/imf/IMFAbstractRateProvider.java",
+          "name": "org.javamoney.moneta.convert.imf.IMFAbstractRateProvider.getExchangeRate",
+          "start_line": 127,
+          "end_line": 169
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn095",
+          "path": "moneta-convert/moneta-convert-imf/src/main/java/org/javamoney/moneta/convert/imf/IMFAbstractRateProvider.java",
+          "name": "org.javamoney.moneta.convert.imf.IMFAbstractRateProvider.getExchangeRate",
+          "start_line": 171,
+          "end_line": 190
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn069",
+          "path": "moneta-convert/moneta-convert-ecb/src/main/java/org/javamoney/moneta/convert/ecb/ECBAbstractRateProvider.java",
+          "name": "org.javamoney.moneta.convert.ecb.ECBAbstractRateProvider.findExchangeRate",
+          "start_line": 170,
+          "end_line": 192
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn072",
+          "path": "moneta-convert/moneta-convert-ecb/src/main/java/org/javamoney/moneta/convert/ecb/ECBAbstractRateProvider.java",
+          "name": "org.javamoney.moneta.convert.ecb.ECBAbstractRateProvider.getBuilder",
+          "start_line": 234,
+          "end_line": 240
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn585",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/AbstractCurrencyConversion.java",
+          "name": "org.javamoney.moneta.spi.AbstractCurrencyConversion.apply",
+          "start_line": 101,
+          "end_line": 120
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn586",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/AbstractCurrencyConversion.java",
+          "name": "org.javamoney.moneta.spi.AbstractCurrencyConversion.roundFactor",
+          "start_line": 138,
+          "end_line": 152
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn723",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/LazyBoundCurrencyConversion.java",
+          "name": "org.javamoney.moneta.spi.LazyBoundCurrencyConversion.getExchangeRate",
+          "start_line": 58,
+          "end_line": 62
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn725",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/spi/LazyBoundCurrencyConversion.java",
+          "name": "org.javamoney.moneta.spi.LazyBoundCurrencyConversion.with",
+          "start_line": 77,
+          "end_line": 80
+        }
+      ],
+      "explanation": [
+        "Moneta IMF chooses rate dates per leg; derived conversion context need not retain one shared date. Conversion validates the returned base but not its term against the requested target, and factor rounding can treat a scale-derived integer as significant precision.",
+        "The cross-leg calls, builders and AbstractCurrencyConversion were read. LazyBound.with changes exposed context while retaining the captured query, so those contexts cannot be assumed interchangeable.",
+        "The relevant provider/conversion implementations and a query whose legs or contexts differ; caller expects the requested target and dated snapshot. Two latest IMF legs can have different dates. A provider returning a different term can pass the local base-only guard; no actual provider response was executed. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    }
+  ]
+}

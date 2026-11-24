@@ -1200,7 +1200,408 @@
       },
       "expected": {
         "status": "success",
-        "value": [{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"},{"amount":"0.01","currency":"USD"}],
+        "value": [
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          }
+        ],
         "observations": {
           "operand": {
             "amount": "1.00",
@@ -1266,6 +1667,451 @@
         "allocation-context-rounded-result",
         "allocation-does-not-conserve-total",
         "allocation-mutates-source"
+      ]
+    },
+    {
+      "id": "money.allocate.ratio.product-safe-boundary-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-004",
+        "MONEY-ALLOCATION-007",
+        "MONEY-ALLOCATION-008",
+        "MONEY-ALLOCATION-009",
+        "MONEY-ALLOCATION-010",
+        "MONEY-ALLOCATION-013"
+      ],
+      "description": "One recipient preserves the source immediately below a signed intermediate product boundary.",
+      "operation": "finkore.money.allocate",
+      "input": {
+        "value": {
+          "amount": "46116860184273879.03",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "RATIO",
+          "ratios": [
+            2
+          ]
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "success",
+        "value": [
+          {
+            "amount": "46116860184273879.03",
+            "currency": "USD"
+          }
+        ],
+        "observations": {
+          "operand": {
+            "amount": "46116860184273879.03",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "premature-product-range-failure"
+      ]
+    },
+    {
+      "id": "money.allocate.ratio.intermediate-product-growth-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-004",
+        "MONEY-ALLOCATION-007",
+        "MONEY-ALLOCATION-008",
+        "MONEY-ALLOCATION-009",
+        "MONEY-ALLOCATION-010",
+        "MONEY-ALLOCATION-013"
+      ],
+      "description": "One recipient must receive the whole source even when amount-times-weight crosses a native intermediate coefficient boundary.",
+      "operation": "finkore.money.allocate",
+      "input": {
+        "value": {
+          "amount": "46116860184273879.04",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "RATIO",
+          "ratios": [
+            2
+          ]
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "success",
+        "value": [
+          {
+            "amount": "46116860184273879.04",
+            "currency": "USD"
+          }
+        ],
+        "observations": {
+          "operand": {
+            "amount": "46116860184273879.04",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "unchecked-allocation-product-overflow"
+      ],
+      "pairedControl": "money.allocate.ratio.product-safe-boundary-001"
+    },
+    {
+      "id": "money.allocate.equal.large-coefficient-residual-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-003",
+        "MONEY-ALLOCATION-007",
+        "MONEY-ALLOCATION-008",
+        "MONEY-ALLOCATION-009",
+        "MONEY-ALLOCATION-010",
+        "MONEY-ALLOCATION-013"
+      ],
+      "description": "Exact integer-unit floors give the first recipient the odd unit even near a decimal coefficient precision boundary.",
+      "operation": "finkore.money.allocate",
+      "input": {
+        "value": {
+          "amount": "90000000000000000.03",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "EQUAL",
+          "parts": 2
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "success",
+        "value": [
+          {
+            "amount": "45000000000000000.02",
+            "currency": "USD"
+          },
+          {
+            "amount": "45000000000000000.01",
+            "currency": "USD"
+          }
+        ],
+        "observations": {
+          "operand": {
+            "amount": "90000000000000000.03",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "rounded-quotient-before-residual"
+      ]
+    },
+    {
+      "id": "money.allocate.equal.tiny-unit-control-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-003",
+        "MONEY-ALLOCATION-007",
+        "MONEY-ALLOCATION-008",
+        "MONEY-ALLOCATION-009",
+        "MONEY-ALLOCATION-010",
+        "MONEY-ALLOCATION-013"
+      ],
+      "description": "An exactly divisible source at a fine explicit scale needs no residual correction.",
+      "operation": "finkore.money.allocate",
+      "input": {
+        "value": {
+          "amount": "0.000000000000000000002",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "EQUAL",
+          "parts": 2
+        },
+        "scale": 21
+      },
+      "expected": {
+        "status": "success",
+        "value": [
+          {
+            "amount": "0.000000000000000000001",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.000000000000000000001",
+            "currency": "USD"
+          }
+        ],
+        "observations": {
+          "operand": {
+            "amount": "0.000000000000000000002",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "unsupported-fine-scale-unit"
+      ]
+    },
+    {
+      "id": "money.allocate.equal.tiny-unit-remainder-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-003",
+        "MONEY-ALLOCATION-007",
+        "MONEY-ALLOCATION-008",
+        "MONEY-ALLOCATION-009",
+        "MONEY-ALLOCATION-010",
+        "MONEY-ALLOCATION-013"
+      ],
+      "description": "An indivisible fine-scale source requires a nonzero exact residual unit and finite progress.",
+      "operation": "finkore.money.allocate",
+      "input": {
+        "value": {
+          "amount": "0.000000000000000000001",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "EQUAL",
+          "parts": 2
+        },
+        "scale": 21
+      },
+      "expected": {
+        "status": "success",
+        "value": [
+          {
+            "amount": "0.000000000000000000001",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.000000000000000000000",
+            "currency": "USD"
+          }
+        ],
+        "observations": {
+          "operand": {
+            "amount": "0.000000000000000000001",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "zero-correction-unit-nonprogress"
+      ],
+      "pairedControl": "money.allocate.equal.tiny-unit-control-001"
+    },
+    {
+      "id": "money.allocate.ratio.equal-weights-remainder-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-004",
+        "MONEY-ALLOCATION-007",
+        "MONEY-ALLOCATION-008",
+        "MONEY-ALLOCATION-009",
+        "MONEY-ALLOCATION-010",
+        "MONEY-ALLOCATION-013"
+      ],
+      "description": "Equal ratios preserve declared recipient order when assigning the remainder.",
+      "operation": "finkore.money.allocate",
+      "input": {
+        "value": {
+          "amount": "10.00",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "RATIO",
+          "ratios": [
+            1,
+            1,
+            1
+          ]
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "success",
+        "value": [
+          {
+            "amount": "3.34",
+            "currency": "USD"
+          },
+          {
+            "amount": "3.33",
+            "currency": "USD"
+          },
+          {
+            "amount": "3.33",
+            "currency": "USD"
+          }
+        ],
+        "observations": {
+          "operand": {
+            "amount": "10.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "equal-weight-order-not-preserved"
+      ]
+    },
+    {
+      "id": "money.allocate.ratio.near-integer-share-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-001",
+        "MONEY-ALLOCATION-002",
+        "MONEY-ALLOCATION-004",
+        "MONEY-ALLOCATION-007",
+        "MONEY-ALLOCATION-008",
+        "MONEY-ALLOCATION-009",
+        "MONEY-ALLOCATION-010",
+        "MONEY-ALLOCATION-012",
+        "MONEY-ALLOCATION-013"
+      ],
+      "description": "Preserves declared residual ownership when a later exact share lies just below one target unit.",
+      "operation": "finkore.money.allocate",
+      "input": {
+        "value": {
+          "amount": "10.00",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "RATIO",
+          "ratios": [
+            1000,
+            1
+          ]
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "success",
+        "value": [
+          {
+            "amount": "10.00",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.00",
+            "currency": "USD"
+          }
+        ],
+        "observations": {
+          "operand": {
+            "amount": "10.00",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "rounded-division-before-integer-floor",
+        "residual-priority-shifted"
+      ]
+    },
+    {
+      "id": "money.allocate.ratio.small-equal-weights-remainder-001",
+      "spec": "money/allocation",
+      "requirements": [
+        "MONEY-ALLOCATION-004",
+        "MONEY-ALLOCATION-007",
+        "MONEY-ALLOCATION-008",
+        "MONEY-ALLOCATION-009",
+        "MONEY-ALLOCATION-010",
+        "MONEY-ALLOCATION-013"
+      ],
+      "description": "Preserves declared recipient order when rounded-first equal shares would overshoot a five-unit source.",
+      "operation": "finkore.money.allocate",
+      "input": {
+        "value": {
+          "amount": "0.05",
+          "currency": "USD"
+        },
+        "allocation": {
+          "method": "RATIO",
+          "ratios": [
+            1,
+            1,
+            1
+          ]
+        },
+        "scale": 2
+      },
+      "expected": {
+        "status": "success",
+        "value": [
+          {
+            "amount": "0.02",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.02",
+            "currency": "USD"
+          },
+          {
+            "amount": "0.01",
+            "currency": "USD"
+          }
+        ],
+        "observations": {
+          "operand": {
+            "amount": "0.05",
+            "currency": "USD"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "rounded-first-share-overshoot",
+        "largest-share-decrement-reverses-declared-residual-order"
       ]
     }
   ]

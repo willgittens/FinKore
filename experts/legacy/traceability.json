@@ -691,7 +691,7 @@
       ]
     },
     "contract": {
-      "core_version": "FinKore Core 2.0.4",
+      "core_version": "FinKore Core 2.0.5",
       "files": {
         "agentic/effects.md": "a3d7b2545f6d82273879ef370578f1702d41ba19d05ad8b91f6f97bcb125585b",
         "agentic/operations.md": "a72ca5ab5a862675a965159c59bb15f60e9c7aa236c47176ff65a258d61bec3c",
@@ -728,16 +728,16 @@
         "conformance/entities/malformed-boundary-regressions.json": "322968b6427c58398ed1d6f84b215d7fe2f681e7089ab7a7a9249dc20912fc93",
         "conformance/entities/readiness-regressions.json": "e5eb4e8b0f12bd5e17fe632969b5b021213bacb2fbf600add4b8a6fdc11b5fd9",
         "conformance/manifest.json": "bbe35a5783274530f5e913c6a99d62343bfb75e70cb5d2e4acf623441792652f",
-        "conformance/money/allocation.json": "2e1bd47aba543cc5ac9e3ba12126309053343cd2450579f9f73520adfe180e32",
-        "conformance/money/arithmetic.json": "3762114005c04d2b9de52bbfeb54d9a162ed28003bebc8631078f5801c2fa16b",
-        "conformance/money/comparison.json": "539b871a667ef61c30354cc2a9b3eccbb61709757de24dff4409ef885377f68c",
+        "conformance/money/allocation.json": "4fa0fb032047058dcf3df762d0d5f130143ed1fe27135cefc4c6ab757225b8ce",
+        "conformance/money/arithmetic.json": "24d89f2e67afe15cc8c906c2a6c7c11618f0003d7875b9bd5ede348efac33a79",
+        "conformance/money/comparison.json": "569057aedc37d133ea6a3cb5e4be455335f8a6a6c2cbb25050f9614b5ba67ddc",
         "conformance/money/construction-evaluation-regressions.json": "0c5859f359919b45e90710b885f917cd753e0151d9978ccf78efa754182494d2",
-        "conformance/money/rates.json": "a3a098b5f6f455b50086fc25543c2966a76e17a8ff7d9f9a34fd6f6066c84aad",
-        "conformance/money/representation.json": "25b857449438133d17fce285e1e8b81974304545d94be72b3e9af4d660f61d7d",
-        "conformance/money/rounded-division.json": "31a2eb8b3f3c3efbba66792a4baa83d07f226f6698318522b975f11d49768d2d",
-        "conformance/money/rounding.json": "24e8e66532fd9a3642f3b94cd3f13b5c6ba058b0cada1c1a28ce08ba6ed36b94",
+        "conformance/money/rates.json": "4b9b472a88e6d7dfa329f8b294b39409910b04d1a771f8470acaba3e143613b2",
+        "conformance/money/representation.json": "0066111ef157f207b3751d557716481de689bf93d2f93fd85a263ba7476b394b",
+        "conformance/money/rounded-division.json": "bc125c19e56e6192b7983616aeedc4ea27f426cf0919ba0d923d61070de5ed73",
+        "conformance/money/rounding.json": "fc28b9c779043ac4c33f343235628c285a555b16dc80c84e8fee07edd983331c",
         "conformance/shared/timestamps.json": "b08cafdbca7abad35829850221719cbd442747ddefae69c344c0b142efb393b2",
-        "conformance/traceability.md": "811f011221939e4471f00845f34e68354a7a36c2c1a30feb64878e5ed328994a",
+        "conformance/traceability.md": "bd15f4a3f33f112ff0c5d551778e295331b8c5addac2ba42bbdec12b1c36cd4f",
         "conformance/workflow/construction-evaluation-regressions.json": "2dc3c20eef3fbeebe641d330fe317d47307363ef22fa235db82f0b6fa64c1013",
         "conformance/workflow/corrections-098.json": "d1ac2c76baa4d05904a235c65ef4f245b1944a4e36cc307914ab6cc0b4da8094",
         "conformance/workflow/discovery-regressions.json": "668b3da39f10e13caa3e9adb137cb3a0c960205fe5c6f4059fa8ac0dcd7a1aa1",
@@ -745,54 +745,54 @@
         "conformance/workflow/readiness-regressions.json": "81259a509f0622700e4ee04c273af2ea881ac5a1078d335d6e1233ae63d93bb4",
         "conformance/workflow/transitions.json": "3326d9e99cfeec1e3566e0f3c2da6485b441fe5473821a0f6d000ff933b404d2",
         "conformance/workflow/versioning.json": "22fd4a09e04a351ae167fba3b7cddbbe58404951493e357509f921c30f5dc2b1",
-        "docs/coreDoc/core-doc.md": "29a582d47aba456fee752185dac4b37bf1e3f673928c58e9efac68293bd57d24",
-        "spec/README.md": "fca54eeb1654db60c639a5cefc4df1ec82cc847c2ce04fefa258069d13b8d324",
-        "spec/approvals/README.md": "220315ac32d8f03a354fee1b6ecaca8eababc45b7903831bf5c4c939efe19f34",
-        "spec/approvals/chains.md": "c496e8d497171a138d147f9d38f0c33a00313edf135c96175bbaff85f77a9ac2",
-        "spec/approvals/composition.md": "272702a579c850bc020d8a4656b37371e34fec8c69ff54e9f3bf0f99e0d40a17",
-        "spec/approvals/conditions.md": "de6ece94ad0a82f3a03cc2eef8fbd98ca73aaf7397f13bc57cb28fa918fd1ee6",
-        "spec/approvals/decisions.md": "f13cf70f291d33fc2366273d8a9740b6bfdefb2f84f9f3d3feff1a8bc40215bf",
-        "spec/approvals/errors.md": "dbbe997baf8a4c1428c2da084d2a93374adfecc65e4aa550a1a1ee90d2763e2c",
-        "spec/approvals/requirements.md": "e7af478c14a465e01ddf17bee516cd81cff47dac306cabcbdc36a6422f29a83e",
-        "spec/approvals/validity.md": "e6995c264f1fe86a5f25040b8317d3d1938b35b790a89fba8b1938e203aef83f",
-        "spec/audit/README.md": "28e65878597ee775e2bf124fe7c47043ea6bf90c3765174479e7af0146facea8",
-        "spec/audit/actors.md": "625d8b8ba4f1fb4f693fba70c9167ecb34dbb67f2d989b98a3e6adbe82ce4217",
-        "spec/audit/append-only.md": "96fd709de262ce9bf6432c9c6cb59c3f45c2afe47383574937210f5a5471e32c",
-        "spec/audit/changes.md": "475bfe7fef366432caed72fcf3bfec4e66ca4ccd132afe2fa2b467a50fcfda54",
-        "spec/audit/errors.md": "f7cf23fb55f087a8611fff64e23ac554c85f009669868d03b00b5f255789d3c3",
-        "spec/audit/events.md": "1f784f4661c92b9a9a69ba1f2659029ff0f73fc65c703a5da0fec5d831c63a90",
-        "spec/audit/redaction.md": "0b2688a8a9c82fe3c3678244284d0121671de7a1451c5b5fefd5fd5fe31716ea",
-        "spec/audit/relationships.md": "8b5f02f15ef951d4f5af88e90ba6c28b54563fecc89cdbd8e5f09288117752a8",
-        "spec/conventions.md": "586812feb8dd611e772147e216c13e59abef3d0c81548ebefc38878d51666e9e",
-        "spec/entities/README.md": "9a7e7a2a36e6925167d0c8fb478e761142e51f2ebace1693730849f30ae6b8fb",
-        "spec/entities/errors.md": "5ab53f9d39d4bdeacf85f7ff9b1f174964a6039682259bcb1d6623f712da7c02",
-        "spec/entities/evolution.md": "093a9cca371e971a96fc50114e879631d467619c9e19a656701301e5d21decc0",
-        "spec/entities/identity.md": "4eac62ba6122ed481073b5a274579b92567a8f03dfb61dafef4f346a254998c0",
-        "spec/entities/import.md": "a67ef492192134d0982df61356d0f38882f7c510965a4bfa2d6f1b93bfc0ba71",
-        "spec/entities/lifecycle.md": "e0099d8977aab5bf0f317304a54bf0a03db625eccba04a5bb70934aa90bb58b0",
-        "spec/entities/mutability.md": "30e05f8ee90bcf3cf2cc36116b913927cc9fd3017f1c6ce3d2acf7b963a0a5d1",
-        "spec/entities/revisions.md": "8733719dfed405cfff8adb0ec66e1ea7621d004f4bbc07d4feaea1860c3e2595",
-        "spec/entities/validation.md": "829c25d0426543146eaaf93433cc6adc12a858b83ea7469bedc1cbbd53e6382b",
-        "spec/glossary.md": "487feccdd7d6bd7e13ccf9cf8d37ac4e16395b606a700a9dadc29d68c2bb6386",
-        "spec/money/README.md": "3c7d7b4712883fd4cc3437170e224fc09a556cfa1248e15e26be6acfeb591ae4",
-        "spec/money/allocation.md": "12378bce780102d9c219886e22c35f99e887196a28f90d653088ed889cd093c8",
-        "spec/money/arithmetic.md": "512537d586fab8956dd86485c9c59e793f28714aabc59c48532244b5caa44ec5",
-        "spec/money/comparison.md": "639d2aa15bcb018a55c422b06b37bf159add1ca4f87caa26282f4fc83cfd801f",
-        "spec/money/currency.md": "2df8da466e1bda770daaffceb6b54b09999174cd44292c60a468ac8304c5a947",
-        "spec/money/errors.md": "373a1c9cfc344be660eb8c89380d5cb50922817345eda508b3896e5ceecc0a1e",
-        "spec/money/rates.md": "b8cf2f532cc91548be8823311df8560fd433ce4e3d270907d814c6a1d3c1c064",
-        "spec/money/representation.md": "c60b3b18a4a9fdb532596a75361cf8fb4d4dd1f3c44408b67838cfe52d4d1dce",
-        "spec/money/rounding.md": "f7144c814ca1390335bbb50d286b8ebb6ac24222c38b6c41f6e6712ad9012631",
-        "spec/money/serialization.md": "18373902a55e7f3d2dde71b309798c8c72edc19191ccc6a2376604e84ae2d0f5",
-        "spec/workflow/README.md": "607dbb049f39ef4a18b867e2df5c30a686cc27b06c625a7a3a67edd7ef03ba9c",
-        "spec/workflow/conflicts.md": "dc5f2a023aa8975ca29d9a944537a5bec3bbb8bf9432fd3c3c58714e4682bcda",
-        "spec/workflow/errors.md": "97c70760144510ae974e7b69a1eb48ec3c37b5ecbcbe92f8da3b94c8683d24a5",
-        "spec/workflow/guards.md": "fa606f5af94663138fca6b89af23231a61da962be4e12f4a2b43e836430f1b4e",
-        "spec/workflow/import.md": "5f92395ea3efaa8cf5c8740fd97dfb6f1fc33811eb1a72a84fc0b82560e33ae5",
-        "spec/workflow/states.md": "99e0606fae7f0af1a809e4f9ab71742167fb05b8d01df2893d94cc9e7c654fe2",
-        "spec/workflow/terminal-states.md": "4ff89fd3f6d35ced11dcbc3671ce2872c3b5733a3d51763f8245fb17b82140b1",
-        "spec/workflow/transitions.md": "5e6e594de027670693957751b9706268c8849f30534ea4c9e106d0e726320933",
-        "spec/workflow/versioning.md": "1179bbcce2157712f5642f5cf4ed56797b15e9a5d0bcdde316d0987e481bf76b"
+        "docs/coreDoc/core-doc.md": "4f06ff2c6501b9d99bacd8293594490b81a3811a384eb26b351d81fb9b612de1",
+        "spec/README.md": "99028ad44b0f993726478b7910da98574296886f08bb551f8765fb647f2d6306",
+        "spec/approvals/README.md": "51bac4d1bf03ff57cf52d263c2fe22257725b49e03f7c935bff53db1421b2939",
+        "spec/approvals/chains.md": "89c6571bc48d525078bfbfd17f3f3d0368a36c7d0894d243c40d5a5ac9c7d12f",
+        "spec/approvals/composition.md": "ebf14eec4f2b3e64d2e7fad2627a5a6b6b1558ea61c69e9eabfba692070c6faa",
+        "spec/approvals/conditions.md": "c771aa326de02654a76b437f743f16f4ff1efbc212c60ccc8407c9b237385388",
+        "spec/approvals/decisions.md": "3e9f2ded86a45dadaad4b9ed98280e37a366719828fdea94564b12e92b35f97f",
+        "spec/approvals/errors.md": "95e7fa40d405fa15695075ab4a224bf882dc54f4c30963af2eba53e2bd8330d1",
+        "spec/approvals/requirements.md": "b3abee5f541b7d1385db91a84efd6a74a98d093a55a5c315df784ebc7d066613",
+        "spec/approvals/validity.md": "71d1f2015f2df77a94b335511d7a586b03c2a7b8cb34ac6802567bd84612aa04",
+        "spec/audit/README.md": "0860df2d2fc0b815958ec82e3fab8123e1222d2315689f2bc6d867a786958d4f",
+        "spec/audit/actors.md": "b3702c7a9e290dda0cb3cb55ad515b248f86af32c3227f9aa33b6d2b99d42000",
+        "spec/audit/append-only.md": "80855c282fae429ad35b7a8041df300f56138acb2cae94973fb062d20c37f3e5",
+        "spec/audit/changes.md": "4c0ca9f3fb688fa8eadf898b889aae213785b898889bb04509d29c227306c365",
+        "spec/audit/errors.md": "b7b4bd4dff936d5699fe0e56f2977f79a13114d72f4664e7fa94dcfdd82896a0",
+        "spec/audit/events.md": "f432579159882d006c14401768015f37f5a34443ac4682709a9e339e36d32460",
+        "spec/audit/redaction.md": "17949a3f72dec0e5b4171902cbada52fe14afc7e421e73f7d6d597c59eada9fd",
+        "spec/audit/relationships.md": "647623fd35789b813d35fc5157297ea320892613d4e9732c3230ea2fb7416b24",
+        "spec/conventions.md": "795a3c71cdbedd9d7ed84d407b9626a45917e6348a3cd1a39161b6fca2c84d32",
+        "spec/entities/README.md": "7a1a6875e9ea8a09bc56f695375c266bab6df3be374e1ae6254c9f75e9f7c274",
+        "spec/entities/errors.md": "a085ef470464b40706e251c8d597098c69461abbb3f8e7a8ac4ff23a04d43dce",
+        "spec/entities/evolution.md": "d2b0c0385abf220970f53c537eb90d5c25d6936ea99bef1f0c41f3240aa6f4c4",
+        "spec/entities/identity.md": "f03fb4c7663303d81bb8193ffde3e23fd6ab35c3f3e99d30e8fcc0fe4a48fca7",
+        "spec/entities/import.md": "de7b819381ff310be76f4975bd434b57f1412104f83a34fb981fa3532ee924d9",
+        "spec/entities/lifecycle.md": "de5f8f58582b3632c69b09f60e40f693e9dc7a1197bb3a0fa8b77d6ce8b2cd09",
+        "spec/entities/mutability.md": "8f057dc5b1254c2dc55138d2bb3fa76e1c99939a1bb1a0a7d0df21bde02689cc",
+        "spec/entities/revisions.md": "0f88d1be6a79d1f5a12e99d94989f438eba4af8dd02e49391e42447213efdb05",
+        "spec/entities/validation.md": "1dfd23e66b2a6df3ee39aba02e5fe019ebedd3c41ee11a3758692d47509bc340",
+        "spec/glossary.md": "ad8aa99c7dd3417401ed42e03bd089682a25cfedf533fb4946e68dcfcf41a66c",
+        "spec/money/README.md": "ee7d50f5dba917682fe68cb80992778a2f813cc8d733f5c6c819952e3a7d69d0",
+        "spec/money/allocation.md": "02ff61e662151332c401fc5a665892a80746a888d38d42ac703253d1607df508",
+        "spec/money/arithmetic.md": "2a711cda3e06c85b93775059d3b4081187c8dad85a2618774a5b8813ed8babca",
+        "spec/money/comparison.md": "20599d301ddc4d3315299955da97fd8d3a07902397fc75e373041112ade7c7d5",
+        "spec/money/currency.md": "77f5d34bb03c551a5d1db93ec1b066eb76bc41c055ee6794f666ee014a2d00c2",
+        "spec/money/errors.md": "65d3c70d96d26f6be2077063365a4d5b4d72756694c40d8e69b93b3d88a58f22",
+        "spec/money/rates.md": "b0c5c13bc8f1df4c9b5b32281a403f8aff8af5c95b0980025720e958b1679a6b",
+        "spec/money/representation.md": "d267aa1ba5827b54fc4104a835b0785a81998bc74bac0cf6c52d8c0870ea17d5",
+        "spec/money/rounding.md": "3bdea5c4503070370dd48fe003d515071ea8e7619940937d8cca81d1785704d0",
+        "spec/money/serialization.md": "0b62e4de067c22b3da3ecd009f6a0cbca09344a9ac949d9f68458c70609fa155",
+        "spec/workflow/README.md": "e90f6e2942b0c25d8e9f4a051e5c489bce9f20b5b08837566d3e98331f761231",
+        "spec/workflow/conflicts.md": "542825a8e43b8f352664462404927ad036ad69605b93195d8933535b2ababf6a",
+        "spec/workflow/errors.md": "aadfc9914f9dd57093d026f36602179d9ca7498a804239b6a6c3cb0c621e6d35",
+        "spec/workflow/guards.md": "3e5c280e5916dcbe25bb99a1cb9ce56365d5fe8b941ab8bc686f8af20e8d8146",
+        "spec/workflow/import.md": "52062ffee19a52a9aa25f77a013ad890d7bc6af413857a9a66f67ca148c7348e",
+        "spec/workflow/states.md": "3801beb0bc10c9846a48244153800d39afd20eaf828b8a8e82ae53eccc43b71d",
+        "spec/workflow/terminal-states.md": "5a244a5cd3e43589db33a2027b2f22910609ec4c5320a398ef804e3939003c97",
+        "spec/workflow/transitions.md": "45af7149add68966b55817fc06ff1e8073e084cb9eedad0188a965315a37497f",
+        "spec/workflow/versioning.md": "8f5b85f1777824e11ea115203d412d4a0092cc0da043b16abdcb7710b5fcbfc4"
       },
       "operations": {
         "finkore.audit.append": {
@@ -1065,7 +1065,7 @@
           "state_mutation": "yes"
         }
       },
-      "repository_revision": "ba16f0d726bdf46adac8b58a5641d9872f7fd8ef",
+      "repository_revision": "55dd866ff52bae25f126fd08ad83e197803e6fe0",
       "targets": {
         "AUDIT-APPEND-003": {
           "agentic_operation_ids": [
@@ -1477,7 +1477,7 @@
           "coredoc_ids": [],
           "coverage": {
             "classification": "COVERED",
-            "scope_note": "money.boundary096.rate-kind-absent-001, money.boundary096.rate-kind-array-001, money.boundary096.rate-kind-boolean-001, money.boundary096.rate-kind-empty-001, money.boundary096.rate-kind-null-001, money.boundary096.rate-kind-number-001, money.boundary096.rate-kind-object-001, money.boundary096.rate-kind-unknown-001, money.deserialize.exponent-001, money.deserialize.leading-plus-001, money.deserialize.missing-amount-001, money.deserialize.non-finite-001, money.deserialize.numeric-amount-001, money.rate.invalid-exponent-value-001, money.rate.invalid-kind-001, money.rate.invalid-numeric-value-001",
+            "scope_note": "money.boundary096.rate-kind-absent-001, money.boundary096.rate-kind-array-001, money.boundary096.rate-kind-boolean-001, money.boundary096.rate-kind-empty-001, money.boundary096.rate-kind-null-001, money.boundary096.rate-kind-number-001, money.boundary096.rate-kind-object-001, money.boundary096.rate-kind-unknown-001, money.deserialize.boolean-amount-001, money.deserialize.empty-amount-text-001, money.deserialize.exponent-001, money.deserialize.invalid-amount-text-001, money.deserialize.leading-plus-001, money.deserialize.long-fraction-invalid-suffix-001, money.deserialize.missing-amount-001, money.deserialize.negative-infinity-001, money.deserialize.non-finite-001, money.deserialize.null-amount-001, money.deserialize.numeric-amount-001, money.deserialize.positive-infinity-001, money.rate.invalid-exponent-value-001, money.rate.invalid-kind-001, money.rate.invalid-numeric-value-001",
             "source": "conformance/traceability.md"
           },
           "id": "MONEY-ERROR-001",
@@ -1498,11 +1498,18 @@
             "money.boundary096.rate-kind-number-001",
             "money.boundary096.rate-kind-object-001",
             "money.boundary096.rate-kind-unknown-001",
+            "money.deserialize.boolean-amount-001",
+            "money.deserialize.empty-amount-text-001",
             "money.deserialize.exponent-001",
+            "money.deserialize.invalid-amount-text-001",
             "money.deserialize.leading-plus-001",
+            "money.deserialize.long-fraction-invalid-suffix-001",
             "money.deserialize.missing-amount-001",
+            "money.deserialize.negative-infinity-001",
             "money.deserialize.non-finite-001",
+            "money.deserialize.null-amount-001",
             "money.deserialize.numeric-amount-001",
+            "money.deserialize.positive-infinity-001",
             "money.rate.invalid-exponent-value-001",
             "money.rate.invalid-kind-001",
             "money.rate.invalid-numeric-value-001"
@@ -1515,7 +1522,7 @@
           "coredoc_ids": [],
           "coverage": {
             "classification": "COVERED",
-            "scope_note": "money.add.currency-mismatch-001, money.allocate.equal.invalid-zero-parts-001, money.allocate.unrepresentable-source-scale-001, money.boundary096.rate-kind-absent-001, money.boundary096.rate-kind-array-001, money.boundary096.rate-kind-boolean-001, money.boundary096.rate-kind-empty-001, money.boundary096.rate-kind-null-001, money.boundary096.rate-kind-number-001, money.boundary096.rate-kind-object-001, money.boundary096.rate-kind-unknown-001, money.compare.equality-currency-mismatch-001, money.compare.order-currency-mismatch-001, money.divide.rounding-incomplete-001, money.divide.rounding-negative-scale-001, money.divide.rounding-null-001, money.divide.rounding-required-001, money.divide.rounding-unsupported-mode-001, money.divide.zero-001, money.divide.zero-before-invalid-rounding-001, money.subtract.currency-mismatch-001",
+            "scope_note": "money.add.currency-mismatch-001, money.add.zero-currency-mismatch-001, money.allocate.equal.invalid-zero-parts-001, money.allocate.unrepresentable-source-scale-001, money.boundary096.rate-kind-absent-001, money.boundary096.rate-kind-array-001, money.boundary096.rate-kind-boolean-001, money.boundary096.rate-kind-empty-001, money.boundary096.rate-kind-null-001, money.boundary096.rate-kind-number-001, money.boundary096.rate-kind-object-001, money.boundary096.rate-kind-unknown-001, money.compare.equality-currency-mismatch-001, money.compare.order-currency-mismatch-001, money.compare.zero-equality-currency-mismatch-001, money.compare.zero-order-currency-mismatch-001, money.divide.rounding-incomplete-001, money.divide.rounding-negative-scale-001, money.divide.rounding-null-001, money.divide.rounding-required-001, money.divide.rounding-unsupported-mode-001, money.divide.zero-001, money.divide.zero-before-invalid-rounding-001, money.subtract.currency-mismatch-001",
             "source": "conformance/traceability.md"
           },
           "id": "MONEY-ERROR-007",
@@ -1528,6 +1535,7 @@
           "title": "MONEY-ERROR-007",
           "vector_ids": [
             "money.add.currency-mismatch-001",
+            "money.add.zero-currency-mismatch-001",
             "money.allocate.equal.invalid-zero-parts-001",
             "money.allocate.unrepresentable-source-scale-001",
             "money.boundary096.rate-kind-absent-001",
@@ -1540,6 +1548,8 @@
             "money.boundary096.rate-kind-unknown-001",
             "money.compare.equality-currency-mismatch-001",
             "money.compare.order-currency-mismatch-001",
+            "money.compare.zero-equality-currency-mismatch-001",
+            "money.compare.zero-order-currency-mismatch-001",
             "money.divide.rounding-incomplete-001",
             "money.divide.rounding-negative-scale-001",
             "money.divide.rounding-null-001",
@@ -1559,7 +1569,7 @@
           ],
           "coverage": {
             "classification": "COVERED",
-            "scope_note": "money.add.deep-positive-scale-001, money.add.large-significant-digits-001, money.deserialize.positive-001, money.divide.terminating-scale-40-001, money.multiply.large-product-growth-001, money.rate.large-percentage-growth-001, money.round.scale-50-half-even-001, money.subtract.large-negative-001",
+            "scope_note": "money.add.deep-positive-scale-001, money.add.large-significant-digits-001, money.deserialize.finer-than-currency-scale-001, money.deserialize.insignificant-fraction-zeros-001, money.deserialize.negative-finer-than-currency-scale-001, money.deserialize.positive-001, money.divide.terminating-scale-40-001, money.multiply.bounded-operands-product-growth-001, money.multiply.large-product-growth-001, money.rate.large-percentage-growth-001, money.round.scale-50-half-even-001, money.subtract.large-negative-001",
             "source": "conformance/traceability.md"
           },
           "id": "MONEY-REPRESENTATION-002",
@@ -1573,8 +1583,12 @@
           "vector_ids": [
             "money.add.deep-positive-scale-001",
             "money.add.large-significant-digits-001",
+            "money.deserialize.finer-than-currency-scale-001",
+            "money.deserialize.insignificant-fraction-zeros-001",
+            "money.deserialize.negative-finer-than-currency-scale-001",
             "money.deserialize.positive-001",
             "money.divide.terminating-scale-40-001",
+            "money.multiply.bounded-operands-product-growth-001",
             "money.multiply.large-product-growth-001",
             "money.rate.large-percentage-growth-001",
             "money.round.scale-50-half-even-001",
@@ -3225,6 +3239,18 @@
             "MONEY-REPRESENTATION-002"
           ]
         },
+        "money.add.zero-currency-mismatch-001": {
+          "id": "money.add.zero-currency-mismatch-001",
+          "operation": "finkore.money.add",
+          "path": "conformance/money/arithmetic.json",
+          "requirements": [
+            "MONEY-ARITHMETIC-001",
+            "MONEY-CURRENCY-003",
+            "MONEY-CURRENCY-004",
+            "MONEY-ERROR-003",
+            "MONEY-ERROR-007"
+          ]
+        },
         "money.allocate.equal.invalid-zero-parts-001": {
           "id": "money.allocate.equal.invalid-zero-parts-001",
           "operation": "finkore.money.allocate",
@@ -3352,6 +3378,50 @@
             "MONEY-ERROR-007"
           ]
         },
+        "money.compare.zero-equality-currency-mismatch-001": {
+          "id": "money.compare.zero-equality-currency-mismatch-001",
+          "operation": "finkore.money.compare",
+          "path": "conformance/money/comparison.json",
+          "requirements": [
+            "MONEY-COMPARISON-004",
+            "MONEY-CURRENCY-003",
+            "MONEY-CURRENCY-004",
+            "MONEY-ERROR-003",
+            "MONEY-ERROR-007"
+          ]
+        },
+        "money.compare.zero-order-currency-mismatch-001": {
+          "id": "money.compare.zero-order-currency-mismatch-001",
+          "operation": "finkore.money.compare",
+          "path": "conformance/money/comparison.json",
+          "requirements": [
+            "MONEY-COMPARISON-004",
+            "MONEY-CURRENCY-003",
+            "MONEY-CURRENCY-004",
+            "MONEY-ERROR-003",
+            "MONEY-ERROR-007"
+          ]
+        },
+        "money.deserialize.boolean-amount-001": {
+          "id": "money.deserialize.boolean-amount-001",
+          "operation": "money.deserialize",
+          "path": "conformance/money/representation.json",
+          "requirements": [
+            "MONEY-ERROR-001",
+            "MONEY-SERIALIZATION-002",
+            "MONEY-SERIALIZATION-005"
+          ]
+        },
+        "money.deserialize.empty-amount-text-001": {
+          "id": "money.deserialize.empty-amount-text-001",
+          "operation": "money.deserialize",
+          "path": "conformance/money/representation.json",
+          "requirements": [
+            "MONEY-ERROR-001",
+            "MONEY-SERIALIZATION-002",
+            "MONEY-SERIALIZATION-005"
+          ]
+        },
         "money.deserialize.exponent-001": {
           "id": "money.deserialize.exponent-001",
           "operation": "money.deserialize",
@@ -3359,6 +3429,35 @@
           "requirements": [
             "MONEY-ERROR-001",
             "MONEY-SERIALIZATION-003",
+            "MONEY-SERIALIZATION-005"
+          ]
+        },
+        "money.deserialize.finer-than-currency-scale-001": {
+          "id": "money.deserialize.finer-than-currency-scale-001",
+          "operation": "money.deserialize",
+          "path": "conformance/money/representation.json",
+          "requirements": [
+            "MONEY-REPRESENTATION-002",
+            "MONEY-SERIALIZATION-008"
+          ]
+        },
+        "money.deserialize.insignificant-fraction-zeros-001": {
+          "id": "money.deserialize.insignificant-fraction-zeros-001",
+          "operation": "money.deserialize",
+          "path": "conformance/money/representation.json",
+          "requirements": [
+            "MONEY-REPRESENTATION-002",
+            "MONEY-REPRESENTATION-005",
+            "MONEY-SERIALIZATION-008"
+          ]
+        },
+        "money.deserialize.invalid-amount-text-001": {
+          "id": "money.deserialize.invalid-amount-text-001",
+          "operation": "money.deserialize",
+          "path": "conformance/money/representation.json",
+          "requirements": [
+            "MONEY-ERROR-001",
+            "MONEY-SERIALIZATION-002",
             "MONEY-SERIALIZATION-005"
           ]
         },
@@ -3372,6 +3471,16 @@
             "MONEY-SERIALIZATION-005"
           ]
         },
+        "money.deserialize.long-fraction-invalid-suffix-001": {
+          "id": "money.deserialize.long-fraction-invalid-suffix-001",
+          "operation": "money.deserialize",
+          "path": "conformance/money/representation.json",
+          "requirements": [
+            "MONEY-ERROR-001",
+            "MONEY-SERIALIZATION-002",
+            "MONEY-SERIALIZATION-005"
+          ]
+        },
         "money.deserialize.missing-amount-001": {
           "id": "money.deserialize.missing-amount-001",
           "operation": "money.deserialize",
@@ -3382,6 +3491,25 @@
             "MONEY-SERIALIZATION-001"
           ]
         },
+        "money.deserialize.negative-finer-than-currency-scale-001": {
+          "id": "money.deserialize.negative-finer-than-currency-scale-001",
+          "operation": "money.deserialize",
+          "path": "conformance/money/representation.json",
+          "requirements": [
+            "MONEY-REPRESENTATION-002",
+            "MONEY-SERIALIZATION-008"
+          ]
+        },
+        "money.deserialize.negative-infinity-001": {
+          "id": "money.deserialize.negative-infinity-001",
+          "operation": "money.deserialize",
+          "path": "conformance/money/representation.json",
+          "requirements": [
+            "MONEY-ERROR-001",
+            "MONEY-SERIALIZATION-002",
+            "MONEY-SERIALIZATION-005"
+          ]
+        },
         "money.deserialize.non-finite-001": {
           "id": "money.deserialize.non-finite-001",
           "operation": "money.deserialize",
@@ -3389,6 +3517,16 @@
           "requirements": [
             "MONEY-ERROR-001",
             "MONEY-SERIALIZATION-003",
+            "MONEY-SERIALIZATION-005"
+          ]
+        },
+        "money.deserialize.null-amount-001": {
+          "id": "money.deserialize.null-amount-001",
+          "operation": "money.deserialize",
+          "path": "conformance/money/representation.json",
+          "requirements": [
+            "MONEY-ERROR-001",
+            "MONEY-SERIALIZATION-002",
             "MONEY-SERIALIZATION-005"
           ]
         },
@@ -3413,6 +3551,16 @@
             "MONEY-SERIALIZATION-001",
             "MONEY-SERIALIZATION-002",
             "MONEY-SERIALIZATION-008"
+          ]
+        },
+        "money.deserialize.positive-infinity-001": {
+          "id": "money.deserialize.positive-infinity-001",
+          "operation": "money.deserialize",
+          "path": "conformance/money/representation.json",
+          "requirements": [
+            "MONEY-ERROR-001",
+            "MONEY-SERIALIZATION-002",
+            "MONEY-SERIALIZATION-005"
           ]
         },
         "money.divide.rounding-incomplete-001": {
@@ -3504,6 +3652,18 @@
             "MONEY-ARITHMETIC-011",
             "MONEY-ERROR-004",
             "MONEY-ERROR-007"
+          ]
+        },
+        "money.multiply.bounded-operands-product-growth-001": {
+          "id": "money.multiply.bounded-operands-product-growth-001",
+          "operation": "finkore.money.multiply",
+          "path": "conformance/money/arithmetic.json",
+          "requirements": [
+            "SPEC-DECIMAL-001",
+            "MONEY-ARITHMETIC-004",
+            "MONEY-ARITHMETIC-007",
+            "MONEY-ARITHMETIC-009",
+            "MONEY-REPRESENTATION-002"
           ]
         },
         "money.multiply.large-product-growth-001": {
@@ -3686,7 +3846,7 @@
     "inputs": {
       "experts/legacy/interviews/001-elaine-richardson.md": "7320e3f457f31a6c7a67c285dda9399d184b2325b144ad513045c19592897d46",
       "experts/legacy/interviews/002-otilia-borges.md": "bcc27cced4b94883d64514784a9bec37fc3163c3ce0af23f2b144a7010dee192",
-      "experts/research/traceability.json": "5c6f1b41aeff2cac3fdff151d4ee1f19c9f63b9960923e77fe1fc1949d6e7089"
+      "experts/research/traceability.json": "1eb65aab48a54dcb04f1cd44c77bd17c14a4c37e638c8b772661c05ea345b79a"
     },
     "interviews": [
       {

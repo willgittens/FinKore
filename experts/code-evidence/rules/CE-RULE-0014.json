@@ -1,0 +1,1315 @@
+{
+  "schema_version": "2.1.0",
+  "id": "CE-RULE-0014",
+  "title": "Invalid financial inputs are not silently replaced by zero",
+  "scope": "existing_core_subject",
+  "question": "Human-input permissiveness, native numeric validation and portable decoding are separate boundaries.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0027",
+      "title": "Parsing policy can replace malformed input with financial zero",
+      "library_id": "CE-REPO-0018",
+      "edition_id": "CE-EDITION-0018",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn04",
+          "path": "src/currency.js",
+          "name": "currency",
+          "start_line": 25,
+          "end_line": 53
+        },
+        {
+          "id": "CE-REPO-0018:CE-EDITION-0018:fn05",
+          "path": "src/currency.js",
+          "name": "parse",
+          "start_line": 55,
+          "end_line": 89
+        }
+      ],
+      "explanation": [
+        "currency.js sanitizes human strings and maps an empty sanitized result to zero; errorOnInvalid governs unsupported types, not all malformed strings or nonfinite numbers.",
+        "The parser and constructing wrapper were read. This establishes permissive normalization and an incomplete strictness switch, but the wrapper has no currency-identity component and is not a portable FinKore decoder.",
+        "Explicit native input/options and default number backend; a string reaching the sanitizer or an unsupported type reaching its fallback. Alphabetic text is stripped to empty then zero even with errorOnInvalid; constructor finite/currency validation cannot be certified merely from this parser switch. No upstream execution. The cited public entry points, decisive bodies and recorded facets were read. Versioned R1-M1 dependency contracts are reused only within their recorded bounds; exact runtime observations, all compatible dependency releases and financial conformance are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0031",
+      "title": "Input validation and numeric-engine grammar are separate boundaries",
+      "library_id": "CE-REPO-0050",
+      "edition_id": "CE-EDITION-0050",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0050:CE-EDITION-0050:fn01",
+          "path": "src/Price.php",
+          "name": "CommerceGuys\\Pricing\\Price::__construct",
+          "start_line": 31,
+          "end_line": 36
+        },
+        {
+          "id": "CE-REPO-0050:CE-EDITION-0050:fn08",
+          "path": "src/Price.php",
+          "name": "CommerceGuys\\Pricing\\Price::multiply",
+          "start_line": 100,
+          "end_line": 106
+        },
+        {
+          "id": "CE-REPO-0050:CE-EDITION-0050:fn09",
+          "path": "src/Price.php",
+          "name": "CommerceGuys\\Pricing\\Price::divide",
+          "start_line": 111,
+          "end_line": 117
+        },
+        {
+          "id": "CE-REPO-0050:CE-EDITION-0050:fn17",
+          "path": "src/Price.php",
+          "name": "CommerceGuys\\Pricing\\Price::assertAmountFormat",
+          "start_line": 193,
+          "end_line": 201
+        }
+      ],
+      "explanation": [
+        "The amount guard rejects binary floats but accepts other is_numeric values, then arithmetic delegates to BCMath with fixed scale.",
+        "Inspect exponent notation, integer native inputs, whitespace, enormous scales and zero divisors under an explicitly selected PHP/BCMath version. No new portable error is inferred."
+      ],
+      "context_requirement_ids": [
+        "MONEY-REPRESENTATION-002"
+      ]
+    },
+    {
+      "id": "CE-FINDING-0068",
+      "title": "Invalid financial context can print a diagnostic instead of failing",
+      "library_id": "CE-REPO-0099",
+      "edition_id": "CE-EDITION-0099",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "open_question",
+      "functions": [
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn46",
+          "path": "R/pmt.R",
+          "name": "FinCal::pmt",
+          "start_line": 18,
+          "end_line": 25
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn47",
+          "path": "R/pv.R",
+          "name": "FinCal::pv",
+          "start_line": 19,
+          "end_line": 26
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn21",
+          "path": "R/fv.R",
+          "name": "FinCal::fv",
+          "start_line": 17,
+          "end_line": 23
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn48",
+          "path": "R/pv.annuity.R",
+          "name": "FinCal::pv.annuity",
+          "start_line": 13,
+          "end_line": 20
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn22",
+          "path": "R/fv.annuity.R",
+          "name": "FinCal::fv.annuity",
+          "start_line": 13,
+          "end_line": 20
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn43",
+          "path": "R/n.period.R",
+          "name": "FinCal::n.period",
+          "start_line": 17,
+          "end_line": 24
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn49",
+          "path": "R/pv.perpetuity.R",
+          "name": "FinCal::pv.perpetuity",
+          "start_line": 15,
+          "end_line": 26
+        }
+      ],
+      "explanation": [
+        "FinCal invalid timing and perpetuity growth branches print diagnostics instead of calling stop or returning their ordinary financial expression.",
+        "All seven branches were read. A printed diagnostic alone does not establish a typed rejected-operation result; these untyped annuity/perpetuity helpers are outside Core.",
+        "Scalar timing outside0/1, or growth>=discount in pv.perpetuity; actual R evaluation/visibility is not asserted. Downstream callers cannot infer a numeric result or a FinKore portable error from the diagnostic string. Native vector/NA condition behavior is separate. No upstream execution. The cited public entry points, decisive bodies and recorded facets were read. Versioned R1-M1 dependency contracts are reused only within their recorded bounds; exact runtime observations, all compatible dependency releases and financial conformance are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0111",
+      "title": "Typed currency indices and generated aliases need invariant validation",
+      "library_id": "CE-REPO-0023",
+      "edition_id": "CE-EDITION-0023",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn05",
+          "path": "amount.go",
+          "name": "govalues/money.NewAmountFromDecimal",
+          "start_line": 90,
+          "end_line": 92
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn101",
+          "path": "currency.go",
+          "name": "govalues/money.Currency.Code",
+          "start_line": 366,
+          "end_line": 368
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn99",
+          "path": "currency.go",
+          "name": "govalues/money.Currency.Scale",
+          "start_line": 347,
+          "end_line": 349
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn175",
+          "path": "scripts/currency/codegen.go",
+          "name": "govalues/money.generator.convertDataToCurrencies",
+          "start_line": 68,
+          "end_line": 95
+        }
+      ],
+      "explanation": [
+        "A forged Currency enum can reach array indexing through NewAmountFromDecimal before returning an error; the generator comparator returns true for both XXX/XTS argument orders.",
+        "newAmountSafe was followed to m.Scale, which indexes the array without a range guard. The generator ordering issue is independent and does not prove that published currency data is corrupt.",
+        "Public Go enum construction such as Currency(255) with the pinned158-entry lookup, or generation input containing the special codes. Typed enum syntax does not guarantee an in-range native value. Comparator antisymmetry fails for XXX versus XTS, but generation was not run. No upstream execution. The cited public entry points, decisive bodies and recorded facets were read. Versioned R1-M1 dependency contracts are reused only within their recorded bounds; exact runtime observations, all compatible dependency releases and financial conformance are not certified."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0130",
+      "title": "Public construction does not validate complete currency and radix context",
+      "library_id": "CE-REPO-0005",
+      "edition_id": "CE-EDITION-0005",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn440",
+          "path": "packages/dinero.js/src/core/helpers/createDinero.ts",
+          "name": "packages/dinero.js/src/core/helpers/createDinero.ts::createDinero.dinero@24",
+          "start_line": 24,
+          "end_line": 48
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn487",
+          "path": "packages/dinero.js/src/dinero.ts",
+          "name": "packages/dinero.js/src/dinero.ts::onCreate@22",
+          "start_line": 22,
+          "end_line": 25
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn449",
+          "path": "packages/dinero.js/src/core/utils/countTrailingZeros.ts",
+          "name": "packages/dinero.js/src/core/utils/countTrailingZeros.ts::countTrailingZeros@7",
+          "start_line": 7,
+          "end_line": 29
+        }
+      ],
+      "explanation": [
+        "The public factory projects code/base/exponent without validating currency identity; the default number onCreate hook validates only integral amount/scale. A nonzero base1 trailing-zero loop has no progressing quotient.",
+        "The returned object can expose an empty code before any arithmetic, which directly differs from the Core nonempty-currency boundary. Custom radix termination is a separate implementation question outside Core currency scope.",
+        "A native caller supplies integral amount/scale and an empty code, or separately supplies base1 to the cited trailing-zero helper with nonzero input. For base1, modulo remains zero and division leaves the value unchanged under the default arithmetic contract; no hang was executed. Non-ISO custom namespaces are not judged valid/invalid by Core. No upstream execution. The cited public entry points, decisive bodies and recorded facets were read. Versioned R1-M1 dependency contracts are reused only within their recorded bounds; exact runtime observations, all compatible dependency releases and financial conformance are not certified."
+      ],
+      "conformance": {
+        "passed": 6,
+        "total": 7,
+        "description": [
+          "Assessed 2026-11-23 using Node 24.15.0, first-party Dinero calculators. Primary profile declared_native_profile; native path: bigint dinero constructor. Selected outcomes: 6 matched, 1 mismatched.",
+          "The actual bigint-backed constructor preserves admitted components but accepts an empty currency code. The binding neither supplies a missing code nor treats the numeric factory as a full JSON decoder."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.empty-currency-001"
+        ]
+      }
+    },
+    {
+      "id": "CE-FINDING-0131",
+      "title": "Native construction can expose nonfinite amounts and unchecked Currency objects",
+      "library_id": "CE-REPO-0008",
+      "edition_id": "CE-EDITION-0008",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0008:CE-EDITION-0008:fn021",
+          "path": "src/moneyed/classes.py",
+          "name": "moneyed.classes.Money.__init__",
+          "start_line": 181,
+          "end_line": 197
+        },
+        {
+          "id": "CE-REPO-0008:CE-EDITION-0008:fn005",
+          "path": "src/moneyed/classes.py",
+          "name": "moneyed.classes.Currency.__init__",
+          "start_line": 35,
+          "end_line": 47
+        }
+      ],
+      "explanation": [
+        "py-moneyed stores an existing Decimal unchanged and accepts Currency objects directly, without checking amount finiteness or the object nonempty code.",
+        "The two constructors expose a clear native path for a Decimal special value or Currency(empty). Python Final annotations do not supply runtime guards.",
+        "Public Money construction with an already constructed nonfinite Decimal or a Currency object whose code is empty; valid string-code lookup is a different path. Using an existing Decimal avoids dependence on malformed-text trap settings; native finite exponent notation remains valid and is not the issue. No upstream execution. The cited public entry points, decisive bodies and recorded facets were read. Versioned R1-M1 dependency contracts are reused only within their recorded bounds; exact runtime observations, all compatible dependency releases and financial conformance are not certified."
+      ],
+      "conformance": {
+        "passed": 8,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using Python 3.10.12, Decimal. Primary profile declared_native_profile; native path: Money constructor. Selected outcomes: 8 matched, 4 mismatched.",
+          "The actual Money constructor receives amount text directly and owns Decimal admission, including malformed/empty text. Nonfinite admission and native currency behavior remain as observed; these are component obligations, not full JSON decoding."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001"
+        ]
+      }
+    },
+    {
+      "id": "CE-FINDING-0137",
+      "title": "Falsey construction inputs collapse into monetary zero and default currency",
+      "library_id": "CE-REPO-0040",
+      "edition_id": "CE-EDITION-0040",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0040:CE-EDITION-0040:fn049",
+          "path": "money/money.py",
+          "name": "money.money.Money.__init__",
+          "start_line": 116,
+          "end_line": 144
+        },
+        {
+          "id": "CE-REPO-0040:CE-EDITION-0040:fn046",
+          "path": "money/money.py",
+          "name": "money.money.Money._from_string",
+          "start_line": 90,
+          "end_line": 101
+        }
+      ],
+      "explanation": [
+        "py-money stores an existing Decimal without a finite check, normalizes falsey amount inputs to zero, and selects a default currency for falsey currency inputs.",
+        "The direct existing-Decimal path supports the finite-boundary contrast without relying on text traps. Falsey/default and optional human-string policies are separate observations.",
+        "Native construction with a nonfinite Decimal, or a caller relying on the documented default/coercion path; selected currency object must be assessed separately. Capturing the exact binary expansion of a finite float is not itself proof of imprecise arithmetic; missing-input defaults do not establish portable JSON acceptance. No upstream execution. The cited public entry points, decisive bodies and recorded facets were read. Versioned R1-M1 dependency contracts are reused only within their recorded bounds; exact runtime observations, all compatible dependency releases and financial conformance are not certified."
+      ],
+      "conformance": {
+        "passed": 7,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using Python 3.10.12, Decimal. Primary profile declared_native_profile; native path: Money constructor. Selected outcomes: 7 matched, 5 mismatched.",
+          "The actual Money constructor now receives malformed/empty text directly. Its own conversion/rejection and nonfinite values are observed without an external Decimal pre-parser; the bounded component selection does not certify Core JSON grammar."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001"
+        ]
+      }
+    },
+    {
+      "id": "CE-FINDING-0143",
+      "title": "Native Decimal construction and permissive currency regex need independent validation",
+      "library_id": "CE-REPO-0041",
+      "edition_id": "CE-EDITION-0041",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn025",
+          "path": "money/money.py",
+          "name": "money.money.py::Money.__init__",
+          "start_line": 40,
+          "end_line": 52
+        },
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn061",
+          "path": "money/money.py",
+          "name": "money.money.py::Money.loads",
+          "start_line": 295,
+          "end_line": 303
+        }
+      ],
+      "explanation": [
+        "The Money constructor checks Decimal conversion but not finiteness, and checks currency with a three-uppercase-letter regex rather than a complete identifier validator.",
+        "The regex constant and constructor were read. Under the recorded Python contracts a final newline can satisfy dollar anchoring and be stored, while existing special Decimal inputs avoid malformed-text trap uncertainty.",
+        "Native Money construction, the pinned regex and Python Decimal/regex contracts; known supported currency context must be declared independently. Three letters alone do not certify registry validity; exact binary-float expansion is finite and not automatically a loss of the input float value. No upstream execution. The cited public entry points, decisive bodies and recorded facets were read. Versioned R1-M1 dependency contracts are reused only within their recorded bounds; exact runtime observations, all compatible dependency releases and financial conformance are not certified."
+      ],
+      "conformance": {
+        "passed": 8,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using Python 3.10.12, Decimal. Primary profile declared_native_profile; native path: Money constructor. Selected outcomes: 8 matched, 4 mismatched.",
+          "Actual native construction owns text/Decimal admission, including malformed/empty strings; the binding no longer pre-parses those operands. Nonfinite values and later arithmetic/context limits remain separate from JSON grammar."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001"
+        ]
+      }
+    },
+    {
+      "id": "CE-FINDING-0167",
+      "title": "Explicit calculation scale bypasses supported-currency lookup",
+      "library_id": "CE-REPO-0017",
+      "edition_id": "CE-EDITION-0017",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn05",
+          "path": "src/index.ts",
+          "name": "Money.constructor",
+          "start_line": 67,
+          "end_line": 93
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn01",
+          "path": "src/index.ts",
+          "name": "currencyToDecimals",
+          "start_line": 39,
+          "end_line": 48
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn20",
+          "path": "src/index.ts",
+          "name": "Money.assertSameCurrency",
+          "start_line": 310,
+          "end_line": 315
+        }
+      ],
+      "explanation": [
+        "Supplying decimals bypasses currencyToDecimals entirely, so a native caller can store an empty currency while Big validates only amount/rounding. Without override, lookup normalization does not normalize the stored identifier.",
+        "The nullish expression and stored currency were traced to the exact equality guard. Custom unknown codes alone do not establish a Core violation; an empty identifier gives the bounded contrast.",
+        "A JavaScript native caller supplies valid Big amount/scale with empty currency and explicit decimals; TypeScript annotations do not impose runtime validation. The UNKNOWN fallback is an application convention outside Core; lowercase lookup acceptance can still leave case-sensitive compatibility differences. No upstream execution. The cited public entry points, decisive bodies and recorded facets were read. Versioned R1-M1 dependency contracts are reused only within their recorded bounds; exact runtime observations, all compatible dependency releases and financial conformance are not certified."
+      ],
+      "conformance": {
+        "passed": 6,
+        "total": 7,
+        "description": [
+          "Assessed 2026-11-23 using Node 24.15.0, Big.js. Primary profile declared_native_profile; native path: Money.of with explicit decimals. Selected outcomes: 6 matched, 1 mismatched.",
+          "The native constructor retains an empty currency code when explicit decimals make construction possible. Numeric factory admission and currency identity were observed without supplying an ISO-validation guard."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.empty-currency-001"
+        ]
+      }
+    },
+    {
+      "id": "CE-FINDING-0172",
+      "title": "Loose decimal coercion can accept invalid text and substitute zero",
+      "library_id": "CE-REPO-0003",
+      "edition_id": "CE-EDITION-0003",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn168",
+          "path": "lib/money/money.rb",
+          "name": "Money::initialize",
+          "start_line": 357,
+          "end_line": 372
+        },
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn191",
+          "path": "lib/money/money.rb",
+          "name": "Money::as_d",
+          "start_line": 640,
+          "end_line": 646
+        },
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn166",
+          "path": "lib/money/money.rb",
+          "name": "Money::from_amount",
+          "start_line": 316,
+          "end_line": 324
+        }
+      ],
+      "explanation": [
+        "RubyMoney constructor delegates to loose to_d coercion before rejecting nonfinite values; from_amount instead admits Numeric and invokes amount.to_d without the Rational precision argument.",
+        "The constructor, as_d and from_amount plus BigDecimal3.1.8 util bodies were read. Finite-value guarding is present; strict original-text grammar is not. Rational conversion differs between the two paths.",
+        "A compatible recorded BigDecimal version and a String/nil constructor input, or Rational input through from_amount. A numeric-prefix string can normalize before the finite guard. This is a native coercion policy, not proof that the portable JSON decoder accepts malformed decimals; all allowed BigDecimal versions were not checked. No upstream execution. The cited public entry points, decisive bodies and recorded facets were read. Versioned R1-M1 dependency contracts are reused only within their recorded bounds; exact runtime observations, all compatible dependency releases and financial conformance are not certified. This behavior is not currently defined by FinKore Core."
+      ],
+      "conformance": {
+        "passed": 8,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using Ruby 3.1.2, BigDecimal 3.1.1. Primary profile declared_native_profile; native path: Money.from_amount. Selected outcomes: 8 matched, 2 mismatched, 2 unsupported.",
+          "Money.from_amount in finite-precision mode quantizes positive and negative fine values. These are shared component/value checks, not a Core JSON grammar certification."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001"
+        ]
+      }
+    },
+    {
+      "id": "CE-FINDING-0182",
+      "title": "Parser sanitization deliberately maps nonnumeric input to Money zero",
+      "library_id": "CE-REPO-0033",
+      "edition_id": "CE-EDITION-0033",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0033:CE-EDITION-0033:fn017",
+          "path": "lib/monetize/parser.rb",
+          "name": "Monetize::Parser::parse",
+          "start_line": 47,
+          "end_line": 59
+        },
+        {
+          "id": "CE-REPO-0033:CE-EDITION-0033:fn018",
+          "path": "lib/monetize/parser.rb",
+          "name": "Monetize::Parser::normalize_number",
+          "start_line": 63,
+          "end_line": 67
+        },
+        {
+          "id": "CE-REPO-0033:CE-EDITION-0033:fn030",
+          "path": "lib/monetize/parser.rb",
+          "name": "Monetize::Parser::extract_major_minor",
+          "start_line": 117,
+          "end_line": 133
+        },
+        {
+          "id": "CE-REPO-0033:CE-EDITION-0033:fn037",
+          "path": "lib/monetize.rb",
+          "name": "Monetize::parse",
+          "start_line": 27,
+          "end_line": 31
+        }
+      ],
+      "explanation": [
+        "Monetize deliberately strips human-text decoration before BigDecimal parsing, so no-digit text can become zero and parentheses need not encode a negative value.",
+        "The sanitizer, decimal assembly and parse! forwarding were read. The historical claim of a Core conflict from permissiveness alone is too broad: this is a human parser, not the normative portable Money decoder.",
+        "A valid selected/default currency and text admitted by Monetize normalization, under the recorded RubyMoney/BigDecimal contracts. The cleaned no-delimiter path forms .00 for no digits; parse! only means an exception-producing interface, not a guarantee that original text was canonical decimal. No upstream execution. The cited public entry points, decisive bodies and recorded facets were read. Versioned R1-M1 dependency contracts are reused only within their recorded bounds; exact runtime observations, all compatible dependency releases and financial conformance are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0184",
+      "title": "Currency detection falls back on unknown code and case-sensitive symbol map",
+      "library_id": "CE-REPO-0033",
+      "edition_id": "CE-EDITION-0033",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0033:CE-EDITION-0033:fn021",
+          "path": "lib/monetize/parser.rb",
+          "name": "Monetize::Parser::parse_currency",
+          "start_line": 81,
+          "end_line": 90
+        },
+        {
+          "id": "CE-REPO-0033:CE-EDITION-0033:fn028",
+          "path": "lib/monetize/parser.rb",
+          "name": "Monetize::Parser::compute_currency",
+          "start_line": 108,
+          "end_line": 111
+        },
+        {
+          "id": "CE-REPO-0033:CE-EDITION-0033:fn038",
+          "path": "lib/monetize.rb",
+          "name": "Monetize::parse!",
+          "start_line": 33,
+          "end_line": 43
+        }
+      ],
+      "explanation": [
+        "Monetize considers only its first uppercase code match, then optional symbols/defaults; existing Money input returns immediately and ignores requested currency/options.",
+        "The fallback chain and case-preserving map lookup were read. A currency override is not executed conversion, and a detected unknown label does not force rejection when a fallback exists.",
+        "A configured fallback/default or optional assume_from_symbol policy, plus the inherited Currency registry behavior. A case-insensitive symbol match can miss a case-sensitive map key; a Money argument remains its original currency regardless of requested override. No upstream execution. The cited public entry points, decisive bodies and recorded facets were read. Versioned R1-M1 dependency contracts are reused only within their recorded bounds; exact runtime observations, all compatible dependency releases and financial conformance are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0186",
+      "title": "Hash, numeric and nil coercion use different units and missing-value policies",
+      "library_id": "CE-REPO-0033",
+      "edition_id": "CE-EDITION-0033",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0033:CE-EDITION-0033:fn009",
+          "path": "lib/monetize/core_extensions/hash.rb",
+          "name": "Hash::to_money",
+          "start_line": 2,
+          "end_line": 14
+        },
+        {
+          "id": "CE-REPO-0033:CE-EDITION-0033:fn011",
+          "path": "lib/monetize/core_extensions/numeric.rb",
+          "name": "Numeric::to_money",
+          "start_line": 2,
+          "end_line": 4
+        },
+        {
+          "id": "CE-REPO-0033:CE-EDITION-0033:fn010",
+          "path": "lib/monetize/core_extensions/nil_class.rb",
+          "name": "NilClass::to_money",
+          "start_line": 2,
+          "end_line": 4
+        },
+        {
+          "id": "CE-REPO-0033:CE-EDITION-0033:fn040",
+          "path": "lib/monetize.rb",
+          "name": "Monetize::from_string",
+          "start_line": 49,
+          "end_line": 52
+        }
+      ],
+      "explanation": [
+        "Monetize Numeric inputs use major units, Hash cents/fractional use minor units, and nil delegates to RubyMoney zero coercion; ordinary string-key Hashes can miss fields unless indifferent access exists.",
+        "The four paths were read and the recorded RubyMoney nil/to_d contract is reused. Unit/default differences are not independent evidence for arithmetic correctness or a portable JSON schema.",
+        "The specific extension method, configured currency/default, and optional ActiveSupport availability; no claim about an uninspected ActiveSupport implementation. A string-key plain Hash can pass nil for missing symbol-key cents and select zero/default; the same numeric token through another route has different units. No upstream execution. The cited public entry points, decisive bodies and recorded facets were read. Versioned R1-M1 dependency contracts are reused only within their recorded bounds; exact runtime observations, all compatible dependency releases and financial conformance are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0200",
+      "title": "Fixed-width numeric currency parsing does not require digits",
+      "library_id": "CE-REPO-0004",
+      "edition_id": "CE-EDITION-0004",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn101",
+          "path": "src/main/java/org/joda/money/CurrencyUnit.java",
+          "name": "org.joda.money.CurrencyUnit.ofNumericCode",
+          "start_line": 374,
+          "end_line": 387
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn303",
+          "path": "src/main/java/org/joda/money/format/MoneyFormatterBuilder.java",
+          "name": "org.joda.money.format.MoneyFormatterBuilder.Singletons.parse",
+          "start_line": 338,
+          "end_line": 352
+        }
+      ],
+      "explanation": [
+        "Fixed-width numeric currency parsing checks length but not digits, allowing character subtraction to alias a numeric code; its fixed-three formatter delegates to that same method.",
+        "For83:, the literal arithmetic is8*100+3*10+10=840. Registry resolution to USD relies on the pinned numeric map, not a current ISO authority.",
+        "A one-to-three-character string passed to CurrencyUnit.ofNumericCode or the fixed-width parser; the calculated numeric key exists in the pinned registry. The variable numeric parser has a different actual-digit policy. Exact Java parse execution and consumer intent were not observed. No upstream execution. The cited public entry points, decisive bodies and recorded facets were read. Versioned R1-M1 dependency contracts are reused only within their recorded bounds; exact runtime observations, all compatible dependency releases and financial conformance are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0202",
+      "title": "Signed parsing selects longest grammar then can replace amount with zero",
+      "library_id": "CE-REPO-0004",
+      "edition_id": "CE-EDITION-0004",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn346",
+          "path": "src/main/java/org/joda/money/format/SignedPrinterParser.java",
+          "name": "org.joda.money.format.SignedPrinterParser.parse",
+          "start_line": 60,
+          "end_line": 94
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn296",
+          "path": "src/main/java/org/joda/money/format/MoneyFormatterBuilder.java",
+          "name": "org.joda.money.format.MoneyFormatterBuilder.appendSigned",
+          "start_line": 243,
+          "end_line": 249
+        }
+      ],
+      "explanation": [
+        "Signed parsing chooses the longest successful child grammar with positive/zero/negative tie priority, then forces zero or a nonpositive amount according to the selected grammar.",
+        "The source makes grammar selection financially observable; this is a configured human-format interpretation rather than a universal sign parser.",
+        "Configured child formatters succeed and produce the context required by the selected branch; custom callback effects are external. A zero-grammar parse can replace a nonzero parsed amount with zero; it is not a decimal-preservation guarantee and no actual formatted parse was executed. No upstream execution. The cited public entry points, decisive bodies and recorded facets were read. Versioned R1-M1 dependency contracts are reused only within their recorded bounds; exact runtime observations, all compatible dependency releases and financial conformance are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0206",
+      "title": "Null utility semantics model absence as a numeric neutral element",
+      "library_id": "CE-REPO-0004",
+      "edition_id": "CE-EDITION-0004",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn207",
+          "path": "src/main/java/org/joda/money/MoneyUtils.java",
+          "name": "org.joda.money.MoneyUtils.isZero",
+          "start_line": 53,
+          "end_line": 55
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn214",
+          "path": "src/main/java/org/joda/money/MoneyUtils.java",
+          "name": "org.joda.money.MoneyUtils.add",
+          "start_line": 160,
+          "end_line": 168
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn215",
+          "path": "src/main/java/org/joda/money/MoneyUtils.java",
+          "name": "org.joda.money.MoneyUtils.subtract",
+          "start_line": 182,
+          "end_line": 190
+        }
+      ],
+      "explanation": [
+        "MoneyUtils treats null as a convenience neutral/absent value in selected predicates and binary helpers; two null operands can remain null.",
+        "The explicit null branches bypass construction of a Money value, while nonnull pairs delegate to ordinary plus/minus. This is not a Money with a missing currency or amount.",
+        "The convenience utility overload, with zero, one or two null references; not a canonical Money operation accepting portable null. isZero(null) is true without constructing a currency-bearing zero; returning the other alias does not certify deep copying or monetary construction. No upstream execution. The cited public entry points, decisive bodies and recorded facets were read. Versioned R1-M1 dependency contracts are reused only within their recorded bounds; exact runtime observations, all compatible dependency releases and financial conformance are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0217",
+      "title": "Type-sensitive parser changes major/minor units and ignores options for Money inputs",
+      "library_id": "CE-REPO-0019",
+      "edition_id": "CE-EDITION-0019",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0019:CE-EDITION-0019:fn068",
+          "path": "src/MoneyParserTrait.php",
+          "name": "MoneyParserTrait::parse",
+          "start_line": 32,
+          "end_line": 106
+        },
+        {
+          "id": "CE-REPO-0019:CE-EDITION-0019:fn042",
+          "path": "src/Money.php",
+          "name": "Money::__construct",
+          "start_line": 73,
+          "end_line": 76
+        }
+      ],
+      "explanation": [
+        "Laravel-money parsing changes major/minor interpretation by native type/text form, converts null to integer zero, and returns an existing Money input without applying new currency/options.",
+        "The source also routes forceDecimals integer inputs through sprintf %.14F, introducing a floating conversion boundary before the inherited exact integer Money backend.",
+        "Specified parse flags, selected currencies/locale and actual MoneyPHP4.9 parser contract; the wrapper constructor requests convert=false. Integer10 and decimal-form10.00 enter different unit paths; large exact integer text can lose information in forceDecimals, but a concrete runtime value was not executed. No upstream execution. The cited public entry points, decisive bodies and recorded facets were read. Versioned R1-M1 dependency contracts are reused only within their recorded bounds; exact runtime observations, all compatible dependency releases and financial conformance are not certified. This behavior is not currently defined by FinKore Core."
+      ],
+      "conformance": {
+        "passed": 8,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37, MoneyPHP, en_US locale. Primary profile major_parse; native path: Cknow Money constructor/parse. Selected outcomes: 8 matched, 4 mismatched.",
+          "Both native constructor parse configurations now receive malformed/empty text directly. Their own parsing admission is compared as a component obligation, without inventing a complete Core JSON boundary or changing the declared locale/unit policy. Control profiles, excluded from the primary score: minor_parse (same test_ids): 8 matched, 4 mismatched."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001"
+        ]
+      }
+    },
+    {
+      "id": "CE-FINDING-0224",
+      "title": "Native numeric storage admits nonfinite values and rounds raw minor units",
+      "library_id": "CE-REPO-0020",
+      "edition_id": "CE-EDITION-0020",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn029",
+          "path": "src/Money.php",
+          "name": "Money::parseAmount",
+          "start_line": 228,
+          "end_line": 246
+        },
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn057",
+          "path": "src/Money.php",
+          "name": "Money::round",
+          "start_line": 532,
+          "end_line": 537
+        },
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn046",
+          "path": "src/Money.php",
+          "name": "Money::compare",
+          "start_line": 404,
+          "end_line": 417
+        },
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn042",
+          "path": "src/Money.php",
+          "name": "Money::getValue",
+          "start_line": 374,
+          "end_line": 377
+        }
+      ],
+      "explanation": [
+        "Akaunting float construction has no finite guard and passes through native round; same-currency comparison uses less/greater then equal, making a NaN path qualitatively unsafe.",
+        "The native parse/round/compare bodies were read and the recorded PHP8.2 nonfinite round/comparison contracts are reused. The strongest direct contrast is exposing nonfinite Money at construction.",
+        "Supported PHP8.2 semantics, a native nonfinite float, valid currency/rounding mode and the ordinary public construction path. No concrete nonfinite instance was executed; exact finite float expansion is not the same issue. Integer overflow and display rounding are separate precision boundaries. No upstream execution. The cited public entry points, decisive bodies and recorded facets were read. Versioned R1-M1 dependency contracts are reused only within their recorded bounds; exact runtime observations, all compatible dependency releases and financial conformance are not certified."
+      ],
+      "conformance": {
+        "passed": 6,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37. Primary profile declared_native_profile; native path: Akaunting Money constructor with native nonfinite numbers. Selected outcomes: 6 matched, 6 mismatched.",
+          "The actual constructor now owns malformed/empty string admission alongside the native NaN/Infinity component probes. Native sanitization and resulting values are retained; no JSON grammar or binding validation is added."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001"
+        ]
+      }
+    },
+    {
+      "id": "CE-FINDING-0225",
+      "title": "Sanitized monetary strings can change original numeric grammar",
+      "library_id": "CE-REPO-0020",
+      "edition_id": "CE-EDITION-0020",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn031",
+          "path": "src/Money.php",
+          "name": "Money::parseAmountFromString",
+          "start_line": 257,
+          "end_line": 278
+        },
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn030",
+          "path": "src/Money.php",
+          "name": "Money::parseAmountFromCallable",
+          "start_line": 248,
+          "end_line": 255
+        },
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn029",
+          "path": "src/Money.php",
+          "name": "Money::parseAmount",
+          "start_line": 228,
+          "end_line": 246
+        }
+      ],
+      "explanation": [
+        "Akaunting sanitizes monetary strings before numeric recognition, deleting exponent letters and accounting parentheses, then casts integer/decimal forms to native int/float. Only Closure amounts are invoked.",
+        "The historical MONEY-SERIALIZATION-005 context is not direct: these methods parse a human/native amount and do not implement the normative JSON decoder. Sanitized grammar and binary conversion remain real observations.",
+        "Explicit currency separators/symbol and a native string or Closure input; callbacks may have external effects before later validation. USD1e3 can clean to13 under ordinary USD settings rather than mean1000. That alone does not establish a portable JSON rejection failure; no callback was executed. No upstream execution. The cited public entry points, decisive bodies and recorded facets were read. Versioned R1-M1 dependency contracts are reused only within their recorded bounds; exact runtime observations, all compatible dependency releases and financial conformance are not certified. This behavior is not currently defined by FinKore Core."
+      ],
+      "conformance": {
+        "passed": 9,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37. Primary profile string; native path: Akaunting Money constructor/string parser and Closure input. Selected outcomes: 9 matched, 3 mismatched.",
+          "String and real Closure inputs now carry malformed/empty text into native construction. Native sanitization/rejection is observed directly; closure results and unit policy are unchanged, and complete Core JSON grammar is not claimed. Control profiles, excluded from the primary score: Closure (same test_ids): 9 matched, 3 mismatched."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001"
+        ]
+      }
+    },
+    {
+      "id": "CE-FINDING-0231",
+      "title": "Currency validators normalize differently from constructors",
+      "library_id": "CE-REPO-0020",
+      "edition_id": "CE-EDITION-0020",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn086",
+          "path": "src/Rules/CurrencyRule.php",
+          "name": "CurrencyRule::passes",
+          "start_line": 13,
+          "end_line": 16
+        },
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn079",
+          "path": "src/Provider.php",
+          "name": "Provider::<anonymous_function@39>",
+          "start_line": 39,
+          "end_line": 47
+        },
+        {
+          "id": "CE-REPO-0020:CE-EDITION-0020:fn005",
+          "path": "src/Currency.php",
+          "name": "Currency::__construct",
+          "start_line": 217,
+          "end_line": 237
+        }
+      ],
+      "explanation": [
+        "The constructor trims and uppercases, the object rule only uppercases, and the provider rule uses exact configured keys.",
+        "The three different normalization points establish a policy discrepancy without proving that the resulting constructed uppercase currency is invalid.",
+        "The source default uppercase registry/configuration and the selected validator/constructor entry point. Lowercase usd can construct and pass one rule while failing the provider rule; a whitespace-padded token has another acceptance combination. No upstream execution. The cited public entry points, decisive bodies and recorded facets were read. Versioned R1-M1 dependency contracts are reused only within their recorded bounds; exact runtime observations, all compatible dependency releases and financial conformance are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0240",
+      "title": "Nonfinite constructor inputs escape financial guards",
+      "library_id": "CE-REPO-0022",
+      "edition_id": "CE-EDITION-0022",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "potential_conflict",
+      "functions": [
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn004",
+          "path": "amount.go",
+          "name": "NewAmount",
+          "start_line": 70,
+          "end_line": 80
+        },
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn021",
+          "path": "amount.go",
+          "name": "(a Amount)::Cmp",
+          "start_line": 319,
+          "end_line": 324
+        },
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn018",
+          "path": "amount.go",
+          "name": "(a Amount)::Allocate",
+          "start_line": 241,
+          "end_line": 294
+        },
+        {
+          "id": "CE-REPO-0022:CE-EDITION-0022:fn015",
+          "path": "amount.go",
+          "name": "(a Amount)::Mul",
+          "start_line": 200,
+          "end_line": 209
+        }
+      ],
+      "explanation": [
+        "bojanz/currency NewAmount accepts successfully parsed apd special forms without a finite Form guard; Allocate later treats copied coefficient/exponent as finite data and Mul discards dependency conditions/errors.",
+        "The constructor supports a direct nonfinite native boundary contrast. Allocation and comparison consequences remain bounded by recorded apd3.2.3 representation/contracts; no finite conservation result is claimed for invalid input.",
+        "Successful special-token parsing under the recorded apd contract and a valid currency, then a specific downstream method if its consequences are considered. NaN comparison is explicitly undefined in the dependency; it is not defensible to invent a concrete compare result. A zero coefficient in a special form can become finite zero allocation parts. No upstream execution. The cited public entry points, decisive bodies and recorded facets were read. Versioned R1-M1 dependency contracts are reused only within their recorded bounds; exact runtime observations, all compatible dependency releases and financial conformance are not certified."
+      ],
+      "conformance": {
+        "passed": 9,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using Go 1.25.5. Primary profile declared_native_profile; native path: NewAmount. Selected outcomes: 9 matched, 3 mismatched.",
+          "For money.deserialize.non-finite-001, native observation {\"amount\":\"NaN\",\"currency\":\"EUR\"} differs from expected {\"code\":\"FINKORE_MONEY_INVALID_AMOUNT\"}. Construction probes cover shared value obligations, not a complete Core JSON decoder."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001"
+        ]
+      }
+    },
+    {
+      "id": "CE-FINDING-0262",
+      "title": "Scalar and fractional-count normalization accept distinct fallback policies",
+      "library_id": "CE-REPO-0048",
+      "edition_id": "CE-EDITION-0048",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn058",
+          "path": "src/Money.php",
+          "name": "Money::normalizeOperand",
+          "start_line": 998,
+          "end_line": 1025
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn059",
+          "path": "src/Money.php",
+          "name": "Money::floatToDecimalString",
+          "start_line": 1032,
+          "end_line": 1053
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn057",
+          "path": "src/Money.php",
+          "name": "Money::normalizeFraction",
+          "start_line": 967,
+          "end_line": 988
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn051",
+          "path": "src/Money.php",
+          "name": "Money::createFromNoDelimiterAmount",
+          "start_line": 839,
+          "end_line": 859
+        }
+      ],
+      "explanation": [
+        "Paysera native normalizers deliberately coerce null/booleans/empty operands, truncate numeric fractional-count values and render floats under ambient PHP precision before expanding exponent text.",
+        "The operand/count/no-delimiter helpers have distinct admission policies. Exact text storage does not certify exact conversion of a prior float, but coercion alone does not prove portable-decoder nonconformance.",
+        "The selected public wrapper reaching these helpers, recorded PHP casting/rendering contracts and explicit fraction/currency; stringable hooks have caller-owned effects. Fraction2.5 becomes2; null/false become0. Numeric-string exponents can be admitted for counts while operand grammar rejects them. No upstream execution. The cited public entry points, decisive bodies and recorded facets were read. Versioned R1-M1 dependency contracts are reused only within their recorded bounds; exact runtime observations, all compatible dependency releases and financial conformance are not certified. This behavior is not currently defined by FinKore Core."
+      ],
+      "conformance": {
+        "passed": 12,
+        "total": 14,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37, Maba monetary 0.10.0/math 1.0.1. Primary profile declared_native_profile; native path: Money constructor. Selected outcomes: 12 matched, 2 mismatched.",
+          "Malformed/empty text and nullable amounts now reach the genuine nullable constructor. Exposed invalid values or native rejections are observed as shared component obligations; absent guards are not supplied and Core JSON grammar is not inferred."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001",
+          "money.deserialize.null-amount-001",
+          "money.deserialize.boolean-amount-001"
+        ]
+      }
+    },
+    {
+      "id": "CE-FINDING-0271",
+      "title": "Exact string construction still accepts missing digits and repeated signs",
+      "library_id": "CE-REPO-0098",
+      "edition_id": "CE-EDITION-0098",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn277",
+          "path": "money/manager.go",
+          "name": "(mm *Manager)::CreateFromString",
+          "start_line": 78,
+          "end_line": 101
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn315",
+          "path": "parser/parser.go",
+          "name": "(p *Parser)::ParseStringSign",
+          "start_line": 263,
+          "end_line": 278
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn316",
+          "path": "parser/parser.go",
+          "name": "(p *Parser)::ParseDecimalParts",
+          "start_line": 282,
+          "end_line": 303
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn318",
+          "path": "parser/parser.go",
+          "name": "(p *Parser)::ParseAmountString",
+          "start_line": 324,
+          "end_line": 353
+        }
+      ],
+      "explanation": [
+        "The exact-string constructor strips at most one sign, then lets ParseInt accept a remaining sign; no-digit/sign-only fragments can become padded zero and ordinary negative minimum magnitude is rejected before negation.",
+        "The full path through decimal padding was followed. Exact integer storage is compatible with a permissive or defective lexical boundary, so no full-input validation certificate follows.",
+        "Valid resolved currency with known fraction, ordinary default parser and recorded Go ParseInt contract; input reaches CreateFromString. With fraction2, --1.23 traces to ParseInt(-123) then negation, giving positive123 minor; a sign-only token is padded to zero. These are static traces, not executed samples. No upstream execution. The cited public entry points, decisive bodies and recorded facets were read. Versioned R1-M1 dependency contracts are reused only within their recorded bounds; exact runtime observations, all compatible dependency releases and financial conformance are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0278",
+      "title": "Parser localization heuristics admit nonfinite floating values",
+      "library_id": "CE-REPO-0098",
+      "edition_id": "CE-EDITION-0098",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn312",
+          "path": "parser/parser.go",
+          "name": "(p *Parser)::parseNumericString",
+          "start_line": 114,
+          "end_line": 164
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn314",
+          "path": "parser/parser.go",
+          "name": "(p *Parser)::extractCurrency",
+          "start_line": 211,
+          "end_line": 260
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn028",
+          "path": "currency/iso.go",
+          "name": "(iso *ISOCodePattern)::GetPattern",
+          "start_line": 87,
+          "end_line": 98
+        }
+      ],
+      "explanation": [
+        "The localized parser can return nonfinite float64 values under the recorded ParseFloat contract and has comma/symbol/code heuristics; the returned pair is not yet a Money instance.",
+        "The public ParseAmount forwarding path was followed. It is too broad to classify every admitted float or custom-registry grammar as exposed invalid Core Money without tracing the subsequent consumer boundary.",
+        "Recorded Go1.25.5 ParseFloat semantics, explicit parser/registry/default code and selected decimal-comma policy. NaN/Inf can leave this numeric parser with nil error; no concrete int64 Money result is inferred. Custom regex keys/cache refresh are separate registry integration questions. No upstream execution. The cited public entry points, decisive bodies and recorded facets were read. Versioned R1-M1 dependency contracts are reused only within their recorded bounds; exact runtime observations, all compatible dependency releases and financial conformance are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0283",
+      "title": "Checked Decimal arithmetic can still reduce precision and parsing can ignore a long suffix",
+      "library_id": "CE-REPO-0097",
+      "edition_id": "CE-EDITION-0097",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn002",
+          "path": "src/base.rs",
+          "name": "src/base.rs::BaseMoney::new",
+          "start_line": 135,
+          "end_line": 139
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn032",
+          "path": "src/base.rs",
+          "name": "src/base.rs::BaseOps::checked_mul",
+          "start_line": 773,
+          "end_line": 780
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn033",
+          "path": "src/base.rs",
+          "name": "src/base.rs::BaseOps::checked_div",
+          "start_line": 798,
+          "end_line": 805
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn036",
+          "path": "src/base.rs",
+          "name": "src/base.rs::Amount<C> for Decimal::get_decimal",
+          "start_line": 1062,
+          "end_line": 1064
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn037",
+          "path": "src/base.rs",
+          "name": "src/base.rs::Amount<C> for f64::get_decimal",
+          "start_line": 1069,
+          "end_line": 1071
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn038",
+          "path": "src/base.rs",
+          "name": "src/base.rs::Amount<C> for i32::get_decimal",
+          "start_line": 1076,
+          "end_line": 1078
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn039",
+          "path": "src/base.rs",
+          "name": "src/base.rs::Amount<C> for i64::get_decimal",
+          "start_line": 1083,
+          "end_line": 1085
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn040",
+          "path": "src/base.rs",
+          "name": "src/base.rs::Amount<C> for i128::get_decimal",
+          "start_line": 1090,
+          "end_line": 1092
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn041",
+          "path": "src/base.rs",
+          "name": "src/base.rs::DecimalNumber for Decimal::get_decimal",
+          "start_line": 1104,
+          "end_line": 1106
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn042",
+          "path": "src/base.rs",
+          "name": "src/base.rs::DecimalNumber for f64::get_decimal",
+          "start_line": 1111,
+          "end_line": 1113
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn043",
+          "path": "src/base.rs",
+          "name": "src/base.rs::DecimalNumber for i32::get_decimal",
+          "start_line": 1118,
+          "end_line": 1120
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn044",
+          "path": "src/base.rs",
+          "name": "src/base.rs::DecimalNumber for i64::get_decimal",
+          "start_line": 1125,
+          "end_line": 1127
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn045",
+          "path": "src/base.rs",
+          "name": "src/base.rs::DecimalNumber for i128::get_decimal",
+          "start_line": 1132,
+          "end_line": 1134
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn107",
+          "path": "src/money.rs",
+          "name": "src/money.rs::FromStr for Money<C>::from_str",
+          "start_line": 113,
+          "end_line": 119
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn232",
+          "path": "src/raw_money/raw_money.rs",
+          "name": "src/raw_money/raw_money.rs::FromStr for RawMoney<C>::from_str",
+          "start_line": 160,
+          "end_line": 166
+        }
+      ],
+      "explanation": [
+        "The locked rust_decimal rounding parser can return after one rounding digit without consuming a remaining suffix; checked arithmetic can also round/rescale before Money reconstruction rounds to currency precision.",
+        "The pinned wrappers and dependency parser branches were read. maybe_round has no remaining-bytes parameter. A checked Option denotes successful bounded arithmetic, not an exact-decimal or complete-input-validation certificate.",
+        "Locked rust_decimal1.40.0, default FromStr implementation, a sufficiently long fractional string reaching the rounding branch, and the specific Money versus RawMoney receiver policy. A string with28 fractional digits followed by a rounding digit and invalid trailing text can bypass suffix validation. No actual Rust parse or macro/limb execution was performed. No Rust execution. Source wrappers, Money/RawMoney reconstruction and rust_decimal1.40.0 str.rs rounding/suffix branches were freshly read. R1-M1 bounded multiplication/division/FromPrimitive contracts are reused explicitly; no limb-algorithm or all-feature certification is asserted."
+      ],
+      "conformance": {
+        "passed": 10,
+        "total": 16,
+        "description": [
+          "Assessed 2026-11-23 using Rust 1.88, rust_decimal 1.40.0, raw_money/serde. Primary profile Money; native path: Money.FromStr/checked_mul. Selected outcomes: 10 matched, 4 mismatched, 2 unsupported.",
+          "The original Money/RawMoney FromStr receives malformed/empty amount strings and supplies its own rejection. Money quantization, static currency-type admission and finite decimal capacity remain separate; no missing currency implementation is introduced. Control profiles, excluded from the primary score: RawMoney (same test_ids): 14 matched, 1 mismatched, 1 unsupported."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001",
+          "money.multiply.decimal-001",
+          "money.multiply.negative-scalar-001",
+          "money.multiply.zero-scalar-001",
+          "money.multiply.bounded-operands-product-growth-001"
+        ]
+      }
+    }
+  ]
+}

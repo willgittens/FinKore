@@ -1,0 +1,1288 @@
+{
+  "schema_version": "2.1.0",
+  "id": "CE-RULE-0024",
+  "title": "Composed financial actions preserve their selected policy",
+  "scope": "existing_core_subject",
+  "question": "Compare scalar and range paths; supplied rounding can be lost by recursive wrappers.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0047",
+      "title": "A range wrapper can silently drop caller-selected rounding",
+      "library_id": "CE-REPO-0038",
+      "edition_id": "CE-EDITION-0038",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0038:CE-EDITION-0038:fn02",
+          "path": "prices/discount.py",
+          "name": "prices.discount.fractional_discount",
+          "start_line": 33,
+          "end_line": 52
+        },
+        {
+          "id": "CE-REPO-0038:CE-EDITION-0038:fn03",
+          "path": "prices/discount.py",
+          "name": "prices.discount.percentage_discount",
+          "start_line": 55,
+          "end_line": 58
+        },
+        {
+          "id": "CE-REPO-0038:CE-EDITION-0038:fn15",
+          "path": "prices/money.py",
+          "name": "prices.money.Money.quantize",
+          "start_line": 104,
+          "end_line": 121
+        },
+        {
+          "id": "CE-REPO-0038:CE-EDITION-0038:fn23",
+          "path": "prices/money_range.py",
+          "name": "prices.money_range.MoneyRange.quantize",
+          "start_line": 87,
+          "end_line": 94
+        },
+        {
+          "id": "CE-REPO-0038:CE-EDITION-0038:fn47",
+          "path": "prices/taxed_money_range.py",
+          "name": "prices.taxed_money_range.TaxedMoneyRange.quantize",
+          "start_line": 88,
+          "end_line": 96
+        }
+      ],
+      "explanation": [
+        "fractional_discount forwards from_gross but omits rounding when recursing into range endpoints. Scalar paths use the supplied rounding; range quantize wrappers forward it explicitly.",
+        "The existing half-up discount tests exercise scalar TaxedMoney only. Proposed counterexample: apply 50 percent HALF_UP to a 1.01 USD singleton range versus its scalar endpoint; no runtime comparison was executed."
+      ],
+      "context_requirement_ids": [
+        "MONEY-ROUNDING-001",
+        "MONEY-ROUNDING-007"
+      ]
+    },
+    {
+      "id": "CE-FINDING-0059",
+      "title": "An exposed validation timeout is not necessarily the timeout used",
+      "library_id": "CE-REPO-0112",
+      "edition_id": "CE-EDITION-0112",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0112:CE-EDITION-0112:fn04",
+          "path": "iban_bic.go",
+          "name": "finance.performIBANBICRequest(string,string) (string,error)",
+          "start_line": 79,
+          "end_line": 111
+        },
+        {
+          "id": "CE-REPO-0112:CE-EDITION-0112:fn05",
+          "path": "vies.go",
+          "name": "finance.CheckVAT(string) (*VATInfo,error)",
+          "start_line": 50,
+          "end_line": 121
+        }
+      ],
+      "explanation": [
+        "The IBAN request helper reads VATTimeout even though IBANBICTimeout is separately exported. Its timeout test changes IBANBICTimeout and expects only an error; a malformed mock response can also produce that error.",
+        "Static configuration mismatch is directly visible. No test was executed or timing measured. The assertion does not establish which timeout caused failure, and test order can leave the unrelated VAT timeout modified."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0072",
+      "title": "A payment batch key must retain every shared output policy",
+      "library_id": "CE-REPO-0106",
+      "edition_id": "CE-EDITION-0106",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0106:CE-EDITION-0106:fn11",
+          "path": "src/nemiah/phpSepaXml/SEPADirectDebitBasic.php",
+          "name": "nemiah\\phpSepaXml\\SEPADirectDebitBasic::addDebitor(SEPADebitor $debitor)",
+          "start_line": 44,
+          "end_line": 55
+        },
+        {
+          "id": "CE-REPO-0106:CE-EDITION-0106:fn13",
+          "path": "src/nemiah/phpSepaXml/SEPADirectDebitBasic.php",
+          "name": "nemiah\\phpSepaXml\\SEPADirectDebitBasic::toXML($format='pain.008.001.02')",
+          "start_line": 74,
+          "end_line": 150
+        },
+        {
+          "id": "CE-REPO-0106:CE-EDITION-0106:fn14",
+          "path": "src/nemiah/phpSepaXml/SEPADirectDebitBusiness.php",
+          "name": "nemiah\\phpSepaXml\\SEPADirectDebitBusiness::__construct($data=null)",
+          "start_line": 15,
+          "end_line": 19
+        }
+      ],
+      "explanation": [
+        "Direct-debit grouping uses date+caller group+debtor type, while serialized sequenceType is taken only from the first debtor. The Business constructor sets a file property but output reads debtor type.",
+        "Two debtors sharing date/group/type but different sequenceType enter the same group and inherit the first sequence in output; this is derived statically, not executed. Parties can change after grouping. Dynamic-property/runtime effects, scheme constraints and collision-free keys remain unreviewed."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0086",
+      "title": "Input parsing can round before the caller-selected arithmetic policy",
+      "library_id": "CE-REPO-0001",
+      "edition_id": "CE-EDITION-0001",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn154",
+          "path": "src/Parser/DecimalMoneyParser.php",
+          "name": "Money\\Parser\\DecimalMoneyParser::parse",
+          "start_line": 33,
+          "end_line": 84
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn56",
+          "path": "src/Number.php",
+          "name": "Money\\Number::roundMoneyValue",
+          "start_line": 294,
+          "end_line": 329
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn183",
+          "path": "src/Teller.php",
+          "name": "Money\\Teller::convertToMoney",
+          "start_line": 362,
+          "end_line": 365
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn168",
+          "path": "src/Teller.php",
+          "name": "Money\\Teller::multiply",
+          "start_line": 146,
+          "end_line": 156
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn173",
+          "path": "src/Teller.php",
+          "name": "Money\\Teller::ratioOf",
+          "start_line": 229,
+          "end_line": 236
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn158",
+          "path": "src/Parser/IntlMoneyParser.php",
+          "name": "Money\\Parser\\IntlMoneyParser::parse",
+          "start_line": 32,
+          "end_line": 79
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn156",
+          "path": "src/Parser/IntlLocalizedDecimalParser.php",
+          "name": "Money\\Parser\\IntlLocalizedDecimalParser::parse",
+          "start_line": 31,
+          "end_line": 73
+        }
+      ],
+      "explanation": [
+        "MoneyPHP convenience parsers quantize text to metadata subunits before Teller applies its configured arithmetic rounding, and ratioOf formats a dimensionless quotient through the monetary parser.",
+        "Decimal parsing explicitly returns zero for trimmed-empty text and calls roundMoneyValue before truncation; Teller multiply first converts the amount. This is a native text pipeline, not evidence that the canonical FinKore JSON parser follows these semantics.",
+        "Use DecimalMoneyParser or a Teller bound to it; currency metadata supplies a subunit count. Intl paths additionally depend on formatter/native numeric conversion. Empty text takes the zero branch and9.999 with two subunits is pre-rounded before a later caller mode can act. Exact ICU lexemes and backend outcomes remain environment-qualified. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ],
+      "conformance": {
+        "passed": 10,
+        "total": 15,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37, BCMath/GMP. Primary profile declared_native_profile; native path: DecimalMoneyParser.parse; Teller.multiply/convertToMoney. Selected outcomes: 10 matched, 5 mismatched.",
+          "Malformed and empty amount text now reach the actual DecimalMoneyParser rather than a binding exclusion. The native parser and Teller pipeline still round fine inputs/products to minor units. These component checks do not certify complete Core JSON grammar."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001",
+          "money.multiply.decimal-001",
+          "money.multiply.negative-scalar-001",
+          "money.multiply.zero-scalar-001"
+        ]
+      }
+    },
+    {
+      "id": "CE-FINDING-0127",
+      "title": "Greedy expense settlement does not guarantee the minimum number of transfers",
+      "library_id": "CE-REPO-0005",
+      "edition_id": "CE-EDITION-0005",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn132",
+          "path": "examples/expense-splitter/src/lib/money.ts",
+          "name": "examples/expense-splitter/src/lib/money.ts::calculateShares@61",
+          "start_line": 61,
+          "end_line": 102
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn139",
+          "path": "examples/expense-splitter/src/lib/money.ts",
+          "name": "examples/expense-splitter/src/lib/money.ts::calculateNetBalances@108",
+          "start_line": 108,
+          "end_line": 132
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn140",
+          "path": "examples/expense-splitter/src/lib/money.ts",
+          "name": "examples/expense-splitter/src/lib/money.ts::calculateSettlements@138",
+          "start_line": 138,
+          "end_line": 209
+        }
+      ],
+      "explanation": [
+        "The expense-splitter example uses a one-time sorted greedy matching of positive/negative balances; it does not establish a globally minimum transfer count.",
+        "Each loop exhausts the current creditor or debtor without reconsidering a globally better matching. The explicit counterexample distinguishes conservation of balances from transfer-count optimality. Core defines neither settlement execution nor a minimum-transfer optimizer.",
+        "Use same-currency finite net balances, with creditors sorted10,8,2 and debtor magnitudes8,7,5; example transfer entries remain local data. The traced greedy sequence emits8,2,5,3,2, while matching8-to8 and splitting the remaining10/2 across7/5 uses four transfers. No payment executes and no universal optimum is inferred. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0128",
+      "title": "Editing expense participants rewrites allocation context and requires callback guards",
+      "library_id": "CE-REPO-0005",
+      "edition_id": "CE-EDITION-0005",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn062",
+          "path": "examples/expense-splitter/src/App.tsx",
+          "name": "examples/expense-splitter/src/App.tsx::App@115",
+          "start_line": 115,
+          "end_line": 291
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn085",
+          "path": "examples/expense-splitter/src/components/add-expense.tsx",
+          "name": "examples/expense-splitter/src/components/add-expense.tsx::AddExpense@12",
+          "start_line": 12,
+          "end_line": 301
+        }
+      ],
+      "explanation": [
+        "The expense demo deletes payer expenses, redistributes remaining participant ratios and checks percentage/selection constraints in button disabling rather than repeating them in the submit callback.",
+        "The App callback rewrites local expense state; onSubmit checks description and positive parsed amount but not the selected-person count or percentage sum. This is an illustrative application boundary, not a committed journal, backend guard or Core Audit history.",
+        "Invoke the submit callback with an invalid retained selection/percentage state, or remove a participant; ordinary disabled-button UI flow may prevent some such requests. Removing a payer discards those local expense records; an invoked callback can build shares without checking100 percent. No normal-user DOM bypass or durable financial-history rewrite was executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0141",
+      "title": "Descriptor fallback catches the wrong Decimal parse exception",
+      "library_id": "CE-REPO-0040",
+      "edition_id": "CE-EDITION-0040",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0040:CE-EDITION-0040:fn013",
+          "path": "money/contrib/django/models/fields.py",
+          "name": "money.contrib.django.models.fields.MoneyFieldProxy.__set__",
+          "start_line": 66,
+          "end_line": 89
+        }
+      ],
+      "explanation": [
+        "The historical Django descriptor tries Decimal(str(value)) and catches TypeError rather than the ordinary decimal InvalidOperation, so its documented formatted-string fallback is not reached on that usual parse failure.",
+        "Assignments occur after conversion inside the try block, preserving the old dictionary pair on the normal failing branch. Default/disabled Decimal traps change whether parsing raises or yields NaN; that runtime policy must remain explicit rather than claiming universal partial mutation.",
+        "Assign formatted monetary text rather than Money/Decimal/None; use the documented Decimal context behavior reused from the prior dependency review. USD123-style text reaches Decimal first. With the normal trap it raises outside the TypeError handler; with a disabled trap a nonfinite Decimal may reach _set_values. No database rollback or deployed trap setting was tested. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ],
+      "conformance": {
+        "passed": 8,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using Python 3.10.12, Decimal. Primary profile InvalidOperation_trap_true; native path: MoneyFieldProxy.__set__/__get__. Selected outcomes: 8 matched, 4 mismatched.",
+          "Malformed/empty strings now reach the original descriptor under both Decimal trap policies. With traps enabled its native conversion rejects; with traps disabled nonfinite values can survive. Empty currency still becomes XXX. No framework lifecycle, database rollback or complete JSON decoder is inferred. Control profiles, excluded from the primary score: InvalidOperation_trap_false (same test_ids): 6 matched, 6 mismatched."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001"
+        ]
+      }
+    },
+    {
+      "id": "CE-FINDING-0148",
+      "title": "Receiver-class arithmetic can invalidate a documented currency preset subclass",
+      "library_id": "CE-REPO-0041",
+      "edition_id": "CE-EDITION-0041",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn040",
+          "path": "money/money.py",
+          "name": "money.money.py::Money.__add__",
+          "start_line": 132,
+          "end_line": 138
+        },
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn044",
+          "path": "money/money.py",
+          "name": "money.money.py::Money.__mul__",
+          "start_line": 154,
+          "end_line": 159
+        },
+        {
+          "id": "CE-REPO-0041:CE-EDITION-0041:fn057",
+          "path": "money/money.py",
+          "name": "money.money.py::Money.__round__",
+          "start_line": 239,
+          "end_line": 240
+        }
+      ],
+      "explanation": [
+        "The currency-preset EUR subclass shown by carlospalol/money narrows __init__ to amount only, while inherited arithmetic and round construct self.__class__(amount,currency). The documented combination therefore has incompatible call shapes.",
+        "The README example and result constructors disagree in positional arity. Core prescribes neither subclassing nor constructor design; this is a bounded documentation/API composition issue, not proof that ordinary base Money arithmetic fails.",
+        "Use exactly the documented narrowing subclass and an inherited result-producing operator; a subclass retaining the inherited constructor is not the same control. EUR(\"9.99\") may be a valid construction while inherited addition passes an extra currency positional argument. The source call mismatch was traced without executing the subclass. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ],
+      "conformance": {
+        "passed": 0,
+        "total": 4,
+        "description": [
+          "Assessed 2026-11-23 using Python 3.10.12, Decimal. Primary profile declared_native_profile; native path: EUR subclass inherited add/multiply. Selected outcomes: 4 unmapped native outcomes.",
+          "All four admitted subclass operations reach native reconstruction and raise the documented constructor-signature TypeError. Source diagnosis is complete, but no Money result or portable error exists for these valid requests. Fixing that behavior requires changing the pinned implementation or the subclass profile."
+        ],
+        "test_ids": [
+          "money.add.same-currency.basic-001",
+          "money.multiply.decimal-001",
+          "money.multiply.negative-scalar-001",
+          "money.multiply.zero-scalar-001"
+        ]
+      }
+    },
+    {
+      "id": "CE-FINDING-0149",
+      "title": "Descriptor changes currency before amount validation and can retain a stale cached Money",
+      "library_id": "CE-REPO-0039",
+      "edition_id": "CE-EDITION-0039",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn056",
+          "path": "djmoney/models/fields.py",
+          "name": "djmoney/models/fields.py::MoneyFieldProxy.prepare_value",
+          "start_line": 127,
+          "end_line": 132
+        },
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn057",
+          "path": "djmoney/models/fields.py",
+          "name": "djmoney/models/fields.py::MoneyFieldProxy.set_currency",
+          "start_line": 134,
+          "end_line": 150
+        },
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn055",
+          "path": "djmoney/models/fields.py",
+          "name": "djmoney/models/fields.py::MoneyFieldProxy.__set__",
+          "start_line": 108,
+          "end_line": 125
+        },
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn054",
+          "path": "djmoney/models/fields.py",
+          "name": "djmoney/models/fields.py::MoneyFieldProxy.__get__",
+          "start_line": 98,
+          "end_line": 106
+        }
+      ],
+      "explanation": [
+        "Django-money changes a companion currency before converting a proposed amount, and an already cached Money bypasses reconstruction after a direct companion-currency change.",
+        "prepare_value calls set_currency before field.to_python; __set__ writes the prepared amount only after that returns. __get__ reuses an existing Money. These are concrete model-dictionary effects, but Core does not declare every Django descriptor a Money or Financial Entity mutation boundary.",
+        "Assign a pair with a truthy new currency and invalid amount, or mutate only the companion field after Money has been cached. The bad-amount conversion can leave old amount with changed currency. A cached Money can continue exposing its previous currency until replaced. No database transaction or save behavior was tested. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0151",
+      "title": "Membership expansion loses relation prefixes and mutates caller queries",
+      "library_id": "CE-REPO-0039",
+      "edition_id": "CE-EDITION-0039",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn078",
+          "path": "djmoney/models/managers.py",
+          "name": "djmoney/models/managers.py::_convert_in_lookup",
+          "start_line": 49,
+          "end_line": 79
+        },
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn080",
+          "path": "djmoney/models/managers.py",
+          "name": "djmoney/models/managers.py::_expand_arg",
+          "start_line": 92,
+          "end_line": 116
+        },
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn079",
+          "path": "djmoney/models/managers.py",
+          "name": "djmoney/models/managers.py::_expand_money_args",
+          "start_line": 82,
+          "end_line": 89
+        }
+      ],
+      "explanation": [
+        "Django-money related __in expansion builds predicates from terminal field.name rather than the complete relation path, and positional Q expansion replaces children in caller-owned query objects.",
+        "The scalar path retains a cleaned relation name, whereas _convert_in_lookup creates keys from the resolved field name. This supports a bounded query-rewrite concern, not a universal generated-SQL or Core Money arithmetic defect.",
+        "Use a related money-field __in lookup or reuse the same mutable Q tree across expansions; schema layout determines which root field the shortened key resolves to. moneyModel__money__in may be rewritten as a root money predicate. That can fail field resolution or target another field depending on the model; no query count or SQL execution was observed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0152",
+      "title": "Wrapper copies display scale while dropping format policy and retaining live aliases",
+      "library_id": "CE-REPO-0039",
+      "edition_id": "CE-EDITION-0039",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn094",
+          "path": "djmoney/money.py",
+          "name": "djmoney/money.py::Money.__init__",
+          "start_line": 28,
+          "end_line": 31
+        },
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn095",
+          "path": "djmoney/money.py",
+          "name": "djmoney/money.py::Money._copy_attributes",
+          "start_line": 33,
+          "end_line": 50
+        },
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn102",
+          "path": "djmoney/money.py",
+          "name": "djmoney/money.py::Money.__str__",
+          "start_line": 100,
+          "end_line": 108
+        },
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn104",
+          "path": "djmoney/money.py",
+          "name": "djmoney/money.py::Money.__round__",
+          "start_line": 113,
+          "end_line": 117
+        },
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn105",
+          "path": "djmoney/money.py",
+          "name": "djmoney/money.py::Money.round",
+          "start_line": 119,
+          "end_line": 122
+        }
+      ],
+      "explanation": [
+        "Django-money treats decimal_places as formatting metadata, retains a live MappingProxy view of caller format options, copies only selected display scale attributes, and uses the current locale in string output.",
+        "The mapping proxy is read-only through that view but not a defensive copy. Arithmetic display metadata propagation and Python round(None) versus round(0) are different paths; none establishes that stored Decimal amount was quantized by decimal_places. Core canonical serialization is not this display API.",
+        "Caller mutates the original options mapping, locale changes, or a wrapper result is reconstructed through an inherited method. Copied decimal_places can coexist with discarded format_options/use_l10n; __str__ does not consume decimal_places directly. Changing display metadata alone is not an amount or currency mutation. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0168",
+      "title": "An explicit one-off rounding mode is not the resulting Money policy",
+      "library_id": "CE-REPO-0017",
+      "edition_id": "CE-EDITION-0017",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn32",
+          "path": "src/index.ts",
+          "name": "Money.round",
+          "start_line": 412,
+          "end_line": 418
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn15",
+          "path": "src/index.ts",
+          "name": "Money.merge",
+          "start_line": 268,
+          "end_line": 270
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn34",
+          "path": "src/index.ts",
+          "name": "Money.divide",
+          "start_line": 433,
+          "end_line": 435
+        }
+      ],
+      "explanation": [
+        "Dintero applies a supplied round mode to that Big.round call but merges only the computed amount; future Money reconstruction retains the original stored mode and scale policy.",
+        "The body uses the supplied mode correctly for its local rounding operation, then merge reconstructs from original data. Core requires the current rounding operation to follow its explicit policy; it does not require a one-off request to become a persistent future policy.",
+        "A Money has an existing stored roundingMode; a subsequent operation performs another rounding or uses Big.div with ambient Big settings. A valid immediate rounded value does not prove the result now stores the one-off mode. Conversely, retained old mode is not proof that the immediate requested round was ignored. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ],
+      "conformance": {
+        "passed": 17,
+        "total": 26,
+        "description": [
+          "Assessed 2026-11-23 using Node 24.15.0, Big.js. Primary profile immediate_round; native path: Money.round/divide. Selected outcomes: 17 matched, 4 mismatched, 5 unsupported.",
+          "Native round and divide were exercised directly. Currency-place rounding can change exact finite quotients, and missing policy is not a Core rounding-required failure. FLOOR/CEILING remain unsupported where no genuine signed selector exists."
+        ],
+        "test_ids": [
+          "money.round.half-up.tie-positive-001",
+          "money.round.half-up.tie-negative-001",
+          "money.round.half-even.tie-even-down-001",
+          "money.round.half-even.tie-odd-up-001",
+          "money.round.half-even.tie-negative-even-001",
+          "money.round.down.positive-001",
+          "money.round.down.negative-001",
+          "money.round.up.positive-001",
+          "money.round.up.negative-001",
+          "money.round.floor.positive-001",
+          "money.round.floor.negative-001",
+          "money.round.ceiling.positive-001",
+          "money.round.ceiling.negative-001",
+          "money.round.explicit-scale-001",
+          "money.round.no-discard-001",
+          "money.round.invalid-mode-001",
+          "money.round.invalid-scale-001",
+          "money.round.near-half-no-double-round-001",
+          "money.divide.exact-001",
+          "money.divide.zero-001",
+          "money.divide.rounding-required-001",
+          "money.divide.rounded-third-half-up-001",
+          "money.divide.negative-down-001",
+          "money.divide.negative-floor-001",
+          "money.divide.exact-finer-than-policy-001",
+          "money.divide.zero-before-invalid-rounding-001"
+        ]
+      }
+    },
+    {
+      "id": "CE-FINDING-0171",
+      "title": "Aggregate policy follows the first Money rather than aggregate options",
+      "library_id": "CE-REPO-0017",
+      "edition_id": "CE-EDITION-0017",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn11",
+          "path": "src/index.ts",
+          "name": "Money.sum",
+          "start_line": 213,
+          "end_line": 231
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn35",
+          "path": "src/index.ts",
+          "name": "Money.add",
+          "start_line": 437,
+          "end_line": 440
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn12",
+          "path": "src/index.ts",
+          "name": "Money.max",
+          "start_line": 233,
+          "end_line": 241
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn13",
+          "path": "src/index.ts",
+          "name": "Money.min",
+          "start_line": 243,
+          "end_line": 251
+        }
+      ],
+      "explanation": [
+        "Dintero nonempty sums reduce from the first Money and ignore aggregate currency/options; extrema select an existing operand, preserving first-item context on equal numeric values.",
+        "The sum branch only uses supplied currency/options for the empty list. Receiver merge supplies the first amount policy during binary adds. Core does not define aggregate-policy merging or extreme-object identity; exactness requirements apply separately to any Money addition used underneath.",
+        "Use a nonempty list with differing admitted scales/modes/tags; compatible currency is still required by add and ordered comparison. 1.00 at two places followed by0.005 at three places can reconstruct1.01, while reversing the seed can retain1.005. Singleton sum/max/min can return an input alias. These branches were traced only. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0177",
+      "title": "Rate-store transaction can preserve partial import writes on failure",
+      "library_id": "CE-REPO-0003",
+      "edition_id": "CE-EDITION-0003",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn201",
+          "path": "lib/money/rates_store/memory.rb",
+          "name": "Money::RatesStore::Memory::transaction",
+          "start_line": 74,
+          "end_line": 76
+        },
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn047",
+          "path": "lib/money/bank/variable_exchange.rb",
+          "name": "Money::Bank::VariableExchange::import_rates",
+          "start_line": 260,
+          "end_line": 279
+        },
+        {
+          "id": "CE-REPO-0003:CE-EDITION-0003:fn195",
+          "path": "lib/money/rates_store/memory.rb",
+          "name": "Money::RatesStore::Memory::add_rate",
+          "start_line": 42,
+          "end_line": 46
+        }
+      ],
+      "explanation": [
+        "RubyMoney Memory.transaction serializes a block with Monitor but contains no state snapshot or restoration; import_rates performs sequential raw store writes inside that boundary.",
+        "Mutual exclusion and exception-safe lock release are not rollback. Earlier hash assignments remain if a later callback/deserialization/key/store step raises. Core does not define FX stores or database transactions, so this is a composing persistence/transaction candidate rather than a universal violation of Core Money failure rules.",
+        "Use the Memory store and a block/import where at least one add_rate succeeds before a later exception; external Redis/ActiveRecord implementations may differ. A transaction block that adds a valid pair then raises has no local rollback branch. This was not executed, and no live database transaction behavior is inferred. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0187",
+      "title": "Parser rounding is inherited RubyMoney policy rather than independent corroboration",
+      "library_id": "CE-REPO-0033",
+      "edition_id": "CE-EDITION-0033",
+      "collected_on": "2026-11-21",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0033:CE-EDITION-0033:fn038",
+          "path": "lib/monetize.rb",
+          "name": "Monetize::parse!",
+          "start_line": 33,
+          "end_line": 43
+        },
+        {
+          "id": "CE-REPO-0033:CE-EDITION-0033:fn044",
+          "path": "lib/monetize.rb",
+          "name": "Monetize::from_numeric",
+          "start_line": 67,
+          "end_line": 70
+        },
+        {
+          "id": "CE-REPO-0033:CE-EDITION-0033:fn026",
+          "path": "lib/monetize/parser.rb",
+          "name": "Monetize::Parser::apply_multiplier",
+          "start_line": 100,
+          "end_line": 102
+        }
+      ],
+      "explanation": [
+        "Monetize parses a scalar or multiplied suffix amount and then delegates to RubyMoney.from_amount, so its observed precision/rounding is inherited policy rather than independent corroboration.",
+        "parse! returns existing Money immediately, otherwise reconstructs through the same RubyMoney mechanism used in many expected values. Agreement with an expected value built by that dependency is not an independent arithmetic oracle.",
+        "Use the pinned compatible RubyMoney7.x dependency and the matching native input path; stored/current RubyMoney precision context still matters. Money input bypasses currency/options overrides, while parsed text and Numeric values pass through from_amount. A parameterized fixture using that same constructor cannot independently establish exactness. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ],
+      "conformance": {
+        "passed": 8,
+        "total": 12,
+        "description": [
+          "Assessed 2026-11-23 using Ruby 3.1.2, BigDecimal 3.1.1. Primary profile declared_native_profile; native path: Monetize.from_numeric. Selected outcomes: 8 matched, 2 mismatched, 2 unsupported.",
+          "Monetize.from_numeric passes genuine BigDecimal amounts through the native Money pipeline. Finite native currency precision changes fine values; parsing of human strings and a complete Core JSON grammar are outside these component tests."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001"
+        ]
+      }
+    },
+    {
+      "id": "CE-FINDING-0208",
+      "title": "Streaming formatter failure can retain an output prefix",
+      "library_id": "CE-REPO-0004",
+      "edition_id": "CE-EDITION-0004",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn279",
+          "path": "src/main/java/org/joda/money/format/MoneyFormatter.java",
+          "name": "org.joda.money.format.MoneyFormatter.printIO",
+          "start_line": 205,
+          "end_line": 214
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn341",
+          "path": "src/main/java/org/joda/money/format/MultiPrinterParser.java",
+          "name": "org.joda.money.format.MultiPrinterParser.print",
+          "start_line": 68,
+          "end_line": 73
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn230",
+          "path": "src/main/java/org/joda/money/format/AmountPrinterParser.java",
+          "name": "org.joda.money.format.AmountPrinterParser.print",
+          "start_line": 46,
+          "end_line": 112
+        }
+      ],
+      "explanation": [
+        "Streaming formatting can retain an appended prefix when a later append or component fails.",
+        "printIO checks provider/capability, obtains BigMoney, then passes caller Appendable through sequential printers. Amount printing may append a sign before subsequent digits. No buffer rollback is implemented; immutable Money operand nonmutation does not imply rollback of arbitrary caller streams.",
+        "Appendable or a later custom printer throws after at least one successful append. An initial capability/provider failure or failure before any append leaves no prefix. Core does not prescribe presentation stream transactional behavior. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0209",
+      "title": "Signed component capability is not recursively validated",
+      "library_id": "CE-REPO-0004",
+      "edition_id": "CE-EDITION-0004",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn296",
+          "path": "src/main/java/org/joda/money/format/MoneyFormatterBuilder.java",
+          "name": "org.joda.money.format.MoneyFormatterBuilder.appendSigned",
+          "start_line": 243,
+          "end_line": 249
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn339",
+          "path": "src/main/java/org/joda/money/format/MultiPrinterParser.java",
+          "name": "org.joda.money.format.MultiPrinterParser.isParser",
+          "start_line": 57,
+          "end_line": 59
+        },
+        {
+          "id": "CE-REPO-0004:CE-EDITION-0004:fn346",
+          "path": "src/main/java/org/joda/money/format/SignedPrinterParser.java",
+          "name": "org.joda.money.format.SignedPrinterParser.parse",
+          "start_line": 60,
+          "end_line": 94
+        }
+      ],
+      "explanation": [
+        "Signed formatter composition accepts child formatters without recursively checking parse capability and may dereference a missing negative amount.",
+        "appendSigned checks only child nonnull references and installs the signed object as a nonnull parser; MultiPrinterParser.isParser checks direct array nullness only. Signed.parse invokes every child parser and later calls compareTo on negative-branch amount without a null guard. A printer-only child or a successful negative branch that supplied no amount therefore exposes a native failure path despite outer direct capability.",
+        "Compose signed branches using a child lacking parser capability, or make the longest successful negative branch omit amount. Ordinary fully populated branches need not fail; no runtime exception was executed. This is formatter composition rather than canonical Money parsing. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0216",
+      "title": "Fixed-scale division and scalar type dispatch are inherited policy boundaries",
+      "library_id": "CE-REPO-0024",
+      "edition_id": "CE-EDITION-0024",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn037",
+          "path": "src/clojure/clojurewerkz/money/amounts.clj",
+          "name": "clojurewerkz.money.amounts/divide[arity2]",
+          "start_line": 212,
+          "end_line": 213
+        },
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn038",
+          "path": "src/clojure/clojurewerkz/money/amounts.clj",
+          "name": "clojurewerkz.money.amounts/divide[arity3]",
+          "start_line": 214,
+          "end_line": 215
+        },
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn029",
+          "path": "src/clojure/clojurewerkz/money/amounts.clj",
+          "name": "clojurewerkz.money.amounts/plus",
+          "start_line": 157,
+          "end_line": 160
+        },
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn032",
+          "path": "src/clojure/clojurewerkz/money/amounts.clj",
+          "name": "clojurewerkz.money.amounts/minus",
+          "start_line": 174,
+          "end_line": 178
+        },
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn001",
+          "path": "src/clojure/clojurewerkz/money/amounts.clj",
+          "name": "clojurewerkz.money.amounts/amount-of[arity2]",
+          "start_line": 48,
+          "end_line": 49
+        },
+        {
+          "id": "CE-REPO-0024:CE-EDITION-0024:fn039",
+          "path": "src/clojure/clojurewerkz/money/amounts.clj",
+          "name": "clojurewerkz.money.amounts/parse",
+          "start_line": 217,
+          "end_line": 221
+        }
+      ],
+      "explanation": [
+        "ClojureWerkz inherits Joda0.12 currency-scale Money division and preserves scalar protocol dispatch, so its rounding/default/type boundary differs from Core exact-finite division.",
+        "The wrapper sends nil policy through UNNECESSARY and dispatches Long/Double/BigDecimal differently; Joda currency-scale division is reused, not independently validated here. Core requires an exactly finite quotient to remain exact even when finer than currency minor digits.",
+        "Use fixed-scale Joda Money, such as two-place USD, rather than BigMoney; the selected transitive source edition and actual scalar class matter. USD1 divided by8 has finite0.125 but cannot fit the inherited two-place UNNECESSARY path; supplying a mode permits a currency-scale reduction rather than the generic Core exact result. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ],
+      "conformance": {
+        "passed": 7,
+        "total": 8,
+        "description": [
+          "Assessed 2026-11-23 using Java 21.0.12.1, Clojure/Joda 0.12, BigDecimal. Primary profile declared_native_profile; native path: amounts/divide. Selected outcomes: 7 matched, 1 mismatched.",
+          "Actual amounts/divide was invoked with exact BigDecimal input and native policy conversion. Exact finite and missing-policy cases were compared without implementing division or repairing the public API in the binding."
+        ],
+        "test_ids": [
+          "money.divide.exact-001",
+          "money.divide.zero-001",
+          "money.divide.rounding-required-001",
+          "money.divide.rounded-third-half-up-001",
+          "money.divide.negative-down-001",
+          "money.divide.negative-floor-001",
+          "money.divide.exact-finer-than-policy-001",
+          "money.divide.zero-before-invalid-rounding-001"
+        ]
+      }
+    },
+    {
+      "id": "CE-FINDING-0264",
+      "title": "Factory and base constructors implement different validation and unit contracts",
+      "library_id": "CE-REPO-0048",
+      "edition_id": "CE-EDITION-0048",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn065",
+          "path": "src/MoneyFactory.php",
+          "name": "MoneyFactory::create",
+          "start_line": 33,
+          "end_line": 46
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn067",
+          "path": "src/MoneyFactory.php",
+          "name": "MoneyFactory::createFromCents",
+          "start_line": 75,
+          "end_line": 87
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn054",
+          "path": "src/Money.php",
+          "name": "Money::createFromCents",
+          "start_line": 896,
+          "end_line": 906
+        },
+        {
+          "id": "CE-REPO-0048:CE-EDITION-0048:fn018",
+          "path": "src/Money.php",
+          "name": "Money::__construct",
+          "start_line": 226,
+          "end_line": 234
+        }
+      ],
+      "explanation": [
+        "Paysera base construction permits incomplete values, while its injected factory adds validation and a separate fractional-cents conversion policy; zero-without-currency admission depends on the selected Maba numeric comparison scale.",
+        "The concrete factory accepts injected Math/validator objects. The examined compatible Maba validator exempts isZero with null currency, and the test composition uses BcMath scale6; other injected scales/implementations need not classify the same tiny amount as zero. Core valid Money always requires amount and currency.",
+        "Use the examined compatible Maba0.10/math1.0.1 composition, with its selected comparison scale; distinguish base constructors, local integer-cents entry point and injected factory cents. Factory cents12.5 passes its decimal grammar and is divided by100, unlike local integer-only cents. Tiny nonzero zero-classification is conditional on scale6, not a universal factory fact. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed."
+      ],
+      "conformance": {
+        "passed": 11,
+        "total": 15,
+        "description": [
+          "Assessed 2026-11-23 using PHP 8.3.37, Maba monetary 0.10.0/math 1.0.1. Primary profile base_constructor; native path: Money constructor (base); genuine Maba MoneyFactory.create control. Selected outcomes: 11 matched, 4 mismatched.",
+          "Both constructors now receive malformed/empty text and the ordinary missing-currency component request directly. The real Maba factory supplies its own validation; the base constructor remains distinct. Both still expose currency=null for 0 and 0.0000001, with the factory zero comparison at six-place BCMath. Control profiles, excluded from the primary score: real_Maba_factory (same test_ids): 13 matched, 2 mismatched."
+        ],
+        "test_ids": [
+          "money.deserialize.positive-001",
+          "money.deserialize.negative-001",
+          "money.deserialize.zero-001",
+          "money.deserialize.finer-than-currency-scale-001",
+          "money.deserialize.negative-finer-than-currency-scale-001",
+          "money.deserialize.insignificant-fraction-zeros-001",
+          "money.deserialize.non-finite-001",
+          "money.deserialize.positive-infinity-001",
+          "money.deserialize.negative-infinity-001",
+          "money.deserialize.invalid-amount-text-001",
+          "money.deserialize.empty-amount-text-001",
+          "money.deserialize.empty-currency-001",
+          "money.deserialize.missing-currency-001",
+          "money.deserialize.zero-missing-currency-001",
+          "money.deserialize.tiny-nonzero-missing-currency-001"
+        ]
+      }
+    },
+    {
+      "id": "CE-FINDING-0277",
+      "title": "Aggregation shortcuts return aliases and bypass singleton input validation",
+      "library_id": "CE-REPO-0098",
+      "edition_id": "CE-EDITION-0098",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn071",
+          "path": "money/aggregator.go",
+          "name": "(a *Aggregator)::Sum",
+          "start_line": 22,
+          "end_line": 40
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn072",
+          "path": "money/aggregator.go",
+          "name": "(a *Aggregator)::Min",
+          "start_line": 47,
+          "end_line": 72
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn074",
+          "path": "money/aggregator.go",
+          "name": "(a *Aggregator)::Avg",
+          "start_line": 118,
+          "end_line": 143
+        },
+        {
+          "id": "CE-REPO-0098:CE-EDITION-0098:fn303",
+          "path": "money/money.go",
+          "name": "(m *Money)::UnmarshalJSON",
+          "start_line": 210,
+          "end_line": 216
+        }
+      ],
+      "explanation": [
+        "gocanto aggregate singleton paths return the supplied pointer without validating it, including a nil singleton; multi-input extrema return an existing winner and Avg truncates an integer-minor sum.",
+        "The early len1 branches precede any per-Money validation and return no error. Core defines neither aggregate admission/identity nor average rounding, so these are distinct application policies rather than an automatically invalid canonical operation.",
+        "The aggregator/manager must be valid; use a singleton nil input or later mutate a returned source pointer through a supported decoder. Sum(nil) can take the success-shaped nil,nil branch. A returned source alias can later change under receiver decoding, but aggregate execution itself need not have changed the source. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0315",
+      "title": "JSR354 API: default callbacks trust type and effects instead of enforcing interface promises",
+      "library_id": "CE-REPO-0109",
+      "edition_id": "CE-EDITION-0109",
+      "collected_on": "2026-11-21",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn105",
+          "path": "src/main/java/javax/money/MonetaryAmount.java",
+          "name": "javax.money.MonetaryAmount.query",
+          "start_line": 127,
+          "end_line": 129
+        },
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn106",
+          "path": "src/main/java/javax/money/MonetaryAmount.java",
+          "name": "javax.money.MonetaryAmount.with",
+          "start_line": 174,
+          "end_line": 176
+        },
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn312",
+          "path": "src/main/java/javax/money/spi/Bootstrap.java",
+          "name": "javax.money.spi.Bootstrap.init",
+          "start_line": 68,
+          "end_line": 84
+        },
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn317",
+          "path": "src/main/java/javax/money/spi/Bootstrap.java",
+          "name": "javax.money.spi.Bootstrap.getService",
+          "start_line": 120,
+          "end_line": 126
+        },
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn346",
+          "path": "src/main/java/javax/money/spi/MonetaryFormatsSingletonSpi.java",
+          "name": "javax.money.spi.MonetaryFormatsSingletonSpi.getAmountFormat",
+          "start_line": 76,
+          "end_line": 82
+        },
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn349",
+          "path": "src/main/java/javax/money/spi/MonetaryFormatsSingletonSpi.java",
+          "name": "javax.money.spi.MonetaryFormatsSingletonSpi.getAmountFormat",
+          "start_line": 116,
+          "end_line": 118
+        },
+        {
+          "id": "CE-REPO-0109:CE-EDITION-0109:fn350",
+          "path": "src/main/java/javax/money/spi/MonetaryFormatsSingletonSpi.java",
+          "name": "javax.money.spi.MonetaryFormatsSingletonSpi.getAmountFormat",
+          "start_line": 129,
+          "end_line": 131
+        }
+      ],
+      "explanation": [
+        "Default callbacks delegate type/effect obligations, while service and formatter selection follows provider collection order.",
+        "query/with call the supplied callbacks directly without verifying returned type or preventing external effects. Bootstrap.init replaces the service provider under a lock and getService chooses the first result; format selection chooses the first available format. These are observable extension policies, but arbitrary callback misbehavior is not evidence that native arithmetic mutates Money.",
+        "Supply a callback with unexpected return/effects, explicitly replace Bootstrap, or supply multiple ordered service/format results. Compliant immutable implementations and identity callbacks remain possible; no automatic Core FinancialEntity/Workflow mapping follows. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0324",
+      "title": "JavaMoney validated amount wraps results but its factory loses source template",
+      "library_id": "CE-REPO-0111",
+      "edition_id": "CE-EDITION-0111",
+      "collected_on": "2026-11-21",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn024",
+          "path": "calc/src/main/java/org/javamoney/calc/ValidatedMoney.java",
+          "name": "org.javamoney.calc.ValidatedMoney.divideAndRemainder",
+          "start_line": 131,
+          "end_line": 135
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn036",
+          "path": "calc/src/main/java/org/javamoney/calc/ValidatedMoney.java",
+          "name": "org.javamoney.calc.ValidatedMoney.with",
+          "start_line": 242,
+          "end_line": 244
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn053",
+          "path": "calc/src/main/java/org/javamoney/calc/ValidatedMoney.java",
+          "name": "org.javamoney.calc.ValidatedMoney.divideAndRemainder",
+          "start_line": 358,
+          "end_line": 363
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn054",
+          "path": "calc/src/main/java/org/javamoney/calc/ValidatedMoney.java",
+          "name": "org.javamoney.calc.ValidatedMoney.divideAndRemainder",
+          "start_line": 366,
+          "end_line": 371
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn058",
+          "path": "calc/src/main/java/org/javamoney/calc/ValidatedMoney.java",
+          "name": "org.javamoney.calc.ValidatedMoney.getFactory",
+          "start_line": 394,
+          "end_line": 396
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn060",
+          "path": "calc/src/main/java/org/javamoney/calc/ValidatedMoney.java",
+          "name": "org.javamoney.calc.ValidatedMoney.ValidatedAmountFactory.ValidatedAmountFactory",
+          "start_line": 415,
+          "end_line": 417
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn061",
+          "path": "calc/src/main/java/org/javamoney/calc/ValidatedMoney.java",
+          "name": "org.javamoney.calc.ValidatedMoney.ValidatedAmountFactory.getAmountType",
+          "start_line": 420,
+          "end_line": 422
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn062",
+          "path": "calc/src/main/java/org/javamoney/calc/ValidatedMoney.java",
+          "name": "org.javamoney.calc.ValidatedMoney.ValidatedAmountFactory.setCurrency",
+          "start_line": 425,
+          "end_line": 428
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn063",
+          "path": "calc/src/main/java/org/javamoney/calc/ValidatedMoney.java",
+          "name": "org.javamoney.calc.ValidatedMoney.ValidatedAmountFactory.setNumber",
+          "start_line": 431,
+          "end_line": 434
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn064",
+          "path": "calc/src/main/java/org/javamoney/calc/ValidatedMoney.java",
+          "name": "org.javamoney.calc.ValidatedMoney.ValidatedAmountFactory.setNumber",
+          "start_line": 437,
+          "end_line": 440
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn065",
+          "path": "calc/src/main/java/org/javamoney/calc/ValidatedMoney.java",
+          "name": "org.javamoney.calc.ValidatedMoney.ValidatedAmountFactory.setNumber",
+          "start_line": 443,
+          "end_line": 446
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn066",
+          "path": "calc/src/main/java/org/javamoney/calc/ValidatedMoney.java",
+          "name": "org.javamoney.calc.ValidatedMoney.ValidatedAmountFactory.getMaxNumber",
+          "start_line": 449,
+          "end_line": 451
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn067",
+          "path": "calc/src/main/java/org/javamoney/calc/ValidatedMoney.java",
+          "name": "org.javamoney.calc.ValidatedMoney.ValidatedAmountFactory.getMinNumber",
+          "start_line": 454,
+          "end_line": 456
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn068",
+          "path": "calc/src/main/java/org/javamoney/calc/ValidatedMoney.java",
+          "name": "org.javamoney.calc.ValidatedMoney.ValidatedAmountFactory.setContext",
+          "start_line": 459,
+          "end_line": 462
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn069",
+          "path": "calc/src/main/java/org/javamoney/calc/ValidatedMoney.java",
+          "name": "org.javamoney.calc.ValidatedMoney.ValidatedAmountFactory.create",
+          "start_line": 465,
+          "end_line": 467
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn070",
+          "path": "calc/src/main/java/org/javamoney/calc/ValidatedMoney.java",
+          "name": "org.javamoney.calc.ValidatedMoney.ValidatedAmountFactory.getDefaultMonetaryContext",
+          "start_line": 470,
+          "end_line": 472
+        }
+      ],
+      "explanation": [
+        "ValidatedMoney rechecks its predicate on created results, but its factory copies the predicate rather than the wrapped amount template.",
+        "Arithmetic/with results pass through a constructor that checks amount/predicate and evaluates predicate; divideAndRemainder validates quotient before remainder. getFactory constructs a wrapper whose field initializes the global default amount factory and whose constructor copies only predicate. That template policy is explicit, while arbitrary callbacks may perform effects before validation. It is not a rollback mechanism or a demonstrated Core operand mutation.",
+        "A wrapped value whose currency/context/type differs from global default, followed by factory use without explicitly resetting all required fields, or a predicate that rejects a derived result. Factory documentation explicitly says based on the default amount factory, so differing template is not by itself a violated upstream promise. Predicate checks cannot undo external callback effects. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0328",
+      "title": "JavaMoney CDI annotation translation drops explicit rateTypes and zero-scale controls",
+      "library_id": "CE-REPO-0111",
+      "edition_id": "CE-EDITION-0111",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn475",
+          "path": "javamoney-cdi/src/main/java/org/javamoney/cdi/internal/MonetaryProducer.java",
+          "name": "org.javamoney.cdi.internal.MonetaryProducer.exchangeRates",
+          "start_line": 124,
+          "end_line": 149
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn486",
+          "path": "javamoney-cdi/src/main/java/org/javamoney/cdi/internal/MonetaryProducer.java",
+          "name": "org.javamoney.cdi.internal.MonetaryProducer.createConversionQuery",
+          "start_line": 255,
+          "end_line": 273
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn489",
+          "path": "javamoney-cdi/src/main/java/org/javamoney/cdi/internal/MonetaryProducer.java",
+          "name": "org.javamoney.cdi.internal.MonetaryProducer.createAmountQuery",
+          "start_line": 307,
+          "end_line": 328
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn490",
+          "path": "javamoney-cdi/src/main/java/org/javamoney/cdi/internal/MonetaryProducer.java",
+          "name": "org.javamoney.cdi.internal.MonetaryProducer.applyAttributes",
+          "start_line": 330,
+          "end_line": 335
+        }
+      ],
+      "explanation": [
+        "CDI annotation translation discards nonempty rateTypes and omits zero precision/scale selectors.",
+        "createConversionQuery forwards rate types only when length==0, so explicit nonempty selections are not written. createAmountQuery forwards maxScale/precision only above zero. applyAttributes splits strings and indexes parts[1] without checking a separator. Collection exchangeRates catches lookup failures inside the getExchangeRate block, but obtaining the provider occurs outside that catch. These are translation/failure boundaries rather than Core FX contracts.",
+        "Use a nonempty rateTypes annotation, scale/precision zero, or an attribute without equals; for collection partial results use lookup failure after provider construction. Omitted selectors may match provider defaults by coincidence. No CDI wiring, provider behavior or actual rate selection was executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0380",
+      "title": "Rmetrics loader forwards the financial flag only for London",
+      "library_id": "CE-REPO-0102",
+      "edition_id": "CE-EDITION-0102",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0102:CE-EDITION-0102:fn067",
+          "path": "R/create-calendars.R",
+          "name": "bizdays::load_rmetrics_calendars",
+          "start_line": 189,
+          "end_line": 250
+        }
+      ],
+      "explanation": [
+        "Rmetrics loader forwards financial only to London and spans unrequested intervening years without requesting their holidays.",
+        "The loader computes continuous min/max-year bounds, requests provider holidays only for the supplied year vector, and passes financial explicitly only in London create.calendar. Other four calls omit it, selecting create.calendar defaultTRUE even when caller supplied FALSE. Holiday legal correctness and provider completeness are not established by this argument trace.",
+        "Call with financial=FALSE or a noncontiguous year vector. financial=TRUE matches omitted defaults. No timeDate execution or jurisdiction holiday verification was performed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0384",
+      "title": "Pure model rows and validated distributions are caller boundaries",
+      "library_id": "CE-REPO-0028",
+      "edition_id": "CE-EDITION-0028",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn054",
+          "path": "src/engine.jl",
+          "name": "Experimental.reachable_frontiers",
+          "start_line": 531,
+          "end_line": 553
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn040",
+          "path": "src/engine.jl",
+          "name": "Experimental.value_states",
+          "start_line": 434,
+          "end_line": 469
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn061",
+          "path": "src/engine.jl",
+          "name": "Experimental.condition",
+          "start_line": 576,
+          "end_line": 581
+        }
+      ],
+      "explanation": [
+        "Backward valuation traverses reachable rows and later requests rows again; a one-shot row object is supported per call, while a stateful changing model is not made deterministic. condition filters/normalizes arbitrary pair input without check_distribution, rejecting only a zero kept total.",
+        "Do not infer valid probability law from the helper name; project remains open for complete product and dependency evaluation."
+      ],
+      "context_requirement_ids": []
+    }
+  ]
+}

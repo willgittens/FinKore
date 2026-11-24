@@ -1,0 +1,597 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0004",
+  "title": "A year fraction declares its day-count and endpoints",
+  "scope": "candidate_rule",
+  "question": "Compare actual/360, actual/365, per-year actual/actual and month-end adjustments; do not infer algorithms from convention labels.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0010",
+      "title": "Interest year fractions depend on day-count and endpoint policy",
+      "library_id": "CE-REPO-0010",
+      "edition_id": "CE-EDITION-0010",
+      "collected_on": "2026-11-18",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0010:CE-EDITION-0010:fn01",
+          "path": "ql/time/daycounters/actual360.hpp",
+          "name": "QuantLib::Actual360::Impl::dayCount",
+          "start_line": 50,
+          "end_line": 52
+        },
+        {
+          "id": "CE-REPO-0010:CE-EDITION-0010:fn02",
+          "path": "ql/time/daycounters/actual360.hpp",
+          "name": "QuantLib::Actual360::Impl::yearFraction",
+          "start_line": 53,
+          "end_line": 57
+        },
+        {
+          "id": "CE-REPO-0010:CE-EDITION-0010:fn03",
+          "path": "ql/time/daycounters/actual360.hpp",
+          "name": "QuantLib::Actual360::Actual360",
+          "start_line": 60,
+          "end_line": 61
+        }
+      ],
+      "explanation": [
+        "Actual360 uses actual elapsed days and a fixed 360-day denominator. Its includeLastDay option adds a day to both day count and year fraction, so the endpoint convention is an explicit part of the financial calculation.",
+        "Actual/360 time fractions and endpoint inclusion only. Interest accrual is outside current Core; Time test tolerances are not exact Money comparison rules. Date internals and a complete interest calculation were not verified."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0017",
+      "title": "Elapsed dates alone do not determine an interest year fraction",
+      "library_id": "CE-REPO-0026",
+      "edition_id": "CE-EDITION-0026",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0026:CE-EDITION-0026:fn01",
+          "path": "src/DayCounts.jl",
+          "name": "yearfrac(startdate::Date, enddate::Date, ::Actual365Fixed)",
+          "start_line": 39,
+          "end_line": 41
+        },
+        {
+          "id": "CE-REPO-0026:CE-EDITION-0026:fn02",
+          "path": "src/DayCounts.jl",
+          "name": "yearfrac(startdate::Date, enddate::Date, ::Actual360)",
+          "start_line": 58,
+          "end_line": 60
+        },
+        {
+          "id": "CE-REPO-0026:CE-EDITION-0026:fn03",
+          "path": "src/DayCounts.jl",
+          "name": "yearfrac(startdate::Date, enddate::Date, dc::ActualActualISDA)",
+          "start_line": 80,
+          "end_line": 95
+        }
+      ],
+      "explanation": [
+        "Actual/365 Fixed and Actual/360 divide signed elapsed days by different fixed denominators; Actual/Actual ISDA additionally partitions years. A year-fraction interface therefore needs the convention and endpoint interpretation as inputs.",
+        "The three complete source bodies make the divisor/partition distinction explicit. This supports a candidate context requirement, not a claim that one convention is universally financially correct.",
+        "Julia Date operands; the specific selected day-count object; comparisons concern the fraction before any interest or accrual composition. An interval spanning a leap-year boundary can select different results despite identical dates; a later interest amount was not traced or executed. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0038",
+      "title": "Day-count labels do not establish identical endpoint algorithms",
+      "library_id": "CE-REPO-0113",
+      "edition_id": "CE-EDITION-0113",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn26",
+          "path": "fin/bonds.go",
+          "name": "fin.DaysDifference",
+          "start_line": 25,
+          "end_line": 45
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn27",
+          "path": "fin/bonds.go",
+          "name": "fin.DaysPerYear",
+          "start_line": 48,
+          "end_line": 65
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn28",
+          "path": "fin/bonds.go",
+          "name": "fin.TBillYield",
+          "start_line": 76,
+          "end_line": 85
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn29",
+          "path": "fin/bonds.go",
+          "name": "fin.TBillPrice",
+          "start_line": 96,
+          "end_line": 105
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn30",
+          "path": "fin/bonds.go",
+          "name": "fin.TBillEquivalentYield",
+          "start_line": 116,
+          "end_line": 135
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn31",
+          "path": "fin/bonds.go",
+          "name": "fin.DiscountRate",
+          "start_line": 148,
+          "end_line": 153
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn32",
+          "path": "fin/bonds.go",
+          "name": "fin.PriceDiscount",
+          "start_line": 166,
+          "end_line": 171
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn33",
+          "path": "fin/bonds.go",
+          "name": "fin.isLeap",
+          "start_line": 173,
+          "end_line": 175
+        }
+      ],
+      "explanation": [
+        "The bond helpers choose component-based or elapsed-second day counts, return zero for unknown basis, and impose method-specific Treasury-bill maturity limits.",
+        "The named European branch does not clamp day31; ActualActual denominators in discount helpers come from settlement year only. Names alone therefore do not establish standard-convention equivalence.",
+        "Unix-second date inputs, explicit basis and instrument helper, with valid price/redemption and nonzero day/year denominator. A 31st endpoint distinguishes this European branch from DayCounts min(day,30); unsupported basis can make downstream division singular. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0109",
+      "title": "Interest simulation declares fixed year basis and monthly rounding",
+      "library_id": "CE-REPO-0023",
+      "edition_id": "CE-EDITION-0023",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn156",
+          "path": "doc_test.go",
+          "name": "govalues/money.example.DailyRate",
+          "start_line": 134,
+          "end_line": 144
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn157",
+          "path": "doc_test.go",
+          "name": "govalues/money.example.MonthlyInterest",
+          "start_line": 147,
+          "end_line": 158
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn158",
+          "path": "doc_test.go",
+          "name": "govalues/money.example.SimulateStatement",
+          "start_line": 160,
+          "end_line": 182
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn154",
+          "path": "doc_test.go",
+          "name": "govalues/money.example.Statement.PercChange",
+          "start_line": 98,
+          "end_line": 116
+        }
+      ],
+      "explanation": [
+        "The statement example derives a daily rate from annual/365, uses a fixed nonleap month array, rounds monthly interest to currency units, then capitalizes the rounded interest.",
+        "The simulation source explicitly fixes both time basis and rounding/capitalization frequency. It is not a general day-count or effective-rate calculator.",
+        "The fixed twelve-month example and meaningful initial balance/rate; current balance stays fixed within each monthly daily-interest loop. February always has28days; a leap-year or differently compounded contract cannot be inferred from the same example output. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0343",
+      "title": "30/360 convention identity includes February and maturity policy",
+      "library_id": "CE-REPO-0026",
+      "edition_id": "CE-EDITION-0026",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0026:CE-EDITION-0026:fn007",
+          "path": "src/DayCounts.jl",
+          "name": "DayCounts.yearfrac(::Date,::Date,::Thirty360)",
+          "start_line": 178,
+          "end_line": 195
+        },
+        {
+          "id": "CE-REPO-0026:CE-EDITION-0026:fn008",
+          "path": "src/DayCounts.jl",
+          "name": "DayCounts.yearfrac(::Date,::Date,::ThirtyE360)",
+          "start_line": 220,
+          "end_line": 229
+        },
+        {
+          "id": "CE-REPO-0026:CE-EDITION-0026:fn009",
+          "path": "src/DayCounts.jl",
+          "name": "DayCounts.yearfrac(::Date,::Date,::ThirtyE360ISDA)",
+          "start_line": 259,
+          "end_line": 273
+        },
+        {
+          "id": "CE-REPO-0026:CE-EDITION-0026:fn010",
+          "path": "src/excel.jl",
+          "name": "DayCounts.yearfrac(::Date,::Date,::Thirty360Excel)",
+          "start_line": 17,
+          "end_line": 40
+        }
+      ],
+      "explanation": [
+        "The four 30/360 source variants have different day-clamping and February/maturity branches; a shared 30/360 label does not identify a single result.",
+        "Bond Basis clamps the end day only under its start-day condition; Eurobond clamps each day, ISDA includes a February maturity exception, and the spreadsheet branch adds paired February handling.",
+        "Ascending Date interval; the exact convention type and, for ISDA, its maturity field. Reversal recurses and negates. A 29th/last-February or 31st endpoint distinguishes branches; this does not establish legal ISDA/Excel conformance. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0344",
+      "title": "ICMA schedule-domain guard and zero-period holes",
+      "library_id": "CE-REPO-0026",
+      "edition_id": "CE-EDITION-0026",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0026:CE-EDITION-0026:fn005",
+          "path": "src/DayCounts.jl",
+          "name": "DayCounts.yearfrac(::Date,::Date,::ActualActualICMA)",
+          "start_line": 129,
+          "end_line": 151
+        },
+        {
+          "id": "CE-REPO-0026:CE-EDITION-0026:fn004",
+          "path": "src/DayCounts.jl",
+          "name": "DayCounts.ActualActualICMA(schedule::StepRange{Date,Month})",
+          "start_line": 125,
+          "end_line": 125
+        }
+      ],
+      "explanation": [
+        "The ICMA source range guard groups the before-first predicate separately from the error branch; invalid coverage and a zero interval at the first schedule element can reach invalid indexing rather than an intentional domain rejection.",
+        "The expression uses || before the && error call and then findlast(x<enddate)/findfirst(x>=startdate), with no early equal-date return. The resulting missing/zero index path is visible statically.",
+        "Ordinary ascending finite schedule, positive frequency, start before its first item or start=end at that first item. For start=end=first(schedule), no element is strictly earlier; for before-first start, inext can be1 and the expression accesses schedule[inext-1]. Exact Julia exception details are unobserved. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0346",
+      "title": "Actual/Actual denominator differs between ISDA and spreadsheet compatibility",
+      "library_id": "CE-REPO-0026",
+      "edition_id": "CE-EDITION-0026",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0026:CE-EDITION-0026:fn03",
+          "path": "src/DayCounts.jl",
+          "name": "yearfrac(startdate::Date, enddate::Date, dc::ActualActualISDA)",
+          "start_line": 80,
+          "end_line": 95
+        },
+        {
+          "id": "CE-REPO-0026:CE-EDITION-0026:fn011",
+          "path": "src/excel.jl",
+          "name": "DayCounts.yearfrac(::Date,::Date,::ActualActualExcel)",
+          "start_line": 64,
+          "end_line": 83
+        }
+      ],
+      "explanation": [
+        "ISDA and the spreadsheet-compatible Actual/Actual implementation use different year denominators and leap-day decisions, while both preserve signed reversal.",
+        "The spreadsheet branch uses one year length for short cross-year intervals and an average across inclusive years for longer intervals; ISDA divides partial years separately.",
+        "Explicit Date interval and exact convention type; dates must be interpreted under the pinned Julia Date contract. A multi-year interval with different leap-year participation distinguishes the arithmetic. Saved workbook/borrowed reference outputs do not independently certify spreadsheet compatibility. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0349",
+      "title": "Calendar identity includes market, region and historical cutover",
+      "library_id": "CE-REPO-0025",
+      "edition_id": "CE-EDITION-0025",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0025:CE-EDITION-0025:fn128",
+          "path": "src/calendars/brazil.jl",
+          "name": "BusinessDays.isholiday(::BRSettlement, dt::Dates.Date) [L12]",
+          "start_line": 12,
+          "end_line": 79
+        },
+        {
+          "id": "CE-REPO-0025:CE-EDITION-0025:fn129",
+          "path": "src/calendars/brazil.jl",
+          "name": "BusinessDays.isholiday(::BrazilExchange, dt::Dates.Date) [L81]",
+          "start_line": 81,
+          "end_line": 107
+        },
+        {
+          "id": "CE-REPO-0025:CE-EDITION-0025:fn154",
+          "path": "src/calendars/us.jl",
+          "name": "BusinessDays.isholiday(::USSettlement, dt::Dates.Date) [L20]",
+          "start_line": 20,
+          "end_line": 65
+        },
+        {
+          "id": "CE-REPO-0025:CE-EDITION-0025:fn155",
+          "path": "src/calendars/us.jl",
+          "name": "BusinessDays.isholiday(::USNYSE, dt::Dates.Date) [L67]",
+          "start_line": 67,
+          "end_line": 182
+        },
+        {
+          "id": "CE-REPO-0025:CE-EDITION-0025:fn139",
+          "path": "src/calendars/germany.jl",
+          "name": "BusinessDays.isholiday(cal::DE, dt::Dates.Date)::Bool [L46]",
+          "start_line": 46,
+          "end_line": 52
+        },
+        {
+          "id": "CE-REPO-0025:CE-EDITION-0025:fn119",
+          "path": "src/calendars/australia.jl",
+          "name": "BusinessDays.is_australian_national_holiday(dt::Dates.Date, yy::Int, mm::Int, dd::Int, easter_sunday::Dates.Date) [L56]",
+          "start_line": 56,
+          "end_line": 65
+        },
+        {
+          "id": "CE-REPO-0025:CE-EDITION-0025:fn152",
+          "path": "src/calendars/target.jl",
+          "name": "BusinessDays.isholiday(::TARGET, dt::Dates.Date) [L9]",
+          "start_line": 9,
+          "end_line": 57
+        }
+      ],
+      "explanation": [
+        "The calendars encode market-, region- and year-specific holidays, including Brazil November20 from2024, US settlement Juneteenth from2021 and NYSE from2022.",
+        "The dated branches, exceptional exchange closures and differing regional delegates were read. These are pinned source policies, not independently verified statutory calendars.",
+        "The exact named market/region calendar and supported date range; source version is part of the evidence context. A shared country label does not select settlement versus exchange policy; historical exceptional closures and cutovers can disagree legitimately. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0353",
+      "title": "Inclusive-last-day convention changes zero and reversal invariants",
+      "library_id": "CE-REPO-0010",
+      "edition_id": "CE-EDITION-0010",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0010:CE-EDITION-0010:fn01",
+          "path": "ql/time/daycounters/actual360.hpp",
+          "name": "QuantLib::Actual360::Impl::dayCount",
+          "start_line": 50,
+          "end_line": 52
+        },
+        {
+          "id": "CE-REPO-0010:CE-EDITION-0010:fn02",
+          "path": "ql/time/daycounters/actual360.hpp",
+          "name": "QuantLib::Actual360::Impl::yearFraction",
+          "start_line": 53,
+          "end_line": 57
+        },
+        {
+          "id": "CE-REPO-0010:CE-EDITION-0010:fn03",
+          "path": "ql/time/daycounters/actual360.hpp",
+          "name": "QuantLib::Actual360::Actual360",
+          "start_line": 60,
+          "end_line": 61
+        }
+      ],
+      "explanation": [
+        "Actual360 inclusive mode adds1 even at equal/reversed endpoints. Equal dates give a positive daycount and1/360yearfraction; sum of forward and reversed inclusive fractions is2/360 instead ofzero. DayCounts.jl fixed Actual360 preserveszero/antisymmetry and has no such flag.",
+        "Static algebra from read bodies; no execution or claim that either convention is universally correct. Source test consistency does not establish reversed/equal inclusive policy."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0354",
+      "title": "Actual365 variants require reference periods and leap-day policy",
+      "library_id": "CE-REPO-0010",
+      "edition_id": "CE-EDITION-0010",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0010:CE-EDITION-0010:fn010",
+          "path": "ql/time/daycounters/actual365fixed.hpp",
+          "name": "QuantLib::Actual365Fixed::Impl::yearFraction",
+          "start_line": 55,
+          "end_line": 58
+        },
+        {
+          "id": "CE-REPO-0010:CE-EDITION-0010:fn012",
+          "path": "ql/time/daycounters/actual365fixed.cpp",
+          "name": "QuantLib::Actual365Fixed::CA_Impl::yearFraction",
+          "start_line": 40,
+          "end_line": 67
+        },
+        {
+          "id": "CE-REPO-0010:CE-EDITION-0010:fn013",
+          "path": "ql/time/daycounters/actual365fixed.cpp",
+          "name": "QuantLib::Actual365Fixed::NL_Impl::dayCount",
+          "start_line": 69,
+          "end_line": 91
+        },
+        {
+          "id": "CE-REPO-0010:CE-EDITION-0010:fn014",
+          "path": "ql/time/daycounters/actual365fixed.cpp",
+          "name": "QuantLib::Actual365Fixed::NL_Impl::yearFraction",
+          "start_line": 93,
+          "end_line": 98
+        }
+      ],
+      "explanation": [
+        "Standard divides actual days by365; Canadian infers rounded months and integer frequency from reference days and uses a piecewise formula; NoLeap mapsFeb29 back toFeb28 in a synthetic365-day calendar. Canadian equal endpoints returnzero before reference validation.",
+        "Not a current Core rule; rounded month and frequency guards are implementation facts, not authoritative Canadian bond definitions. Exact invalid date/runtime domain remains bounded."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0355",
+      "title": "Calendar dayCount and elapsed yearFraction can differ under intraday builds",
+      "library_id": "CE-REPO-0010",
+      "edition_id": "CE-EDITION-0010",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0010:CE-EDITION-0010:fn01",
+          "path": "ql/time/daycounters/actual360.hpp",
+          "name": "QuantLib::Actual360::Impl::dayCount",
+          "start_line": 50,
+          "end_line": 52
+        },
+        {
+          "id": "CE-REPO-0010:CE-EDITION-0010:fn02",
+          "path": "ql/time/daycounters/actual360.hpp",
+          "name": "QuantLib::Actual360::Impl::yearFraction",
+          "start_line": 53,
+          "end_line": 57
+        },
+        {
+          "id": "CE-REPO-0010:CE-EDITION-0010:fn010",
+          "path": "ql/time/daycounters/actual365fixed.hpp",
+          "name": "QuantLib::Actual365Fixed::Impl::yearFraction",
+          "start_line": 55,
+          "end_line": 58
+        },
+        {
+          "id": "CE-REPO-0010:CE-EDITION-0010:fn013",
+          "path": "ql/time/daycounters/actual365fixed.cpp",
+          "name": "QuantLib::Actual365Fixed::NL_Impl::dayCount",
+          "start_line": 69,
+          "end_line": 91
+        },
+        {
+          "id": "CE-REPO-0010:CE-EDITION-0010:fn014",
+          "path": "ql/time/daycounters/actual365fixed.cpp",
+          "name": "QuantLib::Actual365Fixed::NL_Impl::yearFraction",
+          "start_line": 93,
+          "end_line": 98
+        },
+        {
+          "id": "CE-REPO-0010:CE-EDITION-0010:fn031",
+          "path": "ql/time/date.cpp",
+          "name": "QuantLib::daysBetween [high-resolution build]",
+          "start_line": 749,
+          "end_line": 752
+        }
+      ],
+      "explanation": [
+        "QL_HIGH_RESOLUTION_DATE subtraction uses calendar dates only; daysBetween adds time-of-day fractions. Actual360/standard365yearFraction use elapsed fractional days; integer dayCount omits clock. NoLeapyearFraction also uses integer syntheticdayCount. Build configuration therefore belongs to reproducible calculation context.",
+        "Selected QuantLib code traced; Boost internals and exact runtime build unverified. No Money conformance implication or timezone specification."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0359",
+      "title": "Irregular-return elapsed years erase sign and inherit local-date context",
+      "library_id": "CE-REPO-0103",
+      "edition_id": "CE-EDITION-0103",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn21",
+          "path": "finance.js",
+          "name": "Finance.prototype.XIRR",
+          "start_line": 205,
+          "end_line": 240
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn25",
+          "path": "finance.js",
+          "name": "durYear",
+          "start_line": 269,
+          "end_line": 271
+        }
+      ],
+      "explanation": [
+        "durYear uses absolute elapsed milliseconds divided by365days, so dates before the first flow still yield positive exponents. Supplied Date instants retain whatever timezone interpretation constructed them.",
+        "Math.abs explicitly removes direction. The calculation is elapsed-time policy, not a signed civil-calendar or business-day convention.",
+        "Native Date objects with meaningful getTime values; comparisons must distinguish already constructed instants from local Date constructor inputs. Reversing two instants leaves durYear unchanged. Host-local construction may change those instants, but the helper itself performs no timezone lookup. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0366",
+      "title": "European day-count label does not enforce 31st-day normalization",
+      "library_id": "CE-REPO-0113",
+      "edition_id": "CE-EDITION-0113",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn26",
+          "path": "fin/bonds.go",
+          "name": "fin.DaysDifference",
+          "start_line": 25,
+          "end_line": 45
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn27",
+          "path": "fin/bonds.go",
+          "name": "fin.DaysPerYear",
+          "start_line": 48,
+          "end_line": 65
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn31",
+          "path": "fin/bonds.go",
+          "name": "fin.DiscountRate",
+          "start_line": 148,
+          "end_line": 153
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn32",
+          "path": "fin/bonds.go",
+          "name": "fin.PriceDiscount",
+          "start_line": 166,
+          "end_line": 171
+        }
+      ],
+      "explanation": [
+        "The CountEuropean branch retains raw day components while a separately read ThirtyE360 implementation clamps each day to30; settlement-year ActualActual is likewise not ISDA split-year weighting.",
+        "This establishes an implementation difference and a possible mismatch with the advertised convention, not an authoritative conclusion that one label is legally wrong.",
+        "Unix date inputs including a day31 or cross-year ActualActual interval; compare under the exact convention a consumer intended. Use a start on a31st with an end on a30th to expose differing numerators. Existing nondiscriminating fixtures do not settle named-convention correctness. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    }
+  ],
+  "historical_publications": [
+    {
+      "id": "CE-FINDING-0010",
+      "title": "QuantLib — Interest year fractions depend on day-count and endpoint policy",
+      "collected_on": "2026-11-18",
+      "function_ids": [
+        "CE-REPO-0010:CE-EDITION-0010:fn01",
+        "CE-REPO-0010:CE-EDITION-0010:fn02",
+        "CE-REPO-0010:CE-EDITION-0010:fn03"
+      ],
+      "explanation": [
+        "Actual360 uses actual elapsed days and a fixed 360-day denominator. Its includeLastDay option adds a day to both day count and year fraction, so the endpoint convention is an explicit part of the financial calculation.",
+        "Actual/360 time fractions and endpoint inclusion only. Interest accrual is outside current Core; Time test tolerances are not exact Money comparison rules. Date internals and a complete interest calculation were not verified."
+      ]
+    }
+  ]
+}

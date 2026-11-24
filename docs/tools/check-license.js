@@ -109,7 +109,23 @@ for (const path of repositoryFiles()) {
     continue
   }
 
-  const content = readFileSync(path, 'utf8')
+  let content = readFileSync(path, 'utf8')
+  // A filename in a source inventory is attribution metadata, not this
+  // repository's license notice. Mask only that exact tuple path component;
+  // descriptions, license fields and malformed documents remain inspected.
+  if (/^experts\/code-evidence\/inventories\/CE-REPO-\d+\/CE-EDITION-\d+\.json$/.test(path)) {
+    try {
+      const inventory = JSON.parse(content)
+      for (const group of ['source_files', 'other_files']) {
+        for (const row of Array.isArray(inventory[group]) ? inventory[group] : []) {
+          if (Array.isArray(row) && typeof row[0] === 'string') {
+            row[0] = row[0].replace(/(^|\/)MIT-LICENSE(?:\.(?:md|txt))?$/i, '$1[upstream license filename]')
+          }
+        }
+      }
+      content = JSON.stringify(inventory)
+    } catch { /* Preserve the raw content check when inventory JSON is malformed. */ }
+  }
   // An institution acronym or a diagnostic mentioning that acronym is not a
   // license declaration. Retain checks for explicit notices and metadata.
   const incompatibleNotice = /\bMIT[\s-]+licen[cs](?:e|ed)\b|\b(?:SPDX-License-Identifier|licen[cs]e)["']?\s*[:=]\s*["']?(?:https?:\/\/(?:www\.)?opensource\.org\/licenses\/)?MIT\b|\blicen[cs]ed\s+(?:under|as|using|with)\s+(?:(?:the|an?)\s+)?MIT\b|\b(?:FinKore|project)\s+(?:uses?|is)\s+(?:the\s+)?MIT\b|@license\s+MIT\b/i

@@ -1,0 +1,273 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:finkore:code-evidence:rule:2.1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "enum": [
+        "2.0.0",
+        "2.1.0"
+      ]
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^CE-RULE-[0-9]{4}$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "question": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^CE-FINDING-[0-9]{4}$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "library_id": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^CE-REPO-[0-9]{4}$"
+          },
+          "edition_id": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^CE-EDITION-[0-9]{4}$"
+          },
+          "collected_on": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+          },
+          "relationship": {
+            "enum": [
+              "corroborates",
+              "counterpoint",
+              "proposes"
+            ]
+          },
+          "qualification": {
+            "enum": [
+              "support",
+              "partial_support",
+              "alternative_policy",
+              "potential_conflict",
+              "suspected_defect",
+              "candidate",
+              "open_question",
+              "not_critically_reviewed"
+            ]
+          },
+          "functions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^CE-REPO-[0-9]{4}:CE-EDITION-[0-9]{4}:.+$"
+                },
+                "path": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "start_line": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "end_line": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "id",
+                "path",
+                "name",
+                "start_line",
+                "end_line"
+              ]
+            },
+            "minItems": 1
+          },
+          "explanation": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[^\\r\\n]+$"
+            },
+            "minItems": 1,
+            "maxItems": 3
+          },
+          "context_requirement_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 0
+          },
+          "conformance": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "passed": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "total": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "description": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 2,
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^[^\\r\\n]+$"
+                }
+              },
+              "test_ids": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "required": [
+              "passed",
+              "total",
+              "description"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "library_id",
+          "edition_id",
+          "collected_on",
+          "relationship",
+          "qualification",
+          "functions",
+          "explanation"
+        ]
+      },
+      "minItems": 1
+    },
+    "historical_publications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^CE-FINDING-[0-9]{4}$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "collected_on": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+          },
+          "function_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          },
+          "explanation": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[^\\r\\n]+$"
+            },
+            "minItems": 1,
+            "maxItems": 3
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "collected_on",
+          "function_ids",
+          "explanation"
+        ]
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "schema_version",
+    "id",
+    "title",
+    "scope",
+    "question",
+    "evidence"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "evidence": {
+            "contains": {
+              "type": "object",
+              "required": [
+                "conformance"
+              ],
+              "properties": {
+                "conformance": {}
+              }
+            },
+            "type": "array"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "schema_version": {
+            "const": "2.1.0"
+          }
+        }
+      }
+    }
+  ]
+}

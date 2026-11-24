@@ -1,0 +1,69 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0023",
+  "title": "A discount declares its base and floor",
+  "scope": "candidate_rule",
+  "question": "Record gross/net selection, fractional-vs-percentage units, fixed reduction and zero clipping.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0046",
+      "title": "A discount chooses both a calculation base and a nonnegative floor",
+      "library_id": "CE-REPO-0038",
+      "edition_id": "CE-EDITION-0038",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0038:CE-EDITION-0038:fn01",
+          "path": "prices/discount.py",
+          "name": "prices.discount.fixed_discount",
+          "start_line": 14,
+          "end_line": 30
+        },
+        {
+          "id": "CE-REPO-0038:CE-EDITION-0038:fn02",
+          "path": "prices/discount.py",
+          "name": "prices.discount.fractional_discount",
+          "start_line": 33,
+          "end_line": 52
+        },
+        {
+          "id": "CE-REPO-0038:CE-EDITION-0038:fn03",
+          "path": "prices/discount.py",
+          "name": "prices.discount.percentage_discount",
+          "start_line": 55,
+          "end_line": 58
+        }
+      ],
+      "explanation": [
+        "Fixed discounts subtract the same amount from net/gross and clamp each component at zero. Fractional discounts choose gross or net, quantize the discount amount, then apply the fixed discount.",
+        "Fractions/negative discounts are not bounded here; reducing both components independently can change effective tax. Tests cover zero clipping and base selection, not every sign/cap interaction."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0123",
+      "title": "Annual discount rounds a complementary share after full-period pricing",
+      "library_id": "CE-REPO-0005",
+      "edition_id": "CE-EDITION-0005",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn294",
+          "path": "examples/pricing-react/src/components/tier-card.tsx",
+          "name": "examples/pricing-react/src/components/tier-card.tsx::YearlyPrice@83",
+          "start_line": 83,
+          "end_line": 103
+        }
+      ],
+      "explanation": [
+        "The annual-pricing example first multiplies monthly price by12, allocates a discount/complement pair, then subtracts the discount share.",
+        "The complement allocation determines where indivisible units go; this need not equal an independently rounded percentage multiplication.",
+        "The selected fixed discount ratio, source coefficient scale and Dinero allocation policy. A small indivisible discount can be affected by the larger complementary weight priority. The example has no independent assertions and was not executed. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    }
+  ]
+}

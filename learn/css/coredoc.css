@@ -151,3 +151,7 @@
   .core-rule-navigation { grid-template-columns: minmax(0, 1fr); }
   .core-rule-navigation a:last-child { text-align: left; }
 }
+
+/* Execution summaries remain collapsed inside existing finding cards. */
+.rule-implementations .finding-conformance summary strong { color: var(--accent); font-size: inherit; }
+.rule-implementations .finding-conformance .finding-conformance-scope { color: var(--muted); font-size: 0.875rem; }

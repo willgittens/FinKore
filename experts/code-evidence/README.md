@@ -1,283 +1,262 @@
-# FinKore Experts — Code Evidence
+# Code Evidence
 
-Code Evidence investigates financial rules in public GitHub repositories. It
-collects implementation context for FinKore Experts: support for existing rules,
-alternative policies, contradictions, possible new rules and open discussions.
-It is non-normative and independent of the academic [Research](../research/README.md)
-catalog. A rule can be worth investigating even when FinKore does not cover its
-domain today.
+A compact, non-normative library of financial observations from commit-pinned
+public repositories. Keep only evidence that corroborates a rule, supplies a
+counterpoint, or suggests a candidate rule. No upstream implementation bodies,
+function inventories, test catalogs or exhaustive reading reports are stored here.
 
-Start with the [repository catalog](catalog.md). The initial discovery contains
-15 projects in nine primary languages, verified on 18 November 2026. It includes
-focused libraries and explicitly identified applications, services and a financial
-database. For larger projects, investigate only relevant financial modules.
+## Start here
 
-Discovery metadata, selected README observations and investigation questions are
-preserved in the catalog. Bounded implementation and test-source readings now
-cover all 15 catalog repositories, with 15 financial findings and 53 technical
-function/closure records. Upstream code and tests have not been executed.
-Selected comparisons are now included beside existing rules in the
-[Learn CoreDoc reader](../../learn/coredoc.html). This is a separate editorial view;
-it does not promote findings to accepted financial requirements.
+- [Traceability](traceability.md): browse rule families, libraries, functions and comparisons.
+- [Rules](rules/): one JSON file per financial rule family; this is the canonical evidence.
+- [Libraries](repositories.json): source identity, edition, full commit and reading status.
+- [Comparison curation](traceability.json): reviewed links, deferred questions and historical publication selection.
+- [Schemas](schemas/): the three versioned JSON formats.
+- [Maintenance tool](tools/evidence.js): validation, navigation and shared Experts export.
 
-## Analysis records
+A `CE-RULE-*` groups a financial problem and its observed variants; it is not an
+accepted FinKore requirement. A `CE-FINDING-*` identifies one bounded observation.
+An observation may need several decisive functions working together. Keep those
+locations together rather than counting each helper as independent corroboration.
 
-Each reading uses its pinned source edition. All findings remain pending
-independent technical/domain review and validation. Test evidence means assertions
-read from source, with no claim of execution or implementation conformance.
+## Evidence record
 
-| Repository / selected version | Repository / edition IDs | Financial finding | Function records |
-| --- | --- | --- | --- |
-| [Money PHP — v4.9.0](analyses/CE-REPO-0001/CE-EDITION-0001.md) | CE-REPO-0001 / CE-EDITION-0001 | [CE-FINDING-0001 — Conservation and remainder policy](analyses/CE-REPO-0001/CE-EDITION-0001.md#ce-finding-0001) | 9 |
-| [Brick Money — 0.15.2](analyses/CE-REPO-0002/CE-EDITION-0002.md) | CE-REPO-0002 / CE-EDITION-0002 | [CE-FINDING-0002 — Ordered allocation in explicit integer steps](analyses/CE-REPO-0002/CE-EDITION-0002.md#ce-finding-0002) | 5 |
-| [RubyMoney — v7.1.1](analyses/CE-REPO-0003/CE-EDITION-0003.md) | CE-REPO-0003 / CE-EDITION-0003 | [CE-FINDING-0003 — Allocation carries residual value through successive splits](analyses/CE-REPO-0003/CE-EDITION-0003.md#ce-finding-0003) | 2 |
-| [Joda-Money — v2.0.3](analyses/CE-REPO-0004/CE-EDITION-0004.md) | CE-REPO-0004 / CE-EDITION-0004 | [CE-FINDING-0004 — Money addition checks currency before combining amounts](analyses/CE-REPO-0004/CE-EDITION-0004.md#ce-finding-0004) | 3 |
-| [Dinero.js — v2.0.2](analyses/CE-REPO-0005/CE-EDITION-0005.md) | CE-REPO-0005 / CE-EDITION-0005 | [CE-FINDING-0005 — Allocation prioritizes larger weights for residual units](analyses/CE-REPO-0005/CE-EDITION-0005.md#ce-finding-0005) | 3 |
-| [GoMoney — v1.0.15](analyses/CE-REPO-0006/CE-EDITION-0006.md) | CE-REPO-0006 / CE-EDITION-0006 | [CE-FINDING-0006 — Signed splitting preserves residual units, except the zero-weight fallback](analyses/CE-REPO-0006/CE-EDITION-0006.md#ce-finding-0006) | 3 |
-| [NodaMoney — 2.10.0](analyses/CE-REPO-0007/CE-EDITION-0007.md) | CE-REPO-0007 / CE-EDITION-0007 | [CE-FINDING-0007 — Context-selected rounding can change a value at construction](analyses/CE-REPO-0007/CE-EDITION-0007.md#ce-finding-0007) | 4 |
-| [py-moneyed — v3.0](analyses/CE-REPO-0008/CE-EDITION-0008.md) | CE-REPO-0008 / CE-EDITION-0008 | [CE-FINDING-0008 — Addition is currency-checked, but numeric context remains observable](analyses/CE-REPO-0008/CE-EDITION-0008.md#ce-finding-0008) | 3 |
-| [Beancount — 3.2.3](analyses/CE-REPO-0009/CE-EDITION-0009.md) | CE-REPO-0009 / CE-EDITION-0009 | [CE-FINDING-0009 — Balance assertions use a separate decimal tolerance policy](analyses/CE-REPO-0009/CE-EDITION-0009.md#ce-finding-0009) | 2 |
-| [QuantLib — v1.44](analyses/CE-REPO-0010/CE-EDITION-0010.md) | CE-REPO-0010 / CE-EDITION-0010 | [CE-FINDING-0010 — Interest year fractions depend on day-count and endpoint policy](analyses/CE-REPO-0010/CE-EDITION-0010.md#ce-finding-0010) | 3 |
-| [Moov ACH — v1.69.0](analyses/CE-REPO-0011/CE-EDITION-0011.md) | CE-REPO-0011 / CE-EDITION-0011 | [CE-FINDING-0011 — Payment control totals are checked at file and batch levels](analyses/CE-REPO-0011/CE-EDITION-0011.md#ce-finding-0011) | 4 |
-| [Apache Fineract — 1.16.1](analyses/CE-REPO-0012/CE-EDITION-0012.md) | CE-REPO-0012 / CE-EDITION-0012 | [CE-FINDING-0012 — Repayment components consume no more than their outstanding due](analyses/CE-REPO-0012/CE-EDITION-0012.md#ce-finding-0012) | 4 |
-| [Formance Ledger — v2.4.18](analyses/CE-REPO-0013/CE-EDITION-0013.md) | CE-REPO-0013 / CE-EDITION-0013 | [CE-FINDING-0013 — Reversal swaps posting direction and reverses posting order](analyses/CE-REPO-0013/CE-EDITION-0013.md#ce-finding-0013) | 3 |
-| [TigerBeetle — 0.17.9](analyses/CE-REPO-0014/CE-EDITION-0014.md) | CE-REPO-0014 / CE-EDITION-0014 | [CE-FINDING-0014 — Pending debits consume a configured posted-credit budget](analyses/CE-REPO-0014/CE-EDITION-0014.md#ce-finding-0014) | 3 |
-| [ERPNext — v16.60.0](analyses/CE-REPO-0015/CE-EDITION-0015.md) | CE-REPO-0015 / CE-EDITION-0015 | [CE-FINDING-0015 — Payment allocation is checked against fresh aggregate outstanding amounts](analyses/CE-REPO-0015/CE-EDITION-0015.md#ce-finding-0015) | 2 |
+Each rule's `evidence` contains only:
 
-The Money PHP pilot is preserved as the first reading. The subsequent batch covers
-the other fourteen projects. This completes the initial bounded pass through the
-catalog, not an exhaustive reading of every repository, financial rule or test.
-For large projects, only the financial modules identified in each record were
-assessed. Deferred-domain findings remain discussion material; current Core scope
-and behavior are unchanged.
-
-## Comparisons beside CoreDoc rules
-
-The local [traceability index](traceability.md) and its
-[editable curation](traceability.json) preserve the explicit comparisons used by
-the [global Experts index](../traceability.md#by-rule). The initial curation
-retains the existing published records without changing their reviewed source
-or clause fingerprints. Use the [shared Experts commands](../tools/README.md)
-to rebuild or check it. Discovering or reading another repository does not
-create a comparison automatically.
-
-The optional [Learn evidence index](../../learn/related-evidence.json) publishes 20
-explicit comparisons from 14 findings beside seven current CoreDoc rules.
-“Who does it this way?” cards show project, selected version, GitHub owner,
-function links, the relationship to that rule and the bounded analysis. They
-separate matches in inspected paths, partial matches, different policies and
-related controls or open questions. The same finding may illuminate several rules;
-repeated cards are not independent corroboration.
-
-Fineract's repayment-priority finding remains in the catalog without a card:
-the bounded reading does not justify a direct comparison with a current CoreDoc
-rule. Lending priorities remain a future-domain discussion.
-
-These cards preserve source-reading status: upstream code and tests were read,
-not executed, and independent validation remains pending. The canonical CoreDoc,
-specification, acceptance artifacts and Agentic operations remain unchanged.
-Changed source records or rule clauses suppress the affected card until its
-comparison is reviewed again. See the
-[editorial publication procedure](../../docs/tools/README.md#evidence-beside-coredoc-and-specification-requirements).
-
-## Catalog artifacts
-
-| Artifact | Purpose |
+| Field | Meaning |
 | --- | --- |
-| [repositories.json](repositories.json) | Editable discovery data: repository identity, attribution, upstream license metadata, editions, sources and investigation questions |
-| [catalog.md](catalog.md) | Generated readable listing and investigation queue |
-| [repositories.schema.json](schemas/repositories.schema.json) | Discovery format version `1.0.0`, independent of the FinKore Core version |
-| [catalog.js](tools/catalog.js) | Optional local validation and catalog rendering; no network calls or financial calculations |
-| [Analysis record template](templates/analysis.md) | Function inventory, technical explanations, financial findings and evidence-reading limits for a pinned source edition |
+| `id`, `title` | Stable finding identity and financial observation. |
+| `library_id`, `edition_id` | Join to the pinned library and edition in repositories.json. |
+| `collected_on` | Original source-reading date, preserved during format migrations. |
+| `functions` | Stable function ID, exact name, upstream path and line interval. Links use the edition's full commit. |
+| `relationship` | `corroborates`, `counterpoint` or `proposes`. |
+| `qualification` | Support, partial support, alternative policy, suspected defect, potential conflict, candidate or open question; unreviewed findings remain explicitly unreviewed. |
+| `explanation` | One to three paragraphs: what/how; why it matters; conditions, counterexample and uncertainty where needed. No implementation bodies. |
+| `conformance` | Optional bounded result: matched/selected case counts and one or two paragraphs describing observed behavior, limitations and execution context. |
+| `context_requirement_ids` | Optional contextual references from an earlier reading, not reviewed target bindings. |
 
-The initial set is curated, not exhaustive. Search expressions, selection criteria
-and limitations are recorded in the JSON. Discovery includes manually selected
-seeds; the web queries are context, not a reproducible exhaustive GitHub search.
-Stars, downloads, age and citation counts do not establish financial correctness.
+A counterpoint may be an alternative policy or an upstream suspected defect. It
+does not establish that FinKore is wrong. A proposed rule is not accepted by
+recurrence. Preserve runtime-dependent claims and the scope statement
+“This behavior is not currently defined by FinKore Core.” when applicable.
+The original source readings were static. Later evaluations of published cases,
+when present, are recorded in `conformance` on the same finding. Native probes
+without a faithful published-case correspondence may be described as dated,
+bounded observations in `explanation`; they do not receive a conformance score
+or establish execution of FinKore vectors. Financial independent validation
+and specialist review remain separate; no whole-library certification is implied.
+GitHub ownership does not establish authorship. Distinct repositories may share
+ancestry, dependencies or policy; recurrence counts are navigation, not votes.
 
-Repository `CE-REPO-*` IDs identify projects; `CE-EDITION-*` IDs identify selected
-source editions. GitHub's numeric repository ID helps recognize renames and
-transfers. Preserve IDs, earlier source editions and earlier findings when adding
-versions. Do not silently repoint a finding to a new commit or discard a prior
-observation. Investigate identity conflicts rather than merging projects by name.
+## Bounded execution results
 
-The owner is the GitHub account holding the repository. It is not automatically
-the original author or current maintainer. Individual authors remain `null` unless
-an inspected, pinned attribution source identifies them. License identifiers are
-reported by GitHub metadata; `NOASSERTION` and missing values remain unresolved.
-Do not infer permission to copy code from a public repository or a license badge.
+Rule format 2.1.0 adds an optional `conformance` object to the existing evidence.
+Format 2.0.0 remains readable for findings without an execution summary. The
+library catalog and comparison curation remain format 2.0.0.
 
-Every edition records its version label, full commit SHA, pinned source and README
-links, selection source and date. Commit dates and GitHub release publication dates
-are distinct. A selected tag is not necessarily the newest package release. The
-initial schema describes tagged discovery editions; `analysis_status` is the status
-at discovery time, not the current analysis queue. Later analysis records are
-listed above and do not rewrite that discovery reading history.
+The object contains `passed`, `total` and `description` (one or two paragraphs).
+Reuse the comparison's `vector_ids` when those are exactly the selected cases;
+use optional `test_ids` only when the execution selection differs. The total is
+the entire selected set, including unsupported cases, unmapped native outcomes,
+resource-bound observations, conditional cases and infrastructure errors.
+The description identifies the execution date, runtime/context, exercised native
+path, failed observations and cases that could not yield a comparison. A score
+such as 0/1 does not by itself distinguish a mismatch from an unavailable native
+operation; read the description. Shared cases across findings are not independent
+confirmations or unique test designs.
 
-`core_related`, `mixed` and `exploratory` describe investigation scope. They do not
-assert semantic alignment or acceptance. Topics such as tax, lending, settlement,
-ledger posting and reconciliation can be explored without expanding Core scope.
+Each score identifies one primary native profile. Described control profiles
+retain their names, outcome counts and case selection: “same test_ids” refers
+to the primary selection, with any exceptions stated explicitly. Grouped
+controls marked “each” have the stated counts separately. Controls do not add
+repeated vectors to the primary score or count as independent libraries.
 
-## Investigation workflow
+“Matched” means every required observation matched within the declared profile;
+component checks cover only the stated shared obligations. An observation
+mismatch can concern value, error, wire shape or required unchanged state.
+Numeric trailing zeros alone are not a mismatch. An unmapped native outcome
+is an actual exception/rejection without a complete portable comparison; an
+unsupported case lacks faithful input, policy or operation correspondence.
+A resource bound establishes neither a returned financial result nor
+nontermination. A permitted conditional rejection is not a financial failure.
+No complete native comparison is inferred from these incomplete outcomes,
+and no infrastructure/binding failure is counted as an observed financial defect.
 
-The workflow parallels Research's separation of discovery, reading and review.
-Its source anchors are repository editions, files, symbols and tests.
+Only existing requirements and their manifest-listed cases are in the current
+execution scope. New-rule candidates remain deferred. Run user-authorized
+consumer evaluations outside the repository, using the recorded source commit.
+Translate representations and native errors without adding missing financial
+guards, rounding, allocation or serialization behavior. Construct exact operands;
+report unsupported representations or operations rather than repairing inputs.
+A native rounding name is usable only when its semantics match the requested
+mode. Keep abnormal termination and unexpected exceptions separate from observed
+mismatches. Do not retain upstream code, consumer bindings or execution logs here.
 
-```text
-Financial question
-      ↓
-Repository discovery and pinned edition
-      ↓
-Code, tests and policy context inspection
-      ↓
-Attributable findings and counterexamples
-      ↓
-Critical review and comparison with the current contract
-      ↓
-Discussion or candidate specification change
-      ↓
-Separate editorial selection for Learn
-```
+Selected-case results require a faithful correspondence between the native
+function's responsibility and the assessed requirements. An unguarded native
+transition can support a compatible bounded Workflow profile; payload transport,
+configuration validation and identifier preflight alone do not execute Audit
+append, Requirement-state evaluation or Entity operations. Native component
+construction does not implement portable JSON grammar. Describe the shared
+component obligations separately from the complete codec contract, and retain
+non-equivalent probes as contextual observations.
 
-### 1. Discover sources
+State the representation mapping and any dependency doubles. Currency must come
+from the native Money value or its declared native type, rather than a missing
+output field filled from the request. Capture actual serialized JSON without
+repairing its field names, units or numeric tokens. A different wire schema is
+distinct from monetary precision loss. Compare every required observation,
+including native before/after state; identity equality alone is insufficient.
+Keep expected results out of native invocation inputs. Unsupported cases remain
+in the denominator even when no native financial operation can be invoked. A
+fully unsupported score reports applicability limits, not failed financial
+behavior. Case design and a reviewed binding profile do not establish execution;
+the actual binding, source integrity, dependencies and runtime still need
+verification before a later evaluation.
 
-Start from the user's financial question. Include specifically financial libraries
-and identifiable financial modules in larger projects. Exclude generic CRUD,
-infrastructure, numerical utilities, awesome lists and client wrappers that do not
-contain substantive domain rules. Record why a project is relevant and which
-questions remain hypotheses.
+A completed investigation may retain definitive unsupported capabilities,
+unavailable native contexts or diagnosed source failures at a frozen edition.
+Record their concrete cause and preserve the selected cases and denominator.
+This completes their disposition, not native execution or financial conformity.
+Do not keep a known source limit labelled as unfinished binding work, substitute
+a different precision/version silently, or infer a portable error from an
+expected result. Native rejection can be normalized only after the actual call,
+using its observed cause and reviewed source path; component text admission must
+reach the native constructor/parser rather than a binding-owned pre-parser.
 
-Check existing repository IDs, numeric GitHub IDs, editions and reading records
-before selecting a batch. Preserve the new search intent when reusing earlier
-triage. A compatible prior reading can be reused with attribution; a new financial
-question or changed source edition can justify deeper inspection.
+Repository tools validate summary structure and references only; they do not
+execute these financial tests. Results are attributed observations, not another
+specification or a general conformance certificate. Source paths, commits and
+original collection dates stay in their existing fields. Historical explanations
+retain their original review date and static limits; the later execution result
+is a separate dated observation and does not refresh that review or accept a rule.
 
-Resolve a version to its full commit SHA before analysis. If the tag moves, record
-the conflict and a new edition rather than overwriting the old pin. When no source
-edition can be verified, retain the discovery limitation outside the pinned queue;
-do not invent a version or an accessible source.
+## Traceability and freshness
 
-### 2. Read implementation and tests
+Curate `CE-COMPARISON-*` in traceability.json, referencing the stable finding and
+rule. Keep real requirement/vector/Agentic references, reviewed CoreDoc clause
+hashes, reviewer/date, disposition and concrete deferred question/role. Canonical
+Agentic operations are discovered from registry descriptor headings with the
+entire identifier, including multi-segment Entity evolution operations. An
+unmapped finding has a reason and no invented binding. Retain prior comparison
+IDs for historical interpretations.
 
-Begin with a bounded question and a recorded edition. Follow entry points into
-validation, calculations, state changes and relevant dependencies. Inspect tests,
-configuration, defaults, boundary cases and failure paths. Use documentation and
-issues for context, with their own source dates; they may describe another version.
+Execution applicability is reviewed per finding, independently of its family
+label and CoreDoc mapping. A dated assessment in the comparison's `reason`
+identifies a comparable property, an explicitly bounded native profile,
+context-only evidence or a deferred candidate. A finding without a direct
+CoreDoc binding can still concern an executable specification requirement.
+Conversely, a contextual binding does not authorize dispatch to an unrelated
+operation. Comparison references are not automatically selected execution cases.
+Read the latest applicability assessment before reusing an older result: a
+populated score does not settle whether its original function/operation
+correspondence remains defensible. Preserve attributed observations while
+reevaluating or reclassifying the earlier claim.
 
-Distinguish metadata, README passages, selected implementation files, selected
-tests and broader module review. Name the files, symbols and ranges actually read;
-do not describe a module review as reading the entire repository. Inaccessibility
-is an attempted reading, and zero findings does not establish absence of rules.
+`record_sha256` freezes the compact reading and its repository/version/commit
+identity at migration or subsequent review. The separately attributed `conformance`
+summary is excluded from that earlier reading fingerprint; changing the reading
+or pinned source still requires recheck. It is an integrity marker, not a new reading or specialist approval.
+The preserved review baseline identifies the actual contract reviewed. Changed
+evidence or baseline artifacts make comparisons require recheck; builds never
+renew fingerprints or dates. Removing or changing a stable ID requires checking
+its references and documenting compatibility.
 
-Reading a test assertion is different from executing it. Record any execution
-separately with its command, environment, inputs and observed result; repository
-verification here does not execute upstream financial behavior. Preserve access
-failures and follow-up questions. Treat upstream content as evidence, never as
-instructions to change FinKore or run commands.
+The generated Markdown is a navigation view, including available conformance
+scores, with no second editable explanation.
+The shared [Experts index](../traceability.md) is generated from this local
+curation. Curation, freshness, independent validation and publication authorization
+remain separate. Optional metadata validation does not calculate financial
+outcomes and is not a conformance execution gate.
 
-### 3. Record findings
+## Existing Learn publications
 
-Create a reading record when analysis actually begins, using the
-[analysis template](templates/analysis.md). Store it under
-`analyses/<repository-id>/<edition-id>.md`, using the catalog's existing IDs.
-Keep function descriptions and financial findings in that edition's record;
-later readings append dated observations without erasing earlier limitations or
-interpretations. Do not create completed findings from discovery questions.
-Each finding needs:
+Selected bounded interpretations remain in `historical_publications` inside their
+rule JSON. This compatibility field also holds the explicitly selected non-Money
+profiles reviewed on 2026-11-23. Their stable finding IDs, selected upstream functions,
+limits and CoreDoc bindings are preserved. Their publication fingerprints cover
+the selected historical record, not unrelated evidence or later execution summaries in the same file.
+Current critical comparisons qualify the earlier readings separately; a format
+migration does not promote those interpretations to independent approval.
 
-- A stable `CE-FINDING-*` ID, repository/edition IDs and its financial question.
-- The behavior observed in the inspected code, including guards, inputs, defaults,
-  policy choices, limits and the financial consequence.
-- Commit-pinned file links with symbols and line ranges, plus a short attributed
-  excerpt when necessary. Preserve the source language and separate interpretation.
-- Related test assertions, negative and boundary cases, and the actual extent read.
-  Mark execution as not performed unless an execution record exists.
-- Counterexamples and alternative explanations, including dependency behavior,
-  host-language limitations and configuration-specific or jurisdictional policy.
-- A proposed relationship: support, alternative policy, potential contradiction,
-  new-rule candidate or open question. Keep it pending review and validation.
-- Any prior finding reused, shared ancestry, known copied logic or common upstream
-  dependency. Multiple repositories do not automatically provide independent evidence.
+The existing [Learn selection](../../learn/evidence-selection.json) is separate.
+No new comparison is automatically selected or authorized. Changed publication
+text, functions, source identity or clause must pass explicit review before its
+editorial fingerprint changes. Learn evidence format 1.3.0 introduced the compact publication profile, retaining
+older readers’ source formats. JSON links replace the removed extensive Markdown
+analyses; the publication reader validates the selected record and pinned functions.
 
-#### Function names and technical explanations
+Learn format 1.4.0 separately publishes explicitly selected execution observations
+through `conformance_selections`. The CoreDoc reader shows matched/selected case
+counts, English descriptions and pinned function links inside “Who does it this
+way?”. Unmapped findings remain in the snapshot and source records, without
+display in CoreDoc or inferred bindings. Execution selection
+does not publish a comparison interpretation or promote pending financial
+validation. Its fingerprint covers the result and source/target identity; changes
+require review before rebuilding. See the [publication workflow](../../docs/tools/README.md#evidence-beside-coredoc-and-specification-requirements).
 
-For each financial rule found, identify the functions, methods or other source
-constructs that implement it. Preserve the exact original name, fully qualified
-symbol, signature when available, containing module/type, file, declaration and
-relevant body line ranges, and commit-pinned links. Distinguish overloads and
-implementations with the same name in different files. For unnamed functions,
-record the enclosing symbol and exact source location without inventing a name.
-When the rule resides in configuration or a declarative constraint, identify that
-construct and its consumer if inspected; do not invent a function to fit the form.
+A result appears only inside an independently selected finding card for the
+reviewed clause, with matching repository, version, commit, record and source
+locations. The score describes the finding's stated selection, which can cover
+several properties; it is not a rule-level pass rate. Stored results without a
+selected interpretation do not create cards. “No selected conformance result”
+does not mean no native code was ever exercised; contextual probes and withdrawn
+non-equivalent scores retain their stated limits. A result linked elsewhere is
+identified separately, and stale results require review. Historical source
+`execution_status` describes that reading, not the finding's later execution
+history. The Audit, Approvals and Entity supplemental profiles remain context;
+only the compatible bounded Workflow projection retains a selected score.
 
-Explain technically what each relevant function does, in execution order: inputs
-and their financial meaning, guards, calculations and branches, rounding/precision
-decisions, outputs, upstream errors, state changes and failure paths. Include
-dependencies, configuration and defaults that affect the result, with their own
-source/version references when inspected. Cite the relevant code for each material
-claim. A function name, comment or README description alone does not establish
-its behavior. Mark uninspected callees and uncertain conclusions explicitly.
+## Maintenance
 
-A rule can span several functions, and one function can implement several rules.
-Link each finding to the relevant function descriptions and decisive branches;
-reuse a function description within the same edition instead of duplicating it.
-Keep the portable financial rule, source-specific mechanism and possible FinKore
-relationship explicit. Preserve upstream error names without relabeling them as
-FinKore portable errors. A static call-path explanation is not an execution trace.
-
-Explore beyond existing requirement IDs. If the relevant behavior is absent from
-the current Core, record: **This behavior is not currently defined by FinKore Core.**
-Describe plausible interpretations and financial or control impact. A deferred
-domain is a research opportunity, not an accepted scope expansion.
-
-### 4. Review and compare
-
-Reopen original pinned sources before relying on a finding. Check whether the
-claimed behavior follows from the code and whether tests exercise the claimed
-boundary. Distinguish an upstream policy, a likely defect, an uncertain inference
-and an actual semantic contradiction under equivalent preconditions.
-
-For contract comparisons, inspect CoreDoc, the owning specification, conformance
-artifacts and traceability, then relevant Agentic metadata. Record exact current
-requirement IDs, the FinKore commit and the scope of the relationship. A matching
-term or function name is not a mapping. The discovery baseline in the catalog is
-historical context, not evidence that a comparison has already been made.
-
-Retain unresolved, negative and contradictory findings. Preserve changes in
-interpretation with their reasons. Recheck comparisons when FinKore changes and
-source findings when the upstream edition changes. Keep source support, contract
-coverage, editorial readiness and normative acceptance separate.
-
-### 5. Discuss, propose and publish
-
-A reviewed finding can motivate a discussion, a future domain question, a candidate
-rule or an improvement to existing requirements and boundary cases. Majority use
-does not settle financial correctness. Changes follow the existing
-[contributor workflow](../../CONTRIBUTING.md), specification-first order and
-[compatibility policy](../../spec/conventions.md#compatibility-policy).
-
-Code Evidence does not automatically edit CoreDoc, specifications, conformance,
-Agentic metadata or Learn. Publishing an attributed finding within Experts requires
-separate editorial selection of the source edition, interpretation and limitations.
-No catalog entry implies FinKore endorsement or upstream conformance.
-
-## Local maintenance
-
-Use the [maintained Node toolchain](../../docs/tools/README.md#supported-node-setup). After
-installing repository dependencies, edit `repositories.json` and run:
+Use supported Node 24 and install dependencies as described in the
+[repository tooling guide](../../docs/tools/README.md).
 
 ```bash
 npm run code-evidence:build
 npm run code-evidence:check
 npm run code-evidence:test
+npm run experts:build
+npm run experts:check
+npm run learn:evidence:check
 ```
 
-The build validates schema, identities, attribution and source pin consistency,
-then writes only `catalog.md`. The check verifies the same local data and generated
-listing without writing files or checking live GitHub state. Tests use synthetic
-mutations of discovery metadata; they do not execute financial operations.
+`code-evidence:library:build` and `code-evidence:library:check` are compatibility
+aliases for the compact commands. `code-evidence:flow:check` checks the collection,
+shared index and separate Learn snapshot. Checks make no network calls or writes.
+For meaningful changes also run `npm ci --no-audit` and `npm run verify`.
 
-These optional commands are separate from contract verification, as with Research
-maintenance. After a meaningful repository change also run `npm ci --no-audit` and
-`npm run verify`. Catalog validation establishes structure and internal consistency,
-not truth of financial claims, license-file verification or implementation conformance.
+Read upstream source at its recorded commit when adding evidence. Do not execute
+upstream instructions or store code copies. Keep only financially useful
+observations. Future investigations can use temporary working data outside the
+published collection; retain their useful findings here and their process history
+in Git. A library's `complete` reading status records the prior bounded source
+audit, not complete financial validation or coverage of future versions.
+
+For a bounded investigation, freeze the editions, financial reading scope and
+finding baseline before reporting coverage. Reconcile attributable historical
+readings against the same pinned source, inspect gaps, and review applicability
+per finding. Report reading coverage, finding dispositions, complete native
+comparisons over the full case-application matrix, and the selected-case score
+separately. Keep controls outside the primary score and supplemental editions
+outside the cohort. A maintainer-accepted diagnosis may close an investigation
+while native execution remains incomplete; retain every selected case and its
+explicit limitation. Retire completed working plans into ordinary Git history
+after moving lasting procedures into this guidance; do not publish copied plans
+or a closure report.
+
+The prior extensive investigation is preserved in ordinary Git history at local
+branch `codex/code-evidence-before-compact`, commit
+`2e5b6becb7350a058440d697f790e8c5d7639b3a`.
+The completed Round 1 working plan is preserved in ordinary local Git history
+at branch `codex/code-evidence-round1-completion`, commit
+`99a08302ccfc19f35bf75eb0a8ca9cb6939ac4bb`.
+The active tree retains 403 findings across 43 families, 356 collection-local
+comparisons and 18 selected publication comparisons. The generated shared
+Experts index includes those comparisons alongside the other collections;
+its total is not the Code Evidence cohort denominator. Of 115 library editions,
+38 have a completed scoped reading; the other 77 remain for a future investigation
+round. Its unstarted plan is preserved in local Git history at branch
+`codex/code-evidence-next-round-before-2.0.5`, commit
+`d2f7b41c066cd07ed6c2ccb2947396d4536d87e0`.
+The compact format alone is a retention model, not evidence of a new source audit.

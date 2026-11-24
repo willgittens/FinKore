@@ -12,12 +12,13 @@ import { readLearnAssetVersion, versionLearnStylesheets } from '../build-learn-a
 import { comparisonFingerprint } from '../build-learn-evidence.js'
 
 const repository = new URL('../../../', import.meta.url)
+const releaseNegative = JSON.parse(readFileSync(new URL('docs/tools/test/fixtures/release-content-negative.json', repository), 'utf8'))
 const pages = ['learn/index.html', 'learn/coredoc.html', ...LEARN_PAGES.map(page => page.output), ...LEARN_EDITORIAL_PAGES.filter(page => page !== 'learn/index.html')]
 function fixture(t) {
   const root = mkdtempSync(join(tmpdir(), 'finkore-learn-assets-'))
   t.after(() => rmSync(root, { recursive: true, force: true }))
   const sources = ['package.json', ...LEARN_EDITORIAL_PAGES, 'docs/coreDoc/core-doc.md', 'learn/related-evidence.json', ...LEARN_PAGES.map(page => page.source),
-    'docs/tools/build-learn-evidence.js', 'docs/tools/build-learn-assets.js', 'docs/tools/build-learn-coredoc.js', 'docs/tools/build-learn-pages.js', 'docs/tools/learn-evidence.js', 'docs/tools/learn-specifications.js']
+    'docs/tools/build-learn-evidence.js', 'docs/tools/build-learn-assets.js', 'docs/tools/build-learn-coredoc.js', 'docs/tools/build-learn-pages.js', 'docs/tools/learn-evidence.js', 'docs/tools/code-evidence-publication.js', 'docs/tools/learn-specifications.js']
   for (const path of sources) {
     mkdirSync(dirname(join(root, path)), { recursive: true })
     writeFileSync(join(root, path), readFileSync(new URL(path, repository)))
@@ -105,7 +106,15 @@ test('deployment gates reject stale readers, broken HTML links and unpublished e
     'docs', 'spec', 'conformance', 'agentic', '.github', '.agents', 'experts',
     'learn/css', 'learn/fonts', 'learn/img', 'learn/js']) {
     cpSync(new URL(path, repository), join(root, path), { recursive: true,
-      filter: source => path !== 'experts' || (basename(source) !== 'catalog' && !source.endsWith('.json')) })
+      // Stage publication content independently of active development plans.
+      // The publication gate still rejects plans in the actual proposed tree.
+      // This fixture selects a review report below. Optional code-source
+      // analyses are not publication inputs to that report, and may quote
+      // upstream planning paths while their own editorial review is pending.
+      filter: source => (path !== 'docs' || basename(source) !== 'plans') &&
+        (path !== 'experts' || (basename(source) !== 'catalog' &&
+          !(basename(source) === 'analyses' && basename(dirname(source)) === 'code-evidence') &&
+          !source.endsWith('.json'))) })
   }
   publicationEvidenceFixture(root)
   run(root, 'learn:build')
@@ -132,6 +141,12 @@ test('deployment gates reject stale readers, broken HTML links and unpublished e
   validate()
   assert.equal(readLearnAssetVersion(root), version)
   assert.deepEqual(snapshot(root), built)
+  const activePlanDirectory = join(root, releaseNegative.emptyPlanDirectory)
+  mkdirSync(activePlanDirectory, { recursive: true })
+  writeFileSync(join(activePlanDirectory, 'active-work.md'), '# Active working plan\n')
+  assert.throws(validate, /planning artifact is forbidden/)
+  rmSync(activePlanDirectory, { recursive: true })
+  validate()
   const stale = built[2] + '\n'
   writeFileSync(join(root, pages[2]), stale)
   assert.throws(validate, /Learn pages are out of date/)

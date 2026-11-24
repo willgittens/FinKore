@@ -1,0 +1,194 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0008",
+  "title": "Financial actions respect declared available or outstanding budgets",
+  "scope": "candidate_rule",
+  "question": "Component dues, pending transfer budgets and invoice aggregates have different subjects, ownership and failure conditions.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0012",
+      "title": "Repayment components consume no more than their outstanding due",
+      "library_id": "CE-REPO-0012",
+      "edition_id": "CE-EDITION-0012",
+      "collected_on": "2026-11-18",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0012:CE-EDITION-0012:fn01",
+          "path": "fineract-loan/src/main/java/org/apache/fineract/portfolio/loanaccount/domain/LoanRepaymentScheduleInstallment.java",
+          "name": "org.apache.fineract.portfolio.loanaccount.domain.LoanRepaymentScheduleInstallment.getPrincipalOutstanding",
+          "start_line": 319,
+          "end_line": 322
+        },
+        {
+          "id": "CE-REPO-0012:CE-EDITION-0012:fn02",
+          "path": "fineract-loan/src/main/java/org/apache/fineract/portfolio/loanaccount/domain/LoanRepaymentScheduleInstallment.java",
+          "name": "org.apache.fineract.portfolio.loanaccount.domain.LoanRepaymentScheduleInstallment.getInterestOutstanding",
+          "start_line": 340,
+          "end_line": 344
+        },
+        {
+          "id": "CE-REPO-0012:CE-EDITION-0012:fn03",
+          "path": "fineract-loan/src/main/java/org/apache/fineract/portfolio/loanaccount/domain/LoanRepaymentScheduleInstallment.java",
+          "name": "org.apache.fineract.portfolio.loanaccount.domain.LoanRepaymentScheduleInstallment.payPrincipalComponent",
+          "start_line": 697,
+          "end_line": 716
+        },
+        {
+          "id": "CE-REPO-0012:CE-EDITION-0012:fn04",
+          "path": "fineract-loan/src/main/java/org/apache/fineract/portfolio/loanaccount/domain/LoanRepaymentScheduleInstallment.java",
+          "name": "org.apache.fineract.portfolio.loanaccount.domain.LoanRepaymentScheduleInstallment.payInterestComponent",
+          "start_line": 676,
+          "end_line": 695
+        }
+      ],
+      "explanation": [
+        "For non-negative supplied payment and non-negative component outstanding, the inspected component methods apply the smaller of supplied amount and outstanding due, update the corresponding completed/paid field and return the consumed component amount. The methods do not determine the global ordering among loan components.",
+        "This separates a component payment cap from the transaction processor’s ordering among principal, interest, fees and penalties; the ordering is not established by these methods.",
+        "The cap assumes non-negative payment and outstanding state. Completed/paid fields change before later helpers, whose failure atomicity and persistence rollback were not traced. The inspected tests exercise setter/getter normalization, not these payment methods. Negative outstanding, date-sensitive effects and partial helper failure remain unresolved. Static source reading only; no execution or independent validation. Loan repayment semantics are outside current FinKore Core."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0014",
+      "title": "Pending debits consume a configured posted-credit budget",
+      "library_id": "CE-REPO-0014",
+      "edition_id": "CE-EDITION-0014",
+      "collected_on": "2026-11-18",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0014:CE-EDITION-0014:fn01",
+          "path": "src/tigerbeetle.zig",
+          "name": "tigerbeetle.Account.debits_exceed_credits",
+          "start_line": 34,
+          "end_line": 37
+        },
+        {
+          "id": "CE-REPO-0014:CE-EDITION-0014:fn02",
+          "path": "src/tigerbeetle.zig",
+          "name": "tigerbeetle.Account.credits_exceed_debits",
+          "start_line": 39,
+          "end_line": 42
+        },
+        {
+          "id": "CE-REPO-0014:CE-EDITION-0014:fn03",
+          "path": "src/state_machine.zig",
+          "name": "state_machine.StateMachineType(Storage).create_transfer",
+          "start_line": 3719,
+          "end_line": 3986
+        }
+      ],
+      "explanation": [
+        "For an account with the debit constraint enabled, pending debits plus posted debits plus the proposed amount must not exceed posted credits. Pending credits do not fund that budget. A symmetric optional constraint applies to credits. The normal create-transfer path checks overflow and these predicates before inserting the transfer.",
+        "Configured account constraints on the normal new-transfer path. Pending/posted counters and pre-insertion guards were read; consensus, persistence atomicity and post/void paths were not audited. Ledger/reservation semantics remain outside Core."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0015",
+      "title": "Payment allocation is checked against fresh aggregate outstanding amounts",
+      "library_id": "CE-REPO-0015",
+      "edition_id": "CE-EDITION-0015",
+      "collected_on": "2026-11-18",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0015:CE-EDITION-0015:fn01",
+          "path": "erpnext/accounts/doctype/payment_entry/payment_entry.py",
+          "name": "erpnext.accounts.doctype.payment_entry.payment_entry.PaymentEntry.validate_allocated_amount",
+          "start_line": 435,
+          "end_line": 456
+        },
+        {
+          "id": "CE-REPO-0015:CE-EDITION-0015:fn02",
+          "path": "erpnext/accounts/doctype/payment_entry/payment_entry.py",
+          "name": "erpnext.accounts.doctype.payment_entry.payment_entry.PaymentEntry.validate_allocated_amount_with_latest_data",
+          "start_line": 493,
+          "end_line": 590
+        }
+      ],
+      "explanation": [
+        "Payment validation distinguishes internal transfers and party types, then for customer/supplier references refreshes outstanding data and accumulates allocation by voucher and payment term. It rejects positive or negative aggregate over-allocation using the configured amount precision instead of validating every duplicate row independently.",
+        "Invoice/payment domain context, outside current Core. Selected tests assert aggregate rejection and unchanged invoice outstanding, but were not run. Fresh database reads alone do not establish a race-free validation/commit boundary."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0158",
+      "title": "Currency-specific validators skip unconfigured currencies and preserve zero bounds",
+      "library_id": "CE-REPO-0039",
+      "edition_id": "CE-EDITION-0039",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn090",
+          "path": "djmoney/models/validators.py",
+          "name": "djmoney/models/validators.py::BaseMoneyValidator.get_limit_value",
+          "start_line": 11,
+          "end_line": 23
+        },
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn091",
+          "path": "djmoney/models/validators.py",
+          "name": "djmoney/models/validators.py::BaseMoneyValidator.__call__",
+          "start_line": 25,
+          "end_line": 34
+        },
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn092",
+          "path": "djmoney/models/validators.py",
+          "name": "djmoney/models/validators.py::MinMoneyValidator.compare",
+          "start_line": 47,
+          "end_line": 48
+        },
+        {
+          "id": "CE-REPO-0039:CE-EDITION-0039:fn093",
+          "path": "djmoney/models/validators.py",
+          "name": "djmoney/models/validators.py::MaxMoneyValidator.compare",
+          "start_line": 55,
+          "end_line": 56
+        }
+      ],
+      "explanation": [
+        "Django Money selects a limit for the cleaned currency, skips a missing/mismatching currency limit, and treats scalar zero as an effective inclusive bound.",
+        "get_limit_value returns None on code mismatch or absent mapping entry; __call__ skips only None and compares cleaned.amount for int/Decimal limits. Min/max use strict < or >, so equality passes. This is selected-domain validation, not a universal available-budget check.",
+        "A successfully cleaned Money value and supported limit shape; callable limits may depend on application facts. Nonfinite Decimal admission and validator side effects are not proved by these comparisons. A mapping containing EUR only performs no bound comparison for USD. A minimum of zero still rejects an ordinary negative amount. Neither branch promises FX conversion or an all-currency economic limit. No upstream operation was executed. The conclusion is a bounded static source trace; deployment/runtime-dependent outputs are not certified. This behavior is not currently defined by FinKore Core."
+      ]
+    }
+  ],
+  "historical_publications": [
+    {
+      "id": "CE-FINDING-0014",
+      "title": "TigerBeetle — Pending debits consume a configured posted-credit budget",
+      "collected_on": "2026-11-18",
+      "function_ids": [
+        "CE-REPO-0014:CE-EDITION-0014:fn01",
+        "CE-REPO-0014:CE-EDITION-0014:fn02",
+        "CE-REPO-0014:CE-EDITION-0014:fn03"
+      ],
+      "explanation": [
+        "For an account with the debit constraint enabled, pending debits plus posted debits plus the proposed amount must not exceed posted credits. Pending credits do not fund that budget. A symmetric optional constraint applies to credits. The normal create-transfer path checks overflow and these predicates before inserting the transfer.",
+        "Configured account constraints on the normal new-transfer path. Pending/posted counters and pre-insertion guards were read; consensus, persistence atomicity and post/void paths were not audited. Ledger/reservation semantics remain outside Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0015",
+      "title": "ERPNext — Payment allocation is checked against fresh aggregate outstanding amounts",
+      "collected_on": "2026-11-18",
+      "function_ids": [
+        "CE-REPO-0015:CE-EDITION-0015:fn01",
+        "CE-REPO-0015:CE-EDITION-0015:fn02"
+      ],
+      "explanation": [
+        "Payment validation distinguishes internal transfers and party types, then for customer/supplier references refreshes outstanding data and accumulates allocation by voucher and payment term. It rejects positive or negative aggregate over-allocation using the configured amount precision instead of validating every duplicate row independently.",
+        "Invoice/payment domain context, outside current Core. Selected tests assert aggregate rejection and unchanged invoice outstanding, but were not run. Fresh database reads alone do not establish a race-free validation/commit boundary."
+      ]
+    }
+  ]
+}

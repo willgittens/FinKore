@@ -1,0 +1,32 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0034",
+  "title": "Inventory costing preserves consumed and remaining layer value",
+  "scope": "candidate_rule",
+  "question": "Compare FIFO/LIFO traversal, weighted average, partial consumption, insufficient stock and total-value conservation.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0064",
+      "title": "Inventory costing must preserve the unsold layers after partial consumption",
+      "library_id": "CE-REPO-0099",
+      "edition_id": "CE-EDITION-0099",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn10",
+          "path": "R/cogs.R",
+          "name": "FinCal::cogs",
+          "start_line": 16,
+          "end_line": 101
+        }
+      ],
+      "explanation": [
+        "After satisfying an ordered FIFO/LIFO layer, cogs sets the remaining sale quantity to0 but continues with next, allowing later layers to overwrite endingInventory.",
+        "The continuing loop and repeated assignment provide a direct static conservation counterexample under the function own cost/ending-inventory subject. This is not a FinKore ledger or statutory rule.",
+        "Positive ordinary inventory layers, matching unit/price vector lengths, an ordered FIFO/LIFO method and a sale that is satisfied before the final traversed layer. For initial2units at2, purchases[3,5,4] priced[3,5,6], sale3, the traced FIFO cost7 plus final ending24 is31 rather than initial total62. The arithmetic trace was not executed in R. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    }
+  ]
+}

@@ -19,9 +19,9 @@
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="FinKore — Define once. Build many times." />
   <link rel="icon" type="image/png" href="img/Finkore_Favicon.png" />
-  <link rel="stylesheet" href="css/styles.css?v=5d3eb129-91f2-4b83-b5e7-780fbe389706" />
-  <link rel="stylesheet" href="css/coredoc.css?v=5d3eb129-91f2-4b83-b5e7-780fbe389706" />
-  <link rel="stylesheet" href="css/documents.css?v=5d3eb129-91f2-4b83-b5e7-780fbe389706" />
+  <link rel="stylesheet" href="css/styles.css?v=e3d34999-81b6-45dc-9716-b7998f97e574" />
+  <link rel="stylesheet" href="css/coredoc.css?v=e3d34999-81b6-45dc-9716-b7998f97e574" />
+  <link rel="stylesheet" href="css/documents.css?v=e3d34999-81b6-45dc-9716-b7998f97e574" />
 </head>
 <body id="top" class="core-reader learn-document">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -123,7 +123,7 @@ npm run verify</code></pre>
 <h3 id="stable-release-procedure">Stable release procedure</h3>
 <p>Obtain maintainer acceptance of the release scope and review its normative, conformance, Agentic, and documentation changes before tagging. Ongoing Expert Review does not require every consultation question to be answered first. Preserve stable identifiers and CoreDoc evolution metadata, retain explicit coverage limitations, and resolve any blocking specification gap. Review the proposed tracked file list for credentials, generated reports, local toolchains, copied development material, and obsolete implementation or package instructions. Check the Learn index&#39;s rendered layout and keyboard navigation.</p>
 <p>After removing temporary plans, run a clean locked dependency install, <code>npm run verify</code>, the separate network-backed <code>npm run dependencies:audit</code>, and <code>npm run release:check</code> on the actual final tree. Record the advisory-query date and dependency scope with the concise release summary in <code>docs/releases/README.md</code>. Failed gates block tagging; artifact checks do not establish consumer implementation conformance.</p>
-<p>Commit the reviewed release tree, then create an annotated <code>&lt;Core version&gt;</code> tag on that commit (for example, <code>2.0.4</code>, following the published <code>2.0.3</code> tag). Preserve all existing tag names and targets. Confirm the new tag targets the verified commit and that the working tree is clean. Distribute only tracked release content, excluding local checkout state. Remote tag publication is a separate maintainer action; a local tag does not imply a remote release. Core publication does not publish implementation packages or a runner.</p>
+<p>Commit the reviewed release tree, then create an annotated <code>&lt;Core version&gt;</code> tag on that commit (for example, <code>2.0.5</code>, following the published <code>2.0.4</code> tag). Preserve all existing tag names and targets. Confirm the new tag targets the verified commit and that the working tree is clean. Distribute only tracked release content, excluding local checkout state. Remote tag publication is a separate maintainer action; a local tag does not imply a remote release. Core publication does not publish implementation packages or a runner.</p>
         </article>
         <a class="text-link core-back-top" href="#top">Back to the top ↑</a>
       </div>

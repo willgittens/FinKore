@@ -1,0 +1,458 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0016",
+  "title": "Financial solvers distinguish convergence, failure and ambiguity",
+  "scope": "candidate_rule",
+  "question": "Record root selection, guesses, stopping rules, residual checks, iteration limits and nonconvergence representation.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0035",
+      "title": "A root solver has financial success and failure semantics",
+      "library_id": "CE-REPO-0113",
+      "edition_id": "CE-EDITION-0113",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "open_question",
+      "functions": [
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn05",
+          "path": "fin/tvm.go",
+          "name": "fin.Rate",
+          "start_line": 93,
+          "end_line": 104
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn06",
+          "path": "fin/tvm.go",
+          "name": "fin.f",
+          "start_line": 106,
+          "end_line": 109
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn07",
+          "path": "fin/tvm.go",
+          "name": "fin.df",
+          "start_line": 111,
+          "end_line": 115
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn19",
+          "path": "fin/cashflow.go",
+          "name": "fin.InternalRateOfReturn",
+          "start_line": 25,
+          "end_line": 38
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn23",
+          "path": "fin/cashflow.go",
+          "name": "fin.ScheduledInternalRateOfReturn",
+          "start_line": 97,
+          "end_line": 115
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn17",
+          "path": "fin/newton.go",
+          "name": "fin.newton",
+          "start_line": 15,
+          "end_line": 24
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn25",
+          "path": "fin/cashflow.go",
+          "name": "fin.minMaxSlice",
+          "start_line": 131,
+          "end_line": 143
+        }
+      ],
+      "explanation": [
+        "The IRR-like functions reject non-opposite extrema using their product, then delegate to a Newton recurrence whose success checks step size and whose failure checks the iteration count after computing an update.",
+        "The source does not certify residual size, derivative nonzero or a unique root. Sign-change admission is a useful heuristic but cannot be promoted to solver correctness.",
+        "float64 flow arrays, caller guess and the actual derivative function; scheduled arrays also need matched lengths. Empty/all-NaN extrema and tiny opposite-sign products are separate admission questions; a small Newton step can occur without a small financial residual. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0041",
+      "title": "Nonconvergence must remain distinguishable from a genuine zero result",
+      "library_id": "CE-REPO-0103",
+      "edition_id": "CE-EDITION-0103",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn21",
+          "path": "finance.js",
+          "name": "Finance.prototype.XIRR",
+          "start_line": 205,
+          "end_line": 240
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn24",
+          "path": "finance.js",
+          "name": "sumEq",
+          "start_line": 256,
+          "end_line": 266
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn25",
+          "path": "finance.js",
+          "name": "durYear",
+          "start_line": 269,
+          "end_line": 271
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn05",
+          "path": "finance.js",
+          "name": "seekZero",
+          "start_line": 33,
+          "end_line": 42
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn07",
+          "path": "finance.js",
+          "name": "Finance.prototype.IRR / npv (nested)",
+          "start_line": 56,
+          "end_line": 67
+        }
+      ],
+      "explanation": [
+        "XIRR assigns null when its final iterate strings still differ, then uses that null in numeric rounding; under the recorded ECMAScript coercion contract the branch can expose zero instead of a distinct nonconvergence observation.",
+        "The assignment and final multiplication were read together with sumEq. This supports a conditional control-flow finding; it does not show that a particular input actually exhausts the loop.",
+        "A supplied mixed-sign, equally sized cash-flow/date input that reaches the exhaustion branch; native ECMAScript numeric coercion. A genuine zero rate and exhaustion mapped through null may become observationally identical. NaN/derivative/date behavior is not certified by the success fixture. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0066",
+      "title": "A root policy identifies interval, search order and residual units",
+      "library_id": "CE-REPO-0099",
+      "edition_id": "CE-EDITION-0099",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn36",
+          "path": "R/irr.R",
+          "name": "FinCal::irr",
+          "start_line": 10,
+          "end_line": 14
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn37",
+          "path": "R/irr2.R",
+          "name": "FinCal::irr2",
+          "start_line": 13,
+          "end_line": 33
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn15",
+          "path": "R/discount.rate.R",
+          "name": "FinCal::discount.rate",
+          "start_line": 18,
+          "end_line": 20
+        }
+      ],
+      "explanation": [
+        "The two IRR paths use different root policies: irr delegates to uniroot with interval extension, while irr2 scans a caller grid and accepts the first absolute NPV residual below cutoff.",
+        "The interval, iteration order, break and monetary residual threshold are explicit caller/source policy; no uniqueness or solver-backend accuracy follows.",
+        "A meaningful flow vector, chosen scan direction/step/bracket and rates avoiding singular denominators. Scaling all cash flows changes an absolute NPV acceptance test even when the mathematical roots are unchanged; an earlier grid root may be preferred by scan order. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0308",
+      "title": "ex-money: IRR secant stopping compares NPV values rather than residual/root guarantees",
+      "library_id": "CE-REPO-0031",
+      "edition_id": "CE-EDITION-0031",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "open_question",
+      "functions": [
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn165",
+          "path": "lib/money/financial.ex",
+          "name": "Money.Financial.internal_rate_of_return [clause 261]",
+          "start_line": 261,
+          "end_line": 273
+        },
+        {
+          "id": "CE-REPO-0031:CE-EDITION-0031:fn166",
+          "path": "lib/money/financial.ex",
+          "name": "Money.Financial.do_internal_rate_of_return [clause 276]",
+          "start_line": 276,
+          "end_line": 286
+        }
+      ],
+      "explanation": [
+        "The IRR solver performs a secant-like update using NPV amounts converted to native float and stops when successive NPV values differ by at most its fixed threshold; it does not call the inverse root/log helpers.",
+        "The only recursive update is estimate_n-(estimate_n-estimate_m)/(npv_n-npv_m)*npv_n. Historical limits mentioning Localize root/log describe separate inverse financial helpers and should not substantiate this IRR finding.",
+        "A nonempty compatible-currency indexed flow list and finite NPV evaluations at the two estimates; the recurrence has no explicit iteration/bracket bound. Nearly equal successive NPV values can stop with a large absolute residual; root/log approximation evidence belongs to CE0309 and provides no secant convergence certificate. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0320",
+      "title": "JavaMoney periods calculation calls a negative exponent in the rejecting BigDecimal overload",
+      "library_id": "CE-REPO-0111",
+      "edition_id": "CE-EDITION-0111",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn172",
+          "path": "calc/src/main/java/org/javamoney/calc/common/NumPeriodsOfAnnuityFromPresentAndFutureValue.java",
+          "name": "org.javamoney.calc.common.NumPeriodsOfAnnuityFromPresentAndFutureValue.calculate",
+          "start_line": 62,
+          "end_line": 73
+        }
+      ],
+      "explanation": [
+        "If the preceding amount calculations complete, the periods expression invokes BigDecimal.pow(-1) without MathContext, an overload whose recorded JDK8 contract rejects negative exponents.",
+        "The exact chained call was read. Earlier operations can fail first, so the defensible conclusion is no ordinary success through this expression under that contract, not one universally observed exception path.",
+        "Recorded JDK BigDecimal pow(int) contract and a backend that reaches that call after valid preceding monetary operations. The negative exponent is a literal-1 in the rejecting overload; adding a MathContext or reciprocal would be a different operation. No upstream JVM call was executed. No JVM execution. The Java8 BigDecimal pow(int) contract already read during R1-M1 is reused explicitly; backend errors before pow remain possible. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0358",
+      "title": "XIRR convergence failure is rounded into a zero rate",
+      "library_id": "CE-REPO-0103",
+      "edition_id": "CE-EDITION-0103",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn21",
+          "path": "finance.js",
+          "name": "Finance.prototype.XIRR",
+          "start_line": 205,
+          "end_line": 240
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn24",
+          "path": "finance.js",
+          "name": "sumEq",
+          "start_line": 256,
+          "end_line": 266
+        }
+      ],
+      "explanation": [
+        "When XIRR reaches its explicit unequal-iterate exhaustion branch, xirr becomes null and the recorded ECMAScript null-to-number semantics make the following rounding expression zero.",
+        "The source branch is unambiguous once entered. Whether any selected real dataset enters it is unobserved; stopping by toFixed(5) also does not certify an NPV residual.",
+        "Exhaustion with unequal final iterate spellings, standard recorded native numeric coercion, and no earlier exception. The same returned zero can represent a genuine zero rate or the failure branch; no concrete failed-root execution was performed. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0364",
+      "title": "RATE and IRR use different stopping conditions and units",
+      "library_id": "CE-REPO-0104",
+      "edition_id": "CE-EDITION-0104",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "open_question",
+      "functions": [
+        {
+          "id": "CE-REPO-0104:CE-EDITION-0104:fn007",
+          "path": "src/index.ts",
+          "name": "rate",
+          "start_line": 428,
+          "end_line": 457
+        },
+        {
+          "id": "CE-REPO-0104:CE-EDITION-0104:fn012",
+          "path": "src/index.ts",
+          "name": "_gDivGp",
+          "start_line": 722,
+          "end_line": 741
+        },
+        {
+          "id": "CE-REPO-0104:CE-EDITION-0104:fn008",
+          "path": "src/index.ts",
+          "name": "irr",
+          "start_line": 520,
+          "end_line": 575
+        },
+        {
+          "id": "CE-REPO-0104:CE-EDITION-0104:fn013",
+          "path": "src/index.ts",
+          "name": "_irrResult",
+          "start_line": 751,
+          "end_line": 758
+        },
+        {
+          "id": "CE-REPO-0104:CE-EDITION-0104:fn014",
+          "path": "src/index.ts",
+          "name": "_irrResultDeriv",
+          "start_line": 768,
+          "end_line": 780
+        }
+      ],
+      "explanation": [
+        "RATE stops on iterate distance alone; IRR stops when either its rate-step or previous cash-flow residual falls below the same tolerance. Neither return is an independent root/residual certificate.",
+        "The RATE loop sets close from diff<tol. The IRR do-while continues only while both tests exceed tol, and performs one update before checking maxIter.",
+        "Provided scalar tolerances, guesses and iteration limits; finite evaluations near the chosen root are not guaranteed by the API. Small step with large residual, or a small residual at the previous rather than returned iterate, can satisfy the stop branch. No concrete failed root was executed. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0367",
+      "title": "Mixed-sign product and Newton step guards have numeric boundary gaps",
+      "library_id": "CE-REPO-0113",
+      "edition_id": "CE-EDITION-0113",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn17",
+          "path": "fin/newton.go",
+          "name": "fin.newton",
+          "start_line": 15,
+          "end_line": 24
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn19",
+          "path": "fin/cashflow.go",
+          "name": "fin.InternalRateOfReturn",
+          "start_line": 25,
+          "end_line": 38
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn21",
+          "path": "fin/cashflow.go",
+          "name": "fin.ModifiedInternalRateOfReturn",
+          "start_line": 56,
+          "end_line": 74
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn23",
+          "path": "fin/cashflow.go",
+          "name": "fin.ScheduledInternalRateOfReturn",
+          "start_line": 97,
+          "end_line": 115
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn25",
+          "path": "fin/cashflow.go",
+          "name": "fin.minMaxSlice",
+          "start_line": 131,
+          "end_line": 143
+        }
+      ],
+      "explanation": [
+        "Mixed-sign admission is computed as min*max>=0, so any rounded-to-zero product loses the intended sign evidence; Newton additionally accepts only a step threshold without a finite/residual certificate.",
+        "The control paths are clear, but a concrete floating underflow outcome depends on actual arithmetic/runtime. The finding must remain a conditional hazard rather than an executed rejection.",
+        "Very small opposite-signed float64 inputs or nonfinite/empty arrays; iteration proceeds under caller guess and derivative. If min*max rounds to negativezero, >=0 rejects a genuinely mixed-sign stream. A last-step certificate and a financial residual certificate are different. No Go execution or actual underflow observed. Product-underflow rejection is conditional on the implementation floating result; source stop/order hazards are static. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0373",
+      "title": "IRR selection compares sums of candidate rates, not cash-flow totals",
+      "library_id": "CE-REPO-0043",
+      "edition_id": "CE-EDITION-0043",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0043:CE-EDITION-0043:fn014",
+          "path": "numpy_financial/_financial.py",
+          "name": "_irr_default_selection",
+          "start_line": 1010,
+          "end_line": 1027
+        },
+        {
+          "id": "CE-REPO-0043:CE-EDITION-0043:fn015",
+          "path": "numpy_financial/_financial.py",
+          "name": "irr",
+          "start_line": 1057,
+          "end_line": 1183
+        }
+      ],
+      "explanation": [
+        "The default IRR selector compares sums of positive and negative candidate rates, although its comment describes cash-flow totals; for finite mixed-sign candidates its nonnegative sum always exceeds the negative sum.",
+        "The helper receives eirr rather than original cash flows, filters eirr>=0 in that branch, then chooses minimum magnitude. The main engine calls np.roots rather than Newton.",
+        "Multiple finite admissible candidate rates of differing signs returned by the polynomial backend; caller has not replaced selection_logic. Candidates-0.1 and0.2 take the nonnegative branch independent of the original flow totals. No claim is made that a specific flow yields those candidates numerically. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0376",
+      "title": "RATE certifies a last step and exposes failure by policy",
+      "library_id": "CE-REPO-0043",
+      "edition_id": "CE-EDITION-0043",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "open_question",
+      "functions": [
+        {
+          "id": "CE-REPO-0043:CE-EDITION-0043:fn013",
+          "path": "numpy_financial/_financial.py",
+          "name": "rate",
+          "start_line": 914,
+          "end_line": 1007
+        },
+        {
+          "id": "CE-REPO-0043:CE-EDITION-0043:fn012",
+          "path": "numpy_financial/_financial.py",
+          "name": "_g_div_gp",
+          "start_line": 894,
+          "end_line": 904
+        },
+        {
+          "id": "CE-REPO-0043:CE-EDITION-0043:fn01",
+          "path": "numpy_financial/_financial.py",
+          "name": "numpy_financial._financial._convert_when",
+          "start_line": 115,
+          "end_line": 129
+        }
+      ],
+      "explanation": [
+        "RATE updates while not all iterate steps are close, then returns NaN or raises according to policy for the last unresolved entries; no residual or bracket certificate is computed.",
+        "The loop uses abs(rnp1-rn)<tol only and the quotient helper divides by r and r squared. Native timing ndarrays return without alias validation.",
+        "Caller guess/tolerance/iteration count and NumPy or Decimal operation semantics; the financial equation must remain in a valid numeric domain. An initial guess0 enters singular rate denominators; a small step alone is insufficient evidence of financial residual accuracy. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0389",
+      "title": "Expectation-of-life paths preserve different convergence observations",
+      "library_id": "CE-REPO-0029",
+      "edition_id": "CE-EDITION-0029",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn100",
+          "path": "src/parametric_interface.jl",
+          "name": "cumhazard generic",
+          "start_line": 31,
+          "end_line": 34
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn127",
+          "path": "src/life_expectancy.jl",
+          "name": "curtate parametric",
+          "start_line": 70,
+          "end_line": 97
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn128",
+          "path": "src/life_expectancy.jl",
+          "name": "complete table",
+          "start_line": 137,
+          "end_line": 151
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn129",
+          "path": "src/life_expectancy.jl",
+          "name": "complete parametric",
+          "start_line": 153,
+          "end_line": 165
+        }
+      ],
+      "explanation": [
+        "Generic cumulative hazard discards QuadGK error estimates, whereas complete parametric and infinite-tail curtate expectations inspect finite error/estimate criteria; finite-table integration also discards estimates.",
+        "These are different convergence-reporting policies. The source error checks do not establish true integration error or demographic suitability.",
+        "Supported mortality model, age interval, positive supplied tolerances/maxevals and the recorded QuadGK dependency contract. A finite reported estimate is not an independent numerical oracle; the infinite curtate search also has an explicit100000 ceiling. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    }
+  ]
+}

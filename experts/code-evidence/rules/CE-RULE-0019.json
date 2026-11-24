@@ -1,0 +1,106 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0019",
+  "title": "A price uses an identified calculation strategy and context",
+  "scope": "candidate_rule",
+  "question": "A delegated strategy and a stored-price getter are distinct mechanisms; naming a strategy does not establish its financial behavior.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0032",
+      "title": "A pricing strategy is selected explicitly before delegation",
+      "library_id": "CE-REPO-0052",
+      "edition_id": "CE-EDITION-0052",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0052:CE-EDITION-0052:fn03",
+          "path": "Calculator/DelegatingCalculator.php",
+          "name": "Sylius\\Component\\Pricing\\Calculator\\DelegatingCalculator::calculate",
+          "start_line": 38,
+          "end_line": 48
+        },
+        {
+          "id": "CE-REPO-0052:CE-EDITION-0052:fn04",
+          "path": "Calculator/StandardCalculator.php",
+          "name": "Sylius\\Component\\Pricing\\Calculator\\StandardCalculator::calculate",
+          "start_line": 24,
+          "end_line": 27
+        }
+      ],
+      "explanation": [
+        "DelegatingCalculator rejects a subject with null calculator type and otherwise delegates using its named strategy, configuration and supplied context. StandardCalculator simply returns the stored price.",
+        "The sole spec file tests standard stored-price return (1299), not missing strategy or registry failure. No volume-pricing implementation exists among these source files merely because a constant names it. No currency, rounding or discount rule is inferred."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0370",
+      "title": "Bond-equivalent yield embeds integer constant and host-zone policies",
+      "library_id": "CE-REPO-0113",
+      "edition_id": "CE-EDITION-0113",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn26",
+          "path": "fin/bonds.go",
+          "name": "fin.DaysDifference",
+          "start_line": 25,
+          "end_line": 45
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn30",
+          "path": "fin/bonds.go",
+          "name": "fin.TBillEquivalentYield",
+          "start_line": 116,
+          "end_line": 135
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn31",
+          "path": "fin/bonds.go",
+          "name": "fin.DiscountRate",
+          "start_line": 148,
+          "end_line": 153
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn32",
+          "path": "fin/bonds.go",
+          "name": "fin.PriceDiscount",
+          "start_line": 166,
+          "end_line": 171
+        }
+      ],
+      "explanation": [
+        "T-bill long-branch denominator uses integer 365/2 and date-component branches depend on host local zone.",
+        "The expression dsm-365/2 contains integer constant division, yielding 182 before float subtraction rather than 182.5. time.Unix(...).Date reads local-zone calendar components for NASD/European and leap/year branches, while actual-day DaysDifference divides elapsed seconds by86400. This supports language/policy concerns but does not establish a replacement bond formula or a FinKore bond requirement.",
+        "Use the ordinary long T-bill branch, or date-component inputs whose local calendar date changes across zones. Short-branch formulas and elapsed-seconds branch have separate behavior; no numeric yield or timezone experiment was executed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0371",
+      "title": "Comparative chart dates come from only the first instrument",
+      "library_id": "CE-REPO-0099",
+      "edition_id": "CE-EDITION-0099",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn40",
+          "path": "R/lineChartMult.R",
+          "name": "FinCal::lineChartMult",
+          "start_line": 18,
+          "end_line": 44
+        }
+      ],
+      "explanation": [
+        "Comparative chart assigns every series the first instrument dates without date joins.",
+        "lineChartMult builds Date from the first symbol, then writes each price vector by row position and melts by that Date column. Equal-length series recorded on different dates are therefore paired with the first dates at the data-frame boundary. Plot rendering and market facts remain external.",
+        "Two equal-length instrument series with different date sequences. Already aligned inputs avoid the mismatch; unequal lengths may instead trigger R recycling/error. No live chart or market data was rendered. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    }
+  ]
+}

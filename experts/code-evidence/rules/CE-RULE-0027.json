@@ -1,0 +1,88 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0027",
+  "title": "Idempotent financial requests declare identity and replay scope",
+  "scope": "candidate_rule",
+  "question": "Compare numeric canonicalization, key scope/lifetime, original-response replay and recovery after concurrent creation.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0052",
+      "title": "Idempotent creation declares request representation and replay scope",
+      "library_id": "CE-REPO-0016",
+      "edition_id": "CE-EDITION-0016",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn04",
+          "path": "src/main/java/com/lmoraesdev/payment/application/usecase/CreateChargeService.java",
+          "name": "CreateChargeService.create(CreateChargeCommand)",
+          "start_line": 31,
+          "end_line": 58
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn05",
+          "path": "src/main/java/com/lmoraesdev/payment/application/usecase/CreateChargeService.java",
+          "name": "CreateChargeService.replay(StoredIdempotency,String,String)",
+          "start_line": 60,
+          "end_line": 68
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn06",
+          "path": "src/main/java/com/lmoraesdev/payment/application/usecase/CreateChargeService.java",
+          "name": "CreateChargeService.hash(BigDecimal)",
+          "start_line": 70,
+          "end_line": 78
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn07",
+          "path": "src/main/java/com/lmoraesdev/payment/application/usecase/ChargeCreationCoordinator.java",
+          "name": "ChargeCreationCoordinator.createAndPersist(CreateChargeCommand,Money,String)",
+          "start_line": 37,
+          "end_line": 70
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn17",
+          "path": "src/main/java/com/lmoraesdev/payment/adapter/out/persistence/idempotency/IdempotencyPersistenceAdapter.java",
+          "name": "IdempotencyPersistenceAdapter.findByKey(String)",
+          "start_line": 24,
+          "end_line": 32
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn18",
+          "path": "src/main/java/com/lmoraesdev/payment/adapter/out/persistence/idempotency/IdempotencyPersistenceAdapter.java",
+          "name": "IdempotencyPersistenceAdapter.save(String,String,UUID,CreateChargeResult)",
+          "start_line": 35,
+          "end_line": 37
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn19",
+          "path": "src/main/java/com/lmoraesdev/payment/adapter/out/persistence/idempotency/IdempotencyPersistenceAdapter.java",
+          "name": "IdempotencyPersistenceAdapter.toJson(CreateChargeResult)",
+          "start_line": 39,
+          "end_line": 45
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn20",
+          "path": "src/main/java/com/lmoraesdev/payment/adapter/out/persistence/idempotency/IdempotencyPersistenceAdapter.java",
+          "name": "IdempotencyPersistenceAdapter.toResult(String)",
+          "start_line": 47,
+          "end_line": 53
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn29",
+          "path": "src/main/java/com/lmoraesdev/payment/adapter/out/persistence/idempotency/IdempotencyRecordEntity.java",
+          "name": "IdempotencyRecordEntity.create(String,String,UUID,String)",
+          "start_line": 44,
+          "end_line": 54
+        }
+      ],
+      "explanation": [
+        "Charge creation validates Money before lookup, hashes the original decimal representation and replays a stored creation response. A duplicate-key race is handled by finding a winning record after a DataIntegrityViolationException; the database schema declares key uniqueness.",
+        "Equal numeric values spelled as 10 and 10.00 can identify different requests because the hash uses the original scale. This is a derived static scenario, not an executed test. All integrity violations enter the same recovery branch; key lifetime, caller/provider scope, canonicalization, commit visibility and concurrent different-body requests need explicit policy."
+      ],
+      "context_requirement_ids": []
+    }
+  ]
+}

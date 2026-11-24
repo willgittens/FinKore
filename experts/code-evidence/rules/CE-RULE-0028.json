@@ -1,0 +1,60 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0028",
+  "title": "Duplicate financial events declare identity and payload compatibility",
+  "scope": "candidate_rule",
+  "question": "Compare event-ID scope, conflicting duplicate payloads, delivery ordering and atomic marker creation.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0053",
+      "title": "Webhook deduplication identifies an event before comparing its payload",
+      "library_id": "CE-REPO-0016",
+      "edition_id": "CE-EDITION-0016",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn08",
+          "path": "src/main/java/com/lmoraesdev/payment/application/usecase/ProcessWebhookService.java",
+          "name": "ProcessWebhookService.process(ProcessWebhookCommand)",
+          "start_line": 40,
+          "end_line": 92
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn09",
+          "path": "src/main/java/com/lmoraesdev/payment/application/usecase/ProcessWebhookService.java",
+          "name": "ProcessWebhookService.parseStatus(String)",
+          "start_line": 94,
+          "end_line": 100
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn21",
+          "path": "src/main/java/com/lmoraesdev/payment/adapter/out/persistence/webhook/WebhookEventPersistenceAdapter.java",
+          "name": "WebhookEventPersistenceAdapter.existsByEventId(String)",
+          "start_line": 17,
+          "end_line": 19
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn22",
+          "path": "src/main/java/com/lmoraesdev/payment/adapter/out/persistence/webhook/WebhookEventPersistenceAdapter.java",
+          "name": "WebhookEventPersistenceAdapter.save(String,UUID)",
+          "start_line": 22,
+          "end_line": 24
+        },
+        {
+          "id": "CE-REPO-0016:CE-EDITION-0016:fn30",
+          "path": "src/main/java/com/lmoraesdev/payment/adapter/out/persistence/webhook/WebhookEventEntity.java",
+          "name": "WebhookEventEntity.create(String,UUID)",
+          "start_line": 33,
+          "end_line": 40
+        }
+      ],
+      "explanation": [
+        "An existing event ID returns before charge lookup or payload/status comparison, while the processed counter still increments. New events transition the charge, record an outbox event and then save the dedup marker. The schema declares globally unique event_id within this table.",
+        "A repeated ID with a different charge/status is ignored on this method path. Concurrent duplicates depend on the unique constraint and transaction boundary; no local conflict recovery occurs here. Delivery authentication, provider scopes, null status and event ordering remain unreviewed or undefined at this boundary."
+      ],
+      "context_requirement_ids": []
+    }
+  ]
+}

@@ -11,9 +11,12 @@
     "ajv": "^8.20.0"
   },
   "scripts": {
-    "code-evidence:build": "node experts/code-evidence/tools/catalog.js --write",
-    "code-evidence:check": "node experts/code-evidence/tools/catalog.js --check",
+    "code-evidence:build": "node experts/code-evidence/tools/evidence.js --write",
+    "code-evidence:check": "node experts/code-evidence/tools/evidence.js --check",
     "code-evidence:test": "node --test --test-isolation=none experts/code-evidence/tools/test/*.test.js",
+    "code-evidence:library:build": "npm run code-evidence:build",
+    "code-evidence:library:check": "npm run code-evidence:check",
+    "code-evidence:flow:check": "npm run code-evidence:check && npm run experts:check && npm run learn:evidence:check",
     "conformance:check": "node docs/tools/validate-conformance.js",
     "agentic:check": "node docs/tools/check-agentic.js",
     "architecture:check": "node docs/tools/check-architecture.js",

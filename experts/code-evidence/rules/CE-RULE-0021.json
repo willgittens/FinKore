@@ -1,0 +1,150 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0021",
+  "title": "A source claim identifies the actual distributed entry point",
+  "scope": "candidate_rule",
+  "question": "A source module and the package entry point can differ at the same commit. Record each file/symbol and verify the actual observation path.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0045",
+      "title": "Source and distributed entry points can expose different numeric boundaries",
+      "library_id": "CE-REPO-0017",
+      "edition_id": "CE-EDITION-0017",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn26",
+          "path": "src/index.ts",
+          "name": "Money.toLocaleString",
+          "start_line": 357,
+          "end_line": 369
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn74",
+          "path": "dist/index.js",
+          "name": "Money.toNumber",
+          "start_line": 220,
+          "end_line": 228
+        },
+        {
+          "id": "CE-REPO-0017:CE-EDITION-0017:fn76",
+          "path": "dist/index.js",
+          "name": "Money.toLocaleString",
+          "start_line": 232,
+          "end_line": 238
+        }
+      ],
+      "explanation": [
+        "At the pinned Dintero edition, TypeScript locale formatting chooses an exact-string-capable Intl path while the package-main JavaScript path always calls its guarded toNumber conversion first.",
+        "The source branch and distributed body differ, and package.json selects dist/index.js. This is attributable artifact-path evidence; neither package publication contents nor a deployed Intl implementation was executed, and Core does not prescribe a package entry-point policy.",
+        "The relevant engine must support exact decimal-string Intl formatting for the TypeScript branch to avoid native-number conversion; otherwise both routes use the guarded conversion. An exact stored amount beyond native-number round-trip precision can hit the JavaScript conversion error path before formatting; the TypeScript capability branch may avoid it. This is a conditional source trace, not an observed installed-package result. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0090",
+      "title": "Generated factory signatures do not enforce currency metadata support",
+      "library_id": "CE-REPO-0001",
+      "edition_id": "CE-EDITION-0001",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn197",
+          "path": "src/MoneyFactory.php",
+          "name": "Money\\MoneyFactory::__callStatic",
+          "start_line": 612,
+          "end_line": 615
+        },
+        {
+          "id": "CE-REPO-0001:CE-EDITION-0001:fn198",
+          "path": "src/TellerFactory.php",
+          "name": "Money\\TellerFactory::__callStatic",
+          "start_line": 612,
+          "end_line": 628
+        }
+      ],
+      "explanation": [
+        "Generated MoneyPHP/Teller factories share dynamic dispatch and do not verify generated aliases against metadata at dispatch; Teller constructs ISO metadata even for documentary non-ISO method names.",
+        "The two __callStatic bodies pass the method string directly to Currency, while Teller always creates ISOCurrencies. Private namespaces and production factory naming are outside current Core, so this is an artifact/application-boundary candidate, not a new required FinKore factory design.",
+        "Invoke a generated alias or dynamic method; later parser/formatter metadata lookup is required to expose an unsupported Teller currency. Spelling a numeric-leading crypto name as a PHP method is not a reverse mapping to its original identifier; generated annotations do not establish lookup support. No runtime factory failure was observed. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0129",
+      "title": "Documented formatting and API examples require independent validation",
+      "library_id": "CE-REPO-0005",
+      "edition_id": "CE-EDITION-0005",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn550",
+          "path": "docs/guides/formatting-non-decimal-currencies.md",
+          "name": "docs/guides/formatting-non-decimal-currencies.md::transformer@22",
+          "start_line": 22,
+          "end_line": 27
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn553",
+          "path": "docs/guides/formatting-non-decimal-currencies.md",
+          "name": "docs/guides/formatting-non-decimal-currencies.md::transformer@60",
+          "start_line": 60,
+          "end_line": 65
+        },
+        {
+          "id": "CE-REPO-0005:CE-EDITION-0005:fn541",
+          "path": "docs/guides/calculating-percentages.md",
+          "name": "docs/guides/calculating-percentages.md::percentage@35",
+          "start_line": 35,
+          "end_line": 41
+        }
+      ],
+      "explanation": [
+        "Dinero documentary nondecimal formatters filter zero components before applying denomination labels, losing positional meaning; a separate percentage example passes an unused third allocate argument.",
+        "The formatter callback indexes labels after filtering, and the actual allocate wrapper destructures only dineroObject and ratios. These are literal documentation/control-shape defects, not additional shipped financial APIs or proof of all package examples.",
+        "Use an illustrative multicomponent value with a leading zero denomination, or call the documented percentage helper with nonzero scale. A vector such as[0,0,1] is labeled from labels[0] after filtering instead of its original denomination index. The percentage third {scale} argument is not read by the actual wrapper. No example was compiled or run. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0362",
+      "title": "Published declarations and README can select invalid runtime call shapes",
+      "library_id": "CE-REPO-0103",
+      "edition_id": "CE-EDITION-0103",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn06",
+          "path": "finance.js",
+          "name": "Finance.prototype.IRR",
+          "start_line": 45,
+          "end_line": 69
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn05",
+          "path": "finance.js",
+          "name": "seekZero",
+          "start_line": 33,
+          "end_line": 42
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn13",
+          "path": "finance.js",
+          "name": "Finance.prototype.DF",
+          "start_line": 141,
+          "end_line": 149
+        }
+      ],
+      "explanation": [
+        "Published Finance IRR call shape and DF return declaration differ from the inspected JavaScript bodies.",
+        "IRR reads cfs.depth and cfs.cashFlow from one object; the declaration and README numeric variadic call do not supply that shape. DF constructs and returns an array while its declaration promises number. seekZero is a module helper with coarse crossing logic, not a declared instance implementation. These are concrete integration/documentation discrepancies, not accepted FinKore IRR rules.",
+        "Use the pinned declaration/README IRR example or consume DF according to its numeric return declaration. No TypeScript build or JavaScript runtime was executed, and aliases do not change argument handling. IRR root uniqueness and financial formula validity remain separate questions. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    }
+  ]
+}

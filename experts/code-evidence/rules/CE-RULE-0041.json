@@ -1,0 +1,591 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0041",
+  "title": "Mortality factors declare age basis, conditional interval and terminal support",
+  "scope": "candidate_rule",
+  "question": "Compare attained-age indexes, fractional-death assumptions, survival/decrement precision, reversed factors, terminal support and validation without treating every numeric table as probabilities.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0385",
+      "title": "Reversed survival is an inverse factor, not a probability",
+      "library_id": "CE-REPO-0029",
+      "edition_id": "CE-EDITION-0029",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn019",
+          "path": "src/MortalityTable.jl",
+          "name": "MortalityTables.survival whole",
+          "start_line": 250,
+          "end_line": 255
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn020",
+          "path": "src/MortalityTable.jl",
+          "name": "MortalityTables.survival fractional",
+          "start_line": 257,
+          "end_line": 271
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn028",
+          "path": "src/MortalityTable.jl",
+          "name": "MortalityTables._reverse_decrement",
+          "start_line": 346,
+          "end_line": 346
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn029",
+          "path": "src/MortalityTable.jl",
+          "name": "MortalityTables.decrement whole",
+          "start_line": 348,
+          "end_line": 351
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn030",
+          "path": "src/MortalityTable.jl",
+          "name": "MortalityTables.decrement fractional",
+          "start_line": 353,
+          "end_line": 364
+        }
+      ],
+      "explanation": [
+        "Reversed survival intervals return reciprocal factors; reversed decrements are transformed using survival rather than simply negated. Empty forward reductions return survival one and decrement zero.",
+        "The source defines backward factors, which need not be probabilities bounded by one. Zero-survival reversal also has a singular numeric boundary.",
+        "Explicit interpolation/model, admissible ages, and nonzero survival when a reciprocal is required. A reversed survival factor may exceed one and its decrement may be negative; this alone is not an invalid probability claim about a forward interval. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0386",
+      "title": "Fractional assumptions and small-decrement kernels carry distinct policies",
+      "library_id": "CE-REPO-0029",
+      "edition_id": "CE-EDITION-0029",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn021",
+          "path": "src/MortalityTable.jl",
+          "name": "MortalityTables.UDD partial decrement",
+          "start_line": 280,
+          "end_line": 285
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn022",
+          "path": "src/MortalityTable.jl",
+          "name": "MortalityTables.ConstantForce partial decrement",
+          "start_line": 287,
+          "end_line": 289
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn023",
+          "path": "src/MortalityTable.jl",
+          "name": "MortalityTables.Balducci partial decrement",
+          "start_line": 291,
+          "end_line": 296
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn027",
+          "path": "src/MortalityTable.jl",
+          "name": "MortalityTables._accumulate_decrement",
+          "start_line": 341,
+          "end_line": 341
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn032",
+          "path": "src/MortalityTable.jl",
+          "name": "MortalityTables._decrement_piece ConstantForce",
+          "start_line": 370,
+          "end_line": 370
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn026",
+          "path": "src/MortalityTable.jl",
+          "name": "MortalityTables.decrement generic extension",
+          "start_line": 333,
+          "end_line": 333
+        }
+      ],
+      "explanation": [
+        "UDD, constant-force and Balducci interpolation use different conditional formulas; constant-force decrements use log1p/expm1 in a specialized small-change path.",
+        "The denominators, conditioning ages and specialized functions are explicit numerical mechanisms, not proof of certified accuracy or model suitability.",
+        "Forward fractional intervals within supported ages, meaningful probabilities and nonzero conditional denominators for the selected interpolation. Invalid q or a zero conditioning denominator can leave the probability domain; equivalent real formulas need not have identical floating errors. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0387",
+      "title": "Table wrapping does not certify rates or terminal extinction",
+      "library_id": "CE-REPO-0029",
+      "edition_id": "CE-EDITION-0029",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "open_question",
+      "functions": [
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn001",
+          "path": "src/MortalityTable.jl",
+          "name": "MortalityTables.UltimateMortality",
+          "start_line": 24,
+          "end_line": 28
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn003",
+          "path": "src/MortalityTable.jl",
+          "name": "MortalityTables._select_row",
+          "start_line": 71,
+          "end_line": 74
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn033",
+          "path": "src/MortalityTable.jl",
+          "name": "MortalityTables.omega",
+          "start_line": 397,
+          "end_line": 399
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn034",
+          "path": "src/age_basis.jl",
+          "name": "_check_age_basis_rates",
+          "start_line": 1,
+          "end_line": 7
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn037",
+          "path": "src/age_basis.jl",
+          "name": "age_last_to_age_nearest",
+          "start_line": 50,
+          "end_line": 69
+        }
+      ],
+      "explanation": [
+        "Low-level UltimateMortality wraps supplied values without probability validation; omega reports the final index, while age-basis conversion separately checks values and terminal one.",
+        "The permissive data wrapper and guarded conversion have different responsibilities. A last supplied age is not by itself proof of extinction or a calibrated mortality table.",
+        "Caller-supplied indexed mortality vector and the specific constructor or age-conversion entry point. A wrapper can contain out-of-range values or a final value below one; conversion checks do not retroactively validate every wrapper construction. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0388",
+      "title": "Mortality model constructors have different validation boundaries",
+      "library_id": "CE-REPO-0029",
+      "edition_id": "CE-EDITION-0029",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "open_question",
+      "functions": [
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn046",
+          "path": "src/parameterized_models.jl",
+          "name": "hazard(m::Opperman,age)",
+          "start_line": 137,
+          "end_line": 141
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn048",
+          "path": "src/parameterized_models.jl",
+          "name": "hazard(model::Wittstein,age)",
+          "start_line": 220,
+          "end_line": 224
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn057",
+          "path": "src/parameterized_models.jl",
+          "name": "hazard(m::Quadratic,age)",
+          "start_line": 475,
+          "end_line": 478
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn066",
+          "path": "src/parameterized_models.jl",
+          "name": "Makeham keyword constructor",
+          "start_line": 26,
+          "end_line": 26
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn099",
+          "path": "src/ratio_laws.jl",
+          "name": "KannistoMakeham keyword constructor",
+          "start_line": 206,
+          "end_line": 206
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn111",
+          "path": "src/parametric_interface.jl",
+          "name": "_check_age",
+          "start_line": 57,
+          "end_line": 57
+        }
+      ],
+      "explanation": [
+        "Mortality-model parameter guards vary: several keyword constructors merely promote values, some hazards clamp or only test an upper age, while Makeham2 and Carriere validate finite scales/weights and nonnegative ages.",
+        "The model-specific source and stronger Carriere guards were read; no uniform validated-probability contract can be inferred across all parametric laws.",
+        "The exact law, constructor path, parameters and age; a hazard value is not interchangeable with an annual death probability. A polynomial hazard can leave a useful mortality domain under unrestricted coefficients; stronger Carriere checks do not certify other laws or calibration. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0390",
+      "title": "Survival mixtures use posterior surviving populations and ignore zero-weight components",
+      "library_id": "CE-REPO-0029",
+      "edition_id": "CE-EDITION-0029",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn143",
+          "path": "src/carriere.jl",
+          "name": "Carriere1 components",
+          "start_line": 198,
+          "end_line": 199
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn144",
+          "path": "src/carriere.jl",
+          "name": "Carriere2 components",
+          "start_line": 200,
+          "end_line": 201
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn146",
+          "path": "src/carriere.jl",
+          "name": "_sole_component",
+          "start_line": 206,
+          "end_line": 206
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn154",
+          "path": "src/carriere.jl",
+          "name": "_mixture_masses",
+          "start_line": 240,
+          "end_line": 249
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn159",
+          "path": "src/carriere.jl",
+          "name": "cumhazard mixture interval",
+          "start_line": 264,
+          "end_line": 284
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn160",
+          "path": "src/carriere.jl",
+          "name": "hazard mixture",
+          "start_line": 286,
+          "end_line": 304
+        }
+      ],
+      "explanation": [
+        "Carriere hazard weights component hazards by surviving mixture masses, with sole-active-component and overflow/tail branches; the initial mixture weights alone are not the attained-age hazard weights.",
+        "The scaled-mass and interval-hazard paths retain tiny active components and specialize degenerate mixtures. This documents mechanism without independently proving all tail accuracy.",
+        "Validated Carriere parameters and admissible age, with the selected Carriere1/2 component definitions. A tiny positive component can dominate distant survivors even when another weight rounds close to one; component probability and hazard remain distinct subjects. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0391",
+      "title": "Rate loaders preserve labels and absence rather than assuming consecutive positions",
+      "library_id": "CE-REPO-0029",
+      "edition_id": "CE-EDITION-0029",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn168",
+          "path": "src/labeled_tables.jl",
+          "name": "_by_label",
+          "start_line": 7,
+          "end_line": 18
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn169",
+          "path": "src/labeled_tables.jl",
+          "name": "_select_and_ultimate",
+          "start_line": 24,
+          "end_line": 32
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn170",
+          "path": "src/labeled_tables.jl",
+          "name": "_table_from_labels",
+          "start_line": 41,
+          "end_line": 55
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn179",
+          "path": "src/XTbML.jl",
+          "name": "parseXTbMLTable",
+          "start_line": 66,
+          "end_line": 80
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn189",
+          "path": "ext/MortalityTablesCSVExt.jl",
+          "name": "CSV MortalityTable",
+          "start_line": 51,
+          "end_line": 86
+        }
+      ],
+      "explanation": [
+        "XML and CSV assembly use explicit age/duration labels, reject duplicate labels and unsupported block counts, and rebuild select/ultimate indexed tables through shared helpers.",
+        "The labeled assembly is source evidence for alignment checks; using the same assembler across formats is not independent validation of dataset values or meaning.",
+        "Inputs conforming to supported block organization and meaningful source metadata; rates still require actuarial interpretation. Missing age labels can produce gaps and source labels need not establish probability validity; no full new execution or dataset scan was performed. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0393",
+      "title": "Deterioration variants have independent denominator and lapse assumptions",
+      "library_id": "CE-REPO-0029",
+      "edition_id": "CE-EDITION-0029",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn162",
+          "path": "src/dukes_macdonald.jl",
+          "name": "dukes_macdonald1",
+          "start_line": 14,
+          "end_line": 20
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn164",
+          "path": "src/dukes_macdonald.jl",
+          "name": "dukes_macdonald2",
+          "start_line": 33,
+          "end_line": 40
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn166",
+          "path": "src/dukes_macdonald.jl",
+          "name": "dukes_macdonald3",
+          "start_line": 53,
+          "end_line": 58
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn161",
+          "path": "src/dukes_macdonald.jl",
+          "name": "_point_in_scale_and_select",
+          "start_line": 3,
+          "end_line": 4
+        }
+      ],
+      "explanation": [
+        "The three Dukes-MacDonald transformations use different lapse/selection denominators and distinct issue-/attained-age indexing without general clipping or singularity guards.",
+        "The literal formulas preserve identifiable variants but cannot establish their actuarial assumptions, valid parameter ranges or equivalence.",
+        "Caller-selected variant, intended selection duration and economically valid nonzero denominators. A denominator of one minus total lapses can vanish; the other variants have different singular surfaces and are not drop-in replacements. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0394",
+      "title": "Test references distinguish instantaneous force from annual decrement and legacy differences",
+      "library_id": "CE-REPO-0029",
+      "edition_id": "CE-EDITION-0029",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "open_question",
+      "functions": [
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn143",
+          "path": "src/carriere.jl",
+          "name": "Carriere1 components",
+          "start_line": 198,
+          "end_line": 199
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn144",
+          "path": "src/carriere.jl",
+          "name": "Carriere2 components",
+          "start_line": 200,
+          "end_line": 201
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn160",
+          "path": "src/carriere.jl",
+          "name": "hazard mixture",
+          "start_line": 286,
+          "end_line": 304
+        }
+      ],
+      "explanation": [
+        "Carriere tests distinguish instantaneous hazard from historical finite-difference fixtures, combine stored component references, and compare selected tails with direct high-precision formulas. Calibration of the defaults remains unknown.",
+        "The decisive assertions and their direct reference expressions were read. They are stronger numerical cross-check designs than comparing a function with itself, but were not executed here and do not validate population fit.",
+        "Pinned test data/parameters and the explicit finite set of tested ages; source comments attribute component fixtures to MortalityLaws. Passing a high-precision formula comparison would not establish current demographic applicability; no independent fixture generation or calibrated population evidence was supplied. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0395",
+      "title": "A mortality table display name is not a unique source identity",
+      "library_id": "CE-REPO-0029",
+      "edition_id": "CE-EDITION-0029",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "open_question",
+      "functions": [
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn185",
+          "path": "src/XTbML.jl",
+          "name": "read_tables",
+          "start_line": 120,
+          "end_line": 125
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn187",
+          "path": "src/get_SOA_table.jl",
+          "name": "get_SOA_table integer",
+          "start_line": 10,
+          "end_line": 12
+        },
+        {
+          "id": "CE-REPO-0029:CE-EDITION-0029:fn188",
+          "path": "src/get_SOA_table.jl",
+          "name": "get_SOA_table name",
+          "start_line": 14,
+          "end_line": 23
+        }
+      ],
+      "explanation": [
+        "The literal table-name map has3012 pairs but2923 unique names across34 duplicated-name groups; name lookup can therefore lose distinctions retained by integer IDs.",
+        "A source-metadata scan counted literal pairs, and the duplicate1985-90 male ALB-before-revision label maps to366 and2013. The recorded Julia Dict duplicate-key contract is reused, not freshly executed.",
+        "Lookup through the generated Dict by a duplicated name; integer get_SOA lookup remains a separate direct filename route. The same label can denote distinct IDs and name lookup alone cannot select both. No table numerical values, official identity or calibration were certified. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0396",
+      "title": "Mortality support ending does not establish extinction",
+      "library_id": "CE-REPO-0028",
+      "edition_id": "CE-EDITION-0028",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn103",
+          "path": "src/lives.jl",
+          "name": "LifeContingencies.mt.omega [lives.jl:150]",
+          "start_line": 150,
+          "end_line": 150
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn104",
+          "path": "src/lives.jl",
+          "name": "LifeContingencies.mt.omega [lives.jl:151]",
+          "start_line": 151,
+          "end_line": 151
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn111",
+          "path": "src/lives.jl",
+          "name": "LifeContingencies.survival_past_table [lives.jl:183]",
+          "start_line": 183,
+          "end_line": 189
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn112",
+          "path": "src/lives.jl",
+          "name": "LifeContingencies.extinction_age [lives.jl:192]",
+          "start_line": 192,
+          "end_line": 197
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn154",
+          "path": "src/products.jl",
+          "name": "LifeContingencies.benefit_years [products.jl:85]",
+          "start_line": 85,
+          "end_line": 94
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn163",
+          "path": "src/products.jl",
+          "name": "LifeContingencies.schedule [products.jl:192]",
+          "start_line": 192,
+          "end_line": 209
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn170",
+          "path": "src/products.jl",
+          "name": "LifeContingencies.unit_payments [products.jl:278]",
+          "start_line": 278,
+          "end_line": 282
+        }
+      ],
+      "explanation": [
+        "LifeContingencies adds one year to a rate vector last age when forming life horizon, but not to a parametric law omega. Whole-life products reject infinite support without explicit term and reject continuation past an incomplete finite assumption while lives remain active. Endowment supplies an explicit maturity. This differs from simply truncating expectation at the last model age.",
+        "Static source and selected product tests only; no independent actuarial or statutory acceptance. Parametric constructor admits issue ages without comparing omega locally; downstream support checks remain relevant."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0397",
+      "title": "Observed single-life status and joint-status conditioning differ",
+      "library_id": "CE-REPO-0028",
+      "edition_id": "CE-EDITION-0028",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn108",
+          "path": "src/lives.jl",
+          "name": "LifeContingencies.mt.survival [lives.jl:172]",
+          "start_line": 172,
+          "end_line": 172
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn109",
+          "path": "src/lives.jl",
+          "name": "LifeContingencies.mt.survival [lives.jl:173]",
+          "start_line": 173,
+          "end_line": 173
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn114",
+          "path": "src/lives.jl",
+          "name": "LifeContingencies.mt.survival [lives.jl:219]",
+          "start_line": 219,
+          "end_line": 222
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn115",
+          "path": "src/lives.jl",
+          "name": "LifeContingencies.mt.survival [lives.jl:224]",
+          "start_line": 224,
+          "end_line": 229
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn116",
+          "path": "src/lives.jl",
+          "name": "LifeContingencies.joint_statuses [lives.jl:232]",
+          "start_line": 232,
+          "end_line": 237
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn119",
+          "path": "src/lives.jl",
+          "name": "LifeContingencies.active [lives.jl:244]",
+          "start_line": 244,
+          "end_line": 244
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn120",
+          "path": "src/lives.jl",
+          "name": "LifeContingencies.active [lives.jl:245]",
+          "start_line": 245,
+          "end_line": 245
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn129",
+          "path": "src/lives.jl",
+          "name": "LifeContingencies.joint_row [lives.jl:278]",
+          "start_line": 278,
+          "end_line": 281
+        }
+      ],
+      "explanation": [
+        "SingleLife one-time survival honors alive atissue, while two-time form asks hypothetical mortality conditional on being alive atfrom. Joint two-time survival instead divides aggregate active-to by active-from and rejects zero conditioning mass. Independent joint states are Cartesian products, with LastSurvivor any-alive and FirstToDie all-alive; observed named state is a distinct valuation input.",
+        "Same source/dependency family, not independent corroboration. Rate validity and caller mortality basis remain external inputs; no claim that independence is appropriate for a real portfolio."
+      ],
+      "context_requirement_ids": []
+    }
+  ]
+}

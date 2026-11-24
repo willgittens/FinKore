@@ -2,7 +2,7 @@
 
 This is a non-normative research index. Source statements, reviewer inferences, contract scope, and editorial readiness remain separate. No rule is accepted or changed here. Academic sources were not reopened by this indexing stage.
 
-Baseline: FinKore Core 2.0.4; repository revision `ba16f0d726bdf46adac8b58a5641d9872f7fd8ef`. 38 considerations; 61 explicitly linked targets; 23 eligible for editorial review. Status counts: not_recommended: 1, pending_evidence: 14, reviewed: 23.
+Baseline: FinKore Core 2.0.5; repository revision `55dd866ff52bae25f126fd08ad83e197803e6fe0`. 38 considerations; 61 explicitly linked targets; 23 eligible for editorial review. Status counts: not_recommended: 1, pending_evidence: 14, reviewed: 23.
 
 All original findings remain `pending_validation`. A reviewed mapping is a bounded comparison with current text, not specialist sign-off or evidence that FinKore historically adopted a paper's argument. `learn_eligible` permits editorial consideration only.
 
@@ -71,7 +71,7 @@ All original findings remain `pending_validation`. A reviewed mapping is a bound
 
 - [CORE-001.2](../../docs/coreDoc/core-doc.md#core-0012-exact-calculation-and-explicit-rounding) — `already_addressed` / `supports_rationale`. Exact arithmetic and explicit rounding policy are the relevant obligations. The paper’s common currency quantum does not impose a universal calculation scale.
 - [MONEY-ROUNDING-001](../../spec/money/rounding.md) — `already_addressed` / `supports_rationale`. Exact arithmetic and explicit rounding policy are the relevant obligations. The paper’s common currency quantum does not impose a universal calculation scale.
-  Published coverage: `COVERED`; 11 manifest-listed vectors. Canonical Agentic operations: `finkore.money.divide`, `finkore.money.round`.
+  Published coverage: `COVERED`; 14 manifest-listed vectors. Canonical Agentic operations: `finkore.money.divide`, `finkore.money.round`.
   Case references (first 3; full list in JSON): [money.divide.rounded-third-half-up-001](../../conformance/money/rounded-division.json), [money.divide.rounded-two-thirds-half-even-001](../../conformance/money/rounded-division.json), [money.divide.rounding-incomplete-001](../../conformance/money/rounded-division.json).
 - [MONEY-ROUNDING-004](../../spec/money/rounding.md) — `already_addressed` / `supports_rationale`. Exact arithmetic and explicit rounding policy are the relevant obligations. The paper’s common currency quantum does not impose a universal calculation scale.
   Published coverage: `COVERED`; 4 manifest-listed vectors. Canonical Agentic operations: `finkore.money.divide`, `finkore.money.round`.
@@ -79,8 +79,8 @@ All original findings remain `pending_validation`. A reviewed mapping is a bound
 - [MONEY-ROUNDING-007](../../spec/money/rounding.md) — `already_addressed` / `supports_rationale`. Exact arithmetic and explicit rounding policy are the relevant obligations. The paper’s common currency quantum does not impose a universal calculation scale.
   Published coverage: `NOT DIRECTLY TESTABLE`; 0 manifest-listed vectors. Canonical Agentic operations: none linked by the registry.
 - [MONEY-REPRESENTATION-002](../../spec/money/representation.md) — `already_addressed` / `supports_rationale`. Exact decimal meaning is portable while representation remains implementation-neutral and a domain rounding policy is permitted, not universally mandated.
-  Published coverage: `COVERED`; 8 manifest-listed vectors. Canonical Agentic operations: none linked by the registry.
-  Case references (first 3; full list in JSON): [money.add.deep-positive-scale-001](../../conformance/money/arithmetic.json), [money.add.large-significant-digits-001](../../conformance/money/arithmetic.json), [money.deserialize.positive-001](../../conformance/money/representation.json).
+  Published coverage: `COVERED`; 12 manifest-listed vectors. Canonical Agentic operations: none linked by the registry.
+  Case references (first 3; full list in JSON): [money.add.deep-positive-scale-001](../../conformance/money/arithmetic.json), [money.add.large-significant-digits-001](../../conformance/money/arithmetic.json), [money.deserialize.finer-than-currency-scale-001](../../conformance/money/representation.json).
 - [MONEY-REPRESENTATION-006](../../spec/money/representation.md) — `already_addressed` / `supports_rationale`. Exact decimal meaning is portable while representation remains implementation-neutral and a domain rounding policy is permitted, not universally mandated.
   Published coverage: `NOT DIRECTLY TESTABLE`; 0 manifest-listed vectors. Canonical Agentic operations: none linked by the registry.
 - [MONEY-ROUNDING-005](../../spec/money/rounding.md) — `already_addressed` / `supports_rationale`. Exact decimal meaning is portable while representation remains implementation-neutral and a domain rounding policy is permitted, not universally mandated.

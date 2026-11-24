@@ -1,0 +1,234 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0026",
+  "title": "Price-range arithmetic declares its endpoint and empty-aggregate policy",
+  "scope": "candidate_rule",
+  "question": "Endpoint-wise arithmetic and inclusive membership are not a general interval calculus or an empty sum identity.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0051",
+      "title": "Price ranges use endpoint-wise transformations, not universal interval arithmetic",
+      "library_id": "CE-REPO-0038",
+      "edition_id": "CE-EDITION-0038",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0038:CE-EDITION-0038:fn16",
+          "path": "prices/money_range.py",
+          "name": "prices.money_range.MoneyRange.__init__",
+          "start_line": 15,
+          "end_line": 25
+        },
+        {
+          "id": "CE-REPO-0038:CE-EDITION-0038:fn18",
+          "path": "prices/money_range.py",
+          "name": "prices.money_range.MoneyRange.__add__",
+          "start_line": 30,
+          "end_line": 47
+        },
+        {
+          "id": "CE-REPO-0038:CE-EDITION-0038:fn19",
+          "path": "prices/money_range.py",
+          "name": "prices.money_range.MoneyRange.__sub__",
+          "start_line": 49,
+          "end_line": 66
+        },
+        {
+          "id": "CE-REPO-0038:CE-EDITION-0038:fn21",
+          "path": "prices/money_range.py",
+          "name": "prices.money_range.MoneyRange.__contains__",
+          "start_line": 75,
+          "end_line": 80
+        },
+        {
+          "id": "CE-REPO-0038:CE-EDITION-0038:fn43",
+          "path": "prices/taxed_money_range.py",
+          "name": "prices.taxed_money_range.TaxedMoneyRange.__sub__",
+          "start_line": 50,
+          "end_line": 67
+        },
+        {
+          "id": "CE-REPO-0038:CE-EDITION-0038:fn49",
+          "path": "prices/utils.py",
+          "name": "prices.utils.sum",
+          "start_line": 8,
+          "end_line": 10
+        }
+      ],
+      "explanation": [
+        "Range arithmetic applies operations to corresponding endpoints and reconstructs to check currency/order. Membership is inclusive; aggregate sum requires a nonempty iterable.",
+        "Subtracting corresponding endpoints can differ from set-interval subtraction and may fail order validation. No policy for negative multipliers or an empty aggregate identity is implied."
+      ],
+      "context_requirement_ids": []
+    },
+    {
+      "id": "CE-FINDING-0185",
+      "title": "Collection separators conflict with numeric signs and punctuation",
+      "library_id": "CE-REPO-0033",
+      "edition_id": "CE-EDITION-0033",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0033:CE-EDITION-0033:fn003",
+          "path": "lib/monetize/collection.rb",
+          "name": "Monetize::Collection::parse",
+          "start_line": 27,
+          "end_line": 35
+        },
+        {
+          "id": "CE-REPO-0033:CE-EDITION-0033:fn006",
+          "path": "lib/monetize/collection.rb",
+          "name": "Monetize::Collection::range?",
+          "start_line": 37,
+          "end_line": 39
+        },
+        {
+          "id": "CE-REPO-0033:CE-EDITION-0033:fn007",
+          "path": "lib/monetize/collection.rb",
+          "name": "Monetize::Collection::split_list",
+          "start_line": 46,
+          "end_line": 48
+        },
+        {
+          "id": "CE-REPO-0033:CE-EDITION-0033:fn008",
+          "path": "lib/monetize/collection.rb",
+          "name": "Monetize::Collection::split_range",
+          "start_line": 50,
+          "end_line": 52
+        }
+      ],
+      "explanation": [
+        "Monetize Collection splits hyphens as range separators and comma/slash as list separators before parsing monetary fragments; signs and localized numeric punctuation are not tokenized separately.",
+        "range? returns a regex match position or nil, so both collection grammar and README boolean comparisons need their actual Ruby semantics. Core defines neither money lists/ranges nor interval parsing; parser fragment failures do not establish a valid complete collection.",
+        "Pass negative single-value text or comma-containing monetary text to Collection; each fragment uses the non-bang parser path. A leading minus chooses the range branch, while1,000 is separated before a money parser can interpret grouping. No all-fragment validation or endpoint-order policy is supplied. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0291",
+      "title": "Aggregate emptiness, ties and tolerance are explicit alternatives to exact equality",
+      "library_id": "CE-REPO-0097",
+      "edition_id": "CE-EDITION-0097",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn093",
+          "path": "src/iter_ops.rs",
+          "name": "src/iter_ops.rs::IterOps<C> for I::checked_sum",
+          "start_line": 13,
+          "end_line": 17
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn095",
+          "path": "src/iter_ops.rs",
+          "name": "src/iter_ops.rs::IterOps<C> for I::mean",
+          "start_line": 19,
+          "end_line": 28
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn096",
+          "path": "src/iter_ops.rs",
+          "name": "src/iter_ops.rs::IterOps<C> for I::median",
+          "start_line": 30,
+          "end_line": 44
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn098",
+          "path": "src/iter_ops.rs",
+          "name": "src/iter_ops.rs::IterOps<C> for I::mode",
+          "start_line": 46,
+          "end_line": 93
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn026",
+          "path": "src/base.rs",
+          "name": "src/base.rs::BaseOps::is_approx",
+          "start_line": 674,
+          "end_line": 684
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn112",
+          "path": "src/money.rs",
+          "name": "src/money.rs::Sum for Money<C>::sum",
+          "start_line": 173,
+          "end_line": 175
+        },
+        {
+          "id": "CE-REPO-0097:CE-EDITION-0097:fn114",
+          "path": "src/money.rs",
+          "name": "src/money.rs::Sum<&'a Money<C>> for Money<C>::sum",
+          "start_line": 182,
+          "end_line": 184
+        }
+      ],
+      "explanation": [
+        "moneylib checked_sum, ordinary Sum, mean/median/mode and is_approx expose distinct empty-input, overflow, tie and tolerance policies; none substitutes for exact Money equality.",
+        "checked_sum first requires an element, ordinary Sum folds typed zero, and mode rejects a tie across all distinct amounts. is_approx applies a caller tolerance after checked subtraction. Core does not define these aggregates or approximate comparison; exact numeric Money comparison remains separate.",
+        "Use the same supported currency type and distinguish checked methods from ordinary operator folds; custom iterator/trait implementations remain caller context. An empty collection yields None for checked_sum but typed zero for ordinary Sum. A complete mode tie returns None rather than every item. A tolerance match is not evidence that two amounts are exactly equal. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0335",
+      "title": "Moneta summaries: foreign currency can be ignored and failed average leaves partial accumulation",
+      "library_id": "CE-REPO-0110",
+      "edition_id": "CE-EDITION-0110",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn414",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/function/DefaultMonetarySummaryStatistics.java",
+          "name": "org.javamoney.moneta.function.DefaultMonetarySummaryStatistics.accept",
+          "start_line": 69,
+          "end_line": 81
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn416",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/function/DefaultMonetarySummaryStatistics.java",
+          "name": "org.javamoney.moneta.function.DefaultMonetarySummaryStatistics.combine",
+          "start_line": 89,
+          "end_line": 102
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn417",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/function/DefaultMonetarySummaryStatistics.java",
+          "name": "org.javamoney.moneta.function.DefaultMonetarySummaryStatistics.doSummary",
+          "start_line": 104,
+          "end_line": 109
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn044",
+          "path": "moneta-convert/moneta-convert-base/src/main/java/org/javamoney/moneta/convert/ExchangeRateMonetarySummaryStatistics.java",
+          "name": "org.javamoney.moneta.convert.ExchangeRateMonetarySummaryStatistics.create",
+          "start_line": 73,
+          "end_line": 85
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn047",
+          "path": "moneta-convert/moneta-convert-base/src/main/java/org/javamoney/moneta/convert/ExchangeRateMonetarySummaryStatistics.java",
+          "name": "org.javamoney.moneta.convert.ExchangeRateMonetarySummaryStatistics.to",
+          "start_line": 97,
+          "end_line": 107
+        },
+        {
+          "id": "CE-REPO-0110:CE-EDITION-0110:fn510",
+          "path": "moneta-core/src/main/java/org/javamoney/moneta/function/MonetarySummaryMap.java",
+          "name": "org.javamoney.moneta.function.MonetarySummaryMap.get",
+          "start_line": 58,
+          "end_line": 65
+        }
+      ],
+      "explanation": [
+        "Statistics silently filter foreign currency and update fields sequentially; empty combines and failed division need explicit accumulator semantics.",
+        "accept returns for different currency and seeds the first accepted value. Later doSummary writes min/max/sum, increments count in divide(++count), then writes average. A division failure can leave prior fields/count changed. combine has no empty neutral case before using zero extrema and division. FX conversions independently convert summary fields, which is not guaranteed equivalent to converting observations first. These are collection policies, not canonical binary Money addition.",
+        "For partial state a concrete amount division must fail after earlier successful writes; for extrema use same-currency nonempty statistics combined with an empty zero-extrema accumulator. No division failure or parallel reduction was executed. Silent foreign-currency filtering may be intentional, and Core has no summary aggregation/FX-statistics operation. Static review of the pinned bodies and prior attributed dependency contracts only; no upstream build, runtime outcome, deployed state or concurrency schedule was executed. This behavior is not currently defined by FinKore Core."
+      ]
+    }
+  ]
+}

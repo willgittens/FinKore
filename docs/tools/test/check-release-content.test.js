@@ -10,7 +10,7 @@ import test from 'node:test'
 import { TARGET_CORE_VERSION, runReleaseContentCli, validateReleaseContent } from '../check-release-content.js'
 
 const negative = JSON.parse(readFileSync(new URL('./fixtures/release-content-negative.json', import.meta.url), 'utf8'))
-const stable = '# Contract\n\nFinKore Core 2.0.4 stable.\n'
+const stable = '# Contract\n\nFinKore Core 2.0.5 stable.\n'
 function put(root, path, content) {
   mkdirSync(dirname(join(root, path)), { recursive: true })
   writeFileSync(join(root, path), content)
@@ -20,13 +20,13 @@ function fixture(t) {
   t.after(() => rmSync(root, { recursive: true, force: true }))
   for (const path of ['README.md', 'spec/README.md', 'conformance/README.md', 'agentic/README.md',
     ...['money', 'workflow', 'audit', 'approvals', 'entities'].map((d) => `spec/${d}/README.md`)]) put(root, path, stable)
-  put(root, 'docs/coreDoc/core-doc.md', `${stable}\n**CoreDoc version:** FinKore Core 2.0.4\n**Status:** FinKore Core 2.0.4 stable\n**Introduced:** Draft 0.4\n**Last updated:** Draft 0.9\n**Last updated on:** 2026-09-20\n`)
+  put(root, 'docs/coreDoc/core-doc.md', `${stable}\n**CoreDoc version:** FinKore Core 2.0.5\n**Status:** FinKore Core 2.0.5 stable\n**Introduced:** Draft 0.4\n**Last updated:** Draft 0.9\n**Last updated on:** 2026-09-20\n`)
   put(root, 'docs/releases/README.md', `# Release history\n\n${negative.retirement}\n\n## Core 0.9 release candidate\n\nHistorical scope only.\n`)
   put(root, 'package.json', JSON.stringify({ private: true, version: '0.1.0' }))
   put(root, 'conformance/manifest.json', JSON.stringify({ finkoreConformance: '0.1' }))
   put(root, 'conformance/vector.schema.json', JSON.stringify({ finkoreVectorFile: '0.1' }))
   put(root, 'conformance/example.json', JSON.stringify({ vectors: [{ id: 'entity.boundary097.control-001' }] }))
-  put(root, 'learn/index.html', '<h1 id="start">FinKore Core 2.0.4 stable</h1><a href="#start">Start</a><a href="https://github.com/willgittens/FinKore/blob/main/spec/README.md#contract" target="_blank" rel="noopener noreferrer">Spec</a><a href="https://github.com/willgittens/FinKore/blob/main/README.md" target="_blank" rel="noopener noreferrer">Home</a>')
+  put(root, 'learn/index.html', '<h1 id="start">FinKore Core 2.0.5 stable</h1><a href="#start">Start</a><a href="https://github.com/willgittens/FinKore/blob/main/spec/README.md#contract" target="_blank" rel="noopener noreferrer">Spec</a><a href="https://github.com/willgittens/FinKore/blob/main/README.md" target="_blank" rel="noopener noreferrer">Home</a>')
   return root
 }
 function run(root) {
@@ -65,12 +65,12 @@ test('upstream code links require a current registered source, the CoreDoc page 
   const root = fixture(t)
   const data = JSON.parse(readFileSync(new URL('../../../learn/related-evidence.json', import.meta.url), 'utf8'))
   const source = data.sources.find(source => source.kind === 'code')
-  const index = { schema_version: '1.1.0', sources: [source], bindings: [] }
+  const index = { schema_version: data.schema_version, sources: [source], bindings: [] }
   const publication = readFileSync(new URL(`../../../${source.publication_path}`, import.meta.url), 'utf8')
   put(root, source.publication_path, publication)
   put(root, 'learn/related-evidence.json', JSON.stringify(index))
   const href = source.functions[0].href
-  const page = `<h1>FinKore Core 2.0.4 stable</h1><a href="${href}" target="_blank" rel="noopener noreferrer">Function</a>`
+  const page = `<h1>FinKore Core 2.0.5 stable</h1><a href="${href}" target="_blank" rel="noopener noreferrer">Function</a>`
   put(root, 'learn/coredoc.html', page)
   // This small link fixture is intentionally not a synchronized CoreDoc reader.
   // Its unrelated generation diagnostic must not mask the external-link policy.
@@ -96,13 +96,110 @@ test('upstream code links require a current registered source, the CoreDoc page 
 })
 
 test('accepts stable publication while preserving format versions, vector IDs, release history and CoreDoc evolution metadata', (t) => {
-  assert.equal(TARGET_CORE_VERSION, '2.0.4')
+  assert.equal(TARGET_CORE_VERSION, '2.0.5')
   const root = fixture(t)
   put(root, 'docs/tools/check-release-content.js', readFileSync(new URL('../check-release-content.js', import.meta.url), 'utf8'))
   put(root, 'docs/tools/test/check-release-content.test.js', readFileSync(new URL('./check-release-content.test.js', import.meta.url), 'utf8'))
   assert.equal(validateReleaseContent(root).htmlLinkCount, 3)
   assert.equal(run(root).status, 0)
   assert.match(run(root).output, /Financial behavior was not executed/)
+})
+
+function upstreamFixture(t) {
+  const root = fixture(t), repository_id = 'CE-REPO-0001', edition_id = 'CE-EDITION-0001', commit_sha = 'a'.repeat(40)
+  const prefix = 'experts/code-evidence/', stem = `${repository_id}/${edition_id}`
+  const target = negative.emptyPlanDirectory + '/upstream-proposal.md'
+  const archive = `https://codeload.github.com/example/project/tar.gz/${commit_sha}`
+  const url = `https://github.com/example/project/blob/${commit_sha}/${target}#L1-L4`
+  const inventory = { schema_version: '1.1.0', repository_id, edition_id, commit_sha, source_url: archive,
+    source_files: [], other_files: [[target, 'regular', 128]] }
+  const analysis = prefix + `analyses/${stem}/extensive.md`
+  const body = '# Attributed upstream reading\n\n`' + target + '` is an upstream proposal only.\n\n[Pinned source](' + url + ').\n'
+  const evaluation = { repository_id, edition_id, commit_sha, file_groups: [{ paths: [target] }], file_observations: [{ path: target }],
+    constructs: [{ name: 'Proposal only: ' + target, location: { path: target, source_url: url } }], tests: [] }
+  put(root, prefix + 'repositories.json', JSON.stringify({ repositories: [{ id: repository_id, full_name: 'example/project', editions: [{ id: edition_id, commit_sha }] }] }))
+  put(root, prefix + `inventories/${stem}.json`, JSON.stringify(inventory))
+  put(root, prefix + `evaluations/${stem}.json`, JSON.stringify(evaluation))
+  put(root, prefix + 'rule-library.json', JSON.stringify({ sources: [{ repository_id, edition_id,
+    inventory: `inventories/${stem}.json`, analysis_records: [analysis.slice(prefix.length)] }] }))
+  put(root, analysis, body)
+  return { root, prefix, stem, analysis, body, target, url, inventory, evaluation }
+}
+
+test('pinned upstream inventory, evaluation and registered reading paths are not local working plans', t => {
+  const f = upstreamFixture(t)
+  const before = readFileSync(join(f.root, f.analysis))
+  assert.equal(run(f.root).status, 0, run(f.root).error)
+  assert.deepEqual(readFileSync(join(f.root, f.analysis)), before)
+  // A plain upstream directory mention is contextual only beside its pinned citation.
+  put(f.root, f.analysis, f.body + '\nThe source proposal directory ' + negative.emptyPlanDirectory + '/ contains alternatives.\n')
+  assert.equal(run(f.root).status, 0)
+  mkdirSync(join(f.root, negative.emptyPlanDirectory), { recursive: true })
+  assert.match(run(f.root).error, /planning artifact is forbidden/)
+})
+
+test('upstream-path exception requires matching catalog, archive pin and registered reading', t => {
+  for (const mutate of [
+    f => { f.inventory.commit_sha = 'b'.repeat(40) },
+    f => { f.inventory.source_url = f.inventory.source_url.replace('example/project', 'other/project') },
+    f => { f.inventory.source_url = f.inventory.source_url.replace('a'.repeat(40), 'main') },
+    f => { put(f.root, f.prefix + 'rule-library.json', JSON.stringify({ sources: [] })) },
+    f => { put(f.root, f.prefix + 'repositories.json', JSON.stringify({ repositories: [] })) },
+  ]) {
+    const f = upstreamFixture(t); mutate(f)
+    put(f.root, f.prefix + `inventories/${f.stem}.json`, JSON.stringify(f.inventory))
+    assert.match(run(f.root).error, /active planning reference/)
+  }
+})
+
+test('upstream citations cannot hide moved pins, relative links, unknown paths or URL prefixes', t => {
+  for (const mutation of [
+    f => f.body.replace(f.url, f.url.replace('a'.repeat(40), 'main')),
+    f => f.body.replace(f.url, f.url.replace('a'.repeat(40), 'b'.repeat(40))),
+    f => f.body.replace(f.url, 'https://other.invalid/?redirect=' + f.url),
+    f => f.body + '\n[Local plan](' + f.target + ')\n',
+    f => f.body + '\n[Local plan](../../' + f.target + ')\n',
+    f => f.body + '\n`' + f.target + '.local.md`\n',
+    f => f.body + '\n`' + negative.emptyPlanDirectory + '/local-only.md`\n',
+  ]) {
+    const f = upstreamFixture(t)
+    put(f.root, f.analysis, mutation(f))
+    assert.match(run(f.root).error, /active planning reference/)
+  }
+})
+
+test('upstream metadata exception never masks arbitrary prose, copied milestones or another collection', t => {
+  const f = upstreamFixture(t)
+  f.inventory.classification = 'Follow ' + f.target
+  put(f.root, f.prefix + `inventories/${f.stem}.json`, JSON.stringify(f.inventory))
+  assert.match(run(f.root).error, /active planning reference/)
+  delete f.inventory.classification
+  put(f.root, f.prefix + `inventories/${f.stem}.json`, JSON.stringify(f.inventory))
+  put(f.root, f.analysis, f.body + '\n## Milestone 1\n\nCopied local work.\n')
+  assert.match(run(f.root).error, /copied planning content/)
+  put(f.root, f.analysis, f.body)
+  put(f.root, 'experts/research/unregistered.md', f.body)
+  assert.match(run(f.root).error, /active planning reference/)
+})
+
+test('an evaluation path with the wrong upstream commit remains a forbidden reference', t => {
+  const f = upstreamFixture(t)
+  f.evaluation.constructs[0].location.source_url = f.url.replace('a'.repeat(40), 'b'.repeat(40))
+  put(f.root, f.prefix + `evaluations/${f.stem}.json`, JSON.stringify(f.evaluation))
+  assert.match(run(f.root).error, /active planning reference/)
+})
+
+test('Git-tree-only upstream paths require the same catalog commit and tree source', t => {
+  const f = upstreamFixture(t)
+  f.inventory.other_files = []
+  f.inventory.repository_tree = { commit_sha: 'a'.repeat(40), tree_sha: 'c'.repeat(40),
+    source_url: 'https://github.com/example/project/tree/' + 'a'.repeat(40),
+    files: [[f.target, '100644', 'd'.repeat(40), 128, 4]] }
+  put(f.root, f.prefix + `inventories/${f.stem}.json`, JSON.stringify(f.inventory))
+  assert.equal(run(f.root).status, 0)
+  f.inventory.repository_tree.commit_sha = 'b'.repeat(40)
+  put(f.root, f.prefix + `inventories/${f.stem}.json`, JSON.stringify(f.inventory))
+  assert.match(run(f.root).error, /active planning reference/)
 })
 
 test('rejects each reintroduced artifact, dependency, status and HTML defect with its intended CLI diagnostic', (t) => {
@@ -174,14 +271,14 @@ test('rejects even an empty planning directory and missing stable publication do
 
 test('does not accept a version marker without stable status or incoherent CoreDoc fields', (t) => {
   const root = fixture(t)
-  put(root, 'spec/README.md', '# Specification\nFinKore Core 2.0.4\n')
-  assert.match(run(root).error, /missing explicit FinKore Core 2.0.4 stable declaration/)
+  put(root, 'spec/README.md', '# Specification\nFinKore Core 2.0.5\n')
+  assert.match(run(root).error, /missing explicit FinKore Core 2.0.5 stable declaration/)
   put(root, 'spec/README.md', stable)
   put(root, 'docs/coreDoc/core-doc.md', stable)
   assert.match(run(root).error, /CoreDoc version\/status fields/)
 
   const preparationRoot = fixture(t)
-  put(preparationRoot, 'spec/README.md', stable + '\n**Status:** FinKore Core 2.0.4 release preparation (unpublished).\n')
+  put(preparationRoot, 'spec/README.md', stable + '\n**Status:** FinKore Core 2.0.5 release preparation (unpublished).\n')
   assert.match(run(preparationRoot).error, /stale or contradictory Core status/)
 })
 
@@ -191,10 +288,10 @@ test('rejects stale, candidate, and arbitrary matching Core versions', (t) => {
   assert.match(run(staleRoot).error, /stale or contradictory Core status/)
 
   const candidateRoot = fixture(t)
-  put(candidateRoot, 'spec/README.md', '# Specification\n\nFinKore Core 2.0.4 release candidate.\n')
+  put(candidateRoot, 'spec/README.md', '# Specification\n\nFinKore Core 2.0.5 release candidate.\n')
   assert.match(run(candidateRoot).error, /stale or contradictory Core status/)
 
-  for (const version of ['2.0.1', '2.0.2', '2.0.3']) {
+  for (const version of ['2.0.1', '2.0.2', '2.0.3', '2.0.4']) {
     const priorPatchRoot = fixture(t)
     put(priorPatchRoot, 'spec/README.md', `# Specification\n\nFinKore Core ${version} stable.\n`)
     assert.match(run(priorPatchRoot).error, /stale or contradictory Core status/)
@@ -207,7 +304,7 @@ test('rejects stale, candidate, and arbitrary matching Core versions', (t) => {
   }
   put(arbitraryRoot, 'docs/coreDoc/core-doc.md', '# CoreDoc\n\nFinKore Core 9.9 stable.\n\n**CoreDoc version:** FinKore Core 9.9\n**Status:** FinKore Core 9.9 stable\n')
   assert.match(run(arbitraryRoot).error, /stale or contradictory Core status/)
-  assert.match(run(arbitraryRoot).error, /missing explicit FinKore Core 2.0.4 stable declaration/)
+  assert.match(run(arbitraryRoot).error, /missing explicit FinKore Core 2.0.5 stable declaration/)
 })
 
 test('permits compatible major-baseline scope wording without accepting its old stable status', (t) => {
@@ -216,7 +313,7 @@ test('permits compatible major-baseline scope wording without accepting its old 
   assert.equal(run(root).status, 0)
 
   put(root, 'spec/README.md', '# Specification\n\nFinKore Core 2.0x3 stable.\n')
-  assert.match(run(root).error, /missing explicit FinKore Core 2\.0\.4 stable declaration/)
+  assert.match(run(root).error, /missing explicit FinKore Core 2\.0\.5 stable declaration/)
 })
 
 test('limits retired-rule exceptions to the concise release note and designated negative fixture data', (t) => {
@@ -244,7 +341,7 @@ test('accepts a static Learn video preview and rejects scripts and unsupported c
   const script = '<script src="js/examples.js" defer></script>'
   const controls = ['toggle', 'previous', 'next'].map(action =>
     `<button type="button" data-carousel-action="${action}" aria-controls="example-slides">${action}</button>`).join('')
-  const page = '<h1>FinKore Core 2.0.4 stable</h1><figure><div class="video-frame" role="img" aria-label="Video preview; playback unavailable">FinKore</div><figcaption>Introduction video · Coming soon</figcaption></figure>'
+  const page = '<h1>FinKore Core 2.0.5 stable</h1><figure><div class="video-frame" role="img" aria-label="Video preview; playback unavailable">FinKore</div><figcaption>Introduction video · Coming soon</figcaption></figure>'
   put(root, 'learn/js/examples.js', '// Presentation only.\n')
   put(root, 'learn/index.html', page)
   assert.equal(run(root).status, 0)
@@ -275,7 +372,7 @@ test('accepts a static Learn video preview and rejects scripts and unsupported c
 test('permits only the homepage founder profile destination with the required new-tab attributes', t => {
   const root = fixture(t)
   const link = '<a href="https://www.linkedin.com/in/will-gittens/" target="_blank" rel="noopener noreferrer">Connect with Will on LinkedIn</a>'
-  const page = `<h1>FinKore Core 2.0.4 stable</h1><section id="founder">${link}</section>`
+  const page = `<h1>FinKore Core 2.0.5 stable</h1><section id="founder">${link}</section>`
   put(root, 'learn/index.html', page)
   assert.equal(run(root).status, 0)
   assert.equal(validateReleaseContent(root).htmlLinkCount, 1)
@@ -307,7 +404,7 @@ test('permits only the homepage founder profile destination with the required ne
 test('permits the homepage partner destination while rejecting other remote links and resources', t => {
   const root = fixture(t)
   const link = '<a href="https://savoiabarker.com/" target="_blank" rel="noopener noreferrer">Savoia Barker</a>'
-  const page = `<h1>FinKore Core 2.0.4 stable</h1><section id="partners">${link}</section>`
+  const page = `<h1>FinKore Core 2.0.5 stable</h1><section id="partners">${link}</section>`
   put(root, 'learn/index.html', page)
   assert.equal(run(root).status, 0)
   assert.equal(validateReleaseContent(root).htmlLinkCount, 1)
@@ -339,7 +436,7 @@ test('permits the homepage partner destination while rejecting other remote link
 test('rejects an unsynchronized CoreDoc reader even when historical metadata is marked', t => {
   const root = fixture(t)
   put(root, 'docs/coreDoc/core-doc.md', readFileSync(new URL('../../coreDoc/core-doc.md', import.meta.url), 'utf8'))
-  put(root, 'learn/coredoc.html', '<h1>FinKore Core 2.0.4 stable</h1><p class="core-governance"><strong>Introduced:</strong> Draft 0.4</p>')
+  put(root, 'learn/coredoc.html', '<h1>FinKore Core 2.0.5 stable</h1><p class="core-governance"><strong>Introduced:</strong> Draft 0.4</p>')
   assert.match(run(root).error, /learn\/coredoc.html:/)
   assert.match(run(root).error, /generated CoreDoc index markers/)
 })
@@ -347,7 +444,7 @@ test('rejects an unsynchronized CoreDoc reader even when historical metadata is 
 test('limits the CoreDoc reader enhancement to its exact deferred local script and target', t => {
   const root = fixture(t)
   const script = '<script src="js/coredoc.js" defer></script>'
-  const page = '<h1>FinKore Core 2.0.4 stable</h1><details id="core-mobile-index"><summary>Browse</summary></details>' + script
+  const page = '<h1>FinKore Core 2.0.5 stable</h1><details id="core-mobile-index"><summary>Browse</summary></details>' + script
   put(root, 'learn/js/coredoc.js', '// presentation only\n')
   put(root, 'learn/coredoc.html', page)
   // Synchronization still rejects this incomplete reader; the exact script is permitted.
@@ -364,7 +461,7 @@ test('limits the CoreDoc reader enhancement to its exact deferred local script a
 test('permits the official GitHub project link only on known Learn pages with safe new-tab attributes', t => {
   const root = fixture(t)
   const link = '<a class="nav-start" href="https://github.com/willgittens/FinKore" target="_blank" rel="noopener noreferrer">Github Project</a>'
-  const page = `<h1>FinKore Core 2.0.4 stable</h1>${link}`
+  const page = `<h1>FinKore Core 2.0.5 stable</h1>${link}`
   put(root, 'learn/index.html', page)
   assert.equal(run(root).status, 0)
   for (const invalid of [
@@ -386,7 +483,7 @@ test('permits the official GitHub project link only on known Learn pages with sa
 test('validates official GitHub file links and fragments against the local tree', t => {
   const root = fixture(t)
   const url = 'https://github.com/willgittens/FinKore/blob/main/spec/README.md#contract'
-  const page = `<h1>FinKore Core 2.0.4 stable</h1><a href="${url}" target="_blank" rel="noopener noreferrer">Specification</a>`
+  const page = `<h1>FinKore Core 2.0.5 stable</h1><a href="${url}" target="_blank" rel="noopener noreferrer">Specification</a>`
   put(root, 'learn/index.html', page)
   assert.equal(run(root).status, 0)
   for (const invalid of [
@@ -417,7 +514,7 @@ test('validates official GitHub file links and fragments against the local tree'
 test('accepts versioned local CSS while retaining missing, escaping and remote asset checks', t => {
   const root = fixture(t)
   const version = '00000000-0000-4000-8000-000000000001'
-  const page = `<h1>FinKore Core 2.0.4 stable</h1><link rel="stylesheet" href="css/styles.css?v=${version}" />`
+  const page = `<h1>FinKore Core 2.0.5 stable</h1><link rel="stylesheet" href="css/styles.css?v=${version}" />`
   put(root, 'learn/css/styles.css', 'body { color: black; }\n')
   put(root, 'learn/index.html', page)
   assert.equal(run(root).status, 0)
@@ -434,7 +531,7 @@ test('accepts versioned local CSS while retaining missing, escaping and remote a
 test('rejects links outside the published Learn directory even when files exist', t => {
   const root = fixture(t)
   for (const href of ['../README.md', '../spec/README.md', '%2e%2e/README.md']) {
-    put(root, 'learn/index.html', `<h1>FinKore Core 2.0.4 stable</h1><a href="${href}">Repository file</a>`)
+    put(root, 'learn/index.html', `<h1>FinKore Core 2.0.5 stable</h1><a href="${href}">Repository file</a>`)
     assert.match(run(root).error, /HTML link escapes the Learn site root/)
   }
 })

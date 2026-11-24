@@ -1,0 +1,62 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0009",
+  "title": "A reversal preserves its relationship to the original movement",
+  "scope": "candidate_rule",
+  "question": "Posting direction/order and original evidence need explicit semantics; the observed mechanism is not accepted accounting scope.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0013",
+      "title": "Reversal swaps posting direction and reverses posting order",
+      "library_id": "CE-REPO-0013",
+      "edition_id": "CE-EDITION-0013",
+      "collected_on": "2026-11-18",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0013:CE-EDITION-0013:fn01",
+          "path": "internal/transaction.go",
+          "name": "ledger.Transaction.Reverse",
+          "start_line": 64,
+          "end_line": 67
+        },
+        {
+          "id": "CE-REPO-0013:CE-EDITION-0013:fn02",
+          "path": "internal/posting.go",
+          "name": "ledger.Postings.Reverse",
+          "start_line": 37,
+          "end_line": 50
+        },
+        {
+          "id": "CE-REPO-0013:CE-EDITION-0013:fn03",
+          "path": "internal/posting.go",
+          "name": "ledger.Postings.Validate",
+          "start_line": 52,
+          "end_line": 72
+        }
+      ],
+      "explanation": [
+        "The posting helper creates a new posting slice, swaps each source/destination and reverses its order while preserving asset and amount. Transaction.Reverse builds a new transaction from those postings instead of negating unsigned posting amounts or rewriting the original transaction in this helper.",
+        "Constructing inverse postings is not persisted reversal. Original-event linkage, one-time eligibility, authorization and committed history were not established. Amount pointers are shallow-copied, so deep ownership is not proven."
+      ],
+      "context_requirement_ids": []
+    }
+  ],
+  "historical_publications": [
+    {
+      "id": "CE-FINDING-0013",
+      "title": "Formance Ledger — Reversal swaps posting direction and reverses posting order",
+      "collected_on": "2026-11-18",
+      "function_ids": [
+        "CE-REPO-0013:CE-EDITION-0013:fn01",
+        "CE-REPO-0013:CE-EDITION-0013:fn02",
+        "CE-REPO-0013:CE-EDITION-0013:fn03"
+      ],
+      "explanation": [
+        "The posting helper creates a new posting slice, swaps each source/destination and reverses its order while preserving asset and amount. Transaction.Reverse builds a new transaction from those postings instead of negating unsigned posting amounts or rewriting the original transaction in this helper.",
+        "Constructing inverse postings is not persisted reversal. Original-event linkage, one-time eligibility, authorization and committed history were not established. Amount pointers are shallow-copied, so deep ownership is not proven."
+      ]
+    }
+  ]
+}

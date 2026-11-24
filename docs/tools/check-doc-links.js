@@ -186,7 +186,26 @@ function checkCurrentRequirementReferences(specIds) {
 }
 
 function markdownLinks(text) {
-  return [...text.matchAll(/!?\[[^\]]*\]\(([^)]+)\)/g)].map((match) => match[1].trim())
+  // Literal signatures and examples are not links. Match code-span delimiters
+  // by their exact run length; an unmatched backtick remains ordinary prose.
+  return referenceBlocks(text).flatMap(block => proseLinks(block.text))
+}
+
+function proseLinks(prose) {
+  const runs = [...prose.matchAll(/`+/g)]
+  let visible = ''
+  let start = 0
+  for (let index = 0; index < runs.length; index++) {
+    const opening = runs[index]
+    const closingIndex = runs.findIndex((run, candidate) => candidate > index && run[0].length === opening[0].length)
+    if (closingIndex === -1) continue
+    const closing = runs[closingIndex]
+    visible += prose.slice(start, opening.index) + ' '.repeat(closing.index + closing[0].length - opening.index)
+    start = closing.index + closing[0].length
+    index = closingIndex
+  }
+  visible += prose.slice(start)
+  return [...visible.matchAll(/!?\[[^\]]*\]\(([^)]+)\)/g)].map((match) => match[1].trim())
 }
 
 function localLinkTarget(file, target) {

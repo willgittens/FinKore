@@ -1,0 +1,93 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0006",
+  "title": "Balance assertions distinguish tolerance from exact Money equality",
+  "scope": "candidate_rule",
+  "question": "A balance tolerance policy is not approximate comparison for FinKore Money.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0009",
+      "title": "Balance assertions use a separate decimal tolerance policy",
+      "library_id": "CE-REPO-0009",
+      "edition_id": "CE-EDITION-0009",
+      "collected_on": "2026-11-18",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0009:CE-EDITION-0009:fn01",
+          "path": "beancount/ops/balance.py",
+          "name": "beancount.ops.balance.get_balance_tolerance",
+          "start_line": 20,
+          "end_line": 45
+        },
+        {
+          "id": "CE-REPO-0009:CE-EDITION-0009:fn02",
+          "path": "beancount/ops/balance.py",
+          "name": "beancount.ops.balance.check",
+          "start_line": 48,
+          "end_line": 185
+        }
+      ],
+      "explanation": [
+        "An explicit balance tolerance takes precedence. Otherwise the source derives tolerance from the asserted Decimal exponent and a configured multiplier. It compares the accumulated currency-specific balance to the expected amount and reports errors only when absolute difference exceeds that tolerance.",
+        "A ledger balance-assertion policy, outside current Core ledger/reconciliation scope. Its decimal tolerance does not redefine exact Money equality or authorize approximate monetary conformance checks."
+      ],
+      "context_requirement_ids": [
+        "MONEY-REPRESENTATION-005"
+      ]
+    },
+    {
+      "id": "CE-FINDING-0382",
+      "title": "Probability admission is type-based slack without renormalization",
+      "library_id": "CE-REPO-0028",
+      "edition_id": "CE-EDITION-0028",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "not_critically_reviewed",
+      "functions": [
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn001",
+          "path": "src/engine.jl",
+          "name": "Experimental.rounding_slack",
+          "start_line": 23,
+          "end_line": 23
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn023",
+          "path": "src/engine.jl",
+          "name": "Experimental.check_distribution",
+          "start_line": 230,
+          "end_line": 238
+        },
+        {
+          "id": "CE-REPO-0028:CE-EDITION-0028:fn026",
+          "path": "src/engine.jl",
+          "name": "Experimental.fold_row",
+          "start_line": 258,
+          "end_line": 268
+        }
+      ],
+      "explanation": [
+        "Initial distributions and transition rows reject negative mass and accept a total deviation up to the sum of eight floating eps units per entry; accepted rows are not rescaled. fold_row applies nonzero-edge callbacks before checking final row total.",
+        "Probability tolerance is not Money equality. Invalid final sums can leave injected callback effects, though project-owned buffers do not escape as a returned valid projection. No runtime execution."
+      ],
+      "context_requirement_ids": []
+    }
+  ],
+  "historical_publications": [
+    {
+      "id": "CE-FINDING-0009",
+      "title": "Beancount — Balance assertions use a separate decimal tolerance policy",
+      "collected_on": "2026-11-18",
+      "function_ids": [
+        "CE-REPO-0009:CE-EDITION-0009:fn01",
+        "CE-REPO-0009:CE-EDITION-0009:fn02"
+      ],
+      "explanation": [
+        "An explicit balance tolerance takes precedence. Otherwise the source derives tolerance from the asserted Decimal exponent and a configured multiplier. It compares the accumulated currency-specific balance to the expected amount and reports errors only when absolute difference exceeds that tolerance.",
+        "A ledger balance-assertion policy, outside current Core ledger/reconciliation scope. Its decimal tolerance does not redefine exact Money equality or authorize approximate monetary conformance checks."
+      ]
+    }
+  ]
+}

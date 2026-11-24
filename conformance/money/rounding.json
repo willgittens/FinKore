@@ -807,6 +807,338 @@
         "decimal-context-invalid-operation",
         "half-even-tie-wrong"
       ]
+    },
+    {
+      "id": "money.round.floor.negative-near-zero-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-001",
+        "MONEY-ROUNDING-003",
+        "MONEY-ROUNDING-008"
+      ],
+      "description": "The exact signed amount determines the requested rounding result without a narrowed sign test or an intermediate rounding stage.",
+      "operation": "finkore.money.round",
+      "input": {
+        "value": {
+          "amount": "-0.1",
+          "currency": "EUR"
+        },
+        "scale": 0,
+        "mode": "FLOOR"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "-1",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "-0.1",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "scale-limited-sign-check"
+      ]
+    },
+    {
+      "id": "money.round.half-up.negative-tiny-tie-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-001",
+        "MONEY-ROUNDING-003",
+        "MONEY-ROUNDING-008"
+      ],
+      "description": "The exact signed amount determines the requested rounding result without a narrowed sign test or an intermediate rounding stage.",
+      "operation": "finkore.money.round",
+      "input": {
+        "value": {
+          "amount": "-0.0000005",
+          "currency": "EUR"
+        },
+        "scale": 6,
+        "mode": "HALF_UP"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "-0.000001",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "-0.0000005",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "negative-near-zero-tie-sign-lost"
+      ]
+    },
+    {
+      "id": "money.round.near-half-no-double-round-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-001",
+        "MONEY-ROUNDING-003",
+        "MONEY-ROUNDING-008"
+      ],
+      "description": "The exact signed amount determines the requested rounding result without a narrowed sign test or an intermediate rounding stage.",
+      "operation": "finkore.money.round",
+      "input": {
+        "value": {
+          "amount": "1.2349999",
+          "currency": "EUR"
+        },
+        "scale": 2,
+        "mode": "HALF_UP"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "1.23",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "1.2349999",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "intermediate-double-rounding"
+      ]
+    },
+    {
+      "id": "money.round.large-integer-no-discard-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-003",
+        "MONEY-ROUNDING-008",
+        "MONEY-ROUNDING-009"
+      ],
+      "description": "Explicit rounding preserves an already integral accepted coefficient beyond a bounded arithmetic context.",
+      "operation": "finkore.money.round",
+      "input": {
+        "value": {
+          "amount": "1234567890123456789012345678901234567890",
+          "currency": "EUR"
+        },
+        "scale": 2,
+        "mode": "HALF_EVEN"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "1234567890123456789012345678901234567890.00",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "1234567890123456789012345678901234567890",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "quantize-error-ignored",
+        "finite-rounding-result-becomes-nonfinite"
+      ]
+    },
+    {
+      "id": "money.round.half-up.negative-whole-unit-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-002",
+        "MONEY-ROUNDING-003",
+        "MONEY-ROUNDING-008"
+      ],
+      "description": "Applies HALF_UP to an exactly representable negative operand at explicit whole-unit scale.",
+      "operation": "finkore.money.round",
+      "input": {
+        "value": {
+          "amount": "-2.5",
+          "currency": "EUR"
+        },
+        "scale": 0,
+        "mode": "HALF_UP"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "-3",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "-2.5",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "signed-rounding-mode-substitution",
+        "currency-scale-replaces-target-scale"
+      ]
+    },
+    {
+      "id": "money.round.half-even.negative-whole-unit-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-002",
+        "MONEY-ROUNDING-003",
+        "MONEY-ROUNDING-008"
+      ],
+      "description": "Applies HALF_EVEN to an exactly representable negative operand at explicit whole-unit scale.",
+      "operation": "finkore.money.round",
+      "input": {
+        "value": {
+          "amount": "-2.5",
+          "currency": "EUR"
+        },
+        "scale": 0,
+        "mode": "HALF_EVEN"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "-2",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "-2.5",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "signed-rounding-mode-substitution",
+        "currency-scale-replaces-target-scale"
+      ]
+    },
+    {
+      "id": "money.round.floor.negative-whole-unit-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-002",
+        "MONEY-ROUNDING-003",
+        "MONEY-ROUNDING-008"
+      ],
+      "description": "Applies FLOOR to an exactly representable negative operand at explicit whole-unit scale.",
+      "operation": "finkore.money.round",
+      "input": {
+        "value": {
+          "amount": "-2.1",
+          "currency": "EUR"
+        },
+        "scale": 0,
+        "mode": "FLOOR"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "-3",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "-2.1",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "signed-rounding-mode-substitution",
+        "currency-scale-replaces-target-scale"
+      ]
+    },
+    {
+      "id": "money.round.ceiling.negative-whole-unit-001",
+      "spec": "money/rounding",
+      "requirements": [
+        "MONEY-ROUNDING-002",
+        "MONEY-ROUNDING-003",
+        "MONEY-ROUNDING-008"
+      ],
+      "description": "Applies CEILING to an exactly representable negative operand at explicit whole-unit scale.",
+      "operation": "finkore.money.round",
+      "input": {
+        "value": {
+          "amount": "-2.1",
+          "currency": "EUR"
+        },
+        "scale": 0,
+        "mode": "CEILING"
+      },
+      "expected": {
+        "status": "success",
+        "value": {
+          "amount": "-2",
+          "currency": "EUR"
+        },
+        "observations": {
+          "operand": {
+            "amount": "-2.1",
+            "currency": "EUR"
+          }
+        }
+      },
+      "tags": [
+        "positive",
+        "boundary",
+        "invariant",
+        "mutation-sensitive"
+      ],
+      "guardsAgainst": [
+        "signed-rounding-mode-substitution",
+        "currency-scale-replaces-target-scale"
+      ]
     }
   ]
 }

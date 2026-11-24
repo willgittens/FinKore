@@ -1,0 +1,500 @@
+{
+  "schema_version": "2.0.0",
+  "id": "CE-RULE-0005",
+  "title": "A periodic payment declares rate units, timing and the zero-rate case",
+  "scope": "candidate_rule",
+  "question": "Compare per-period scalar vs annual/percentage input, cash-flow signs, singular periods and exact zero-rate branches. The NumPy port is shared ancestry.",
+  "evidence": [
+    {
+      "id": "CE-FINDING-0018",
+      "title": "A zero-rate installment must avoid the ordinary annuity denominator",
+      "library_id": "CE-REPO-0043",
+      "edition_id": "CE-EDITION-0043",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0043:CE-EDITION-0043:fn01",
+          "path": "numpy_financial/_financial.py",
+          "name": "numpy_financial._financial._convert_when",
+          "start_line": 115,
+          "end_line": 129
+        },
+        {
+          "id": "CE-REPO-0043:CE-EDITION-0043:fn02",
+          "path": "numpy_financial/_financial.py",
+          "name": "numpy_financial._financial.pmt",
+          "start_line": 301,
+          "end_line": 401
+        }
+      ],
+      "explanation": [
+        "The NumPy PMT implementation masks a zero rate with1 before evaluating the ordinary factor, then selects nper for zero-rate entries and negates the resulting cash-flow quotient.",
+        "The eager factor expression and _convert_when dispatch were read. This is evidence for an explicit limiting-case branch, not a portable annuity or exact Money implementation.",
+        "NumPy-coercible inputs with compatible broadcast shape, meaningful nper and timing; ndarray timing bypasses alias conversion. A zero-rate positive-count scalar selects nper instead of a vanished annuity denominator. Zero count and dtype-dependent precision remain separate. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0019",
+      "title": "The installment boundary recurs through a declared port",
+      "library_id": "CE-REPO-0104",
+      "edition_id": "CE-EDITION-0104",
+      "collected_on": "2026-11-20",
+      "relationship": "corroborates",
+      "qualification": "partial_support",
+      "functions": [
+        {
+          "id": "CE-REPO-0104:CE-EDITION-0104:fn01",
+          "path": "src/index.ts",
+          "name": "pmt",
+          "start_line": 133,
+          "end_line": 149
+        }
+      ],
+      "explanation": [
+        "The scalar TypeScript PMT port explicitly selects the zero-rate factor nper and preserves sign/timing structure; recurrence with the Python source is attributable shared-port behavior.",
+        "rate===0 masks the division and uses nper, while Begin alone selects the timing multiplier. A matching expression is evidence of shared mechanism, not independent derivation or complete conformance.",
+        "Finite scalar number inputs, nper nonzero, and the declared Begin/End enumeration; no arbitrary array equivalence is asserted. At zero rate PMT reduces to -(fv+pv)/nper; nper=0 remains a singular case. An invalid runtime timing value is treated as End. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0033",
+      "title": "Periodic payments share a zero-rate limit but differ in validation",
+      "library_id": "CE-REPO-0113",
+      "edition_id": "CE-EDITION-0113",
+      "collected_on": "2026-11-20",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn03",
+          "path": "fin/tvm.go",
+          "name": "fin.Payment",
+          "start_line": 53,
+          "end_line": 66
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn01",
+          "path": "fin/tvm.go",
+          "name": "fin.PresentValue",
+          "start_line": 17,
+          "end_line": 30
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn02",
+          "path": "fin/tvm.go",
+          "name": "fin.FutureValue",
+          "start_line": 35,
+          "end_line": 48
+        },
+        {
+          "id": "CE-REPO-0113:CE-EDITION-0113:fn04",
+          "path": "fin/tvm.go",
+          "name": "fin.Periods",
+          "start_line": 71,
+          "end_line": 87
+        }
+      ],
+      "explanation": [
+        "Direct PV/FV/payment paths have explicit zero-rate expressions and validate Begin/End timing. Their guard rejects negative period counts but does not reject zero; the payment quotient can therefore remain singular.",
+        "The zero branches were read alongside the guards and the separate period solver. The useful limit must not be overstated as complete positive-count or finite-result validation.",
+        "float64 inputs; recognized payment type; for payment the period count must additionally be nonzero to avoid its zero-rate division. Payment(0,0,pv,fv,End) reaches division byzero; the same zero count has a different role in PV/FV. No output was executed. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0039",
+      "title": "A payment formula without its zero-rate limit reaches a singular expression",
+      "library_id": "CE-REPO-0103",
+      "edition_id": "CE-EDITION-0103",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn19",
+          "path": "finance.js",
+          "name": "Finance.prototype.PMT",
+          "start_line": 193,
+          "end_line": 197
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn10",
+          "path": "finance.js",
+          "name": "Finance.prototype.AM",
+          "start_line": 98,
+          "end_line": 125
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn11",
+          "path": "finance.js",
+          "name": "Finance.prototype.AM / buildNumerator (nested)",
+          "start_line": 118,
+          "end_line": 124
+        }
+      ],
+      "explanation": [
+        "PMT and AM contain a zero-rate singular expression and no dedicated limiting branch; each returns through a two-decimal native rounding path.",
+        "Substituting rate0 into the written formula gives a0/0 subexpression. That is a source-level missing-limit concern, not a FinKore annuity violation or an executed result.",
+        "Finite scalar inputs and positive payment count; PMT rate is percentage-per-period, while AM converts annual percentage to monthly rate. The zero-rate limit should be principal divided across periods under a separately selected annuity convention; the actual source instead reaches its singular denominator. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0062",
+      "title": "Annuity composition needs zero-rate limits at every called formula",
+      "library_id": "CE-REPO-0099",
+      "edition_id": "CE-EDITION-0099",
+      "collected_on": "2026-11-20",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn46",
+          "path": "R/pmt.R",
+          "name": "FinCal::pmt",
+          "start_line": 18,
+          "end_line": 25
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn47",
+          "path": "R/pv.R",
+          "name": "FinCal::pv",
+          "start_line": 19,
+          "end_line": 26
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn21",
+          "path": "R/fv.R",
+          "name": "FinCal::fv",
+          "start_line": 17,
+          "end_line": 23
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn48",
+          "path": "R/pv.annuity.R",
+          "name": "FinCal::pv.annuity",
+          "start_line": 13,
+          "end_line": 20
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn22",
+          "path": "R/fv.annuity.R",
+          "name": "FinCal::fv.annuity",
+          "start_line": 13,
+          "end_line": 20
+        },
+        {
+          "id": "CE-REPO-0099:CE-EDITION-0099:fn43",
+          "path": "R/n.period.R",
+          "name": "FinCal::n.period",
+          "start_line": 17,
+          "end_line": 24
+        }
+      ],
+      "explanation": [
+        "The FinCal payment and annuity helpers have no explicit rate-zero branch, and composite PV/FV evaluate their annuity helpers even when the payment argument is zero.",
+        "The literal pmt/r and vanishing growth-denominator expressions remain in the called path; multiplying by a zero payment does not avoid eager helper evaluation.",
+        "Native R scalar inputs, valid type0/1 and a nominally meaningful period count; no runtime output is asserted. At rate0, both denominator/rate subexpressions are singular even in a wrapper whose annuity payment is0. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0110",
+      "title": "Annuity example needs an explicit zero-rate limit and final payment policy",
+      "library_id": "CE-REPO-0023",
+      "edition_id": "CE-EDITION-0023",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn163",
+          "path": "doc_test.go",
+          "name": "govalues/money.example.MonthlyRate",
+          "start_line": 310,
+          "end_line": 313
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn164",
+          "path": "doc_test.go",
+          "name": "govalues/money.example.AnnuityPayment",
+          "start_line": 316,
+          "end_line": 342
+        },
+        {
+          "id": "CE-REPO-0023:CE-EDITION-0023:fn165",
+          "path": "doc_test.go",
+          "name": "govalues/money.example.SimulateSchedule",
+          "start_line": 344,
+          "end_line": 390
+        }
+      ],
+      "explanation": [
+        "The annuity schedule example uses annual/12 and a vanishing denominator at zero rate, rounds interest/payment at monthly boundaries, and replaces the final installment with remaining principal plus interest.",
+        "The missing zero-rate branch is source-visible; the final payment is a distinct balancing policy, not evidence that all schedules or input counts are valid.",
+        "Positive intended years/month count, valid Money and decimal rate and a domain that accepts this monthly rounding convention. years*12 has no explicit positive-count/overflow validation; at rate0 the payment formula denominator is zero. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0318",
+      "title": "JavaMoney calculations: static compounding frequency differs from operator application",
+      "library_id": "CE-REPO-0111",
+      "edition_id": "CE-EDITION-0111",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "suspected_defect",
+      "functions": [
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn109",
+          "path": "calc/src/main/java/org/javamoney/calc/common/CompoundInterest.java",
+          "name": "org.javamoney.calc.common.CompoundInterest.calculate",
+          "start_line": 99,
+          "end_line": 101
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn110",
+          "path": "calc/src/main/java/org/javamoney/calc/common/CompoundInterest.java",
+          "name": "org.javamoney.calc.common.CompoundInterest.calculate",
+          "start_line": 112,
+          "end_line": 117
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn111",
+          "path": "calc/src/main/java/org/javamoney/calc/common/CompoundInterest.java",
+          "name": "org.javamoney.calc.common.CompoundInterest.apply",
+          "start_line": 120,
+          "end_line": 122
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn115",
+          "path": "calc/src/main/java/org/javamoney/calc/common/ContinuousCompoundInterest.java",
+          "name": "org.javamoney.calc.common.ContinuousCompoundInterest.calculate",
+          "start_line": 63,
+          "end_line": 65
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn116",
+          "path": "calc/src/main/java/org/javamoney/calc/common/ContinuousCompoundInterest.java",
+          "name": "org.javamoney.calc.common.ContinuousCompoundInterest.apply",
+          "start_line": 68,
+          "end_line": 70
+        }
+      ],
+      "explanation": [
+        "CompoundInterest stores timesCompounded but apply delegates to the overload that fixes frequency1; the separate continuous helper chooses10000 rather than an exact exponential formula.",
+        "The constructor/getter retain the configured frequency and the apply call omits it. The issue is the static/operator API discrepancy, not acceptance of one compounding convention by Core.",
+        "A CompoundInterest operator built with a nonannual frequency and successfully evaluated source MonetaryAmount/backend. An operator configured with24 calls the annual path, whereas the explicit static overload uses24. Numerical economic results were not executed. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0319",
+      "title": "JavaMoney calculations: names conceal materially different annuity and discount expressions",
+      "library_id": "CE-REPO-0111",
+      "edition_id": "CE-EDITION-0111",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "open_question",
+      "functions": [
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn119",
+          "path": "calc/src/main/java/org/javamoney/calc/common/DiscountFactor.java",
+          "name": "org.javamoney.calc.common.DiscountFactor.calculate",
+          "start_line": 45,
+          "end_line": 53
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn152",
+          "path": "calc/src/main/java/org/javamoney/calc/common/FutureValueOfAnnuityFactor.java",
+          "name": "org.javamoney.calc.common.FutureValueOfAnnuityFactor.calculate",
+          "start_line": 55,
+          "end_line": 63
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn155",
+          "path": "calc/src/main/java/org/javamoney/calc/common/FutureValueOfAnnuityPayment.java",
+          "name": "org.javamoney.calc.common.FutureValueOfAnnuityPayment.calculate",
+          "start_line": 70,
+          "end_line": 75
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn156",
+          "path": "calc/src/main/java/org/javamoney/calc/common/FutureValueOfAnnuityPayment.java",
+          "name": "org.javamoney.calc.common.FutureValueOfAnnuityPayment.apply",
+          "start_line": 78,
+          "end_line": 80
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn187",
+          "path": "calc/src/main/java/org/javamoney/calc/common/PresentValueGrowingAnnuity.java",
+          "name": "org.javamoney.calc.common.PresentValueGrowingAnnuity.calculate",
+          "start_line": 80,
+          "end_line": 85
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn188",
+          "path": "calc/src/main/java/org/javamoney/calc/common/PresentValueGrowingAnnuity.java",
+          "name": "org.javamoney.calc.common.PresentValueGrowingAnnuity.apply",
+          "start_line": 89,
+          "end_line": 91
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn207",
+          "path": "calc/src/main/java/org/javamoney/calc/common/PresentValueOfAnnuityPayment.java",
+          "name": "org.javamoney.calc.common.PresentValueOfAnnuityPayment.calculate",
+          "start_line": 80,
+          "end_line": 91
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn208",
+          "path": "calc/src/main/java/org/javamoney/calc/common/PresentValueOfAnnuityPayment.java",
+          "name": "org.javamoney.calc.common.PresentValueOfAnnuityPayment.apply",
+          "start_line": 94,
+          "end_line": 96
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn164",
+          "path": "calc/src/main/java/org/javamoney/calc/common/FutureValueWithContinuousCompounding.java",
+          "name": "org.javamoney.calc.common.FutureValueWithContinuousCompounding.calculate",
+          "start_line": 82,
+          "end_line": 89
+        },
+        {
+          "id": "CE-REPO-0111:CE-EDITION-0111:fn165",
+          "path": "calc/src/main/java/org/javamoney/calc/common/FutureValueWithContinuousCompounding.java",
+          "name": "org.javamoney.calc.common.FutureValueWithContinuousCompounding.apply",
+          "start_line": 92,
+          "end_line": 94
+        }
+      ],
+      "explanation": [
+        "The named JavaMoney annuity/discount methods implement materially different expressions: min(1,1+r), a present-factor form under a future-factor name, distinct division grouping, no finite horizon for one growing-annuity path, and discount-before-exponential compounding.",
+        "Direct expressions and called PresentValue/FutureValue factors were read. They substantiate source differences and naming/intention questions, not a validated textbook or accounting formula.",
+        "Valid RateAndPeriods, nonzero relevant denominators, supported integer powers and the specific MonetaryAmount implementation/context. Equal/zero rates and the written parentheses can separate plausible formulas; a method name cannot settle whether an expression is a defect or deliberately chosen subject. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0360",
+      "title": "Loan-payment variants differ at zero rate and in period units",
+      "library_id": "CE-REPO-0103",
+      "edition_id": "CE-EDITION-0103",
+      "collected_on": "2026-11-21",
+      "relationship": "proposes",
+      "qualification": "candidate",
+      "functions": [
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn10",
+          "path": "finance.js",
+          "name": "Finance.prototype.AM",
+          "start_line": 98,
+          "end_line": 125
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn11",
+          "path": "finance.js",
+          "name": "Finance.prototype.AM / buildNumerator (nested)",
+          "start_line": 118,
+          "end_line": 124
+        },
+        {
+          "id": "CE-REPO-0103:CE-EDITION-0103:fn19",
+          "path": "finance.js",
+          "name": "Finance.prototype.PMT",
+          "start_line": 193,
+          "end_line": 197
+        }
+      ],
+      "explanation": [
+        "PMT expects percentage per period; AM converts annual percentage to monthly periods and optionally reduces its numerator exponent for beginning payments. Both lack an explicit zero-rate limit.",
+        "The source /100 and /12 conversions and local numerator function show distinct units and timing effects. The finding should not imply universal equivalence of their payment formulas.",
+        "Scalar native numbers, clear year/month selector, positive periods and the intended beginning/end interpretation. A fractional-rate README spelling passed directly to PMT is rescaled by another100; a rate0 expression is singular. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0363",
+      "title": "Zero-rate payment limits are implemented but invalid timing falls through",
+      "library_id": "CE-REPO-0104",
+      "edition_id": "CE-EDITION-0104",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0104:CE-EDITION-0104:fn002",
+          "path": "src/index.ts",
+          "name": "fv",
+          "start_line": 60,
+          "end_line": 76
+        },
+        {
+          "id": "CE-REPO-0104:CE-EDITION-0104:fn01",
+          "path": "src/index.ts",
+          "name": "pmt",
+          "start_line": 133,
+          "end_line": 149
+        },
+        {
+          "id": "CE-REPO-0104:CE-EDITION-0104:fn006",
+          "path": "src/index.ts",
+          "name": "pv",
+          "start_line": 368,
+          "end_line": 380
+        },
+        {
+          "id": "CE-REPO-0104:CE-EDITION-0104:fn003",
+          "path": "src/index.ts",
+          "name": "nper",
+          "start_line": 191,
+          "end_line": 206
+        },
+        {
+          "id": "CE-REPO-0104:CE-EDITION-0104:fn004",
+          "path": "src/index.ts",
+          "name": "ipmt",
+          "start_line": 259,
+          "end_line": 288
+        }
+      ],
+      "explanation": [
+        "The scalar annuity functions implement explicit zero-rate branches/factors, but only ipmt validates per<1 and treats Begin/per1 as a zero-interest shortcut; unknown runtime timing values follow End.",
+        "The branches distinguish the zero-rate limit from period/timing admission. They do not establish complete validation of periods, denominators or maturity.",
+        "Native JavaScript numbers and the actual caller timing value; zero-rate results require nonzero payment/period denominators where used. pmt with nper0 or nper with pmt0 still divides by zero; ipmt can return0 for Begin/per1 before evaluating the rest of the financial inputs. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    },
+    {
+      "id": "CE-FINDING-0375",
+      "title": "Array financial inputs use different combination policies",
+      "library_id": "CE-REPO-0043",
+      "edition_id": "CE-EDITION-0043",
+      "collected_on": "2026-11-21",
+      "relationship": "counterpoint",
+      "qualification": "alternative_policy",
+      "functions": [
+        {
+          "id": "CE-REPO-0043:CE-EDITION-0043:fn006",
+          "path": "numpy_financial/_financial.py",
+          "name": "nper",
+          "start_line": 427,
+          "end_line": 497
+        },
+        {
+          "id": "CE-REPO-0043:CE-EDITION-0043:fn016",
+          "path": "numpy_financial/_financial.py",
+          "name": "npv",
+          "start_line": 1192,
+          "end_line": 1283
+        },
+        {
+          "id": "CE-REPO-0043:CE-EDITION-0043:fn017",
+          "path": "numpy_financial/_financial.py",
+          "name": "mirr",
+          "start_line": 1310,
+          "end_line": 1428
+        }
+      ],
+      "explanation": [
+        "NPER crosses five independent input axes in native loops; NPV crosses rates with flow rows; MIRR pairs finance/reinvestment-rate positions before crossing each flow row. Scalar/singleton axes are squeezed afterward.",
+        "The shape helper takes each first-axis length, Cython NPER loops all five axes and NPV loops rate/row/time. These differ from ordinary broadcasting in PMT.",
+        "Inputs satisfying the one-dimensional/two-dimensional wrapper shape checks and native contiguous-array contracts; paired MIRR rate arrays have equal size. Two rates and three payment values can create six NPER combinations rather than pairwise broadcast meaning; this is interface policy, not independent numerical support. No upstream execution. The cited source branches and expressions were read; floating accuracy, actual resolved dependency versions and economic correctness are not certified. Prior R1-M1 dependency contracts are reused only within their recorded bounds. This behavior is not currently defined by FinKore Core."
+      ]
+    }
+  ]
+}
