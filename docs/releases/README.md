@@ -49,8 +49,8 @@ CoreDoc were inspected in Chrome at 320, 390, 768, 1280 and 1440 px, including
 keyboard navigation, visible focus, source links and collapsed result cards.
 A fresh npm registry advisory query on 2026-11-24 reported zero vulnerabilities
 across the five locked maintenance dependencies. Locked installation, artifact
-verification and the separate stable-publication gate are required on the final
-tree before tagging. These checks do not establish external conformance.
+verification and the separate stable-publication gate passed on the final tree.
+These checks do not establish external conformance.
 
 ## FinKore Core 2.0.4 — 2026-11-18
 

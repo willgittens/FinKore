@@ -2827,7 +2827,7 @@
           "state_mutation": "yes"
         }
       },
-      "repository_revision": "ba16f0d726bdf46adac8b58a5641d9872f7fd8ef",
+      "repository_revision": "55dd866ff52bae25f126fd08ad83e197803e6fe0",
       "targets": {
         "APPROVAL-CHAIN-001": {
           "agentic_operation_ids": [],

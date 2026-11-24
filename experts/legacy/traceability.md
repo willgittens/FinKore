@@ -4,7 +4,7 @@ Non-normative analyst comparisons of approved public practitioner interviews. Th
 
 Publication approval applies to the interview text, not to these comparisons or future Learn pages. Speaker quotations, analyst interpretations, and editorial omissions remain separate. No private account was consulted or reconstructed.
 
-Baseline: FinKore Core 2.0.5; repository revision `ba16f0d726bdf46adac8b58a5641d9872f7fd8ef`. 2 interview(s), 10 comparisons, 26 linked requirements.
+Baseline: FinKore Core 2.0.5; repository revision `55dd866ff52bae25f126fd08ad83e197803e6fe0`. 2 interview(s), 10 comparisons, 26 linked requirements.
 
 ## Interview inventory
 
